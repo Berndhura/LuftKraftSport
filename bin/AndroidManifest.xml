@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="de.wichura.camperapp.mainactivity.NewAdActivity"
+            android:name="de.wichura.camperapp.ad.NewAdActivity"
             android:label="@string/title_new_add_page" >
         </activity>
     </application>

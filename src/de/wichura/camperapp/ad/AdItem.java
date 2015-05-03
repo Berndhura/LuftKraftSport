@@ -1,4 +1,4 @@
-package de.wichura.camperapp.mainactivity;
+package de.wichura.camperapp.ad;
 
 import android.content.Intent;
 
@@ -23,7 +23,7 @@ public class AdItem {
 
 	// Create a new ToDoItem from data packaged in an Intent
 
-	AdItem(final Intent intent) {
+	public AdItem(final Intent intent) {
 
 		mTitle = intent.getStringExtra(AdItem.TITLE);
 		mDesc = intent.getStringExtra(AdItem.DESC);

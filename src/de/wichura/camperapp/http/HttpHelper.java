@@ -1,5 +1,6 @@
-package de.wichura.camperapp.mainactivity;
+package de.wichura.camperapp.http;
 
+import de.wichura.camperapp.ad.AdItem;
 import android.content.Intent;
 
 public class HttpHelper {

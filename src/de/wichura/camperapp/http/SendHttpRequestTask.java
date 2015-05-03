@@ -1,10 +1,7 @@
-package de.wichura.camperapp.mainactivity;
+package de.wichura.camperapp.http;
 
 import java.io.ByteArrayOutputStream;
 
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.view.MenuItem;
 
@@ -20,9 +17,9 @@ public class SendHttpRequestTask extends AsyncTask<String, Void, String> {
 
 		// altes bild (b) brauchen wir hier nicht...
 		// b.compress(CompressFormat.PNG, 0, baos);
-		final Bitmap b = BitmapFactory.decodeFile(param2);
+		// final Bitmap b = BitmapFactory.decodeFile(param2);
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		b.compress(CompressFormat.JPEG, 0, baos);
+		// b.compress(CompressFormat.JPEG, 0, baos);
 
 		try {
 			final HttpClient client = new HttpClient(url);

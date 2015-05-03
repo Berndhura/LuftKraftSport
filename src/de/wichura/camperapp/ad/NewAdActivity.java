@@ -1,4 +1,4 @@
-package de.wichura.camperapp.mainactivity;
+package de.wichura.camperapp.ad;
 
 import java.io.InputStream;
 
@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import de.wichura.camperapp.R;
+import de.wichura.camperapp.http.HttpHelper;
 
 public class NewAdActivity extends Activity {
 

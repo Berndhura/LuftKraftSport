@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 import de.wichura.camperapp.R;
+import de.wichura.camperapp.ad.AdItem;
+import de.wichura.camperapp.ad.NewAdActivity;
 
 //farbcode bilder: #639bc5
 public class MainActivity extends ActionBarActivity {

@@ -4,8 +4,9 @@
     android:layout_height="match_parent" 
     android:orientation="vertical"
     android:focusable="true"
-    android:background="@drawable/bg"
     android:focusableInTouchMode="true">
+    <!-- android:background="@drawable/bg" -->
+    
     
      
     
