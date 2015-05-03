@@ -1,0 +1,6 @@
+*.apk
+*.dex
+*.class
+bin/resources.ap_
+*.ap_
+*.ap_
