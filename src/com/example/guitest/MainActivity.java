@@ -18,15 +18,16 @@ public class MainActivity extends ActionBarActivity {
 	List<RowItem> rowItems;
 
 	public static final String[] titles = new String[] { "Strawberry",
-			"Banana", "Orange", "Mixed" };
+			"Banana", "Orange", "Mixed", "Mixed" };
 
 	public static final String[] descriptions = new String[] {
 			"It is an aggregate accessory fruit",
 			"It is the largest herbaceous flowering plant", "Citrus Fruit",
-			"Mixed Fruits" };
+			"Mixed Fruits", "Citrus Fruit" };
 
 	public static final Integer[] images = { R.drawable.applogo,
-			R.drawable.applogo, R.drawable.applogo, R.drawable.applogo };
+			R.drawable.applogo, R.drawable.applogo, R.drawable.applogo,
+			R.drawable.applogo };
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
