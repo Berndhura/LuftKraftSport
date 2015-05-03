@@ -1,5 +1,8 @@
 package com.example.guitest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +14,20 @@ import android.widget.Toast;
 //farbcode bilder: #639bc5
 public class MainActivity extends ActionBarActivity {
 
+	ListView listView;
+	List<RowItem> rowItems;
+
+	public static final String[] titles = new String[] { "Strawberry",
+			"Banana", "Orange", "Mixed" };
+
+	public static final String[] descriptions = new String[] {
+			"It is an aggregate accessory fruit",
+			"It is the largest herbaceous flowering plant", "Citrus Fruit",
+			"Mixed Fruits" };
+
+	public static final Integer[] images = { R.drawable.applogo,
+			R.drawable.applogo, R.drawable.applogo, R.drawable.applogo };
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -18,8 +35,18 @@ public class MainActivity extends ActionBarActivity {
 
 		// Listview:
 		// initList!!!
+		rowItems = new ArrayList<RowItem>();
+		for (int i = 0; i < titles.length; i++) {
+			final RowItem item = new RowItem(images[i], titles[i],
+					descriptions[i]);
+			rowItems.add(item);
+		}
 
-		final ListView lv = (ListView) findViewById(R.id.listView);
+		listView = (ListView) findViewById(R.id.list);
+		final CustomListViewAdapter adapter = new CustomListViewAdapter(this,
+				R.layout.list_item, rowItems);
+		listView.setAdapter(adapter);
+
 	}
 
 	@Override
