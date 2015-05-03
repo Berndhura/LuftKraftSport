@@ -1,4 +1,4 @@
-package com.example.guitest;
+package de.wichura.camperapp.mainactivity;
 
 import java.io.InputStream;
 
@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import de.wichura.camperapp.R;
 
 public class NewAdActivity extends Activity {
 

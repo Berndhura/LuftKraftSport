@@ -1,4 +1,4 @@
-package com.example.guitest;
+package de.wichura.camperapp.mainactivity;
 
 public class RowItem {
 	private int imageId;

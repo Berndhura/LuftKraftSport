@@ -1,4 +1,4 @@
-package com.example.guitest;
+package de.wichura.camperapp.mainactivity;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import de.wichura.camperapp.R;
 
 public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
@@ -28,6 +29,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 		TextView txtDesc;
 	}
 
+	@Override
 	public View getView(final int position, View convertView,
 			final ViewGroup parent) {
 		ViewHolder holder = null;

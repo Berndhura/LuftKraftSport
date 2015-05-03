@@ -1,4 +1,4 @@
-package com.example.guitest;
+package de.wichura.camperapp.mainactivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
+import de.wichura.camperapp.R;
 
 //farbcode bilder: #639bc5
 public class MainActivity extends ActionBarActivity {

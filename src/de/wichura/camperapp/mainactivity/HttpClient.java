@@ -1,4 +1,4 @@
-package com.example.guitest;
+package de.wichura.camperapp.mainactivity;
 
 /*
  * Copyright (C) 2013 Surviving with Android (http://www.survivingwithandroid.com)
