@@ -19,10 +19,11 @@ public class HttpClient {
 		this.url = url;
 	}
 
-	public byte[] downloadImage(final String imgName) {
+	// take out parameter: final String imgName
+	public byte[] downloadImage() {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
-			System.out.println("URL [" + url + "] - Name [" + imgName + "]");
+			// System.out.println("URL [" + url + "] - Name [" + imgName + "]");
 
 			final HttpURLConnection con = (HttpURLConnection) (new URL(url))
 					.openConnection();
@@ -30,7 +31,7 @@ public class HttpClient {
 			con.setDoInput(true);
 			con.setDoOutput(true);
 			con.connect();
-			con.getOutputStream().write(("name=" + imgName).getBytes());
+			// con.getOutputStream().write(("name=" + imgName).getBytes());
 
 			final InputStream is = con.getInputStream();
 			final byte[] b = new byte[1024];

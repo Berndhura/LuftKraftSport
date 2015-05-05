@@ -1,25 +1,45 @@
 package de.wichura.camperapp.http;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 
 public class SendHttpRequestTask extends AsyncTask<String, Void, String> {
 
 	private MenuItem item;
 
+	private final Context mContext;
+
+	public SendHttpRequestTask(final Context context) {
+		mContext = context;
+	}
+
 	@Override
 	protected String doInBackground(final String... params) {
 		final String url = params[0];
 		final String param1 = params[1];
-		final String param2 = params[2];
+		final String param2 = params[2]; // bild URI
 
-		// altes bild (b) brauchen wir hier nicht...
-		// b.compress(CompressFormat.PNG, 0, baos);
-		// final Bitmap b = BitmapFactory.decodeFile(param2);
+		final Uri uri = Uri.parse(param2);
+
+		Bitmap bitmap = null;
+		try {
+			bitmap = MediaStore.Images.Media.getBitmap(
+					mContext.getContentResolver(), uri);
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		// b.compress(CompressFormat.JPEG, 0, baos);
+		bitmap.compress(CompressFormat.PNG, 0, baos);
 
 		try {
 			final HttpClient client = new HttpClient(url);

@@ -100,7 +100,8 @@ public class NewAdActivity extends Activity {
 
 	private void sendHttpToServer(final Intent data) {
 
-		final HttpHelper httpHelper = new HttpHelper(data);
+		final String url = "http://10.0.2.2:8080/2ndHandOz/bildundtext";
+		final HttpHelper httpHelper = new HttpHelper(data, url, this);
 		httpHelper.postData();
 	}
 }
