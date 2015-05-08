@@ -4,11 +4,22 @@ public class RowItem {
 	private int imageId;
 	private String title;
 	private String desc;
+	private byte[] image;
 
-	public RowItem(final int imageId, final String title, final String desc) {
+	public RowItem(final int imageId, final String title, final String desc,
+			final byte[] image) {
 		this.imageId = imageId;
 		this.title = title;
 		this.desc = desc;
+		this.image = image;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(final byte[] image) {
+		this.image = image;
 	}
 
 	public int getImageId() {

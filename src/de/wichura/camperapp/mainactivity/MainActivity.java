@@ -1,6 +1,11 @@
 package de.wichura.camperapp.mainactivity;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 import de.wichura.camperapp.R;
 import de.wichura.camperapp.ad.AdItem;
 import de.wichura.camperapp.ad.NewAdActivity;
@@ -24,6 +28,10 @@ public class MainActivity extends ActionBarActivity {
 	ListView listView;
 	List<RowItem> rowItems;
 	ImageView imgView;
+
+	// public static final byte[] imagesDb =
+	Set<byte[]> imagesDb = new TreeSet<byte[]>();
+	// Bitmap bmp = BitmapFactory.decodeByteArray(blob, 0, blob.length);
 
 	public static final String[] titles = new String[] { "Strawberry",
 			"Banana", "Orange", "Mixed", "Mixed" };
@@ -50,18 +58,26 @@ public class MainActivity extends ActionBarActivity {
 
 		getListWithAds();
 
+		// download JSON formated zeug vom Server
+		final JSONObject jsonobject;
+		// jsonobject = JSONfunctions
+		// .getJSONfromURL("http://localhost:8080/2ndHandOz/getAllAds");
+
 		imgView = (ImageView) findViewById(R.id.imgView1);
 		// test http
 
-		/*
-		 * rowItems = new ArrayList<RowItem>(); for (int i = 0; i <
-		 * titles.length; i++) { final RowItem item = new RowItem(images[i],
-		 * titles[i], descriptions[i]); rowItems.add(item); }
-		 * 
-		 * listView = (ListView) findViewById(R.id.list); final
-		 * CustomListViewAdapter adapter = new CustomListViewAdapter(this,
-		 * R.layout.list_item, rowItems); listView.setAdapter(adapter);
-		 */
+		rowItems = new ArrayList<RowItem>();
+		for (int i = 0; i < titles.length; i++) {
+			final RowItem item = new RowItem(images[i], titles[i],
+					descriptions[i], null); // TODO image einfügen
+			rowItems.add(item);
+		}
+
+		listView = (ListView) findViewById(R.id.list);
+		final CustomListViewAdapter adapter = new CustomListViewAdapter(this,
+				R.layout.list_item, rowItems);
+		listView.setAdapter(adapter);
+
 	}
 
 	@Override
@@ -76,11 +92,13 @@ public class MainActivity extends ActionBarActivity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
+
+		// Toast hier sinnlos, nur zur demo, deshalb raus damit
 		final int id = item.getItemId();
 		if (id == R.id.action_search) {
-			Toast.makeText(MainActivity.this, "Maul " + item.toString(),
-					Toast.LENGTH_LONG).show();
-
+			// Toast.makeText(MainActivity.this, "Maul " + item.toString(),
+			// Toast.LENGTH_LONG).show();
+			// aufruf der New Ad Seite
 			final Intent intent = new Intent(this, NewAdActivity.class);
 			// intent daten neuer ad, siehe todo App weil statuscode noch unklar
 			startActivityForResult(intent, 1);
@@ -107,7 +125,6 @@ public class MainActivity extends ActionBarActivity {
 
 	private void getListWithAds() {
 		final String url = "http://10.0.2.2:8080/2ndHandOz/getBild";
-
 		final SendHttpRequestTask task = new SendHttpRequestTask();
 		task.execute(url);
 	}
@@ -129,11 +146,11 @@ public class MainActivity extends ActionBarActivity {
 		protected void onPostExecute(final byte[] result) {
 			final Bitmap img = BitmapFactory.decodeByteArray(result, 0,
 					result.length);
-			final int lenght = result.length;
+
+			// Hintergrundbild setzen, später nur Listview zu sehen oder
+			// transparent
 			imgView.setImageBitmap(img);
 			// item.setActionView(null);
-
 		}
-
 	}
 }

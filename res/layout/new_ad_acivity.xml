@@ -35,6 +35,22 @@ android:layout_height="fill_parent">
     	  <requestFocus />
     </EditText>
     
+    <TextView android:layout_height="wrap_content"  
+            android:layout_width="wrap_content"  
+            android:text="Keywords">
+    </TextView>  
+    
+    <EditText
+        android:id="@+id/keywords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="14dp"
+        android:ems="10" 
+        android:inputType="textShortMessage">
+    	  <requestFocus />
+    </EditText>
+    
      <ImageButton
         android:id="@+id/uploadButton"
         android:src="@drawable/uploadbutton"

@@ -1,7 +1,5 @@
 package de.wichura.camperapp.ad;
 
-import java.io.InputStream;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,6 +16,8 @@ public class NewAdActivity extends Activity {
 
 	private EditText mTitleText;
 	private EditText mDescText;
+	private EditText mKeywords;
+
 	private static final int SELECT_PHOTO = 100;
 	private String mImage;
 
@@ -29,6 +29,7 @@ public class NewAdActivity extends Activity {
 
 		mTitleText = (EditText) findViewById(R.id.title);
 		mDescText = (EditText) findViewById(R.id.description);
+		mKeywords = (EditText) findViewById(R.id.keywords);
 
 		final Button submitButton = (Button) findViewById(R.id.submitButton);
 
@@ -38,10 +39,12 @@ public class NewAdActivity extends Activity {
 				// TODO - Title
 				final String titleString = mTitleText.getText().toString();
 				final String descString = mDescText.getText().toString();
+				final String keyWordsString = mKeywords.getText().toString();
 
 				// Package ToDoItem data into an Intent
 				final Intent data = new Intent();
-				AdItem.packageIntent(data, titleString, descString, mImage);
+				AdItem.packageIntent(data, titleString, descString,
+						keyWordsString, mImage);
 
 				// TODO - return data Intent and finish
 				setResult(RESULT_OK, data);
@@ -64,17 +67,12 @@ public class NewAdActivity extends Activity {
 
 			}
 		});
-
 	}
 
 	@Override
 	protected void onActivityResult(final int requestCode,
 			final int resultCode, final Intent imageReturnedIntent) {
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
-		// null!!!!!!
-		// Permissions -> erledigt!!!
-		final InputStream imageStream = null;
 
 		switch (requestCode) {
 		case SELECT_PHOTO:
