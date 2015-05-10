@@ -16,6 +16,8 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
 	Context context;
 
+	// notifyDataSetChanged();
+
 	public CustomListViewAdapter(final Context context, final int resourceId,
 			final List<RowItem> items) {
 		super(context, resourceId, items);
@@ -47,7 +49,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 		} else
 			holder = (ViewHolder) convertView.getTag();
 
-		holder.txtDesc.setText(rowItem.getDesc());
+		holder.txtDesc.setText(rowItem.getKeywords());
 		holder.txtTitle.setText(rowItem.getTitle());
 		holder.imageView.setImageResource(rowItem.getImageId());
 

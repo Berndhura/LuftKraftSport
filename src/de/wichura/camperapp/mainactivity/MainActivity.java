@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -17,6 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.google.gson.Gson;
+
 import de.wichura.camperapp.R;
 import de.wichura.camperapp.ad.AdItem;
 import de.wichura.camperapp.ad.NewAdActivity;
@@ -25,9 +30,10 @@ import de.wichura.camperapp.http.HttpClient;
 //farbcode bilder: #639bc5
 public class MainActivity extends ActionBarActivity {
 
-	ListView listView;
-	List<RowItem> rowItems;
-	ImageView imgView;
+	private ListView listView;
+	private List<RowItem> rowItems;
+	private ImageView imgView;
+	private JSONObject j;
 
 	// public static final byte[] imagesDb =
 	Set<byte[]> imagesDb = new TreeSet<byte[]>();
@@ -66,17 +72,88 @@ public class MainActivity extends ActionBarActivity {
 		imgView = (ImageView) findViewById(R.id.imgView1);
 		// test http
 
-		rowItems = new ArrayList<RowItem>();
-		for (int i = 0; i < titles.length; i++) {
-			final RowItem item = new RowItem(images[i], titles[i],
-					descriptions[i], null); // TODO image einfügen
-			rowItems.add(item);
+		// get MOCK JSON
+		try {
+			j = getJson();
+			System.out.println(j.toString());
+		} catch (final JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+		JSONObject responseObj = null;
+
+		try {
+
+			final Gson gson = new Gson();
+			responseObj = new JSONObject(j.toString());
+			final JSONArray titleListObj = responseObj.getJSONArray("zeug");
+
+			rowItems = new ArrayList<RowItem>();
+			for (int i = 0; i < titleListObj.length(); i++) {
+
+				// get the country information JSON object
+				final String title = titleListObj.getJSONObject(i).toString();
+				// create java object from the JSON object, matscht alles in die
+				// RowItem class!geter seter...
+				final RowItem country = gson.fromJson(title, RowItem.class); // klappt
+																				// nun
+																				// nicht
+																				// mehr
+																				// wegen
+																				// Async
+																				// zeug
+																				// und
+																				// adapter!
+				// vielleicht rausconfigurieren aus GSON?? ->www!!!
+				// add to country array list
+				// countryList.add(country);
+				rowItems.add(country);
+				System.out.println("maul: " + title);
+			}
+		} catch (final JSONException e) {
+			e.printStackTrace();
+		}
+
+		/*
+		 * rowItems = new ArrayList<RowItem>(); for (int i = 0; i <
+		 * titles.length; i++) { final RowItem item = new RowItem(images[i],
+		 * titles[i], descriptions[i], "urlDUMMY"); // TODO image einfügen
+		 * rowItems.add(item); }
+		 */
 
 		listView = (ListView) findViewById(R.id.list);
 		final CustomListViewAdapter adapter = new CustomListViewAdapter(this,
 				R.layout.list_item, rowItems);
 		listView.setAdapter(adapter);
+
+		// neu gemacht: load alle bilder zu den URLs async
+		for (final RowItem ri : rowItems) {
+			ri.loadImage(adapter);
+		}
+
+	}
+
+	private JSONObject getJson() throws JSONException {
+
+		final JSONObject jo1 = new JSONObject();
+		jo1.put("title", "Kocher");
+		jo1.put("keywords", "kocher");
+		jo1.put("url", "http://localhost:8080/2ndHandOz/getBild?id=1");
+
+		final JSONObject jo2 = new JSONObject();
+		jo2.put("title", "Zelt");
+		jo2.put("keywords", "zelt");
+		jo2.put("url", "http://localhost:8080/2ndHandOz/getBild?id=12");
+
+		final JSONArray ja = new JSONArray();
+		ja.put(jo1);
+		ja.put(jo2);
+
+		final JSONObject mainObj = new JSONObject();
+		mainObj.put("zeug", ja);
+
+		return mainObj;
 
 	}
 
