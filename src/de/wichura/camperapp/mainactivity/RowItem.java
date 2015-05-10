@@ -3,14 +3,21 @@ package de.wichura.camperapp.mainactivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+
+import com.google.gson.annotations.Expose;
+
 import de.wichura.camperapp.http.HttpClient;
 
 public class RowItem {
 	private int imageId;
+	@Expose
 	private String title;
+	@Expose
 	private String keywords;
+	@Expose
 	private String url;
 	private Bitmap image;
+
 	private CustomListViewAdapter adapter;// EXCLUDE because GSON!! how???
 
 	// private byte[] image;
@@ -84,7 +91,8 @@ public class RowItem {
 		// HOLD A REFERENCE TO THE ADAPTER
 		this.adapter = adapter;
 		if (url != null && !url.equals("")) {
-			new SendHttpRequestTask().execute(url);
+			final SendHttpRequestTask task = new SendHttpRequestTask();
+			task.execute(url);
 		}
 	}
 
@@ -103,18 +111,8 @@ public class RowItem {
 
 		@Override
 		protected void onPostExecute(final byte[] result) {
-			if (result != null) {
-				// Log.i("ImageLoadTask", "Successfully loaded " + name +
-				// " image");
-				image = BitmapFactory.decodeByteArray(result, 0, result.length);
-				if (adapter != null) {
-					// WHEN IMAGE IS LOADED NOTIFY THE ADAPTER
-					adapter.notifyDataSetChanged();
-				}
-			} else {
-				// TODO:log falls bild nicht geladen
-				// Log.e("ImageLoadTask", "Failed to load " + name + " image");
-			}
+			image = BitmapFactory.decodeByteArray(result, 0, result.length);
+			adapter.notifyDataSetChanged();
 		}
 	}
 }

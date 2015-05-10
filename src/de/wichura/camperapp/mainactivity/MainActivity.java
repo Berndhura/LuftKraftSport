@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import de.wichura.camperapp.R;
 import de.wichura.camperapp.ad.AdItem;
@@ -62,7 +63,8 @@ public class MainActivity extends ActionBarActivity {
 		// Listview:
 		// initList!!!
 
-		getListWithAds();
+		//ein bild holen für den startbildschirm
+		//getListWithAds();
 
 		// download JSON formated zeug vom Server
 		final JSONObject jsonobject;
@@ -85,7 +87,8 @@ public class MainActivity extends ActionBarActivity {
 
 		try {
 
-			final Gson gson = new Gson();
+			final Gson gson = new GsonBuilder()
+					.excludeFieldsWithoutExposeAnnotation().create();
 			responseObj = new JSONObject(j.toString());
 			final JSONArray titleListObj = responseObj.getJSONArray("zeug");
 
@@ -96,16 +99,7 @@ public class MainActivity extends ActionBarActivity {
 				final String title = titleListObj.getJSONObject(i).toString();
 				// create java object from the JSON object, matscht alles in die
 				// RowItem class!geter seter...
-				final RowItem country = gson.fromJson(title, RowItem.class); // klappt
-																				// nun
-																				// nicht
-																				// mehr
-																				// wegen
-																				// Async
-																				// zeug
-																				// und
-																				// adapter!
-				// vielleicht rausconfigurieren aus GSON?? ->www!!!
+				final RowItem country = gson.fromJson(title, RowItem.class);
 				// add to country array list
 				// countryList.add(country);
 				rowItems.add(country);
@@ -139,12 +133,12 @@ public class MainActivity extends ActionBarActivity {
 		final JSONObject jo1 = new JSONObject();
 		jo1.put("title", "Kocher");
 		jo1.put("keywords", "kocher");
-		jo1.put("url", "http://localhost:8080/2ndHandOz/getBild?id=1");
+		jo1.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=0");
 
 		final JSONObject jo2 = new JSONObject();
 		jo2.put("title", "Zelt");
 		jo2.put("keywords", "zelt");
-		jo2.put("url", "http://localhost:8080/2ndHandOz/getBild?id=12");
+		jo2.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=1");
 
 		final JSONArray ja = new JSONArray();
 		ja.put(jo1);
@@ -201,7 +195,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	private void getListWithAds() {
-		final String url = "http://10.0.2.2:8080/2ndHandOz/getBild";
+		final String url = "http://10.0.2.2:8080/2ndHandOz/getBild?id=0";
 		final SendHttpRequestTask task = new SendHttpRequestTask();
 		task.execute(url);
 	}
