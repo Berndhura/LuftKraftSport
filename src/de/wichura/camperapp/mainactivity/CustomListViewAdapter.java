@@ -16,8 +16,6 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
 	Context context;
 
-	// notifyDataSetChanged();
-
 	public CustomListViewAdapter(final Context context, final int resourceId,
 			final List<RowItem> items) {
 		super(context, resourceId, items);

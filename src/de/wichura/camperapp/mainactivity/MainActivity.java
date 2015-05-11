@@ -2,8 +2,6 @@ package de.wichura.camperapp.mainactivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,35 +34,13 @@ public class MainActivity extends ActionBarActivity {
 	private ImageView imgView;
 	private JSONObject j;
 
-	// public static final byte[] imagesDb =
-	Set<byte[]> imagesDb = new TreeSet<byte[]>();
-	// Bitmap bmp = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-
-	public static final String[] titles = new String[] { "Strawberry",
-			"Banana", "Orange", "Mixed", "Mixed" };
-
-	public static final String[] descriptions = new String[] {
-			"It is an aggregate accessory fruit",
-			"It is the largest herbaceous flowering plant", "Citrus Fruit",
-			"Mixed Fruits", "Citrus Fruit" };
-
-	public static final Integer[] images = { R.drawable.applogo,
-			R.drawable.applogo, R.drawable.applogo, R.drawable.applogo,
-			R.drawable.applogo };
-
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// TODO: hole im ersten schritt alle einträge aus der datenbank bzw vom
-		// webserver
-		// coursor?von android?
-		// Listview:
-		// initList!!!
-
-		//ein bild holen für den startbildschirm
-		//getListWithAds();
+		// ein bild holen für den startbildschirm
+		// getListWithAds();
 
 		// download JSON formated zeug vom Server
 		final JSONObject jsonobject;
@@ -109,13 +85,6 @@ public class MainActivity extends ActionBarActivity {
 			e.printStackTrace();
 		}
 
-		/*
-		 * rowItems = new ArrayList<RowItem>(); for (int i = 0; i <
-		 * titles.length; i++) { final RowItem item = new RowItem(images[i],
-		 * titles[i], descriptions[i], "urlDUMMY"); // TODO image einfügen
-		 * rowItems.add(item); }
-		 */
-
 		listView = (ListView) findViewById(R.id.list);
 		final CustomListViewAdapter adapter = new CustomListViewAdapter(this,
 				R.layout.list_item, rowItems);
@@ -125,29 +94,6 @@ public class MainActivity extends ActionBarActivity {
 		for (final RowItem ri : rowItems) {
 			ri.loadImage(adapter);
 		}
-
-	}
-
-	private JSONObject getJson() throws JSONException {
-
-		final JSONObject jo1 = new JSONObject();
-		jo1.put("title", "Kocher");
-		jo1.put("keywords", "kocher");
-		jo1.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=0");
-
-		final JSONObject jo2 = new JSONObject();
-		jo2.put("title", "Zelt");
-		jo2.put("keywords", "zelt");
-		jo2.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=1");
-
-		final JSONArray ja = new JSONArray();
-		ja.put(jo1);
-		ja.put(jo2);
-
-		final JSONObject mainObj = new JSONObject();
-		mainObj.put("zeug", ja);
-
-		return mainObj;
 
 	}
 
@@ -217,11 +163,35 @@ public class MainActivity extends ActionBarActivity {
 		protected void onPostExecute(final byte[] result) {
 			final Bitmap img = BitmapFactory.decodeByteArray(result, 0,
 					result.length);
-
-			// Hintergrundbild setzen, später nur Listview zu sehen oder
-			// transparent
 			imgView.setImageBitmap(img);
-			// item.setActionView(null);
 		}
+	}
+
+	private JSONObject getJson() throws JSONException {
+
+		final JSONObject jo1 = new JSONObject();
+		jo1.put("title", "Kocher");
+		jo1.put("keywords", "kocher");
+		jo1.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=0");
+
+		final JSONObject jo2 = new JSONObject();
+		jo2.put("title", "Zelt");
+		jo2.put("keywords", "zelt");
+		jo2.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=1");
+
+		final JSONObject jo3 = new JSONObject();
+		jo3.put("title", "Titel");
+		jo3.put("keywords", "muellhaufen");
+		jo3.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=2");
+
+		final JSONArray ja = new JSONArray();
+		ja.put(jo1);
+		ja.put(jo2);
+		ja.put(jo3);
+
+		final JSONObject mainObj = new JSONObject();
+		mainObj.put("zeug", ja);
+
+		return mainObj;
 	}
 }

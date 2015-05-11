@@ -18,9 +18,7 @@ public class RowItem {
 	private String url;
 	private Bitmap image;
 
-	private CustomListViewAdapter adapter;// EXCLUDE because GSON!! how???
-
-	// private byte[] image;
+	private CustomListViewAdapter adapter;
 
 	public RowItem(final int imageId, final String title,
 			final String keywords, final String url) {
@@ -33,14 +31,6 @@ public class RowItem {
 	public Bitmap getImage() {
 		return image;
 	}
-
-	/*
-	 * public byte[] getImage() { return image; }
-	 */
-
-	/*
-	 * public void setImage(final byte[] image) { this.image = image; }
-	 */
 
 	public int getImageId() {
 		return imageId;

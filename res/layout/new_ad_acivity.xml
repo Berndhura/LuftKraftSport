@@ -1,71 +1,95 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical" android:layout_width="fill_parent"
-android:layout_height="fill_parent">
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
 	
-    
-    <TextView android:layout_height="wrap_content"  
-            android:layout_width="wrap_content"  
-            android:text="Titel">
+    <TextView
+        android:id="@+id/titeltext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="Titel" >
+
     </TextView>  
     
     <EditText
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="14dp"
-        android:ems="10" 
-        android:inputType="textShortMessage">
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/titeltext"
+        android:inputType="textShortMessage" >
+
     	<requestFocus />
     </EditText>
     
-    <TextView android:layout_height="wrap_content"  
-            android:layout_width="wrap_content"  
-            android:text="Description">
+    <TextView
+        android:id="@+id/desctext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/title"
+        android:text="Description" >
+
     </TextView>  
     
     <EditText
         android:id="@+id/description"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="14dp"
-        android:ems="10" 
-        android:inputType="textShortMessage">
-    	  <requestFocus />
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/desctext"
+        android:inputType="textShortMessage" >
+
+    	<requestFocus />
     </EditText>
     
-    <TextView android:layout_height="wrap_content"  
-            android:layout_width="wrap_content"  
-            android:text="Keywords">
+    <TextView
+        android:id="@+id/keywordstext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/description"
+        android:text="Keywords" >
+
     </TextView>  
     
     <EditText
         android:id="@+id/keywords"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="14dp"
-        android:ems="10" 
-        android:inputType="textShortMessage">
-    	  <requestFocus />
-    </EditText>
-    
-     <ImageButton
-        android:id="@+id/uploadButton"
-        android:src="@drawable/uploadbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        style="?android:attr/borderlessButtonStyle"/>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/keywordstext"
+        android:ems="10"
+        android:inputType="textShortMessage" >
+    	 
+    </EditText>
 
      <Button
         android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:text="@string/submit_string" />
 
-</LinearLayout>
+     <ImageButton
+         android:id="@+id/uploadButton"
+         style="?android:attr/borderlessButtonStyle"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentLeft="true"
+         android:layout_below="@+id/keywords"
+         android:layout_marginLeft="15dp"
+         android:src="@drawable/uploadbutton" />
+
+</RelativeLayout>

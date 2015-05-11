@@ -32,7 +32,6 @@ public class NewAdActivity extends Activity {
 		mKeywords = (EditText) findViewById(R.id.keywords);
 
 		final Button submitButton = (Button) findViewById(R.id.submitButton);
-
 		submitButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
