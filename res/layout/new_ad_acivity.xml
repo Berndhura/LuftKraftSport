@@ -4,17 +4,7 @@
     android:layout_height="fill_parent"
     android:padding="10dp" 
     android:gravity="center_horizontal"
-    android:orientation="vertical">
-	
-    <TextView
-        android:id="@+id/titeltext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="Titel" >
-
-    </TextView>  
+    android:orientation="vertical">  
     
     <EditText
         android:id="@+id/title"
@@ -22,23 +12,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/titeltext"
         android:hint="Titel"
         android:inputType="textShortMessage" >
 
     	<requestFocus />
-    </EditText>
-    
-    <TextView
-        android:id="@+id/desctext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/title"
-        android:text="Description" >
-
-    </TextView>  
+    </EditText>  
     
     <EditText
         android:id="@+id/description"
@@ -46,22 +24,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/desctext"
+        android:layout_below="@+id/title"
+        android:hint="Description"
         android:inputType="textShortMessage" >
 
     	<requestFocus />
-    </EditText>
-    
-    <TextView
-        android:id="@+id/keywordstext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/description"
-        android:text="Keywords" >
-
-    </TextView>  
+    </EditText>  
     
     <EditText
         android:id="@+id/keywords"
@@ -70,8 +38,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="false"
-        android:layout_below="@+id/keywordstext"
+        android:layout_below="@+id/description"
         android:ems="10"
+        android:hint="Tags"
         android:inputType="textShortMessage" >
     	 
     </EditText>
@@ -114,7 +83,11 @@
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_above="@+id/uploadButton"
+         android:layout_alignLeft="@+id/keywords"
+         android:layout_alignRight="@+id/keywords"
+         android:layout_below="@+id/keywords"
          android:padding="10dp" >
+
          android:layout_alignParentLeft="true"
          android:layout_alignParentRight="true"
          android:layout_below="@+id/keywords" >
