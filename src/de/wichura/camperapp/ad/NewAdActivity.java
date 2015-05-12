@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import de.wichura.camperapp.R;
 import de.wichura.camperapp.http.HttpHelper;
 
@@ -21,6 +21,8 @@ public class NewAdActivity extends Activity {
 	private static final int SELECT_PHOTO = 100;
 	private String mImage;
 
+	private ImageView mImgOne;
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,6 +32,7 @@ public class NewAdActivity extends Activity {
 		mTitleText = (EditText) findViewById(R.id.title);
 		mDescText = (EditText) findViewById(R.id.description);
 		mKeywords = (EditText) findViewById(R.id.keywords);
+		mImgOne = (ImageView) findViewById(R.id.imageView1);
 
 		final Button submitButton = (Button) findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new OnClickListener() {
@@ -54,7 +57,7 @@ public class NewAdActivity extends Activity {
 			}
 		});
 
-		final ImageButton uploadPicButton = (ImageButton) findViewById(R.id.uploadButton);
+		final Button uploadPicButton = (Button) findViewById(R.id.uploadButton);
 
 		uploadPicButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -78,6 +81,10 @@ public class NewAdActivity extends Activity {
 			if (resultCode == RESULT_OK) {
 				final Uri selectedImage = imageReturnedIntent.getData();
 				mImage = selectedImage.toString();
+
+				mImgOne = (ImageView) findViewById(R.id.imageView1);
+				mImgOne.setImageURI(selectedImage);
+
 				// content://media/external/images/media/18
 				/*
 				 * try { imageStream = getContentResolver().openInputStream(
