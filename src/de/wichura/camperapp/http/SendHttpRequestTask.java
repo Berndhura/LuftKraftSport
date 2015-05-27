@@ -9,12 +9,10 @@ import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.view.MenuItem;
 
 public class SendHttpRequestTask extends AsyncTask<String, Void, String> {
 
-	private MenuItem item;
-
+	// use Context for getting Bitmap from media
 	private final Context mContext;
 
 	public SendHttpRequestTask(final Context context) {
@@ -44,7 +42,7 @@ public class SendHttpRequestTask extends AsyncTask<String, Void, String> {
 		try {
 			final HttpClient client = new HttpClient(url);
 			client.connectForMultipart();
-			client.addFormPart("titel", param1);
+			client.addFormPart("keywords", param1);
 			// client.addFormPart("param2", param2);
 			client.addFilePart("image", "icon.png", baos.toByteArray());
 			client.finishMultipart();

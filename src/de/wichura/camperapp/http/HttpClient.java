@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HttpClient {
+	private static final int PICTURESIZE = 3 * 1024 * 1024;
 	private final String url;
 	private HttpURLConnection con;
 	private OutputStream os;
@@ -34,7 +35,8 @@ public class HttpClient {
 			// con.getOutputStream().write(("name=" + imgName).getBytes());
 
 			final InputStream is = con.getInputStream();
-			final byte[] b = new byte[1024];
+			// TODO groesse der pics!!
+			final byte[] b = new byte[PICTURESIZE];
 
 			while (is.read(b) != -1)
 				baos.write(b);
@@ -84,7 +86,7 @@ public class HttpClient {
 
 	public String getResponse() throws Exception {
 		final InputStream is = con.getInputStream();
-		final byte[] b1 = new byte[1024];
+		final byte[] b1 = new byte[PICTURESIZE];
 		final StringBuffer buffer = new StringBuffer();
 
 		while (is.read(b1) != -1)

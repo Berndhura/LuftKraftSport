@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,7 @@ import de.wichura.camperapp.R;
 import de.wichura.camperapp.ad.AdItem;
 import de.wichura.camperapp.ad.NewAdActivity;
 import de.wichura.camperapp.http.HttpClient;
+import de.wichura.camperapp.http.JSONParser;
 
 //farbcode bilder: #639bc5
 public class MainActivity extends ActionBarActivity {
@@ -33,22 +35,14 @@ public class MainActivity extends ActionBarActivity {
 	private List<RowItem> rowItems;
 	private ImageView imgView;
 	private JSONObject j;
+	private final JSONArray user = null;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// ein bild holen für den startbildschirm
-		// getListWithAds();
-
-		// download JSON formated zeug vom Server
-		final JSONObject jsonobject;
-		// jsonobject = JSONfunctions
-		// .getJSONfromURL("http://localhost:8080/2ndHandOz/getAllAds");
-
 		imgView = (ImageView) findViewById(R.id.imgView1);
-		// test http
 
 		// get MOCK JSON
 		try {
@@ -76,10 +70,7 @@ public class MainActivity extends ActionBarActivity {
 				// create java object from the JSON object, matscht alles in die
 				// RowItem class!geter seter...
 				final RowItem country = gson.fromJson(title, RowItem.class);
-				// add to country array list
-				// countryList.add(country);
 				rowItems.add(country);
-				System.out.println("maul: " + title);
 			}
 		} catch (final JSONException e) {
 			e.printStackTrace();
@@ -140,12 +131,6 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
-	private void getListWithAds() {
-		final String url = "http://10.0.2.2:8080/2ndHandOz/getBild?id=0";
-		final SendHttpRequestTask task = new SendHttpRequestTask();
-		task.execute(url);
-	}
-
 	private class SendHttpRequestTask extends AsyncTask<String, Void, byte[]> {
 
 		@Override
@@ -169,20 +154,23 @@ public class MainActivity extends ActionBarActivity {
 
 	private JSONObject getJson() throws JSONException {
 
+		new JSONParse().execute();
+		// client.execute("http://localhost:8080/2ndHandOz/getAllAds");
+
 		final JSONObject jo1 = new JSONObject();
 		jo1.put("title", "Kocher");
 		jo1.put("keywords", "kocher");
-		jo1.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=0");
+		jo1.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=8");
 
 		final JSONObject jo2 = new JSONObject();
 		jo2.put("title", "Zelt");
 		jo2.put("keywords", "zelt");
-		jo2.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=1");
+		jo2.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=9");
 
 		final JSONObject jo3 = new JSONObject();
 		jo3.put("title", "Titel");
 		jo3.put("keywords", "muellhaufen");
-		jo3.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=2");
+		jo3.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=8");
 
 		final JSONArray ja = new JSONArray();
 		ja.put(jo1);
@@ -193,5 +181,36 @@ public class MainActivity extends ActionBarActivity {
 		mainObj.put("zeug", ja);
 
 		return mainObj;
+	}
+
+	private class JSONParse extends AsyncTask<String, String, String> {
+		private ProgressDialog pDialog;
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pDialog = new ProgressDialog(MainActivity.this);
+			pDialog.setMessage("Getting Data ...");
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(true);
+			pDialog.show();
+
+		}
+
+		@Override
+		protected String doInBackground(final String... args) {
+			final JSONParser jParser = new JSONParser();
+
+			// Getting JSON from URL
+			final String json = jParser
+					.getJSONFromUrl("http://10.0.2.2:8080/2ndHandOz/getAllAds");
+			return json;
+		}
+
+		@Override
+		protected void onPostExecute(final String json) {
+			pDialog.dismiss();
+
+		}
 	}
 }
