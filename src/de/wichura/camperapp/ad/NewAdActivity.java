@@ -69,6 +69,20 @@ public class NewAdActivity extends Activity {
 
 			}
 		});
+
+		final Button cancelButton = (Button) findViewById(R.id.cancelButton);
+
+		cancelButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(final View v) {
+
+				// TODO - Set Activity's result with result code RESULT_OK
+				// setResult(RESULT_OK, intent);
+				// TODO - Finish the Activity
+				finish();
+
+			}
+		});
 	}
 
 	@Override

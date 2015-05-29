@@ -22,7 +22,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import de.wichura.camperapp.R;
-import de.wichura.camperapp.ad.AdItem;
 import de.wichura.camperapp.ad.NewAdActivity;
 import de.wichura.camperapp.http.HttpClient;
 import de.wichura.camperapp.http.JSONParser;
@@ -79,15 +78,8 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onActivityResult(final int requestCode,
 			final int resultCode, final Intent data) {
-
-		{
-			final AdItem adItem = new AdItem(data);
-			System.out.println(adItem.toString());
-
-			// adapter für listview daten aus dem adItem werden hinzugefügt:
-			// daten, bild?!
-			// mAdapter.add(newItem);
-		}
+		// get Ads in JSON
+		new JSONParse(this).execute();
 	}
 
 	private class SendHttpRequestTask extends AsyncTask<String, Void, byte[]> {
@@ -158,8 +150,8 @@ public class MainActivity extends ActionBarActivity {
 					// create java object from the JSON object, matscht alles in
 					// die
 					// RowItem class!geter seter...
-					final RowItem country = gson.fromJson(title, RowItem.class);
-					rowItems.add(country);
+					final RowItem rowItem = gson.fromJson(title, RowItem.class);
+					rowItems.add(rowItem);
 				}
 			} catch (final JSONException e) {
 				e.printStackTrace();

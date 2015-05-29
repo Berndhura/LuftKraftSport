@@ -16,16 +16,28 @@ public class RowItem {
 	private String keywords;
 	@Expose
 	private String urls;
+	@Expose
+	private String description;
+
 	private Bitmap image;
 
 	private CustomListViewAdapter adapter;
 
 	public RowItem(final int imageId, final String title,
-			final String keywords, final String url) {
+			final String keywords, final String url, final String des) {
 		this.imageId = imageId;
 		this.title = title;
 		this.keywords = keywords;
 		this.urls = url;
+		this.description = des;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(final String description) {
+		this.description = description;
 	}
 
 	public Bitmap getImage() {

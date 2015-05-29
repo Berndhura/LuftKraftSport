@@ -18,13 +18,18 @@ public class HttpHelper {
 
 	public void postData() {
 
-		final SendHttpRequestTask t = new SendHttpRequestTask(context);
+		final SendHttpRequestTask sendTask = new SendHttpRequestTask(context);
 
-		final String param1 = data.getStringExtra(AdItem.TITLE);
-		final String param2 = data.getStringExtra(AdItem.FILENAME);
+		final String title = data.getStringExtra(AdItem.TITLE);
+		final String description = data.getStringExtra(AdItem.DESC);
+		final String keywords = data.getStringExtra(AdItem.KEYWORDS);
+		final String picture = data.getStringExtra(AdItem.FILENAME);
 
-		final String[] params = new String[] { url, param1, param2 };
-		t.execute(params);
+		final String[] params = new String[] { url, title, description,
+				keywords, picture };
+		// anders uebergeben?? reihenfolge der parameter merken ist nicht gut
+		// TODO
+		sendTask.execute(params);
 	}
 
 	public void getAds() {

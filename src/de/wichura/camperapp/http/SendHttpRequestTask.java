@@ -21,11 +21,12 @@ public class SendHttpRequestTask extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected String doInBackground(final String... params) {
-		final String url = params[0];
-		final String param1 = params[1];
-		final String param2 = params[2]; // bild URI
 
-		final Uri uri = Uri.parse(param2);
+		final String url = params[0];
+		// final String param1 = params[1];
+		final String bildURI = params[4]; // bild URI
+
+		final Uri uri = Uri.parse(bildURI);
 
 		Bitmap bitmap = null;
 		try {
@@ -42,8 +43,10 @@ public class SendHttpRequestTask extends AsyncTask<String, Void, String> {
 		try {
 			final HttpClient client = new HttpClient(url);
 			client.connectForMultipart();
-			client.addFormPart("keywords", param1);
-			// client.addFormPart("param2", param2);
+			// from HttpHelper: url, title, description, keywords, picture
+			client.addFormPart("title", params[1]);
+			client.addFormPart("description", params[2]);
+			client.addFormPart("keywords", params[3]);
 			client.addFilePart("image", "icon.png", baos.toByteArray());
 			client.finishMultipart();
 			final String data = client.getResponse();
