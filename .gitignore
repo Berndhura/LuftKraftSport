@@ -1,7 +1,6 @@
-*.apk
-*.dex
 *.class
-*.ap_
-*.bin
 *.jar
 bin/
+.settings/
+target/
+
