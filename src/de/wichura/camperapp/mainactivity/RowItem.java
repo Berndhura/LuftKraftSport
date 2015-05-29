@@ -15,7 +15,7 @@ public class RowItem {
 	@Expose
 	private String keywords;
 	@Expose
-	private String url;
+	private String urls;
 	private Bitmap image;
 
 	private CustomListViewAdapter adapter;
@@ -25,7 +25,7 @@ public class RowItem {
 		this.imageId = imageId;
 		this.title = title;
 		this.keywords = keywords;
-		this.url = url;
+		this.urls = url;
 	}
 
 	public Bitmap getImage() {
@@ -57,11 +57,11 @@ public class RowItem {
 	}
 
 	public String getUrl() {
-		return url;
+		return urls;
 	}
 
 	public void setUrl(final String url) {
-		this.url = url;
+		this.urls = url;
 	}
 
 	public void setAdapter(final CustomListViewAdapter adp) {
@@ -74,15 +74,15 @@ public class RowItem {
 
 	@Override
 	public String toString() {
-		return imageId + "\n" + title + "\n" + keywords + "\n" + url;
+		return imageId + "\n" + title + "\n" + keywords + "\n" + urls;
 	}
 
 	public void loadImage(final CustomListViewAdapter adapter) {
 		// HOLD A REFERENCE TO THE ADAPTER
 		this.adapter = adapter;
-		if (url != null && !url.equals("")) {
+		if (urls != null && !urls.equals("")) {
 			final SendHttpRequestTask task = new SendHttpRequestTask();
-			task.execute(url);
+			task.execute(urls);
 		}
 	}
 

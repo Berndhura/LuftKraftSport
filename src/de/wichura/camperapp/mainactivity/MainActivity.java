@@ -5,9 +5,8 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,8 +33,8 @@ public class MainActivity extends ActionBarActivity {
 	private ListView listView;
 	private List<RowItem> rowItems;
 	private ImageView imgView;
-	private JSONObject j;
-	private final JSONArray user = null;
+
+	static String WEBURL = "http://10.0.2.2:8080/2ndHandOz";
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -44,48 +43,8 @@ public class MainActivity extends ActionBarActivity {
 
 		imgView = (ImageView) findViewById(R.id.imgView1);
 
-		// get MOCK JSON
-		try {
-			j = getJson();
-			System.out.println(j.toString());
-		} catch (final JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		JSONObject responseObj = null;
-
-		try {
-
-			final Gson gson = new GsonBuilder()
-					.excludeFieldsWithoutExposeAnnotation().create();
-			responseObj = new JSONObject(j.toString());
-			final JSONArray titleListObj = responseObj.getJSONArray("zeug");
-
-			rowItems = new ArrayList<RowItem>();
-			for (int i = 0; i < titleListObj.length(); i++) {
-
-				// get the country information JSON object
-				final String title = titleListObj.getJSONObject(i).toString();
-				// create java object from the JSON object, matscht alles in die
-				// RowItem class!geter seter...
-				final RowItem country = gson.fromJson(title, RowItem.class);
-				rowItems.add(country);
-			}
-		} catch (final JSONException e) {
-			e.printStackTrace();
-		}
-
-		listView = (ListView) findViewById(R.id.list);
-		final CustomListViewAdapter adapter = new CustomListViewAdapter(this,
-				R.layout.list_item, rowItems);
-		listView.setAdapter(adapter);
-
-		// neu gemacht: load alle bilder zu den URLs async
-		for (final RowItem ri : rowItems) {
-			ri.loadImage(adapter);
-		}
-
+		// get Ads in JSON
+		new JSONParse(this).execute();
 	}
 
 	@Override
@@ -152,64 +111,69 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
-	private JSONObject getJson() throws JSONException {
-
-		new JSONParse().execute();
-		// client.execute("http://localhost:8080/2ndHandOz/getAllAds");
-
-		final JSONObject jo1 = new JSONObject();
-		jo1.put("title", "Kocher");
-		jo1.put("keywords", "kocher");
-		jo1.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=8");
-
-		final JSONObject jo2 = new JSONObject();
-		jo2.put("title", "Zelt");
-		jo2.put("keywords", "zelt");
-		jo2.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=9");
-
-		final JSONObject jo3 = new JSONObject();
-		jo3.put("title", "Titel");
-		jo3.put("keywords", "muellhaufen");
-		jo3.put("url", "http://10.0.2.2:8080/2ndHandOz/getBild?id=8");
-
-		final JSONArray ja = new JSONArray();
-		ja.put(jo1);
-		ja.put(jo2);
-		ja.put(jo3);
-
-		final JSONObject mainObj = new JSONObject();
-		mainObj.put("zeug", ja);
-
-		return mainObj;
-	}
-
 	private class JSONParse extends AsyncTask<String, String, String> {
-		private ProgressDialog pDialog;
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			pDialog = new ProgressDialog(MainActivity.this);
-			pDialog.setMessage("Getting Data ...");
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(true);
-			pDialog.show();
-
+		public JSONParse(final Context context) {
+			this.context = context;
 		}
+
+		private final Context context;
 
 		@Override
 		protected String doInBackground(final String... args) {
 			final JSONParser jParser = new JSONParser();
 
 			// Getting JSON from URL
-			final String json = jParser
-					.getJSONFromUrl("http://10.0.2.2:8080/2ndHandOz/getAllAds");
+			final String json = jParser.getJSONFromUrl(WEBURL + "/getAllAds");
 			return json;
 		}
 
 		@Override
 		protected void onPostExecute(final String json) {
-			pDialog.dismiss();
+			// pDialog.dismiss();
+
+			try {
+
+				final Gson gson = new GsonBuilder()
+						.excludeFieldsWithoutExposeAnnotation().create();
+
+				final JSONArray listOfAllAds = new JSONArray(json);
+
+				// final JSONObject songs = json.getJSONObject("songs");
+				// final Iterator x = responseObj.keys();
+				// final JSONArray jsonArray = new JSONArray();
+
+				// while (x.hasNext()) {
+				// final String key = (String) x.next();
+				// jsonArray.put(responseObj.get(key));
+				// }
+
+				// final JSONArray titleListObj = jsonArray;
+
+				rowItems = new ArrayList<RowItem>();
+				for (int i = 0; i < listOfAllAds.length(); i++) {
+
+					// get the titel information JSON object
+					final String title = listOfAllAds.getJSONObject(i)
+							.toString();
+					// create java object from the JSON object, matscht alles in
+					// die
+					// RowItem class!geter seter...
+					final RowItem country = gson.fromJson(title, RowItem.class);
+					rowItems.add(country);
+				}
+			} catch (final JSONException e) {
+				e.printStackTrace();
+			}
+
+			listView = (ListView) findViewById(R.id.list);
+			final CustomListViewAdapter adapter = new CustomListViewAdapter(
+					context, R.layout.list_item, rowItems);
+			listView.setAdapter(adapter);
+
+			// neu gemacht: load alle bilder zu den URLs async
+			for (final RowItem ri : rowItems) {
+				ri.loadImage(adapter);
+			}
 
 		}
 	}
