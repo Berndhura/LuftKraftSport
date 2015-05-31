@@ -15,14 +15,18 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import de.wichura.camperapp.R;
 import de.wichura.camperapp.ad.NewAdActivity;
+import de.wichura.camperapp.ad.OpenAdActivity;
 import de.wichura.camperapp.http.HttpClient;
 import de.wichura.camperapp.http.JSONParser;
 
@@ -161,6 +165,24 @@ public class MainActivity extends ActionBarActivity {
 			final CustomListViewAdapter adapter = new CustomListViewAdapter(
 					context, R.layout.list_item, rowItems);
 			listView.setAdapter(adapter);
+
+			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+				@Override
+				public void onItemClick(final AdapterView<?> arg0,
+						final View arg1, final int position, final long arg3) {
+					final Object o = listView.getItemAtPosition(position);
+					final RowItem str = (RowItem) o;// As you are using Default
+													// String Adapter
+					// starte neuen intent mit sel. rowitem
+					final Intent intent = new Intent(getApplicationContext(),
+							OpenAdActivity.class);
+					startActivityForResult(intent, 1);
+
+					Toast.makeText(getApplicationContext(), str.getTitle(),
+							Toast.LENGTH_SHORT).show();
+				}
+			});
 
 			// neu gemacht: load alle bilder zu den URLs async
 			for (final RowItem ri : rowItems) {

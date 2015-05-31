@@ -28,5 +28,9 @@
             android:name="de.wichura.camperapp.ad.NewAdActivity"
             android:label="@string/title_new_add_page" >
         </activity>
+        <activity
+            android:name="de.wichura.camperapp.ad.OpenAdActivity"
+            android:label="@string/title_open_ad_page" >
+        </activity>
     </application>
     </manifest>
