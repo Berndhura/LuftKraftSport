@@ -37,6 +37,7 @@ import com.google.gson.GsonBuilder;
 import de.wichura.camperapp.R;
 import de.wichura.camperapp.ad.NewAdActivity;
 import de.wichura.camperapp.ad.OpenAdActivity;
+import de.wichura.camperapp.app.AppController;
 import de.wichura.camperapp.http.HttpClient;
 import de.wichura.camperapp.http.JSONParser;
 
@@ -48,7 +49,7 @@ public class MainActivity extends ActionBarActivity {
 	private ImageView imgView;
 
 	//static String WEBURL = "http://10.0.2.2:8080/2ndHandOz";
-	static String WEBURL = "http://192.168.2.105:8080/2ndHandOz";
+	static String WEBURL = "http://192.168.2.102:8080/2ndHandOz";
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -64,20 +65,14 @@ public class MainActivity extends ActionBarActivity {
                 Request.Method.GET, WEBURL+"/getAllAds", null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                //txtDisplay.setText("Response => " + response.toString());
-                Log.i("MyActivity", "MyClass.getView() — JSON BERND2 " + response.toString());
-                //findViewById(R.id.progressBar1).setVisibility(View.GONE);
                 Context context=getApplicationContext();
 				try {
-
 					final Gson gson = new GsonBuilder()
 							.excludeFieldsWithoutExposeAnnotation().create();
 
 					final JSONArray listOfAllAds = new JSONArray(response.toString());
-
 					rowItems = new ArrayList<RowItem>();
 					for (int i = 0; i < listOfAllAds.length(); i++) {
-
 						// get the titel information JSON object
 						final String title = listOfAllAds.getJSONObject(i)
 								.toString();
@@ -86,6 +81,7 @@ public class MainActivity extends ActionBarActivity {
 						// RowItem class!geter seter...
 						final RowItem rowItem = gson.fromJson(title, RowItem.class);
 						rowItems.add(rowItem);
+                        Log.i("MyActivity", "MyClass.getView() URLS " + rowItem.getUrl());
 					}
 				} catch (final JSONException e) {
 					e.printStackTrace();
@@ -94,40 +90,36 @@ public class MainActivity extends ActionBarActivity {
 				listView = (ListView) findViewById(R.id.list);
 				final CustomListViewAdapter adapter = new CustomListViewAdapter(
 						context, R.layout.list_item, rowItems);
-				listView.setAdapter(adapter);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
 
-				listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-					@Override
-					public void onItemClick(final AdapterView<?> arg0,
-											final View arg1, final int position, final long arg3) {
-						final Object o = listView.getItemAtPosition(position);
-						final RowItem str = (RowItem) o;// As you are using Default
-						// String Adapter
-						// starte neuen intent mit sel. rowitem
-						final Intent intent = new Intent(getApplicationContext(),
-								OpenAdActivity.class);
-						startActivityForResult(intent, 1);
+                    @Override
+                    public void onItemClick(final AdapterView<?> arg0,
+                                            final View arg1, final int position, final long arg3) {
+                        final Object o = listView.getItemAtPosition(position);
+                        final RowItem str = (RowItem) o;// As you are using Default
+                        // String Adapter
+                        // starte neuen intent mit sel. rowitem
+                        final Intent intent = new Intent(getApplicationContext(),
+                                OpenAdActivity.class);
+                        startActivityForResult(intent, 1);
 
-						Toast.makeText(getApplicationContext(), str.getTitle(),
-								Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), str.getTitle(),
+                                Toast.LENGTH_SHORT).show();
 					}
 				});
-
-				// neu gemacht: load alle bilder zu den URLs async
-				for (final RowItem ri : rowItems) {
-					ri.loadImage(adapter);
-				}
-
 			}
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // TODO Auto-generated method stub
-                Log.i("MyActivity", "MyClass.getView() — JSON ERROR " + error.toString());
+                Log.i("MyActivity", "MyClass.getView() ï¿½ JSON ERROR " + error.toString());
             }
         });
-        queue.add(jsObjRequest);
+        //queue.add(jsObjRequest);
+        AppController.getInstance().addToRequestQueue(jsObjRequest);
     }
 
 	@Override
