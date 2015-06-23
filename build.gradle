@@ -1,0 +1,27 @@
+apply plugin: 'com.android.application'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile project(':volley:src:main')
+    compile project(':appcompat_v7')
+}
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "23.0.0 rc1"
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = []
+            resources.srcDirs = []
+            aidl.srcDirs = []
+            renderscript.srcDirs = []
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+        instrumentTest.setRoot('tests')
+    }
+}

@@ -10,11 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.toolbox.ImageLoader;
+
 import de.wichura.camperapp.R;
+import de.wichura.camperapp.app.AppController;
 
 public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
 	Context context;
+	ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
 	public CustomListViewAdapter(final Context context, final int resourceId,
 			final List<RowItem> items) {

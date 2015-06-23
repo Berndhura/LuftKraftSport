@@ -118,7 +118,7 @@ public class NewAdActivity extends Activity {
 
 	private void sendHttpToServer(final Intent data) {
 
-		final String url = "http://10.0.2.2:8080/2ndHandOz/saveNewAd";
+		final String url = "http://192.168.2.105:8080/2ndHandOz/saveNewAd";
 		final HttpHelper httpHelper = new HttpHelper(data, url, this);
 		httpHelper.postData();
 	}
