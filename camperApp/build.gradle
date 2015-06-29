@@ -4,7 +4,7 @@ android {
     signingConfigs {
     }
     compileSdkVersion 22
-    buildToolsVersion "23.0.0 rc1"
+    buildToolsVersion "23.0.0"
     defaultConfig {
         applicationId "de.wichura.camperapp"
         minSdkVersion 15
