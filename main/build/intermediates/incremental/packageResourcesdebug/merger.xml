@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="C:\Users\ich\StudioProjects\CamperApp\main\src\main\res"/><source path="C:\Users\ich\StudioProjects\CamperApp\main\build\generated\res\rs\debug"/><source path="C:\Users\ich\StudioProjects\CamperApp\main\build\generated\res\resValues\debug"/></dataSet><dataSet config="debug"><source path="C:\Users\ich\StudioProjects\CamperApp\main\src\debug\res"/></dataSet><mergedItems/></merger>
