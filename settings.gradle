@@ -1,2 +1,1 @@
-include ':main', ':volley'
-include ':camperApp'
+include ':app', ':volley'

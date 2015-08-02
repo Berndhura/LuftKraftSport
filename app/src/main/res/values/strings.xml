@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name" tools:ignore="MissingTranslation">2ndHandOz</string>
+    <string name="hello_world" tools:ignore="MissingTranslation,MissingTranslation">Tag</string>
+    <string name="action_settings" tools:ignore="MissingTranslation,MissingTranslation">Settings</string>
+    <string name="title_new_add_page" tools:ignore="MissingTranslation">Create new ad</string>
+    <string name="title_open_ad_page">Details</string>
+	<string name="enter_title_string">Titel</string>
+	<string name="submit_string">Submit</string>
+    <string name="APP_ID">535532649933816</string>
+	<string name="uploadPic_string" tools:ignore="MissingTranslation">Pictures</string>
+	
+</resources>
