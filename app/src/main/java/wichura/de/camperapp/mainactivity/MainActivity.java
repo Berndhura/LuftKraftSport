@@ -64,7 +64,11 @@ public class MainActivity extends ActionBarActivity  {
    // private ActionBar actionBar;
     private CustomListViewAdapter adapter;
 
-    static String WEBURL = "http://10.0.2.2:8080/2ndHandOz";
+    static String WEBURL = "http://10.0.2.2:8080/2ndHandOz/";
+    static String URL_GET_ALL_ADS="getAllAds";
+    static String URL_GET_ADS_FOR_KEYWORD="getAdsWithTag?description=";
+
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -94,10 +98,17 @@ public class MainActivity extends ActionBarActivity  {
 
         imgView = (ImageView) findViewById(R.id.imgView1);
 
+        getAdsJsonForKeyword(URL_GET_ALL_ADS);
+
+
+        //AppController.getInstance().addToRequestQueue(jsObjRequest);
+    }
+
+    private void getAdsJsonForKeyword(String url) {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(
-                Request.Method.GET, WEBURL+"/getAdsWithTag?description=zug", null, new Response.Listener<JSONArray>() {
+                Request.Method.GET, WEBURL+url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Context context=getApplicationContext();
@@ -153,7 +164,7 @@ public class MainActivity extends ActionBarActivity  {
             }
         });
         queue.add(getAllAdsInJson);
-        //AppController.getInstance().addToRequestQueue(jsObjRequest);
+
     }
 
     @Override
@@ -171,13 +182,15 @@ public class MainActivity extends ActionBarActivity  {
         searchView.setIconifiedByDefault(true); //iconify the widget
         searchView.setSubmitButtonEnabled(true);
 
+
         if(searchView != null)
         {
             searchView.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-
+                    Log.d("query", query);
+                    getAdsJsonForKeyword(URL_GET_ADS_FOR_KEYWORD+query);
                     return false;
                 }
 
