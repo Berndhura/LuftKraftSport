@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -15,8 +16,8 @@ import wichura.de.camperapp.app.AppController;
 public class OpenAdActivity extends Activity {
 
 	private String pictureUri;
-    private EditText mTitleText;
-    private EditText mDescText;
+    private TextView mTitleText;
+    private TextView mDescText;
 
     private NetworkImageView imgView;
 
@@ -29,8 +30,10 @@ public class OpenAdActivity extends Activity {
 
 		setContentView(R.layout.open_ad_activity);
 
-        mTitleText = (EditText) findViewById(R.id.title);
-        mDescText = (EditText) findViewById(R.id.description);
+        TextView titelHeader = (TextView) findViewById(R.id.headerTitel);
+        mTitleText = (TextView) findViewById(R.id.title);
+        TextView desHeader = (TextView) findViewById(R.id.headerDesciption);
+        mDescText = (TextView) findViewById(R.id.description);
         imgView = (NetworkImageView) findViewById(R.id.icon);
 
         // Fetch screen height and width, to use as our max size when loading images as this
@@ -42,6 +45,7 @@ public class OpenAdActivity extends Activity {
 
 		//get data from Intent
 		pictureUri = getIntent().getStringExtra("uri");
+
         mTitleText.setText(getIntent().getStringExtra("title"));
         mDescText.setText(getIntent().getStringExtra("description"));
 

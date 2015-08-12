@@ -54,27 +54,21 @@ import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.HttpClient;
 
-
 //farbcode bilder: #639bc5
 public class MainActivity extends ActionBarActivity  {
 
     private ListView listView;
     private List<RowItem> rowItems;
     private ImageView imgView;
-   // private ActionBar actionBar;
     private CustomListViewAdapter adapter;
 
     static String WEBURL = "http://10.0.2.2:8080/2ndHandOz/";
     static String URL_GET_ALL_ADS="getAllAds";
     static String URL_GET_ADS_FOR_KEYWORD="getAdsWithTag?description=";
 
-
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         //appid=535532649933816
@@ -93,15 +87,9 @@ public class MainActivity extends ActionBarActivity  {
         } catch (NoSuchAlgorithmException e) {
 
         }
-
         setContentView(R.layout.activity_main);
-
         imgView = (ImageView) findViewById(R.id.imgView1);
-
         getAdsJsonForKeyword(URL_GET_ALL_ADS);
-
-
-        //AppController.getInstance().addToRequestQueue(jsObjRequest);
     }
 
     private void getAdsJsonForKeyword(String url) {
@@ -211,38 +199,19 @@ public class MainActivity extends ActionBarActivity  {
         // as you specify a parent activity in AndroidManifest.xml.
 
         final int id = item.getItemId();
-        if (id == R.id.action_search) {
 
+        if (id == R.id.new_ad) {
             final Intent intent = new Intent(this, NewAdActivity.class);
             startActivityForResult(intent, 1);
-
             return true;
         }
 
-        if (id == R.id.menu_search) {
-
+        if (id == R.id.login) {
 
             return true;
         }
-
-        if (id == R.id.menu_location) {
-            final Intent fbIntent = new Intent(this,FbLoginActivity.class);
-            startActivity(fbIntent);
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
-
-
-    @Override
-    protected void onActivityResult(final int requestCode,
-                                    final int resultCode, final Intent data) {
-        //TODO reload listview
-    }
-
-
-
 
     private class SendHttpRequestTask extends AsyncTask<String, Void, byte[]> {
 

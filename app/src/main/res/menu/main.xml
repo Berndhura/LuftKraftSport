@@ -29,10 +29,10 @@
        Here we create all of the items to be displayed in the menu, setting support:showAsAction to
        define how the item should be displayed on the compatible Action Bar.
     -->
-    <item android:id="@+id/action_search"
+    <item android:id="@+id/new_ad"
         android:icon="@drawable/newad"
-        android:title="Maul"
-        />
+        android:title="New Ad"
+        camper:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menu_search"
@@ -41,23 +41,15 @@
         camper:actionViewClass="android.widget.SearchView"
         camper:showAsAction="always|collapseActionView"/>
 
+    <item android:id="@+id/action_search"
+        android:icon="@drawable/newad"
+        android:title="Maul"
+        camper:showAsAction="always" />
 
     <item
-        android:id="@+id/menu_refresh"
-        android:icon="@drawable/ic_action_refresh"
-        android:title="reffresh"
-        camper:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/menu_location"
-        android:icon="@drawable/ic_action_location"
-        android:title="loco"
-        camper:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/menu_settings"
+        android:id="@+id/login"
         android:icon="@drawable/ic_action_settings"
-        android:title="settings"
+        android:title="Login"
         camper:showAsAction="never"/>
 
 </menu>
