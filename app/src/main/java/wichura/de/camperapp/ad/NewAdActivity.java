@@ -48,8 +48,14 @@ public class NewAdActivity extends Activity {
 
 				// Package ToDoItem data into an Intent
 				final Intent data = new Intent();
-				AdItem.packageIntent(data, titleString, descString,
-						keyWordsString, mImage);
+				AdItem.packageIntent(
+						data,
+						titleString,
+						descString,
+						keyWordsString,
+						mImage,
+						"TODO",
+                                "PHONE"); //TODO : location
 
 				// TODO - return data Intent and finish
 				setResult(RESULT_OK, data);

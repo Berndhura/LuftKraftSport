@@ -10,18 +10,24 @@ public class AdItem {
 	public final static String FILENAME = "";
 	public final static String DESC = "description";
 	public final static String KEYWORDS = "keywords";
+	public final static String LOCATION = "location";
+    public final static String PHONE = "phone";
 
 	private String mTitle = new String();
 	private String mDesc = new String();
 	private String mKeywords = new String();
+	private String location = new String();
+    private String phone = new String();
 	private String mFilename = new String();
 
 	AdItem(final String title, final String desc, final String keyw,
-			final String fileName) {
+			final String fileName, final String location, final String phone) {
 		this.mTitle = title;
 		this.mDesc = desc;
 		this.mKeywords = keyw;
 		this.mFilename = fileName;
+		this.location = location;
+        this.phone = phone;
 
 	}
 
@@ -33,6 +39,9 @@ public class AdItem {
 		mDesc = intent.getStringExtra(AdItem.DESC);
 		mFilename = intent.getStringExtra(AdItem.FILENAME);
 		mKeywords = intent.getStringExtra(AdItem.KEYWORDS);
+		location = intent.getStringExtra((AdItem.LOCATION));
+        phone = intent.getStringExtra(AdItem.PHONE);
+
 
 	}
 
@@ -60,16 +69,22 @@ public class AdItem {
 		mKeywords = keyw;
 	}
 
+	public String getLocation() {return location;}
+
+	public void setLocation(String location) {this.location = location;	}
 	// Take a set of String data values and
 	// package them for transport in an Intent
 
 	public static void packageIntent(final Intent intent, final String title,
-			final String desc, final String keyw, final String fileURI) {
+			final String desc, final String keyw, final String fileURI, final String location,
+                                     final String phone) {
 
 		intent.putExtra(AdItem.TITLE, title);
 		intent.putExtra(AdItem.DESC, desc);
 		intent.putExtra(AdItem.KEYWORDS, keyw);
 		intent.putExtra(AdItem.FILENAME, fileURI);
+		intent.putExtra(AdItem.LOCATION, location);
+        intent.putExtra(AdItem.PHONE, phone);
 
 	}
 

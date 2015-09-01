@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import org.w3c.dom.Text;
+
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.app.AppController;
 
@@ -18,6 +20,8 @@ public class OpenAdActivity extends Activity {
 	private String pictureUri;
     private TextView mTitleText;
     private TextView mDescText;
+    private TextView mLocationText;
+    private TextView mPhoneText;
 
     private NetworkImageView imgView;
 
@@ -34,6 +38,8 @@ public class OpenAdActivity extends Activity {
         mTitleText = (TextView) findViewById(R.id.title);
         TextView desHeader = (TextView) findViewById(R.id.headerDesciption);
         mDescText = (TextView) findViewById(R.id.description);
+        mLocationText = (TextView) findViewById(R.id.location);
+        mPhoneText = (TextView) findViewById(R.id.phone );
         imgView = (NetworkImageView) findViewById(R.id.icon);
 
         // Fetch screen height and width, to use as our max size when loading images as this
@@ -48,6 +54,8 @@ public class OpenAdActivity extends Activity {
 
         mTitleText.setText(getIntent().getStringExtra("title"));
         mDescText.setText(getIntent().getStringExtra("description"));
+        mLocationText.setText(getIntent().getStringExtra("location"));
+        mPhoneText.setText(getIntent().getStringExtra("phone"));
 
 
 
@@ -55,10 +63,6 @@ public class OpenAdActivity extends Activity {
                 .findViewById(R.id.icon);
        // picture.setMinimumWidth(width);
         picture.setImageUrl(pictureUri, imageLoader);
-
-
-
-
 
 		Log.i("MyActivity", "MyClass.getView() OPEN " + pictureUri);
 	}

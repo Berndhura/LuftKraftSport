@@ -138,6 +138,8 @@ public class MainActivity extends ActionBarActivity  {
                         intent.putExtra("uri",rowItem.getUrl());
                         intent.putExtra("title",rowItem.getTitle());
                         intent.putExtra("description",rowItem.getDescription());
+                        intent.putExtra("location",rowItem.getLocation());
+                        intent.putExtra("phone",rowItem.getPhone());
                         startActivity(intent);
 
                         Toast.makeText(getApplicationContext(), rowItem.getTitle(),
@@ -157,10 +159,10 @@ public class MainActivity extends ActionBarActivity  {
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+       // Inflate the menu; this adds items to the action bar if it is present.
+       getMenuInflater().inflate(R.menu.main, menu);
 
-        SearchManager sM =(SearchManager) getSystemService(Context.SEARCH_SERVICE);
+       SearchManager sM =(SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
        final MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
