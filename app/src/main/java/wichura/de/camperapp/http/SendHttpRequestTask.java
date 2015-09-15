@@ -11,13 +11,15 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import wichura.de.camperapp.bitmap.BitmapHelper;
+
 public class SendHttpRequestTask extends AsyncTask<String, Void, String> {
 
 	// use Context for getting Bitmap from media
-	private final Context mContext;
+	private final Context context;
 
 	public SendHttpRequestTask(final Context context) {
-		mContext = context;
+		this.context = context;
 	}
 
 	@Override
@@ -28,19 +30,22 @@ public class SendHttpRequestTask extends AsyncTask<String, Void, String> {
 		final String bildURI = params[4]; // bild URI
 
 		final Uri uri = Uri.parse(bildURI);
+		//TODO: resize Bitmap: path vs. URI funktioniert noch nicht
+        BitmapHelper bitmapHelper = new BitmapHelper(context);
+        Bitmap thump=bitmapHelper.resize(uri.toString());
 
 		Bitmap bitmap = null;
 		try {
 			bitmap = MediaStore.Images.Media.getBitmap(
-					mContext.getContentResolver(), uri);
+					context.getContentResolver(), uri);
 		} catch (final IOException e) {
 			Log.i("MyActivity", "MyClass.getView() URLS " +"BITMAP FEHLER");
 			e.printStackTrace();
 		}
 
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		bitmap.compress(CompressFormat.PNG, 0, baos);
-
+        thump.compress(CompressFormat.PNG, 0, baos);
+        //was bitmap
 		try {
 			Log.i("MyActivity", "MyClass.getView() URLS " +"BITMAP URL: "+url);
 			final HttpClient client = new HttpClient(url);
