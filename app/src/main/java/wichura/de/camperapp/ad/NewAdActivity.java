@@ -29,6 +29,9 @@ public class NewAdActivity extends Activity {
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+
+		//https://www.youtube.com/watch?v=4MFzuP1F-xQ
+
 		setContentView(R.layout.new_ad_acivity);
 
 		mTitleText = (EditText) findViewById(R.id.title);
