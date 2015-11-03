@@ -2,6 +2,7 @@ package wichura.de.camperapp.ad;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.EditText;
@@ -25,6 +26,11 @@ public class OpenAdActivity extends Activity {
 
     private NetworkImageView imgView;
 
+    //TODO
+    //use swipe function from CustomSwipeAdapter to swipe pictures
+    private CustomSwipeAdapter  adapter;
+    private ViewPager viewPager;
+
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
 	@Override
@@ -33,6 +39,14 @@ public class OpenAdActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.open_ad_activity);
+
+        //TODO
+        //swipe the pictures, preparation
+        adapter = new CustomSwipeAdapter(this);
+        //error! this has to be a viewpager obj in layout xml file! TODO!
+        viewPager = (ViewPager)findViewById(R.id.icon);
+        viewPager.setAdapter(adapter);
+
 
         TextView titelHeader = (TextView) findViewById(R.id.headerTitel);
         mTitleText = (TextView) findViewById(R.id.title);

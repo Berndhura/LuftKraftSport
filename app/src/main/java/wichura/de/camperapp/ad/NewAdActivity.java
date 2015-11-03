@@ -9,6 +9,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.HttpHelper;
 
@@ -30,7 +33,7 @@ public class NewAdActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 
-		//https://www.youtube.com/watch?v=4MFzuP1F-xQ
+			//https://www.youtube.com/watch?v=4MFzuP1F-xQ
 
 		setContentView(R.layout.new_ad_acivity);
 
@@ -39,6 +42,8 @@ public class NewAdActivity extends Activity {
 		mKeywords = (EditText) findViewById(R.id.keywords);
 		mImgOne = (ImageView) findViewById(R.id.picturOne);
 		mImgTwo = (ImageView) findViewById(R.id.picturTwo);
+
+		showPicturetable();
 
 		final Button submitButton = (Button) findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new OnClickListener() {
@@ -97,7 +102,26 @@ public class NewAdActivity extends Activity {
 		});
 	}
 
-	@Override
+    private void showPicturetable() {
+
+        TableLayout table = (TableLayout) findViewById(R.id.tableForPics);
+
+        TableRow tableRow = new TableRow(this);
+        tableRow.setLayoutParams(new TableRow.LayoutParams(
+                TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT,
+                1.0f));
+
+                Button but1 = new Button(this);
+
+                tableRow.addView(but1);
+                //tableRow.addView(but1);
+               // tableRow.addView(mImgOne);
+                table.addView(tableRow);
+
+    }
+
+    @Override
 	protected void onActivityResult(final int requestCode,
 			final int resultCode, final Intent imageReturnedIntent) {
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent);

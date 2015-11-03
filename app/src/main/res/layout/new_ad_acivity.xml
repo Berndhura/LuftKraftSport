@@ -92,16 +92,17 @@
          android:text="add pictures" />
 
     <TableLayout
+        android:id="@+id/tableForPics"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/keywords"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/uploadButton"
-        android:layout_alignRight="@+id/keywords"
-        android:layout_alignEnd="@+id/keywords"></TableLayout><![CDATA[
+        android:layout_marginTop="0dp"
+        android:stretchColumns="*"
+
 
          />
-
-     ]]>
+    >
 </RelativeLayout>
