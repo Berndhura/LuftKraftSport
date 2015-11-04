@@ -17,7 +17,7 @@ import wichura.de.camperapp.R;
 public class CustomSwipeAdapter extends PagerAdapter {
 
     //TODO: gets a list of URLs -> Later input for Volley Networkview
-    private int[] imageResources = {R.drawable.image_bg, R.drawable.abc_btn_borderless_material};
+    private int[] imageResources = {R.drawable.abc_ab_share_pack_mtrl_alpha, R.drawable.abc_btn_borderless_material};
 
     private Context ctx;
     private LayoutInflater layoutInflater;
