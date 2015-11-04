@@ -108,9 +108,9 @@ public class NewAdActivity extends Activity {
 
         TableRow tableRow = new TableRow(this);
         tableRow.setLayoutParams(new TableRow.LayoutParams(
-                TableLayout.LayoutParams.MATCH_PARENT,
-                TableLayout.LayoutParams.WRAP_CONTENT,
-                1.0f));
+				TableLayout.LayoutParams.MATCH_PARENT,
+				TableLayout.LayoutParams.WRAP_CONTENT,
+				1.0f));
 
                 Button but1 = new Button(this);
 
@@ -153,7 +153,9 @@ public class NewAdActivity extends Activity {
 
 	private void sendHttpToServer(final Intent data) {
 
-		final String url = "http://10.0.2.2:8080/2ndHandOz/saveNewAd/";
+		//ec2-52-32-84-19.us-west-2.compute.amazonaws.com
+		//final String url = "http://10.0.2.2:8080/2ndHandOz/saveNewAd/";
+		final String url = "http://ec2-52-32-84-19.us-west-2.compute.amazonaws.com:8080/2ndHandOz/saveNewAd/";
 		final HttpHelper httpHelper = new HttpHelper(data, url, this);
 		httpHelper.postData();
 	}
