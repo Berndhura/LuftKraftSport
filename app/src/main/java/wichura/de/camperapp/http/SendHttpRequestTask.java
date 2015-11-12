@@ -30,6 +30,7 @@ public class SendHttpRequestTask extends AsyncTask<String, Void, String> {
 		final String bildURI = params[4]; // bild URI
 
 		final Uri uri = Uri.parse(bildURI);
+		Log.d("URRRRRRRRRRRRI", uri.toString());
 		//TODO: resize Bitmap: path vs. URI funktioniert noch nicht
         BitmapHelper bitmapHelper = new BitmapHelper(context);
         Bitmap thump=bitmapHelper.resize(uri.toString());
@@ -44,7 +45,8 @@ public class SendHttpRequestTask extends AsyncTask<String, Void, String> {
 		}
 
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        thump.compress(CompressFormat.PNG, 0, baos);
+        bitmap.compress(CompressFormat.PNG, 0, baos);
+
         //was bitmap
 		try {
 			Log.i("MyActivity", "MyClass.getView() URLS " +"BITMAP URL: "+url);

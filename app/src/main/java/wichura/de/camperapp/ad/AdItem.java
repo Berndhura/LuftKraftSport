@@ -31,6 +31,8 @@ public class AdItem {
 
 	}
 
+	// Create a new ToDoItem from data packaged in an Intent
+
 	public AdItem(final Intent intent) {
 
 		mTitle = intent.getStringExtra(AdItem.TITLE);
@@ -39,6 +41,8 @@ public class AdItem {
 		mKeywords = intent.getStringExtra(AdItem.KEYWORDS);
 		location = intent.getStringExtra((AdItem.LOCATION));
         phone = intent.getStringExtra(AdItem.PHONE);
+
+
 	}
 
 	public String getTitle() {

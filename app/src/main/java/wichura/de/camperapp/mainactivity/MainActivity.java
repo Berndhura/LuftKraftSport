@@ -63,8 +63,8 @@ public class MainActivity extends ActionBarActivity  {
     private CustomListViewAdapter adapter;
 
 	//ec2-52-32-84-19.us-west-2.compute.amazonaws.com
-    //static String WEBURL = "http://10.0.2.2:8080/2ndHandOz/";
-    static String WEBURL = "http://ec2-52-32-84-19.us-west-2.compute.amazonaws.com:8080/2ndHandOz/";
+	static String WEBURL = "http://10.0.2.2:8080/2ndHandOz/";
+    //static String WEBURL = "http://ec2-52-32-84-19.us-west-2.compute.amazonaws.com:8080/2ndHandOz/";
     static String URL_GET_ALL_ADS="getAllAds";
     static String URL_GET_ADS_FOR_KEYWORD="getAdsWithTag?description=";
 

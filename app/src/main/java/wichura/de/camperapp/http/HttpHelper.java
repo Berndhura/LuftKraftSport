@@ -2,6 +2,8 @@ package wichura.de.camperapp.http;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
 import wichura.de.camperapp.ad.AdItem;
 
 public class HttpHelper {
@@ -24,6 +26,8 @@ public class HttpHelper {
 		final String description = data.getStringExtra(AdItem.DESC);
 		final String keywords = data.getStringExtra(AdItem.KEYWORDS);
 		final String picture = data.getStringExtra(AdItem.FILENAME);
+
+		Log.d("DATEI: ", picture);
 
 		final String[] params = new String[] { url, title, description,
 				keywords, picture };

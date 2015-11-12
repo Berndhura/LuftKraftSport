@@ -1,9 +1,14 @@
 package wichura.de.camperapp.http;
 
+import android.os.Environment;
+import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 
 public class HttpClient {
@@ -50,8 +55,9 @@ public class HttpClient {
 	}
 
 	public void connectForMultipart() throws Exception {
-		con = (HttpURLConnection) (new URL(url)).openConnection();
-		// con.setRequestMethod("POST");
+		con = (HttpURLConnection) (new URL(url)).openConnection(Proxy.NO_PROXY);
+		Log.d("FART:", con.toString());
+				con.setRequestMethod("POST");
 		con.setDoInput(true);
 		con.setDoOutput(true);
 		con.setRequestProperty("Connection", "Keep-Alive");
@@ -85,6 +91,8 @@ public class HttpClient {
 	}
 
 	public String getResponse() throws Exception {
+		String dir = Environment.getExternalStorageDirectory().getAbsolutePath();
+		Log.d("_______________DIR: ", dir.toString());
 		final InputStream is = con.getInputStream();
 		final byte[] b1 = new byte[PICTURESIZE];
 		final StringBuffer buffer = new StringBuffer();

@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="10dp" 
+    android:padding="10dp"
     android:gravity="center_horizontal"
-    android:orientation="vertical">  
-    
+    android:orientation="vertical">
+
     <EditText
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -15,9 +15,9 @@
         android:hint="Titel"
         android:inputType="textShortMessage" >
 
-    	<requestFocus />
-    </EditText>  
-    
+        <requestFocus />
+    </EditText>
+
     <EditText
         android:id="@+id/description"
         android:layout_width="wrap_content"
@@ -28,9 +28,9 @@
         android:hint="Description"
         android:inputType="textShortMessage" >
 
-    	<requestFocus />
-    </EditText>  
-    
+        <requestFocus />
+    </EditText>
+
     <EditText
         android:id="@+id/keywords"
         android:layout_width="wrap_content"
@@ -42,67 +42,63 @@
         android:ems="10"
         android:hint="Tags"
         android:inputType="textShortMessage" >
-    	 
+
     </EditText>
 
-     <Button
-         android:id="@+id/submitButton"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:layout_alignParentBottom="true"
-         android:layout_centerHorizontal="true"
-         android:background="#639bc5" 
-         android:text="@string/submit_string" />
-
-     <Button
-         android:id="@+id/cancelButton"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_above="@+id/submitButton"
-         android:layout_alignParentLeft="true"
-         android:layout_alignParentRight="true"
-         android:layout_marginBottom="10dp"
-         android:background="#639bc5"
-         android:text="Cancel" />
-
-    <ImageView
-        android:id="@+id/picturTwo"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:paddingRight="10dp"
-        android:layout_gravity="right" />
-
-    <ImageView
-        android:id="@+id/picturOne"
-        android:layout_width="wrap_content"
-        android:layout_height="186dp"
-        android:paddingRight="10dp"
-        android:layout_gravity="left" />
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="#639bc5"
+        android:text="@string/submit_string" />
 
     <Button
-         android:id="@+id/uploadButton"
-         style="?android:attr/borderlessButtonStyle"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_above="@+id/cancelButton"
-         android:layout_alignParentLeft="true"
-         android:layout_alignParentRight="true"
-         android:layout_marginBottom="10dp"
-         android:background="#639bc5"
-         android:text="add pictures" />
-
-    <TableLayout
-        android:id="@+id/tableForPics"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/keywords"
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/submitButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:background="#639bc5"
+        android:text="Cancel" />
+
+    <Button
+        android:id="@+id/uploadButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cancelButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:background="#639bc5"
+        android:text="add pictures" />
+
+    />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/uploadButton"
-        android:layout_marginTop="0dp"
-        android:stretchColumns="*"
+        android:layout_alignLeft="@+id/keywords"
+        android:layout_alignRight="@+id/keywords"
+        android:layout_below="@+id/keywords"
+        android:padding="10dp" >
 
+        <ImageView
+            android:id="@+id/picturOne"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="10dp"/>
+        <ImageView
+            android:id="@+id/picturTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="10dp"/>
 
-         />
-    >
+    </LinearLayout>
+
 </RelativeLayout>
