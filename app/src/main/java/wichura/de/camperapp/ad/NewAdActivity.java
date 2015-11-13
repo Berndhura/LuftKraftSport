@@ -1,6 +1,7 @@
 package wichura.de.camperapp.ad;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -189,9 +191,46 @@ public class NewAdActivity extends Activity {
             e.printStackTrace();
         }
 
+        postNewComment(getApplicationContext());
         //uploadImage(data);
         //new UploadImage(bitmap, "fuckingName").execute();
         //https://github.com/DWorkS/VolleyPlus/blob/master/library/src/com/android/volley/request/SimpleMultiPartRequest.java
+    }
+
+    public static void postNewComment(Context context){
+        //mPostCommentResponse.requestStarted();
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest sr = new StringRequest(Request.Method.POST,Urls.MAIN_SERVER_URL+Urls.UPLOAD_NEW_AD_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //mPostCommentResponse.requestCompleted();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("title", "title");
+                params.put("description","description");
+                params.put("keywords","keywords");
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                //params.put("Content-Type","application/x-www-form-urlencoded");
+                params.put("Content-Type","multipart/form-data");
+                return params;
+            }
+        };
+        queue.add(sr);
     }
 
 }

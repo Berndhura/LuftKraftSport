@@ -1,42 +1,25 @@
 package wichura.de.camperapp.mainactivity;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
-
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -48,25 +31,25 @@ import com.facebook.FacebookSdk;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import wichura.de.camperapp.R;
+import org.json.JSONArray;
+import org.json.JSONException;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+
+import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
-import wichura.de.camperapp.http.HttpClient;
+import wichura.de.camperapp.http.Urls;
 
 //farbcode bilder: #639bc5
 public class MainActivity extends ActionBarActivity  {
 
     private ListView listView;
     private List<RowItem> rowItems;
-    private ImageView imgView;
     private CustomListViewAdapter adapter;
-
-	//ec2-52-32-84-19.us-west-2.compute.amazonaws.com
-	static String WEBURL = "http://10.0.2.2:8080/2ndHandOz/";
-    //static String WEBURL = "http://ec2-52-32-84-19.us-west-2.compute.amazonaws.com:8080/2ndHandOz/";
-    static String URL_GET_ALL_ADS="getAllAds";
-    static String URL_GET_ADS_FOR_KEYWORD="getAdsWithTag?description=";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -90,15 +73,14 @@ public class MainActivity extends ActionBarActivity  {
 
         }
         setContentView(R.layout.activity_main);
-        imgView = (ImageView) findViewById(R.id.imgView1);
-        getAdsJsonForKeyword(URL_GET_ALL_ADS);
+        getAdsJsonForKeyword(Urls.MAIN_SERVER_URL+Urls.GET_ALL_ADS_URL);
     }
 
     private void getAdsJsonForKeyword(String url) {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(
-                Request.Method.GET, WEBURL+url, null, new Response.Listener<JSONArray>() {
+                Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Context context=getApplicationContext();
@@ -156,7 +138,6 @@ public class MainActivity extends ActionBarActivity  {
             }
         });
         queue.add(getAllAdsInJson);
-
     }
 
     @Override
@@ -170,8 +151,7 @@ public class MainActivity extends ActionBarActivity  {
        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
 
         searchView.setSearchableInfo(sM.getSearchableInfo(getComponentName()));
-
-        searchView.setIconifiedByDefault(true); //iconify the widget
+        searchView.setIconifiedByDefault(true);
         searchView.setSubmitButtonEnabled(true);
 
 
@@ -181,8 +161,8 @@ public class MainActivity extends ActionBarActivity  {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    Log.d("query", query);
-                    getAdsJsonForKeyword(URL_GET_ADS_FOR_KEYWORD+query);
+                    Log.d("query: ", query);
+                    getAdsJsonForKeyword(Urls.MAIN_SERVER_URL+Urls.GET_ADS_FOR_KEYWORD_URL+query);
                     return false;
                 }
 
@@ -211,30 +191,8 @@ public class MainActivity extends ActionBarActivity  {
         }
 
         if (id == R.id.login) {
-
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private class SendHttpRequestTask extends AsyncTask<String, Void, byte[]> {
-
-        @Override
-        protected byte[] doInBackground(final String... params) {
-            final String url = params[0];
-            // final String name = params[1];
-
-            final HttpClient client = new HttpClient(url);
-            final byte[] data = client.downloadImage();// name
-
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(final byte[] result) {
-            final Bitmap img = BitmapFactory.decodeByteArray(result, 0,
-                    result.length);
-            imgView.setImageBitmap(img);
-        }
     }
 }
