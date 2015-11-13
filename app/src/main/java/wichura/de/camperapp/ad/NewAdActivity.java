@@ -38,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +46,7 @@ import java.util.Map;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.bitmap.BitmapHelper;
+import wichura.de.camperapp.http.MultipartRequest;
 import wichura.de.camperapp.http.Urls;
 
 
@@ -197,10 +199,46 @@ public class NewAdActivity extends Activity {
         //https://github.com/DWorkS/VolleyPlus/blob/master/library/src/com/android/volley/request/SimpleMultiPartRequest.java
     }
 
+
+    //http://stackoverflow.com/questions/18288864/how-to-multipart-data-using-android-volley
+    public void multiPost( Bitmap bitmap , Map<String,String> map) {
+
+        final Response.Listener<String> mListener = new Response.Listener<String>() {
+             @Override
+             public void onResponse(String response) {
+
+             }
+         };
+
+        final Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        };
+
+         final File mFilePart=null;
+         final String mStringPart=null;
+
+        MultipartRequest request = new MultipartRequest(
+                Urls.MAIN_SERVER_URL+Urls.UPLOAD_NEW_AD_URL,
+                errorListener,
+                mListener,
+                mFilePart,
+                mStringPart);
+
+        request.addStringBody("title", "title");
+        request.addStringBody("description", "description");
+        request.addStringBody("keywords", "keywords");
+
+
+
+    }
+
     public static void postNewComment(Context context){
         //mPostCommentResponse.requestStarted();
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest sr = new StringRequest(Request.Method.POST,Urls.MAIN_SERVER_URL+Urls.UPLOAD_NEW_AD_URL, new Response.Listener<String>() {
+        StringRequest sr = new StringRequest(Request.Method.POST, Urls.MAIN_SERVER_URL+Urls.UPLOAD_NEW_AD_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //mPostCommentResponse.requestCompleted();
