@@ -16,12 +16,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -45,292 +43,158 @@ import java.util.Map;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.bitmap.BitmapHelper;
+import wichura.de.camperapp.http.Urls;
 
 
 public class NewAdActivity extends Activity {
 
-	private EditText mTitleText;
-	private EditText mDescText;
-	private EditText mKeywords;
+    private EditText mTitleText;
+    private EditText mDescText;
+    private EditText mKeywords;
 
-	private static final int SELECT_PHOTO = 100;
-	private String mImage;
-	private int pictureCount=1;
+    private static final int SELECT_PHOTO = 100;
+    private String mImage;
+    private int pictureCount = 1;
 
-	private ImageView mImgOne;
-	private ImageView mImgTwo;
+    private ImageView mImgOne;
+    private ImageView mImgTwo;
 
-	@Override
-	protected void onCreate(final Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-
-			//https://www.youtube.com/watch?v=4MFzuP1F-xQ
-
-		setContentView(R.layout.new_ad_acivity);
-
-		mTitleText = (EditText) findViewById(R.id.title);
-		mDescText = (EditText) findViewById(R.id.description);
-		mKeywords = (EditText) findViewById(R.id.keywords);
-		mImgOne = (ImageView) findViewById(R.id.picturOne);
-		mImgTwo = (ImageView) findViewById(R.id.picturTwo);
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
 
+        //https://www.youtube.com/watch?v=4MFzuP1F-xQ
 
-		final Button submitButton = (Button) findViewById(R.id.submitButton);
-		submitButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(final View v) {
+        setContentView(R.layout.new_ad_acivity);
 
-				final String titleString = mTitleText.getText().toString();
-				final String descString = mDescText.getText().toString();
-				final String keyWordsString = mKeywords.getText().toString();
+        mTitleText = (EditText) findViewById(R.id.title);
+        mDescText = (EditText) findViewById(R.id.description);
+        mKeywords = (EditText) findViewById(R.id.keywords);
+        mImgOne = (ImageView) findViewById(R.id.picturOne);
+        mImgTwo = (ImageView) findViewById(R.id.picturTwo);
 
-				// Package ToDoItem data into an Intent
-				final Intent data = new Intent();
-				AdItem.packageIntent(
-						data,
-						titleString,
-						descString,
-						keyWordsString,
-						mImage,
-						"TODO",
-						"PHONE"); //TODO : location
 
-				// TODO - return data Intent and finish
-				setResult(RESULT_OK, data);
+        final Button submitButton = (Button) findViewById(R.id.submitButton);
+        submitButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
 
-				sendHttpToServer(data);
+                final String titleString = mTitleText.getText().toString();
+                final String descString = mDescText.getText().toString();
+                final String keyWordsString = mKeywords.getText().toString();
 
-				finish();
-			}
-		});
+                // Package ToDoItem data into an Intent
+                final Intent data = new Intent();
+                AdItem.packageIntent(
+                        data,
+                        titleString,
+                        descString,
+                        keyWordsString,
+                        mImage,
+                        "TODO",
+                        "PHONE"); //TODO : location
 
-		final Button getPictureButton = (Button) findViewById(R.id.uploadButton);
+                // TODO - return data Intent and finish
+                setResult(RESULT_OK, data);
 
-		getPictureButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(final View v) {
+                sendHttpToServer(data);
 
-				final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-				photoPickerIntent.setType("image/*");
-				startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                finish();
+            }
+        });
 
-			}
-		});
+        final Button getPictureButton = (Button) findViewById(R.id.uploadButton);
 
-		final Button cancelButton = (Button) findViewById(R.id.cancelButton);
+        getPictureButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
 
-		cancelButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(final View v) {
+                final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
 
-				// TODO - Set Activity's result with result code RESULT_OK
-				// setResult(RESULT_OK, intent);
-				// TODO - Finish the Activity
-				finish();
+            }
+        });
 
-			}
-		});
-	}
+        final Button cancelButton = (Button) findViewById(R.id.cancelButton);
 
+        cancelButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+
+                // TODO - Set Activity's result with result code RESULT_OK
+                // setResult(RESULT_OK, intent);
+                // TODO - Finish the Activity
+                finish();
+
+            }
+        });
+    }
 
 
     @Override
-	protected void onActivityResult(final int requestCode,
-			final int resultCode, final Intent imageReturnedIntent) {
-		super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+    protected void onActivityResult(final int requestCode,
+                                    final int resultCode, final Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-		switch (requestCode) {
-		case SELECT_PHOTO:
-			if (resultCode == RESULT_OK && pictureCount<4) {
-				final Uri selectedImage = imageReturnedIntent.getData();
-				//todo :works for one pic, need to work for more: array or comma separeted?
-				mImage = selectedImage.toString();
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == RESULT_OK && pictureCount < 4) {
+                    final Uri selectedImage = imageReturnedIntent.getData();
+                    //todo :works for one pic, need to work for more: array or comma separeted?
+                    mImage = selectedImage.toString();
 
-				switch (pictureCount) {
-					case 1: {
-						mImgOne = (ImageView) findViewById(R.id.picturOne);
-						mImgOne.setImageURI(selectedImage);
-						pictureCount++;
-						break;
-					}
-					case 2: {
-					    mImgTwo = (ImageView) findViewById(R.id.picturTwo);
-					    mImgTwo.setImageURI(selectedImage);
-					    pictureCount++;
-					    break;
-					}
-				}
-			}
-		}
-	}
-
-	private void sendHttpToServer(final Intent data) {
-
-		//ec2-52-32-84-19.us-west-2.compute.amazonaws.com
-		final String url = "http://10.0.2.2:8080/2ndHandOz/saveNewAd/";
-		//final String url = "http://ec2-52-32-84-19.us-west-2.compute.amazonaws.com:8080/2ndHandOz/saveNewAd/";
-
-		final String title = data.getStringExtra(AdItem.TITLE);
-		final String description = data.getStringExtra(AdItem.DESC);
-		final String keywords = data.getStringExtra(AdItem.KEYWORDS);
-		final String picture = data.getStringExtra(AdItem.FILENAME);
-		Log.d("query", title + description + keywords + picture);
-		//alt
-		//final HttpHelper httpHelper = new HttpHelper(data, url, this);
-		//httpHelper.postData();
-        //new
-
-        final Uri uri = Uri.parse(picture);
-        BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
-        Bitmap thump=bitmapHelper.resize(uri.toString());
-
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(
-                    getApplicationContext().getContentResolver(), uri);
-        } catch (final IOException e) {
-            Log.i("MyActivity", "MyClass.getView() URLS " +"BITMAP FEHLER");
-            e.printStackTrace();
+                    switch (pictureCount) {
+                        case 1: {
+                            mImgOne = (ImageView) findViewById(R.id.picturOne);
+                            mImgOne.setImageURI(selectedImage);
+                            pictureCount++;
+                            break;
+                        }
+                        case 2: {
+                            mImgTwo = (ImageView) findViewById(R.id.picturTwo);
+                            mImgTwo.setImageURI(selectedImage);
+                            pictureCount++;
+                            break;
+                        }
+                    }
+                }
         }
+    }
 
-
-        //uploadImage(data);
-        //new UploadImage(bitmap, "fuckingName").execute();
-        //https://github.com/DWorkS/VolleyPlus/blob/master/library/src/com/android/volley/request/SimpleMultiPartRequest.java
-	}
-
-
-	private class UploadImage extends AsyncTask<Void, Void, Void> {
-		private Bitmap image;
-		private String name;
-
-		public UploadImage(Bitmap image, String name) {
-			this.image=image;
-			this.name=name;
-		}
-
-
-		@Override
-		protected Void doInBackground(Void... params) {
-
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-			String encodeImage= Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-
-			ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-			dataToSend.add(new BasicNameValuePair("image", encodeImage));
-			dataToSend.add(new BasicNameValuePair("title", "title"));
-			dataToSend.add(new BasicNameValuePair("description", "description"));
-			dataToSend.add(new BasicNameValuePair("keywords", "keywords"));
-
-			HttpParams httpRequestParams = getHttpParams();
-
-			HttpClient client = new DefaultHttpClient(httpRequestParams);
-			HttpPost post = new HttpPost("http://10.0.2.2:8080/2ndHandOz/saveNewAd/");
-
-			try {
-				post.setEntity(new UrlEncodedFormEntity((dataToSend)));
-                client.execute(post);
-
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-
-            return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void aVoid) {
-			super.onPostExecute(aVoid);
-			Toast.makeText(getApplicationContext(),"Done", Toast.LENGTH_LONG).show();
-		}
-	}
-
-	private HttpParams getHttpParams () {
-		HttpParams httpRequestParams = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(httpRequestParams, 1000 * 30);
-		HttpConnectionParams.setSoTimeout(httpRequestParams, 1000*30);
-
-		return httpRequestParams;
-	}
-
-	public void uploadImage(Intent data) {
-
+    private void sendHttpToServer(final Intent data) {
 
 
         final String title = data.getStringExtra(AdItem.TITLE);
         final String description = data.getStringExtra(AdItem.DESC);
         final String keywords = data.getStringExtra(AdItem.KEYWORDS);
         final String picture = data.getStringExtra(AdItem.FILENAME);
+        Log.d("query", title + description + keywords + picture);
+        //alt
+        //final HttpHelper httpHelper = new HttpHelper(data, url, this);
+        //httpHelper.postData();
+        //new
+
+        final Uri uri = Uri.parse(picture);
+        BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
+        Bitmap thump = bitmapHelper.resize(uri.toString());
 
         Bitmap bitmap = null;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(
-                    getApplicationContext().getContentResolver(), Uri.parse(picture));
+                    getApplicationContext().getContentResolver(), uri);
         } catch (final IOException e) {
-            Log.i("MyActivity", "MyClass.getView() URLS " +"BITMAP FEHLER");
+            Log.i("MyActivity", "MyClass.getView() URLS " + "BITMAP FEHLER");
             e.printStackTrace();
         }
 
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		// Must compress the Image to reduce image size to make upload easy
-		bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
-		byte[] byte_arr = stream.toByteArray();
-		// Encode Image to String
-		final  String  encodedString = Base64.encodeToString(byte_arr, 0);
-
-
-		RequestQueue rq = Volley.newRequestQueue(this);
-		String url = "http://10.0.2.2:8080/2ndHandOz/saveNewAd/";
-		Log.d("URL", url);
-		StringRequest stringRequest = new StringRequest(Request.Method.POST,
-				url, new Response.Listener<String>() {
-
-			@Override
-			public void onResponse(String response) {
-				try {
-					Log.e("RESPONSE", response);
-					JSONObject json = new JSONObject(response);
-
-					Toast.makeText(getBaseContext(),
-							"The image is upload", Toast.LENGTH_SHORT)
-							.show();
-
-				} catch (JSONException e) {
-					Log.d("JSON Exception", e.toString());
-					Toast.makeText(getBaseContext(),
-							"Error while loadin data!",
-							Toast.LENGTH_LONG).show();
-				}
-
-			}
-
-		}, new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				Log.d("ERROR", "Error [" + error + "]");
-				Toast.makeText(getBaseContext(),
-						"Cannot connect to server", Toast.LENGTH_LONG)
-						.show();
-			}
-		}) {
-			@Override
-			protected Map<String, String> getParams() {
-				Map<String, String> params = new HashMap<String, String>();
-
-				params.put("image", encodedString);
-				params.put("title", "title");
-				params.put("description", "description");
-				params.put("keywords", "keywords");
-
-				return params;
-
-			}
-
-		};
-		rq.add(stringRequest);
-	}
+        //uploadImage(data);
+        //new UploadImage(bitmap, "fuckingName").execute();
+        //https://github.com/DWorkS/VolleyPlus/blob/master/library/src/com/android/volley/request/SimpleMultiPartRequest.java
+    }
 
 }
+
+
+
