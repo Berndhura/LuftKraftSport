@@ -26,7 +26,7 @@ public class MultipartRequest extends Request<String> {
 
     MultipartEntityBuilder entity = MultipartEntityBuilder.create();
     HttpEntity httpentity;
-    private static final String FILE_PART_NAME = "file";
+    private static final String FILE_PART_NAME = "image";
 
     private final Response.Listener<String> mListener;
     private final File mFilePart;
@@ -37,10 +37,13 @@ public class MultipartRequest extends Request<String> {
             Map<String, String> mStringPart) {
         super(Method.POST, url, errorListener);
 
+        String boundary = "-------------" + System.currentTimeMillis();
+
         mListener = listener;
         mFilePart = file;
         this.mStringPart = mStringPart;
         entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+       // entity.setBoundary(boundary);
         buildMultipartEntity();
     }
 

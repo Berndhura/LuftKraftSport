@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -193,20 +194,19 @@ public class NewAdActivity extends Activity {
             e.printStackTrace();
         }
 
-        postNewComment(getApplicationContext());
-        //uploadImage(data);
-        //new UploadImage(bitmap, "fuckingName").execute();
-        //https://github.com/DWorkS/VolleyPlus/blob/master/library/src/com/android/volley/request/SimpleMultiPartRequest.java
+        multiPost(uri);
     }
 
 
     //http://stackoverflow.com/questions/18288864/how-to-multipart-data-using-android-volley
-    public void multiPost( Bitmap bitmap , Map<String,String> map) {
+    public void multiPost(Uri bitmap) {
+
+        RequestQueue volleyQueue = Volley.newRequestQueue(getApplicationContext());
 
         final Response.Listener<String> mListener = new Response.Listener<String>() {
              @Override
              public void onResponse(String response) {
-
+                Log.i("volley Res from upload", response.toString());
              }
          };
 
@@ -217,8 +217,9 @@ public class NewAdActivity extends Activity {
             }
         };
 
-         final File mFilePart=null;
-         final String mStringPart=null;
+        final File mFilePart= new File (bitmap.getPath());
+        final Map<String, String> mStringPart= new HashMap<>();
+        mStringPart.put("image", "defender");
 
         MultipartRequest request = new MultipartRequest(
                 Urls.MAIN_SERVER_URL+Urls.UPLOAD_NEW_AD_URL,
@@ -231,46 +232,9 @@ public class NewAdActivity extends Activity {
         request.addStringBody("description", "description");
         request.addStringBody("keywords", "keywords");
 
-
+        volleyQueue.add(request);
 
     }
-
-    public static void postNewComment(Context context){
-        //mPostCommentResponse.requestStarted();
-        RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest sr = new StringRequest(Request.Method.POST, Urls.MAIN_SERVER_URL+Urls.UPLOAD_NEW_AD_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //mPostCommentResponse.requestCompleted();
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("title", "title");
-                params.put("description","description");
-                params.put("keywords","keywords");
-
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
-                //params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put("Content-Type","multipart/form-data");
-                return params;
-            }
-        };
-        queue.add(sr);
-    }
-
 }
 
 
