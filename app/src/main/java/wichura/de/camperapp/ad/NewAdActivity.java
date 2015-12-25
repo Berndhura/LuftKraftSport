@@ -3,47 +3,25 @@ package wichura.de.camperapp.ad;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.bitmap.BitmapHelper;
@@ -63,6 +41,12 @@ public class NewAdActivity extends Activity {
 
     private ImageView mImgOne;
     private ImageView mImgTwo;
+
+    private final String twoHyphens = "--";
+    private final String lineEnd = "\r\n";
+    private final String boundary = "SwA";
+
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -194,45 +178,70 @@ public class NewAdActivity extends Activity {
             e.printStackTrace();
         }
 
-        multiPost(uri);
+        multiPost(picture);
+    }
+
+    public static String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 
 
     //http://stackoverflow.com/questions/18288864/how-to-multipart-data-using-android-volley
-    public void multiPost(Uri bitmap) {
+    public void multiPost(String bitmap) {
+        HashMap<String, String> params = new HashMap<String, String>();
 
-        RequestQueue volleyQueue = Volley.newRequestQueue(getApplicationContext());
+        Uri fileUri = Uri.parse(bitmap.toString());
+        String fileString = getRealPathFromUri(getApplicationContext(),fileUri);
 
-        final Response.Listener<String> mListener = new Response.Listener<String>() {
-             @Override
-             public void onResponse(String response) {
-                Log.i("volley Res from upload", response.toString());
-             }
-         };
+        params.put("title", "farti");
+        params.put("description", "Some Param");
+        params.put("keywords", "Some Param");
 
-        final Response.ErrorListener errorListener = new Response.ErrorListener() {
+        File file = new File(fileString.toString());
+        if (file.exists()) {
+            Log.i("MyActivity", "FILE DAAAAAAAAAAAAAAAAAAAAAA:   "+ bitmap.toString());
+        }
+        else {
+            Log.i("MyActivity", "FILE FEHLLLLLLLLLLLLLLLLLER:   "+ bitmap.toString());
+        }
+        //content://media/external/images/media/19
+
+
+
+
+
+        MultipartRequest mr = new MultipartRequest(Urls.MAIN_SERVER_URL+"saveNewAd",
+                new Response.Listener<String>(){
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("response", response);
+                    }
+
+                },
+                new Response.ErrorListener(){
+
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+                Log.e("Volley Request Error", error.getLocalizedMessage());
             }
-        };
 
-        final File mFilePart= new File (bitmap.getPath());
-        final Map<String, String> mStringPart= new HashMap<>();
-        mStringPart.put("image", "defender");
+        },file, params);
 
-        MultipartRequest request = new MultipartRequest(
-                Urls.MAIN_SERVER_URL+Urls.UPLOAD_NEW_AD_URL,
-                errorListener,
-                mListener,
-                mFilePart,
-                mStringPart);
+        Volley.newRequestQueue(this).add(mr);
 
-        request.addStringBody("title", "title");
-        request.addStringBody("description", "description");
-        request.addStringBody("keywords", "keywords");
-
-        volleyQueue.add(request);
+       //volleyQueue.add(multipartRequest);
 
     }
 }
