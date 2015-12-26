@@ -41,12 +41,10 @@ public class NewAdActivity extends Activity {
 
     private ImageView mImgOne;
     private ImageView mImgTwo;
-
-    private final String twoHyphens = "--";
-    private final String lineEnd = "\r\n";
-    private final String boundary = "SwA";
-
-
+    private String title;
+    private String description;
+    private String keywords;
+    private String picture;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -155,15 +153,12 @@ public class NewAdActivity extends Activity {
     private void sendHttpToServer(final Intent data) {
 
 
-        final String title = data.getStringExtra(AdItem.TITLE);
-        final String description = data.getStringExtra(AdItem.DESC);
-        final String keywords = data.getStringExtra(AdItem.KEYWORDS);
-        final String picture = data.getStringExtra(AdItem.FILENAME);
+        title = data.getStringExtra(AdItem.TITLE);
+        description = data.getStringExtra(AdItem.DESC);
+        keywords = data.getStringExtra(AdItem.KEYWORDS);
+        picture = data.getStringExtra(AdItem.FILENAME);
         Log.d("query", title + description + keywords + picture);
-        //alt
-        //final HttpHelper httpHelper = new HttpHelper(data, url, this);
-        //httpHelper.postData();
-        //new
+
 
         final Uri uri = Uri.parse(picture);
         BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
@@ -178,7 +173,7 @@ public class NewAdActivity extends Activity {
             e.printStackTrace();
         }
 
-        multiPost(picture);
+        multiPost();
     }
 
     public static String getRealPathFromUri(Context context, Uri contentUri) {
@@ -198,28 +193,17 @@ public class NewAdActivity extends Activity {
 
 
     //http://stackoverflow.com/questions/18288864/how-to-multipart-data-using-android-volley
-    public void multiPost(String bitmap) {
+    public void multiPost() {
         HashMap<String, String> params = new HashMap<String, String>();
 
-        Uri fileUri = Uri.parse(bitmap.toString());
+        Uri fileUri = Uri.parse(picture.toString());
         String fileString = getRealPathFromUri(getApplicationContext(),fileUri);
 
-        params.put("title", "farti");
-        params.put("description", "Some Param");
-        params.put("keywords", "Some Param");
+        params.put("title", title);
+        params.put("description", description);
+        params.put("keywords", keywords);
 
         File file = new File(fileString.toString());
-        if (file.exists()) {
-            Log.i("MyActivity", "FILE DAAAAAAAAAAAAAAAAAAAAAA:   "+ bitmap.toString());
-        }
-        else {
-            Log.i("MyActivity", "FILE FEHLLLLLLLLLLLLLLLLLER:   "+ bitmap.toString());
-        }
-        //content://media/external/images/media/19
-
-
-
-
 
         MultipartRequest mr = new MultipartRequest(Urls.MAIN_SERVER_URL+"saveNewAd",
                 new Response.Listener<String>(){
@@ -240,9 +224,6 @@ public class NewAdActivity extends Activity {
         },file, params);
 
         Volley.newRequestQueue(this).add(mr);
-
-       //volleyQueue.add(multipartRequest);
-
     }
 }
 

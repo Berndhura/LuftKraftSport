@@ -29,7 +29,7 @@ public class OpenAdActivity extends Activity {
     //TODO
     //use swipe function from CustomSwipeAdapter to swipe pictures
     private CustomSwipeAdapter  adapter;
-    private ViewPager viewPager;
+    private NetworkImageView viewPager;
 
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
@@ -44,8 +44,8 @@ public class OpenAdActivity extends Activity {
         //swipe the pictures, preparation
         adapter = new CustomSwipeAdapter(this);
         //error! this has to be a viewpager obj in layout xml file! TODO!
-        viewPager = (ViewPager)findViewById(R.id.icon);
-        viewPager.setAdapter(adapter);
+        viewPager = (NetworkImageView)findViewById(R.id.icon);
+        //viewPager.setAdapter(adapter);
 
 
         TextView titelHeader = (TextView) findViewById(R.id.headerTitel);
