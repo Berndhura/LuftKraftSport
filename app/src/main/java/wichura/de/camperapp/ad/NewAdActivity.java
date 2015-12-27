@@ -1,6 +1,7 @@
 package wichura.de.camperapp.ad;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -46,6 +49,8 @@ public class NewAdActivity extends Activity {
     private String keywords;
     private String picture;
 
+    private ProgressDialog progress;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,21 +60,23 @@ public class NewAdActivity extends Activity {
 
         setContentView(R.layout.new_ad_acivity);
 
-        mTitleText = (EditText) findViewById(R.id.title);
+       // mTitleText = (EditText) findViewById(R.id.title);
         mDescText = (EditText) findViewById(R.id.description);
         mKeywords = (EditText) findViewById(R.id.keywords);
-        mImgOne = (ImageView) findViewById(R.id.picturOne);
-        mImgTwo = (ImageView) findViewById(R.id.picturTwo);
+        mImgOne = (ImageView) findViewById(R.id.imageButton);
+        //mImgTwo = (ImageView) findViewById(R.id.picturTwo);
 
 
-        final Button submitButton = (Button) findViewById(R.id.submitButton);
+
+        final Button submitButton = (Button) findViewById(R.id.uploadButton);
         submitButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View v) {
 
-                final String titleString = mTitleText.getText().toString();
+                final String titleString = mKeywords.getText().toString();
                 final String descString = mDescText.getText().toString();
-                final String keyWordsString = mKeywords.getText().toString();
+                //final String keyWordsString = mKeywords.getText().toString();
+                final String keyWordsString = "zelt";
 
                 // Package ToDoItem data into an Intent
                 final Intent data = new Intent();
@@ -91,7 +98,7 @@ public class NewAdActivity extends Activity {
             }
         });
 
-        final Button getPictureButton = (Button) findViewById(R.id.uploadButton);
+        final ImageButton getPictureButton = (ImageButton) findViewById(R.id.imageButton);
 
         getPictureButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -100,20 +107,6 @@ public class NewAdActivity extends Activity {
                 final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-
-            }
-        });
-
-        final Button cancelButton = (Button) findViewById(R.id.cancelButton);
-
-        cancelButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-
-                // TODO - Set Activity's result with result code RESULT_OK
-                // setResult(RESULT_OK, intent);
-                // TODO - Finish the Activity
-                finish();
 
             }
         });
@@ -134,13 +127,13 @@ public class NewAdActivity extends Activity {
 
                     switch (pictureCount) {
                         case 1: {
-                            mImgOne = (ImageView) findViewById(R.id.picturOne);
+                            mImgOne = (ImageView) findViewById(R.id.imageButton);
                             mImgOne.setImageURI(selectedImage);
                             pictureCount++;
                             break;
                         }
                         case 2: {
-                            mImgTwo = (ImageView) findViewById(R.id.picturTwo);
+                            mImgTwo = (ImageView) findViewById(R.id.imageButton);
                             mImgTwo.setImageURI(selectedImage);
                             pictureCount++;
                             break;
@@ -194,6 +187,14 @@ public class NewAdActivity extends Activity {
 
     //http://stackoverflow.com/questions/18288864/how-to-multipart-data-using-android-volley
     public void multiPost() {
+
+        progress = new ProgressDialog(this);
+        progress.setTitle("Please Wait!!");
+        progress.setMessage("Wait!!");
+        progress.setCancelable(false);
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.show();
+
         HashMap<String, String> params = new HashMap<String, String>();
 
         Uri fileUri = Uri.parse(picture.toString());
@@ -211,6 +212,7 @@ public class NewAdActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("response", response);
+                        Toast.makeText(getApplicationContext(),"Upload...done!", Toast.LENGTH_SHORT).show();
                     }
 
                 },
