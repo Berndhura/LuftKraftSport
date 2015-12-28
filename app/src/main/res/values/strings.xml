@@ -8,7 +8,7 @@
     <string name="title_open_ad_page">Details</string>
 	<string name="enter_title_string">Titel</string>
 	<string name="submit_string">Submit</string>
-    <string name="APP_ID">535532649933816</string>
+    <string name="facebook_app_id">535532649933816</string>
 	<string name="uploadPic_string" tools:ignore="MissingTranslation">Pictures</string>
 	
 </resources>

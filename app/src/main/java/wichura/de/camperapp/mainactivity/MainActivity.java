@@ -190,6 +190,8 @@ public class MainActivity extends ActionBarActivity  {
         }
 
         if (id == R.id.login) {
+            final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
+            startActivityForResult(facebookIntent,1);
             return true;
         }
         return super.onOptionsItemSelected(item);

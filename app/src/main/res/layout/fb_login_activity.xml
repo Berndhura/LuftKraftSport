@@ -14,4 +14,19 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp" />
 
+    <com.android.volley.toolbox.NetworkImageView
+        android:layout_width="191dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/profilePic"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.08" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"
+        android:layout_weight="0.28" />
+
+
+
 </LinearLayout>
