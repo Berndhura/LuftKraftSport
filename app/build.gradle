@@ -32,7 +32,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
-    compile 'com.squareup.picasso:picasso:2.5.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile project(':volley')
     compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
     compile('org.apache.httpcomponents:httpmime:4.3') {

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -27,6 +28,7 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.URI;
@@ -41,7 +43,7 @@ import wichura.de.camperapp.app.AppController;
 public class FbLoginActivity extends Activity {
 
     private TextView mName;
-    private NetworkImageView picture;
+    private ImageView picture;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
     private CallbackManager mCallbackMgt;
@@ -87,7 +89,7 @@ public class FbLoginActivity extends Activity {
         loginButton.registerCallback(mCallbackMgt, mCallback);
 
         mName= (EditText) findViewById(R.id.name);
-        picture = (NetworkImageView) findViewById(R.id.icon);
+        picture = (ImageView) findViewById(R.id.profilePic);
 
 
         AccessTokenTracker tracker = new AccessTokenTracker() {
@@ -105,10 +107,7 @@ public class FbLoginActivity extends Activity {
                     Uri uri =  newProfile.getProfilePictureUri(100, 100);
                     Log.d("Facebookbild", uri.toString());
 
-                    NetworkImageView pica = (NetworkImageView) picture
-                            .findViewById(R.id.profilePic);
-                    // picture.setMinimumWidth(width);
-                    pica.setImageUrl(uri.toString(), imageLoader);
+                    Picasso.with(getApplicationContext()).load(uri.toString()).into(picture);
                 }
             }
         };
