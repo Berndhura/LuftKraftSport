@@ -21,11 +21,19 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.08" />
 
-    <EditText
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Zurück"
+        android:id="@+id/backButton"
+        android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:layout_width="197dp"
+        android:layout_height="wrap_content"
         android:id="@+id/name"
-        android:layout_weight="0.28" />
+        android:layout_weight="0.09"
+        android:layout_gravity="center_horizontal" />
 
 
 

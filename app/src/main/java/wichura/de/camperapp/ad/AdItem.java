@@ -12,6 +12,7 @@ public class AdItem {
 	public final static String KEYWORDS = "keywords";
 	public final static String LOCATION = "location";
     public final static String PHONE = "phone";
+    public final static String PRICE = "price";
 
 	private String mTitle = new String();
 	private String mDesc = new String();
@@ -19,15 +20,17 @@ public class AdItem {
 	private String location = new String();
     private String phone = new String();
 	private String mFilename = new String();
+	private String mPrice = new String();
 
 	AdItem(final String title, final String desc, final String keyw,
-			final String fileName, final String location, final String phone) {
+			final String fileName, final String location, final String phone, final String price) {
 		this.mTitle = title;
 		this.mDesc = desc;
 		this.mKeywords = keyw;
 		this.mFilename = fileName;
 		this.location = location;
         this.phone = phone;
+		this.mPrice = price;
 
 	}
 
@@ -39,6 +42,7 @@ public class AdItem {
 		mKeywords = intent.getStringExtra(AdItem.KEYWORDS);
 		location = intent.getStringExtra((AdItem.LOCATION));
         phone = intent.getStringExtra(AdItem.PHONE);
+		mPrice = intent.getStringExtra(AdItem.PRICE);
 	}
 
 	public String getTitle() {
@@ -73,7 +77,7 @@ public class AdItem {
 
 	public static void packageIntent(final Intent intent, final String title,
 			final String desc, final String keyw, final String fileURI, final String location,
-                                     final String phone) {
+                                     final String phone, final String price) {
 
 		intent.putExtra(AdItem.TITLE, title);
 		intent.putExtra(AdItem.DESC, desc);
@@ -81,6 +85,7 @@ public class AdItem {
 		intent.putExtra(AdItem.FILENAME, fileURI);
 		intent.putExtra(AdItem.LOCATION, location);
         intent.putExtra(AdItem.PHONE, phone);
+		intent.putExtra(AdItem.PRICE, price);
 
 	}
 
@@ -89,7 +94,4 @@ public class AdItem {
 		return mTitle + ITEM_SEP + mDesc + ITEM_SEP + mKeywords;
 	}
 
-	public String toLog() {
-		return "Title:" + mTitle + "Description:" + mDesc;
-	}
 }

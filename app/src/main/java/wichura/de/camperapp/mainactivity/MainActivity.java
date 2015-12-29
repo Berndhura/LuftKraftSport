@@ -3,19 +3,17 @@ package wichura.de.camperapp.mainactivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -26,15 +24,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.facebook.FacebookSdk;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,29 +45,15 @@ public class MainActivity extends ActionBarActivity  {
     private List<RowItem> rowItems;
     private CustomListViewAdapter adapter;
 
+    public static final int REQUEST_ID_FOR_NEW_AD= 1;
+    public static final int REQUEST_ID_FOR_FACEBOOK_LOGIN= 2;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        //appid=535532649933816
-
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "wichura.de.camperapp",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }
         setContentView(R.layout.activity_main);
-        getAdsJsonForKeyword(Urls.MAIN_SERVER_URL+Urls.GET_ALL_ADS_URL);
+        getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
     }
 
     private void getAdsJsonForKeyword(String url) {
@@ -149,9 +130,16 @@ public class MainActivity extends ActionBarActivity  {
        final MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
 
+        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        EditText searchPlate = (EditText) searchView.findViewById(searchPlateId);
+        searchPlate.setTextColor(getResources().getColor(R.color.com_facebook_blue));
+        searchPlate.setBackgroundResource(R.drawable.ic_action_settings);
+        searchPlate.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+
         searchView.setSearchableInfo(sM.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(true);
         searchView.setSubmitButtonEnabled(true);
+
 
 
         if(searchView != null)
@@ -161,7 +149,7 @@ public class MainActivity extends ActionBarActivity  {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     Log.d("query: ", query);
-                    getAdsJsonForKeyword(Urls.MAIN_SERVER_URL+Urls.GET_ADS_FOR_KEYWORD_URL+query);
+                    getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
                     return false;
                 }
 
@@ -185,15 +173,31 @@ public class MainActivity extends ActionBarActivity  {
 
         if (id == R.id.new_ad) {
             final Intent intent = new Intent(this, NewAdActivity.class);
-            startActivityForResult(intent, 1);
+            startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
             return true;
         }
 
         if (id == R.id.login) {
             final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
-            startActivityForResult(facebookIntent,1);
+            startActivityForResult(facebookIntent, REQUEST_ID_FOR_FACEBOOK_LOGIN);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ID_FOR_NEW_AD) {
+            /*if (resultCode == RESULT_OK) {
+                //here
+                int i=0;
+            }*/
+            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL+Urls.GET_ALL_ADS_URL);
+        }
+        if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN){
+            int i=2;
+            Log.d("Wo: ", "maul");
+        }
     }
 }

@@ -2,22 +2,20 @@ package wichura.de.camperapp.mainactivity;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -30,12 +28,10 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.app.AppController;
 
 /**
  * Created by ich on 28.07.2015.
@@ -44,7 +40,7 @@ public class FbLoginActivity extends Activity {
 
     private TextView mName;
     private ImageView picture;
-    ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+    private Button backButton;
 
     private CallbackManager mCallbackMgt;
 
@@ -56,8 +52,10 @@ public class FbLoginActivity extends Activity {
             Profile profile =  Profile.getCurrentProfile();
            if (profile!=null) {
                mName.setText("tark: " + profile.getName());
-              Uri uri =  profile.getProfilePictureUri(100, 100);
+               Uri uri =  profile.getProfilePictureUri(250, 250);
                Log.d("Facebookbild", uri.toString());
+               //load Facebook profile picture from uri -> show in picture
+               Picasso.with(getApplicationContext()).load(uri.toString()).into(picture);
            }
         }
 
@@ -78,6 +76,20 @@ public class FbLoginActivity extends Activity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         // Initialize the SDK before executing any other operations,
         // especially, if you're using Facebook UI elements.
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "wichura.de.camperapp",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
 
         mCallbackMgt=CallbackManager.Factory.create();
 
@@ -91,6 +103,16 @@ public class FbLoginActivity extends Activity {
         mName= (EditText) findViewById(R.id.name);
         picture = (ImageView) findViewById(R.id.profilePic);
 
+        backButton = (Button) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent data = new Intent();
+                setResult(RESULT_OK, data);
+                finish();
+            }
+        });
+
 
         AccessTokenTracker tracker = new AccessTokenTracker() {
             @Override
@@ -103,10 +125,10 @@ public class FbLoginActivity extends Activity {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
                 if (newProfile!=null) {
-                    mName.setText("tark: " + newProfile.getName());
+                    mName.setText("FB Name: " + newProfile.getName());
                     Uri uri =  newProfile.getProfilePictureUri(100, 100);
                     Log.d("Facebookbild", uri.toString());
-
+                    //load Facebook profile picture from uri -> show in picture
                     Picasso.with(getApplicationContext()).load(uri.toString()).into(picture);
                 }
             }

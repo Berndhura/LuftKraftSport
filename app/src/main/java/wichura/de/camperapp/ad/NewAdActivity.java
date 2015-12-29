@@ -37,6 +37,7 @@ public class NewAdActivity extends Activity {
     private EditText mTitleText;
     private EditText mDescText;
     private EditText mKeywords;
+    private EditText mPrice;
 
     private static final int SELECT_PHOTO = 100;
     private String mImage;
@@ -47,6 +48,7 @@ public class NewAdActivity extends Activity {
     private String title;
     private String description;
     private String keywords;
+    private String price;
     private String picture;
 
     private ProgressDialog progress;
@@ -64,7 +66,7 @@ public class NewAdActivity extends Activity {
         mDescText = (EditText) findViewById(R.id.description);
         mKeywords = (EditText) findViewById(R.id.keywords);
         mImgOne = (ImageView) findViewById(R.id.imageButton);
-        //mImgTwo = (ImageView) findViewById(R.id.picturTwo);
+        mPrice =(EditText) findViewById(R.id.preis);
 
 
 
@@ -75,7 +77,7 @@ public class NewAdActivity extends Activity {
 
                 final String titleString = mKeywords.getText().toString();
                 final String descString = mDescText.getText().toString();
-                //final String keyWordsString = mKeywords.getText().toString();
+                final String price = mPrice.getText().toString();
                 final String keyWordsString = "zelt";
 
                 // Package ToDoItem data into an Intent
@@ -87,9 +89,9 @@ public class NewAdActivity extends Activity {
                         keyWordsString,
                         mImage,
                         "TODO",
-                        "PHONE"); //TODO : location
+                        "PHONE",
+                        price);
 
-                // TODO - return data Intent and finish
                 setResult(RESULT_OK, data);
 
                 sendHttpToServer(data);
@@ -150,6 +152,8 @@ public class NewAdActivity extends Activity {
         description = data.getStringExtra(AdItem.DESC);
         keywords = data.getStringExtra(AdItem.KEYWORDS);
         picture = data.getStringExtra(AdItem.FILENAME);
+        price = data.getStringExtra(AdItem.PRICE);
+
         Log.d("query", title + description + keywords + picture);
 
 
@@ -203,6 +207,7 @@ public class NewAdActivity extends Activity {
         params.put("title", title);
         params.put("description", description);
         params.put("keywords", keywords);
+       // params.put("price", price);
 
         File file = new File(fileString.toString());
 
