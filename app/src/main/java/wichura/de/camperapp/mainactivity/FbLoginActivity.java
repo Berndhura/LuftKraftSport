@@ -103,15 +103,7 @@ public class FbLoginActivity extends Activity {
         mName= (EditText) findViewById(R.id.name);
         picture = (ImageView) findViewById(R.id.profilePic);
 
-        backButton = (Button) findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent data = new Intent();
-                setResult(RESULT_OK, data);
-                finish();
-            }
-        });
+        backButton();
 
 
         AccessTokenTracker tracker = new AccessTokenTracker() {
@@ -136,6 +128,18 @@ public class FbLoginActivity extends Activity {
 
         tracker.startTracking();
         profileTracker.startTracking();
+    }
+
+    private void backButton() {
+        backButton = (Button) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent data = new Intent();
+                setResult(RESULT_OK, data);
+                finish();
+            }
+        });
     }
 
     @Override
