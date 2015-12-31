@@ -80,6 +80,7 @@ public class MainActivity extends ActionBarActivity  {
                     }
                 } catch (final JSONException e) {
                     e.printStackTrace();
+
                 }
 
                 listView = (ListView) findViewById(R.id.list);
@@ -114,7 +115,7 @@ public class MainActivity extends ActionBarActivity  {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // TODO Auto-generated method stub
+                Toast.makeText(getApplicationContext(),"Missing network connection!\n"+error.toString(), Toast.LENGTH_LONG).show();
             }
         });
         queue.add(getAllAdsInJson);

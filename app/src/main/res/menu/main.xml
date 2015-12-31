@@ -41,10 +41,7 @@
         camper:actionViewClass="android.widget.SearchView"
         camper:showAsAction="always|collapseActionView"/>
 
-    <item android:id="@+id/action_search"
-        android:icon="@drawable/newad"
-        android:title="Maul"
-        camper:showAsAction="always" />
+
 
     <item
         android:id="@+id/login"

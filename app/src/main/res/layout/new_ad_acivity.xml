@@ -39,7 +39,9 @@
             android:id="@+id/imageButton"
             android:layout_gravity="center_vertical"
             android:src="@drawable/applogo"
-            android:layout_margin="20dp"/>
+            android:layout_margin="20dp"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -65,7 +67,7 @@
             android:id="@+id/keywords"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.2"
-            android:hint="Was verkaufst du..."
+            android:hint="Was verkaufst Du..."
             android:background="@android:color/transparent"
             android:gravity="top"
             android:singleLine="false"
