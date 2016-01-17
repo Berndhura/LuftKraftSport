@@ -9,6 +9,6 @@ public class Urls {
     public static String MAIN_SERVER_URL = "http://10.0.2.2:8080/2ndHandOz/";
     public static String UPLOAD_NEW_AD_URL = "saveNewAd/";
     public static String GET_ALL_ADS_URL = "getAllAds/";
-    public static String GET_ADS_FOR_KEYWORD_URL="getAdsWithTag?description=";
+    public static String GET_ADS_FOR_KEYWORD_URL = "getAdsWithTag?description=";
 
 }

@@ -50,6 +50,7 @@ public class NewAdActivity extends Activity {
     private String keywords;
     private String price;
     private String picture;
+    private String userId;
 
     private ProgressDialog progress;
 
@@ -58,16 +59,15 @@ public class NewAdActivity extends Activity {
         super.onCreate(savedInstanceState);
 
 
-            //https://www.youtube.com/watch?v=4MFzuP1F-xQ
+        //https://www.youtube.com/watch?v=4MFzuP1F-xQ
 
         setContentView(R.layout.new_ad_acivity);
 
-       // mTitleText = (EditText) findViewById(R.id.title);
+        // mTitleText = (EditText) findViewById(R.id.title);
         mDescText = (EditText) findViewById(R.id.description);
         mKeywords = (EditText) findViewById(R.id.keywords);
         mImgOne = (ImageView) findViewById(R.id.imageButton);
-        mPrice =(EditText) findViewById(R.id.preis);
-
+        mPrice = (EditText) findViewById(R.id.preis);
 
 
         final Button submitButton = (Button) findViewById(R.id.uploadButton);
@@ -161,14 +161,6 @@ public class NewAdActivity extends Activity {
         BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
         Bitmap thump = bitmapHelper.resize(uri.toString());
 
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(
-                    getApplicationContext().getContentResolver(), uri);
-        } catch (final IOException e) {
-            Log.i("MyActivity", "MyClass.getView() URLS " + "BITMAP FEHLER");
-            e.printStackTrace();
-        }
 
         multiPost();
     }
@@ -176,7 +168,7 @@ public class NewAdActivity extends Activity {
     public static String getRealPathFromUri(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
+            String[] proj = {MediaStore.Images.Media.DATA};
             cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
@@ -202,33 +194,36 @@ public class NewAdActivity extends Activity {
         HashMap<String, String> params = new HashMap<String, String>();
 
         Uri fileUri = Uri.parse(picture.toString());
-        String fileString = getRealPathFromUri(getApplicationContext(),fileUri);
+        String fileString = getRealPathFromUri(getApplicationContext(), fileUri);
 
         params.put("title", title);
         params.put("description", description);
         params.put("keywords", keywords);
-       // params.put("price", price);
+        params.put("userid", "conan");
+
+        // params.put("price", price);
 
         File file = new File(fileString.toString());
 
-        MultipartRequest mr = new MultipartRequest(Urls.MAIN_SERVER_URL+"saveNewAd",
-                new Response.Listener<String>(){
+        MultipartRequest mr = new MultipartRequest(Urls.MAIN_SERVER_URL + "saveNewAd",
+                new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String response) {
                         Log.d("response", response);
-                        Toast.makeText(getApplicationContext(),"Upload...done!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Upload...done!", Toast.LENGTH_SHORT).show();
                     }
 
                 },
-                new Response.ErrorListener(){
+                new Response.ErrorListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Volley Request Error", error.getLocalizedMessage());
-            }
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Request Error", error.getLocalizedMessage());
+                        Toast.makeText(getApplicationContext(), "Upload did not work!\n" + error.toString(), Toast.LENGTH_LONG).show();
+                    }
 
-        },file, params);
+                }, file, params);
 
         Volley.newRequestQueue(this).add(mr);
     }

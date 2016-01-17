@@ -37,8 +37,7 @@ public class PhotoMultipartRequest<T> extends Request<T> {
     public PhotoMultipartRequest(String url,
                                  ErrorListener errorListener,
                                  Listener<T> listener,
-                                 File imageFile)
-    {
+                                 File imageFile) {
         super(Method.POST, url, errorListener);
 
         mListener = listener;
@@ -61,30 +60,24 @@ public class PhotoMultipartRequest<T> extends Request<T> {
         return headers;
     }
 
-    private void buildMultipartEntity()
-    {
+    private void buildMultipartEntity() {
         mBuilder.addBinaryBody(FILE_PART_NAME, mImageFile, ContentType.create("image/jpg"), mImageFile.getName());
         mBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         mBuilder.setLaxMode().setBoundary("xx").setCharset(Charset.forName("UTF-8"));
     }
 
     @Override
-    public String getBodyContentType()
-    {
+    public String getBodyContentType() {
         String contentTypeHeader = mBuilder.build().getContentType().getValue();
         return contentTypeHeader;
     }
 
     @Override
-    public byte[] getBody() throws AuthFailureError
-    {
+    public byte[] getBody() throws AuthFailureError {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try
-        {
+        try {
             mBuilder.build().writeTo(bos);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             VolleyLog.e("IOException writing to ByteArrayOutputStream bos, building the multipart request.");
         }
 
@@ -92,15 +85,13 @@ public class PhotoMultipartRequest<T> extends Request<T> {
     }
 
     @Override
-    protected Response<T> parseNetworkResponse(NetworkResponse response)
-    {
+    protected Response<T> parseNetworkResponse(NetworkResponse response) {
         T result = null;
         return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
     }
 
     @Override
-    protected void deliverResponse(T response)
-    {
+    protected void deliverResponse(T response) {
         mListener.onResponse(response);
     }
 }

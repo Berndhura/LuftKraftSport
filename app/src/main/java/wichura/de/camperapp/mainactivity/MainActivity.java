@@ -3,6 +3,8 @@ package wichura.de.camperapp.mainactivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -39,14 +41,14 @@ import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
 
 //farbcode bilder: #639bc5
-public class MainActivity extends ActionBarActivity  {
+public class MainActivity extends ActionBarActivity {
 
     private ListView listView;
     private List<RowItem> rowItems;
     private CustomListViewAdapter adapter;
 
-    public static final int REQUEST_ID_FOR_NEW_AD= 1;
-    public static final int REQUEST_ID_FOR_FACEBOOK_LOGIN= 2;
+    public static final int REQUEST_ID_FOR_NEW_AD = 1;
+    public static final int REQUEST_ID_FOR_FACEBOOK_LOGIN = 2;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -63,7 +65,7 @@ public class MainActivity extends ActionBarActivity  {
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Context context=getApplicationContext();
+                Context context = getApplicationContext();
                 try {
                     final Gson gson = new GsonBuilder()
                             .excludeFieldsWithoutExposeAnnotation().create();
@@ -100,11 +102,11 @@ public class MainActivity extends ActionBarActivity  {
                         //open new details page with sel. item
                         final Intent intent = new Intent(getApplicationContext(),
                                 OpenAdActivity.class);
-                        intent.putExtra("uri",rowItem.getUrl());
-                        intent.putExtra("title",rowItem.getTitle());
-                        intent.putExtra("description",rowItem.getDescription());
-                        intent.putExtra("location",rowItem.getLocation());
-                        intent.putExtra("phone",rowItem.getPhone());
+                        intent.putExtra("uri", rowItem.getUrl());
+                        intent.putExtra("title", rowItem.getTitle());
+                        intent.putExtra("description", rowItem.getDescription());
+                        intent.putExtra("location", rowItem.getLocation());
+                        intent.putExtra("phone", rowItem.getPhone());
                         startActivity(intent);
 
                         Toast.makeText(getApplicationContext(), rowItem.getTitle(),
@@ -115,7 +117,7 @@ public class MainActivity extends ActionBarActivity  {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),"Missing network connection!\n"+error.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Missing network connection!\n" + error.toString(), Toast.LENGTH_LONG).show();
             }
         });
         queue.add(getAllAdsInJson);
@@ -123,13 +125,13 @@ public class MainActivity extends ActionBarActivity  {
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-       // Inflate the menu; this adds items to the action bar if it is present.
-       getMenuInflater().inflate(R.menu.main, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
 
-       SearchManager sM =(SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchManager sM = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-       final MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
-       final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+        final MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
 
         int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         EditText searchPlate = (EditText) searchView.findViewById(searchPlateId);
@@ -142,9 +144,7 @@ public class MainActivity extends ActionBarActivity  {
         searchView.setSubmitButtonEnabled(true);
 
 
-
-        if(searchView != null)
-        {
+        if (searchView != null) {
             searchView.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -188,16 +188,22 @@ public class MainActivity extends ActionBarActivity  {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ID_FOR_NEW_AD) {
             /*if (resultCode == RESULT_OK) {
                 //here
                 int i=0;
             }*/
-            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL+Urls.GET_ALL_ADS_URL);
+            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
         }
-        if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN){
-            int i=2;
+        //back from Facebock login/logout page
+        if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
+            int i = 2;
+            SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+
+            String highScore = sharedPref.getString("id", "berndi");
+
+            Uri id = data.getData();
             Log.d("Wo: ", "maul");
         }
     }

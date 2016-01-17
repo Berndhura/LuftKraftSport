@@ -18,7 +18,7 @@ import wichura.de.camperapp.app.AppController;
 
 public class OpenAdActivity extends Activity {
 
-	private String pictureUri;
+    private String pictureUri;
     private TextView mTitleText;
     private TextView mDescText;
     private TextView mLocationText;
@@ -28,23 +28,23 @@ public class OpenAdActivity extends Activity {
 
     //TODO
     //use swipe function from CustomSwipeAdapter to swipe pictures
-    private CustomSwipeAdapter  adapter;
+    private CustomSwipeAdapter adapter;
     private NetworkImageView viewPager;
 
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
-	@Override
-	protected void onCreate(final Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
 
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.open_ad_activity);
+        setContentView(R.layout.open_ad_activity);
 
         //TODO
         //swipe the pictures, preparation
         adapter = new CustomSwipeAdapter(this);
         //error! this has to be a viewpager obj in layout xml file! TODO!
-        viewPager = (NetworkImageView)findViewById(R.id.icon);
+        viewPager = (NetworkImageView) findViewById(R.id.icon);
         //viewPager.setAdapter(adapter);
 
 
@@ -53,7 +53,7 @@ public class OpenAdActivity extends Activity {
         TextView desHeader = (TextView) findViewById(R.id.headerDesciption);
         mDescText = (TextView) findViewById(R.id.description);
         mLocationText = (TextView) findViewById(R.id.location);
-        mPhoneText = (TextView) findViewById(R.id.phone );
+        mPhoneText = (TextView) findViewById(R.id.phone);
         imgView = (NetworkImageView) findViewById(R.id.icon);
 
         // Fetch screen height and width, to use as our max size when loading images as this
@@ -63,8 +63,8 @@ public class OpenAdActivity extends Activity {
         final int height = displayMetrics.heightPixels;
         final int width = displayMetrics.widthPixels;
 
-		//get data from Intent
-		pictureUri = getIntent().getStringExtra("uri");
+        //get data from Intent
+        pictureUri = getIntent().getStringExtra("uri");
 
         mTitleText.setText(getIntent().getStringExtra("title"));
         mDescText.setText(getIntent().getStringExtra("description"));
@@ -72,12 +72,11 @@ public class OpenAdActivity extends Activity {
         mPhoneText.setText(getIntent().getStringExtra("phone"));
 
 
-
         NetworkImageView picture = (NetworkImageView) imgView
                 .findViewById(R.id.icon);
-       // picture.setMinimumWidth(width);
+        // picture.setMinimumWidth(width);
         picture.setImageUrl(pictureUri, imageLoader);
 
-		Log.i("MyActivity", "MyClass.getView() OPEN " + pictureUri);
-	}
+        Log.i("MyActivity", "MyClass.getView() OPEN " + pictureUri);
+    }
 }

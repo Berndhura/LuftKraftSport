@@ -2,12 +2,15 @@ package wichura.de.camperapp.mainactivity;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -39,24 +42,27 @@ import wichura.de.camperapp.R;
 public class FbLoginActivity extends Activity {
 
     private TextView mName;
+    private String mUserId;
+    private String USER_ID = "USER_ID";
     private ImageView picture;
+
     private Button backButton;
 
     private CallbackManager mCallbackMgt;
-
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
 
             AccessToken token = loginResult.getAccessToken();
-            Profile profile =  Profile.getCurrentProfile();
-           if (profile!=null) {
-               mName.setText("tark: " + profile.getName());
-               Uri uri =  profile.getProfilePictureUri(250, 250);
-               Log.d("Facebookbild", uri.toString());
-               //load Facebook profile picture from uri -> show in picture
-               Picasso.with(getApplicationContext()).load(uri.toString()).into(picture);
-           }
+            Profile profile = Profile.getCurrentProfile();
+            if (profile != null) {
+                mName.setText("tark: " + profile.getName());
+                mUserId = profile.getId();
+                Uri uri = profile.getProfilePictureUri(250, 250);
+                Log.d("Facebookbild", uri.toString());
+                //load Facebook profile picture from uri -> show in picture
+                Picasso.with(getApplicationContext()).load(uri.toString()).into(picture);
+            }
         }
 
         @Override
@@ -91,7 +97,7 @@ public class FbLoginActivity extends Activity {
 
         }
 
-        mCallbackMgt=CallbackManager.Factory.create();
+        mCallbackMgt = CallbackManager.Factory.create();
 
         setContentView(R.layout.fb_login_activity);
 
@@ -100,7 +106,7 @@ public class FbLoginActivity extends Activity {
 
         loginButton.registerCallback(mCallbackMgt, mCallback);
 
-        mName= (EditText) findViewById(R.id.name);
+        mName = (EditText) findViewById(R.id.name);
         picture = (ImageView) findViewById(R.id.profilePic);
 
         backButton();
@@ -116,9 +122,10 @@ public class FbLoginActivity extends Activity {
         ProfileTracker profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-                if (newProfile!=null) {
+                if (newProfile != null) {
                     mName.setText("FB Name: " + newProfile.getName());
-                    Uri uri =  newProfile.getProfilePictureUri(100, 100);
+                    mUserId = newProfile.getId();
+                    Uri uri = newProfile.getProfilePictureUri(100, 100);
                     Log.d("Facebookbild", uri.toString());
                     //load Facebook profile picture from uri -> show in picture
                     Picasso.with(getApplicationContext()).load(uri.toString()).into(picture);
@@ -136,6 +143,14 @@ public class FbLoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 final Intent data = new Intent();
+                data.putExtra(USER_ID, "123123");
+
+                Context context = getApplicationContext();
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+
+                sharedPref.edit().putString("id", "69");
+
+
                 setResult(RESULT_OK, data);
                 finish();
             }
@@ -146,6 +161,7 @@ public class FbLoginActivity extends Activity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mCallbackMgt.onActivityResult(requestCode,resultCode, data);
+        data.putExtra(USER_ID, mUserId);
+        mCallbackMgt.onActivityResult(requestCode, resultCode, data);
     }
 }

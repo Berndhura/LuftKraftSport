@@ -19,38 +19,38 @@ import wichura.de.camperapp.app.AppController;
 
 public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
-	private Context context;
-	private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+    private Context context;
+    private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
     public CustomListViewAdapter(final Context context, final int resourceId,
-			final List<RowItem> items) {
-		super(context, resourceId, items);
-		this.context = context;
-	}
+                                 final List<RowItem> items) {
+        super(context, resourceId, items);
+        this.context = context;
+    }
 
-	/* private view holder class */
-	private class ViewHolder {
-		TextView txtTitle;
-		TextView txtDesc;
-		TextView txtPrice;
-	}
+    /* private view holder class */
+    private class ViewHolder {
+        TextView txtTitle;
+        TextView txtDesc;
+        TextView txtPrice;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-		final LayoutInflater mInflater = (LayoutInflater) context
-				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater mInflater = (LayoutInflater) context
+                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         ViewHolder holder;
         if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.list_item, null);
+            convertView = mInflater.inflate(R.layout.list_item, null);
             holder = new ViewHolder();
-			holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
-			holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
-			holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
-			convertView.setTag(holder);
-		} else
-			holder = (ViewHolder) convertView.getTag();
+            holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
+            holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
+            holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
+            convertView.setTag(holder);
+        } else
+            holder = (ViewHolder) convertView.getTag();
 
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();
@@ -63,14 +63,14 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         final RowItem rowItem = getItem(position);
         //set image
         thumbNail.setImageUrl(rowItem.getUrl(), imageLoader);
-		Log.i("IM_URLS: ",  rowItem.getUrl());
+        Log.i("IM_URLS: ", rowItem.getUrl());
         //set Keywords
-		holder.txtDesc.setText(rowItem.getKeywords());
-		//set Title
+        holder.txtDesc.setText(rowItem.getKeywords());
+        //set Title
         holder.txtTitle.setText(rowItem.getTitle());
-		//set Price
-		holder.txtPrice.setText("99");
+        //set Price
+        holder.txtPrice.setText("99");
 
-		return convertView;
-	}
+        return convertView;
+    }
 }

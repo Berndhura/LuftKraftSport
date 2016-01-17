@@ -19,9 +19,8 @@ public class BitmapHelper {
     private int maxWidth = 350;
     private int maxHeight = 350;
 
-    public BitmapHelper(Context context)
-    {
-        this.context=context;
+    public BitmapHelper(Context context) {
+        this.context = context;
     }
 
     public Bitmap getThump(String uri) {
@@ -33,11 +32,11 @@ public class BitmapHelper {
             e.printStackTrace();
         }
         //calculate scale
-        float scale = Math.round((float)bitmap.getHeight()/maxWidth);
+        float scale = Math.round((float) bitmap.getHeight() / maxWidth);
         return resize(uri);//todo add scale, check if 1 or bigger...
     }
 
-    public Bitmap resize(String uri){
+    public Bitmap resize(String uri) {
 
         /*Picasso.with(this.context)
                 .load(uri)
@@ -54,10 +53,12 @@ public class BitmapHelper {
             e.printStackTrace();
         }
 
-        int orignalHeight = bitmap.getHeight();
+        float orignalHeight = bitmap.getHeight();
         int orignalWidth = bitmap.getWidth();
+        int factor = Math.round(500 / orignalHeight);
+        Log.i("Conan", "Factor: " + factor);
 
-        Bitmap thump = Bitmap.createScaledBitmap(bitmap,(int)(orignalWidth*0.1), (int)(orignalHeight*0.1), true);
+        Bitmap thump = Bitmap.createScaledBitmap(bitmap, (int) (orignalWidth * factor), (int) (orignalHeight * factor), true);
 
 
         return thump;

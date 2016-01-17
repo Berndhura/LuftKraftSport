@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageButton"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/applogo"
+            android:src="@drawable/empty_photo"
             android:layout_margin="20dp"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"/>
