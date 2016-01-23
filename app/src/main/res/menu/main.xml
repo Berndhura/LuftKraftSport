@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2013 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,30 +22,40 @@
   (actionProviderClass, actionViewClass, actionLayout).
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:camper="http://schemas.android.com/apk/res-auto" >
+    xmlns:camper="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools">
 
     <!--
        Here we create all of the items to be displayed in the menu, setting support:showAsAction to
        define how the item should be displayed on the compatible Action Bar.
     -->
-    <item android:id="@+id/new_ad"
+
+    <item
+        android:id="@+id/action_favorite"
+        android:icon="@drawable/empty_photo"
+        android:title="Yo"
+        app:showAsAction="ifRoom"/>
+
+
+
+    <item
+        android:id="@+id/new_ad"
         android:icon="@drawable/newad"
         android:title="New Ad"
-        camper:showAsAction="ifRoom"/>
+        camper:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_search"
         android:icon="@drawable/abc_ic_search"
         android:title="@string/abc_search_hint"
         camper:actionViewClass="android.widget.SearchView"
-        camper:showAsAction="always|collapseActionView"/>
-
+        camper:showAsAction="always|collapseActionView" />
 
 
     <item
         android:id="@+id/login"
         android:icon="@drawable/ic_action_settings"
         android:title="Login"
-        camper:showAsAction="never"/>
+        camper:showAsAction="never" />
 
 </menu>

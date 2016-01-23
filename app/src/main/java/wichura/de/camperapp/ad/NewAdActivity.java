@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -158,8 +160,8 @@ public class NewAdActivity extends Activity {
 
 
         final Uri uri = Uri.parse(picture);
-        BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
-        Bitmap thump = bitmapHelper.resize(uri.toString());
+        //BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
+        //Bitmap thump = bitmapHelper.resize(uri.toString());
 
 
         multiPost();
@@ -194,7 +196,16 @@ public class NewAdActivity extends Activity {
         HashMap<String, String> params = new HashMap<String, String>();
 
         Uri fileUri = Uri.parse(picture.toString());
-        String fileString = getRealPathFromUri(getApplicationContext(), fileUri);
+        /*
+            neuer versuche zum verkleiner der bilder, compressImage in Bitmaphelper, nimmt String
+         */
+        BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
+        Uri bildCompresse = Uri.parse(bitmapHelper.compressImage(picture.toString()));
+
+        //thumbnail?
+        // Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagePath), THUMBSIZE, THUMBSIZE);
+
+        String fileString = getRealPathFromUri(getApplicationContext(), bildCompresse); //war fileUri
 
         params.put("title", title);
         params.put("description", description);

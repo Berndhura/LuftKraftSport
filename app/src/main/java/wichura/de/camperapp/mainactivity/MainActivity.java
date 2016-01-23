@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.ad.AdItem;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
@@ -188,7 +189,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ID_FOR_NEW_AD) {
             /*if (resultCode == RESULT_OK) {
                 //here
@@ -198,13 +199,9 @@ public class MainActivity extends ActionBarActivity {
         }
         //back from Facebock login/logout page
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
-            int i = 2;
-            SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-
-            String highScore = sharedPref.getString("id", "berndi");
-
-            Uri id = data.getData();
-            Log.d("Wo: ", "maul");
+            String facebookId = data.getStringExtra(Constants.FACEBOOK_ID);
+            String fbProfilePicUrl = data.getStringExtra(Constants.FACEBOOK_PROFILE_PIC_URL);
+            Log.d("CONAN: ", "Return from Facebook login");
         }
     }
 }

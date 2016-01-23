@@ -2,15 +2,12 @@ package wichura.de.camperapp.mainactivity;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -43,7 +40,7 @@ public class FbLoginActivity extends Activity {
 
     private TextView mName;
     private String mUserId;
-    private String USER_ID = "USER_ID";
+    private String mFacebookPicUrl;
     private ImageView picture;
 
     private Button backButton;
@@ -126,6 +123,7 @@ public class FbLoginActivity extends Activity {
                     mName.setText("FB Name: " + newProfile.getName());
                     mUserId = newProfile.getId();
                     Uri uri = newProfile.getProfilePictureUri(100, 100);
+                    mFacebookPicUrl = uri.toString();
                     Log.d("Facebookbild", uri.toString());
                     //load Facebook profile picture from uri -> show in picture
                     Picasso.with(getApplicationContext()).load(uri.toString()).into(picture);
@@ -143,13 +141,8 @@ public class FbLoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 final Intent data = new Intent();
-                data.putExtra(USER_ID, "123123");
-
-                Context context = getApplicationContext();
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-
-                sharedPref.edit().putString("id", "69");
-
+                data.putExtra(Constants.FACEBOOK_ID, mUserId);
+                data.putExtra(Constants.FACEBOOK_PROFILE_PIC_URL, mFacebookPicUrl);
 
                 setResult(RESULT_OK, data);
                 finish();
@@ -161,7 +154,9 @@ public class FbLoginActivity extends Activity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        data.putExtra(USER_ID, mUserId);
+        data.putExtra(Constants.FACEBOOK_ID, mUserId);
+        data.putExtra(Constants.FACEBOOK_PROFILE_PIC_URL, mFacebookPicUrl);
+
         mCallbackMgt.onActivityResult(requestCode, resultCode, data);
     }
 }
