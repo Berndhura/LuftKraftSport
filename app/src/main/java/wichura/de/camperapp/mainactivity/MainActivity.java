@@ -3,8 +3,6 @@ package wichura.de.camperapp.mainactivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -36,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.ad.AdItem;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
@@ -50,6 +48,8 @@ public class MainActivity extends ActionBarActivity {
 
     public static final int REQUEST_ID_FOR_NEW_AD = 1;
     public static final int REQUEST_ID_FOR_FACEBOOK_LOGIN = 2;
+    private String facebookId;
+    private String fbProfilePicUrl;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -79,6 +79,7 @@ public class MainActivity extends ActionBarActivity {
                                 .toString();
                         //use RowItem class to get from GSON
                         final RowItem rowItem = gson.fromJson(title, RowItem.class);
+
                         rowItems.add(rowItem);
                     }
                 } catch (final JSONException e) {
@@ -104,13 +105,14 @@ public class MainActivity extends ActionBarActivity {
                         final Intent intent = new Intent(getApplicationContext(),
                                 OpenAdActivity.class);
                         intent.putExtra("uri", rowItem.getUrl());
+                        intent.putExtra("id", rowItem.getAdId());
                         intent.putExtra("title", rowItem.getTitle());
                         intent.putExtra("description", rowItem.getDescription());
                         intent.putExtra("location", rowItem.getLocation());
                         intent.putExtra("phone", rowItem.getPhone());
                         startActivity(intent);
 
-                        Toast.makeText(getApplicationContext(), rowItem.getTitle(),
+                        Toast.makeText(getApplicationContext(), rowItem.getAdId(),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -121,6 +123,7 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Missing network connection!\n" + error.toString(), Toast.LENGTH_LONG).show();
             }
         });
+        
         queue.add(getAllAdsInJson);
     }
 
@@ -162,6 +165,17 @@ public class MainActivity extends ActionBarActivity {
             });
         }
 
+        MenuItem loginItem = menu.findItem(R.id.login);
+        MenuItem profileItem = menu.findItem(R.id.profile);
+
+        if (facebookId != null) {
+            loginItem.setVisible(false);
+            profileItem.setVisible(true);
+        } else {
+            loginItem.setVisible(true);
+            profileItem.setVisible(false);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -199,9 +213,16 @@ public class MainActivity extends ActionBarActivity {
         }
         //back from Facebock login/logout page
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
-            String facebookId = data.getStringExtra(Constants.FACEBOOK_ID);
-            String fbProfilePicUrl = data.getStringExtra(Constants.FACEBOOK_PROFILE_PIC_URL);
-            Log.d("CONAN: ", "Return from Facebook login");
+            facebookId = data.getStringExtra(Constants.FACEBOOK_ID);
+            fbProfilePicUrl = data.getStringExtra(Constants.FACEBOOK_PROFILE_PIC_URL);
+            Log.d("CONAN: ", "Return from Facebook login" + facebookId);
+
+            //load new Options Menu cause of user is logged in now
+            invalidateOptionsMenu();
+
+            //set Profile pic with URL:
+
+
         }
     }
 }

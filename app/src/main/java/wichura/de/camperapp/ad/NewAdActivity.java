@@ -87,6 +87,7 @@ public class NewAdActivity extends Activity {
                 AdItem.packageIntent(
                         data,
                         titleString,
+                        "apid",
                         descString,
                         keyWordsString,
                         mImage,
@@ -205,7 +206,7 @@ public class NewAdActivity extends Activity {
         //thumbnail?
         // Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagePath), THUMBSIZE, THUMBSIZE);
 
-        String fileString = getRealPathFromUri(getApplicationContext(), bildCompresse); //war fileUri
+        String fileString = getRealPathFromUri(getApplicationContext(), fileUri); //war bildCompresse
 
         params.put("title", title);
         params.put("description", description);

@@ -31,14 +31,6 @@
     -->
 
     <item
-        android:id="@+id/action_favorite"
-        android:icon="@drawable/empty_photo"
-        android:title="Yo"
-        app:showAsAction="ifRoom"/>
-
-
-
-    <item
         android:id="@+id/new_ad"
         android:icon="@drawable/newad"
         android:title="New Ad"
@@ -56,6 +48,12 @@
         android:id="@+id/login"
         android:icon="@drawable/ic_action_settings"
         android:title="Login"
+        camper:showAsAction="never" />
+
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_action_settings"
+        android:title="Profile"
         camper:showAsAction="never" />
 
 </menu>

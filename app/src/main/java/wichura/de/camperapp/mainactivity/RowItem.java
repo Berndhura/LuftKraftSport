@@ -20,15 +20,8 @@ public class RowItem {
     private String date;
     @Expose
     private String price;
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
+    @Expose
+    private String id;
     @Expose
     private String location;
 
@@ -36,6 +29,7 @@ public class RowItem {
 
     public RowItem(final int imageId,
                    final String title,
+                   final String id,
                    final String keywords,
                    final String url,
                    final String des,
@@ -45,12 +39,25 @@ public class RowItem {
                    final String location) {
         this.imageId = imageId;
         this.title = title;
+        this.id = id;
         this.keywords = keywords;
         this.urls = url;
         this.description = des;
         this.phone = phone;
         this.date = date;
         this.price = price;
+        this.location = location;
+    }
+
+    public String getAdId() {return id; }
+
+    public void setId(String id) {this.id = id;}
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
         this.location = location;
     }
 
