@@ -97,13 +97,13 @@ public class OpenAdActivity extends Activity {
             }
         });
 
-        Log.i("MyActivity", "MyClass.getView() OPEN " + pictureUri);
+        Log.i("CONAN", "MyClass.getView() OPEN " + pictureUri);
     }
 
     private void deleteAdRequest(String adId) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = Urls.MAIN_SERVER_URL + Urls.DELET_AD_WITH_APID + "?adid=" + adId;
+        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

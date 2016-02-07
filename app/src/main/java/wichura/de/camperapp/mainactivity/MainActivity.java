@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -48,6 +47,8 @@ public class MainActivity extends ActionBarActivity {
 
     public static final int REQUEST_ID_FOR_NEW_AD = 1;
     public static final int REQUEST_ID_FOR_FACEBOOK_LOGIN = 2;
+    public static final int REQUEST_ID_FOR_OPEN_AD = 3;
+
     private String facebookId;
     private String fbProfilePicUrl;
 
@@ -110,7 +111,8 @@ public class MainActivity extends ActionBarActivity {
                         intent.putExtra("description", rowItem.getDescription());
                         intent.putExtra("location", rowItem.getLocation());
                         intent.putExtra("phone", rowItem.getPhone());
-                        startActivity(intent);
+                        intent.putExtra("userid", rowItem.getUserid());
+                        startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
 
                         Toast.makeText(getApplicationContext(), rowItem.getAdId(),
                                 Toast.LENGTH_SHORT).show();
@@ -222,7 +224,11 @@ public class MainActivity extends ActionBarActivity {
 
             //set Profile pic with URL:
 
+        }
 
+        if (requestCode == REQUEST_ID_FOR_OPEN_AD) {
+
+            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
         }
     }
 }

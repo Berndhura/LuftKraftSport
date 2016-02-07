@@ -24,6 +24,8 @@ public class RowItem {
     private String id;
     @Expose
     private String location;
+    @Expose
+    private String userid;
 
     private Bitmap image;
 
@@ -36,7 +38,8 @@ public class RowItem {
                    final String phone,
                    final String date,
                    final String price,
-                   final String location) {
+                   final String location,
+                   final String userid) {
         this.imageId = imageId;
         this.title = title;
         this.id = id;
@@ -47,6 +50,15 @@ public class RowItem {
         this.date = date;
         this.price = price;
         this.location = location;
+        this.userid = userid;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 
     public String getAdId() {return id; }

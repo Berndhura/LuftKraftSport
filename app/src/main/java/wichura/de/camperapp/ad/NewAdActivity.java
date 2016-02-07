@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -23,8 +24,11 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -150,7 +154,6 @@ public class NewAdActivity extends Activity {
 
     private void sendHttpToServer(final Intent data) {
 
-
         title = data.getStringExtra(AdItem.TITLE);
         description = data.getStringExtra(AdItem.DESC);
         keywords = data.getStringExtra(AdItem.KEYWORDS);
@@ -158,12 +161,6 @@ public class NewAdActivity extends Activity {
         price = data.getStringExtra(AdItem.PRICE);
 
         Log.d("query", title + description + keywords + picture);
-
-
-        final Uri uri = Uri.parse(picture);
-        //BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
-        //Bitmap thump = bitmapHelper.resize(uri.toString());
-
 
         multiPost();
     }
@@ -197,27 +194,26 @@ public class NewAdActivity extends Activity {
         HashMap<String, String> params = new HashMap<String, String>();
 
         Uri fileUri = Uri.parse(picture.toString());
-        /*
-            neuer versuche zum verkleiner der bilder, compressImage in Bitmaphelper, nimmt String
-         */
-        BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
-        Uri bildCompresse = Uri.parse(bitmapHelper.compressImage(picture.toString()));
+        Log.i("CONAN", "fileURI: " + fileUri);
 
         //thumbnail?
         // Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagePath), THUMBSIZE, THUMBSIZE);
 
         String fileString = getRealPathFromUri(getApplicationContext(), fileUri); //war bildCompresse
+        Log.i("CONAN", "fileString: " + fileString);
 
         params.put("title", title);
         params.put("description", description);
         params.put("keywords", keywords);
         params.put("userid", "conan");
-
         // params.put("price", price);
 
         File file = new File(fileString.toString());
+        Log.i("CONAN", "file: " + file);
+        File reducedPicture = saveBitmapToFile(file);
+        Log.i("CONAN", "newFile: " + reducedPicture);
 
-        MultipartRequest mr = new MultipartRequest(Urls.MAIN_SERVER_URL + "saveNewAd",
+        MultipartRequest multipartRequest = new MultipartRequest(Urls.MAIN_SERVER_URL + Urls.UPLOAD_NEW_AD_URL,
                 new Response.Listener<String>() {
 
                     @Override
@@ -235,9 +231,55 @@ public class NewAdActivity extends Activity {
                         Toast.makeText(getApplicationContext(), "Upload did not work!\n" + error.toString(), Toast.LENGTH_LONG).show();
                     }
 
-                }, file, params);
+                }, reducedPicture, params);
 
-        Volley.newRequestQueue(this).add(mr);
+        Volley.newRequestQueue(this).add(multipartRequest);
+    }
+
+
+
+    public File saveBitmapToFile(File file){
+        try {
+
+            // BitmapFactory options to downsize the image
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            o.inSampleSize = 6;
+            // factor of downsizing the image
+
+            FileInputStream inputStream = new FileInputStream(file);
+            //Bitmap selectedBitmap = null;
+            BitmapFactory.decodeStream(inputStream, null, o);
+            inputStream.close();
+
+            // The new size we want to scale to
+            final int REQUIRED_SIZE=75;
+
+            // Find the correct scale value. It should be the power of 2.
+            int scale = 1;
+            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+                scale *= 2;
+            }
+
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            inputStream = new FileInputStream(file);
+
+            Bitmap selectedBitmap = BitmapFactory.decodeStream(inputStream, null, o2);
+            inputStream.close();
+
+            //TODO save a local copy, upload and onSuccess delete the local copy!!!!
+            // here i override the original image file
+            file.createNewFile();
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100 , outputStream);
+
+            return file;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
 
