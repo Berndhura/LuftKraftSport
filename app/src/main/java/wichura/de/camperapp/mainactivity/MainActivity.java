@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +58,19 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        //Show an image in place of the titles
+        ImageView imageView = new ImageView(this);
+        //imageView.setImageResource(R.drawable.uploadbutton);
+        String uri = "https://graph.facebook.com/10208246429418599/picture?height=100&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D";
+        Picasso.with(getApplicationContext()).load(uri.toString()).into(imageView);
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.MATCH_PARENT,
+                ActionBar.LayoutParams.MATCH_PARENT);
+        actionBar.setCustomView(imageView, lp);
 
         setContentView(R.layout.activity_main);
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
@@ -192,6 +208,11 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.new_ad) {
             final Intent intent = new Intent(this, NewAdActivity.class);
             startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
+            return true;
+        }
+
+        if (id == R.id.refresh) {
+            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
             return true;
         }
 

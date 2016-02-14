@@ -5,12 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -24,12 +20,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 
 import wichura.de.camperapp.R;
@@ -99,11 +91,9 @@ public class NewAdActivity extends Activity {
                         "PHONE",
                         price);
 
-                setResult(RESULT_OK, data);
-
                 sendHttpToServer(data);
-
-                finish();
+                setResult(RESULT_OK, data);
+               //old finnish TODO
             }
         });
 
@@ -191,6 +181,7 @@ public class NewAdActivity extends Activity {
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.show();
 
+
         HashMap<String, String> params = new HashMap<String, String>();
 
         Uri fileUri = Uri.parse(picture.toString());
@@ -210,7 +201,8 @@ public class NewAdActivity extends Activity {
 
         File file = new File(fileString.toString());
         Log.i("CONAN", "file: " + file);
-        File reducedPicture = saveBitmapToFile(file);
+        BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
+        final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
         Log.i("CONAN", "newFile: " + reducedPicture);
 
         MultipartRequest multipartRequest = new MultipartRequest(Urls.MAIN_SERVER_URL + Urls.UPLOAD_NEW_AD_URL,
@@ -220,6 +212,13 @@ public class NewAdActivity extends Activity {
                     public void onResponse(String response) {
                         Log.d("response", response);
                         Toast.makeText(getApplicationContext(), "Upload...done!", Toast.LENGTH_SHORT).show();
+                        //jetzt bilder neu laden!! finish() geht zu früh zurück in mainactivity
+                        Boolean deletetd = reducedPicture.delete();
+                        if (!deletetd)
+                            Toast.makeText(getApplicationContext(), "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
+                        progress.dismiss();
+                        finish();
+
                     }
 
                 },
@@ -233,53 +232,8 @@ public class NewAdActivity extends Activity {
 
                 }, reducedPicture, params);
 
+
         Volley.newRequestQueue(this).add(multipartRequest);
-    }
-
-
-
-    public File saveBitmapToFile(File file){
-        try {
-
-            // BitmapFactory options to downsize the image
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            o.inSampleSize = 6;
-            // factor of downsizing the image
-
-            FileInputStream inputStream = new FileInputStream(file);
-            //Bitmap selectedBitmap = null;
-            BitmapFactory.decodeStream(inputStream, null, o);
-            inputStream.close();
-
-            // The new size we want to scale to
-            final int REQUIRED_SIZE=75;
-
-            // Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
-                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
-                scale *= 2;
-            }
-
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            inputStream = new FileInputStream(file);
-
-            Bitmap selectedBitmap = BitmapFactory.decodeStream(inputStream, null, o2);
-            inputStream.close();
-
-            //TODO save a local copy, upload and onSuccess delete the local copy!!!!
-            // here i override the original image file
-            file.createNewFile();
-            FileOutputStream outputStream = new FileOutputStream(file);
-
-            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100 , outputStream);
-
-            return file;
-        } catch (Exception e) {
-            return null;
-        }
     }
 }
 

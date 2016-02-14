@@ -1,11 +1,14 @@
 package wichura.de.camperapp.ad;
 
 import android.app.Activity;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,12 +68,6 @@ public class OpenAdActivity extends Activity {
         imgView = (NetworkImageView) findViewById(R.id.icon);
         mDelButton = (Button) findViewById(R.id.delButton);
 
-        // Fetch screen height and width, to use as our max size when loading images as this
-        // activity runs full screen
-        final DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        final int height = displayMetrics.heightPixels;
-        final int width = displayMetrics.widthPixels;
 
         //get data from Intent
         pictureUri = getIntent().getStringExtra("uri");
@@ -81,10 +78,23 @@ public class OpenAdActivity extends Activity {
         mPhoneText.setText(getIntent().getStringExtra("phone"));
         mAdId = getIntent().getStringExtra("id");
 
+        //Displaygroesse
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        Log.i("CONAN", "X " +  size.x);
+        Log.i("CONAN", "Y " +  size.y);
+
+
+
+
 
         NetworkImageView picture = (NetworkImageView) imgView
                 .findViewById(R.id.icon);
         // picture.setMinimumWidth(width);
+        picture.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        picture.setMaxWidth(size.x);
+        picture.setMaxHeight(size.y);
         picture.setImageUrl(pictureUri, imageLoader);
 
         mDelButton.setOnClickListener(new View.OnClickListener() {

@@ -37,6 +37,12 @@
         camper:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/refresh"
+        android:icon="@drawable/notification_template_icon_bg"
+        android:title="Refresh"
+        camper:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_search"
         android:icon="@drawable/abc_ic_search"
         android:title="@string/abc_search_hint"
