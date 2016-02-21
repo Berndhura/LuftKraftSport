@@ -1,7 +1,5 @@
 package wichura.de.camperapp.mainactivity;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -13,6 +11,8 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+
+import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.app.AppController;

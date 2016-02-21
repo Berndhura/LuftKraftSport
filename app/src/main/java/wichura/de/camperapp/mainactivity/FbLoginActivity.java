@@ -43,6 +43,8 @@ public class FbLoginActivity extends Activity {
     private String mFacebookPicUrl;
     private ImageView picture;
 
+    private AccessToken token;
+
     private Button backButton;
 
     private CallbackManager mCallbackMgt;
@@ -50,13 +52,14 @@ public class FbLoginActivity extends Activity {
         @Override
         public void onSuccess(LoginResult loginResult) {
 
-            AccessToken token = loginResult.getAccessToken();
+            token = loginResult.getAccessToken();
+            Log.d("CONAN", token.getUserId());
             Profile profile = Profile.getCurrentProfile();
             if (profile != null) {
                 mName.setText("tark: " + profile.getName());
                 mUserId = profile.getId();
                 Uri uri = profile.getProfilePictureUri(250, 250);
-                Log.d("Facebookbild", uri.toString());
+                Log.d("CONAN", uri.toString());
                 //load Facebook profile picture from uri -> show in picture
                 Picasso.with(getApplicationContext()).load(uri.toString()).into(picture);
             }
@@ -72,6 +75,7 @@ public class FbLoginActivity extends Activity {
 
         }
     };
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -143,6 +147,7 @@ public class FbLoginActivity extends Activity {
                 final Intent data = new Intent();
                 data.putExtra(Constants.FACEBOOK_ID, mUserId);
                 data.putExtra(Constants.FACEBOOK_PROFILE_PIC_URL, mFacebookPicUrl);
+                data.putExtra(Constants.FACEBOOK_ACCESS_TOKEN, token);
 
                 setResult(RESULT_OK, data);
                 finish();

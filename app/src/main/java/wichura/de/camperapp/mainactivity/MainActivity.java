@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -26,12 +27,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,9 +62,13 @@ public class MainActivity extends ActionBarActivity {
     private String facebookId;
     private String fbProfilePicUrl;
 
+    CallbackManager callbackManager;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getFacebookUserInfos();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
@@ -71,9 +82,36 @@ public class MainActivity extends ActionBarActivity {
                 ActionBar.LayoutParams.MATCH_PARENT,
                 ActionBar.LayoutParams.MATCH_PARENT);
         actionBar.setCustomView(imageView, lp);
+        actionBar.setWindowTitle("gok");
+        actionBar.setDisplayShowTitleEnabled(true);
 
         setContentView(R.layout.activity_main);
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+    }
+
+    private void getFacebookUserInfos() {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                JSONObject json = response.getJSONObject();
+                try {
+                    if (json != null) {
+                        String text = "<b>Name :</b> " + json.getString("name") + "<br><br><b>Email :</b> " +"email" + "<br><br><b>Profile link :</b> " + json.getString("link");
+                        Log.d("CONAN: ", "Return from Facebook login, token: " + text);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                }
+            }
+        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link,picture");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
     private void getAdsJsonForKeyword(String url) {
@@ -141,7 +179,7 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Missing network connection!\n" + error.toString(), Toast.LENGTH_LONG).show();
             }
         });
-        
+
         queue.add(getAllAdsInJson);
     }
 
@@ -238,7 +276,9 @@ public class MainActivity extends ActionBarActivity {
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
             facebookId = data.getStringExtra(Constants.FACEBOOK_ID);
             fbProfilePicUrl = data.getStringExtra(Constants.FACEBOOK_PROFILE_PIC_URL);
-            Log.d("CONAN: ", "Return from Facebook login" + facebookId);
+            String fbToken = data.getStringExtra(Constants.FACEBOOK_ACCESS_TOKEN);
+            Log.d("CONAN: ", "Return from Facebook login, userid: " + facebookId);
+            Log.d("CONAN: ", "Return from Facebook login, token: " + fbToken);
 
             //load new Options Menu cause of user is logged in now
             invalidateOptionsMenu();
