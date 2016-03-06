@@ -47,6 +47,8 @@ public class FbLoginActivity extends Activity {
 
     private Button backButton;
 
+    Profile profile;
+
     private CallbackManager mCallbackMgt;
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
         @Override
@@ -54,7 +56,7 @@ public class FbLoginActivity extends Activity {
 
             token = loginResult.getAccessToken();
             Log.d("CONAN", token.getUserId());
-            Profile profile = Profile.getCurrentProfile();
+            profile = Profile.getCurrentProfile();
             if (profile != null) {
                 mName.setText("tark: " + profile.getName());
                 mUserId = profile.getId();
@@ -63,6 +65,7 @@ public class FbLoginActivity extends Activity {
                 //load Facebook profile picture from uri -> show in picture
                 Picasso.with(getApplicationContext()).load(uri.toString()).into(picture);
             }
+
         }
 
         @Override
@@ -150,6 +153,14 @@ public class FbLoginActivity extends Activity {
                 data.putExtra(Constants.FACEBOOK_ACCESS_TOKEN, token);
 
                 setResult(RESULT_OK, data);
+                if(profile != null){
+                    Intent main = new Intent(FbLoginActivity.this, MainActivity.class);
+                    main.putExtra("name", profile.getFirstName());
+                    main.putExtra("surname", profile.getLastName());
+                    main.putExtra("imageUrl", profile.getProfilePictureUri(200,200).toString());
+                    startActivity(main);
+
+                }
                 finish();
             }
         });

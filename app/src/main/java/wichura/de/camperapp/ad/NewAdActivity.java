@@ -67,6 +67,9 @@ public class NewAdActivity extends Activity {
         mImgOne = (ImageView) findViewById(R.id.imageButton);
         mPrice = (EditText) findViewById(R.id.preis);
 
+        userId= getIntent().getStringExtra("id");
+        //TODO in db schreiben !!!!
+
 
         final Button submitButton = (Button) findViewById(R.id.uploadButton);
         submitButton.setOnClickListener(new OnClickListener() {
@@ -93,7 +96,7 @@ public class NewAdActivity extends Activity {
 
                 sendHttpToServer(data);
                 setResult(RESULT_OK, data);
-               //old finnish TODO
+                //old finnish TODO
             }
         });
 
@@ -231,8 +234,6 @@ public class NewAdActivity extends Activity {
                     }
 
                 }, reducedPicture, params);
-
-
         Volley.newRequestQueue(this).add(multipartRequest);
     }
 }

@@ -6,8 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.text.Html;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -43,13 +42,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.datatype.Duration;
+
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
 
 //farbcode bilder: #639bc5
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private List<RowItem> rowItems;
@@ -84,6 +85,10 @@ public class MainActivity extends ActionBarActivity {
         actionBar.setCustomView(imageView, lp);
         actionBar.setWindowTitle("gok");
         actionBar.setDisplayShowTitleEnabled(true);
+        //homebutton anzeigen
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        //
 
         setContentView(R.layout.activity_main);
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
@@ -91,6 +96,10 @@ public class MainActivity extends ActionBarActivity {
 
     private void getFacebookUserInfos() {
         FacebookSdk.sdkInitialize(getApplicationContext());
+        if  (AccessToken.getCurrentAccessToken() != null)
+            Toast.makeText(getApplicationContext(), "ja", Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getApplicationContext(), "no", Toast.LENGTH_LONG).show();
         callbackManager = CallbackManager.Factory.create();
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
@@ -98,8 +107,10 @@ public class MainActivity extends ActionBarActivity {
                 JSONObject json = response.getJSONObject();
                 try {
                     if (json != null) {
-                        String text = "<b>Name :</b> " + json.getString("name") + "<br><br><b>Email :</b> " +"email" + "<br><br><b>Profile link :</b> " + json.getString("link");
+                        String text = "<b>Name :</b> " + json.getString("name") + "<br><br><b>Email :</b> " + "email" + "<br><br><b>Profile link :</b> " + json.getString("link");
                         Log.d("CONAN: ", "Return from Facebook login, token: " + text);
+                        facebookId=json.getString("id");
+                        //TODO: nur hier wird USERID gesetzt, sonst weg!!!!!!!
                     }
 
                 } catch (JSONException e) {
@@ -139,7 +150,6 @@ public class MainActivity extends ActionBarActivity {
                     }
                 } catch (final JSONException e) {
                     e.printStackTrace();
-
                 }
 
                 listView = (ListView) findViewById(R.id.list);
@@ -179,7 +189,6 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Missing network connection!\n" + error.toString(), Toast.LENGTH_LONG).show();
             }
         });
-
         queue.add(getAllAdsInJson);
     }
 
@@ -245,6 +254,7 @@ public class MainActivity extends ActionBarActivity {
 
         if (id == R.id.new_ad) {
             final Intent intent = new Intent(this, NewAdActivity.class);
+            intent.putExtra("id", facebookId);
             startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
             return true;
         }
@@ -266,10 +276,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ID_FOR_NEW_AD) {
-            /*if (resultCode == RESULT_OK) {
-                //here
-                int i=0;
-            }*/
+
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
         }
         //back from Facebock login/logout page
@@ -282,13 +289,10 @@ public class MainActivity extends ActionBarActivity {
 
             //load new Options Menu cause of user is logged in now
             invalidateOptionsMenu();
-
             //set Profile pic with URL:
-
         }
 
         if (requestCode == REQUEST_ID_FOR_OPEN_AD) {
-
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
         }
     }

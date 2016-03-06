@@ -4,99 +4,103 @@ import android.content.Intent;
 
 public class AdItem {
 
-	public static final String ITEM_SEP = System.getProperty("line.separator");
+    public static final String ITEM_SEP = System.getProperty("line.separator");
 
-	public final static String TITLE = "title";
-	public final static String APID = "id";
-	public final static String FILENAME = "";
-	public final static String DESC = "description";
-	public final static String KEYWORDS = "keywords";
-	public final static String LOCATION = "location";
+    public final static String TITLE = "title";
+    public final static String APID = "id";
+    public final static String FILENAME = "";
+    public final static String DESC = "description";
+    public final static String KEYWORDS = "keywords";
+    public final static String LOCATION = "location";
     public final static String PHONE = "phone";
     public final static String PRICE = "price";
 
-	private String mTitle = new String();
-	private String mApId = new String();
-	private String mDesc = new String();
-	private String mKeywords = new String();
-	private String location = new String();
+    private String mTitle = new String();
+    private String mApId = new String();
+    private String mDesc = new String();
+    private String mKeywords = new String();
+    private String location = new String();
     private String phone = new String();
-	private String mFilename = new String();
-	private String mPrice = new String();
+    private String mFilename = new String();
+    private String mPrice = new String();
 
-	AdItem(final String title, final String apid, final String desc, final String keyw,
-			final String fileName, final String location, final String phone, final String price) {
-		this.mTitle = title;
-		this.mApId = apid;
-		this.mDesc = desc;
-		this.mKeywords = keyw;
-		this.mFilename = fileName;
-		this.location = location;
+    AdItem(final String title, final String apid, final String desc, final String keyw,
+           final String fileName, final String location, final String phone, final String price) {
+        this.mTitle = title;
+        this.mApId = apid;
+        this.mDesc = desc;
+        this.mKeywords = keyw;
+        this.mFilename = fileName;
+        this.location = location;
         this.phone = phone;
-		this.mPrice = price;
+        this.mPrice = price;
 
-	}
+    }
 
-	public AdItem(final Intent intent) {
+    public AdItem(final Intent intent) {
 
-		mTitle = intent.getStringExtra(AdItem.TITLE);
-		mApId = intent.getStringExtra(AdItem.APID);
-		mDesc = intent.getStringExtra(AdItem.DESC);
-		mFilename = intent.getStringExtra(AdItem.FILENAME);
-		mKeywords = intent.getStringExtra(AdItem.KEYWORDS);
-		location = intent.getStringExtra((AdItem.LOCATION));
+        mTitle = intent.getStringExtra(AdItem.TITLE);
+        mApId = intent.getStringExtra(AdItem.APID);
+        mDesc = intent.getStringExtra(AdItem.DESC);
+        mFilename = intent.getStringExtra(AdItem.FILENAME);
+        mKeywords = intent.getStringExtra(AdItem.KEYWORDS);
+        location = intent.getStringExtra((AdItem.LOCATION));
         phone = intent.getStringExtra(AdItem.PHONE);
-		mPrice = intent.getStringExtra(AdItem.PRICE);
-	}
+        mPrice = intent.getStringExtra(AdItem.PRICE);
+    }
 
-	public String getTitle() {
-		return mTitle;
-	}
+    public String getTitle() {
+        return mTitle;
+    }
 
-	public void setTitle(final String title) {
-		mTitle = title;
-	}
+    public void setTitle(final String title) {
+        mTitle = title;
+    }
 
-	public String getDesc() {
-		return mDesc;
-	}
+    public String getDesc() {
+        return mDesc;
+    }
 
-	public void setDesc(final String desc) {
-		mDesc = desc;
-	}
+    public void setDesc(final String desc) {
+        mDesc = desc;
+    }
 
-	public String getKeywords() {
-		return mKeywords;
-	}
+    public String getKeywords() {
+        return mKeywords;
+    }
 
-	public void setKeywords(final String keyw) {
-		mKeywords = keyw;
-	}
+    public void setKeywords(final String keyw) {
+        mKeywords = keyw;
+    }
 
-	public String getLocation() {return location;}
+    public String getLocation() {
+        return location;
+    }
 
-	public void setLocation(String location) {this.location = location;	}
-	// Take a set of String data values and
-	// package them for transport in an Intent
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    // Take a set of String data values and
+    // package them for transport in an Intent
 
-	public static void packageIntent(final Intent intent, final String title, final String apid,
-			final String desc, final String keyw, final String fileURI, final String location,
+    public static void packageIntent(final Intent intent, final String title, final String apid,
+                                     final String desc, final String keyw, final String fileURI, final String location,
                                      final String phone, final String price) {
 
-		intent.putExtra(AdItem.TITLE, title);
-		intent.putExtra(AdItem.APID, apid);
-		intent.putExtra(AdItem.DESC, desc);
-		intent.putExtra(AdItem.KEYWORDS, keyw);
-		intent.putExtra(AdItem.FILENAME, fileURI);
-		intent.putExtra(AdItem.LOCATION, location);
+        intent.putExtra(AdItem.TITLE, title);
+        intent.putExtra(AdItem.APID, apid);
+        intent.putExtra(AdItem.DESC, desc);
+        intent.putExtra(AdItem.KEYWORDS, keyw);
+        intent.putExtra(AdItem.FILENAME, fileURI);
+        intent.putExtra(AdItem.LOCATION, location);
         intent.putExtra(AdItem.PHONE, phone);
-		intent.putExtra(AdItem.PRICE, price);
+        intent.putExtra(AdItem.PRICE, price);
 
-	}
+    }
 
-	@Override
-	public String toString() {
-		return mTitle + ITEM_SEP + mDesc + ITEM_SEP + mKeywords;
-	}
+    @Override
+    public String toString() {
+        return mTitle + ITEM_SEP + mDesc + ITEM_SEP + mKeywords;
+    }
 
 }
