@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String facebookId;
     private String fbProfilePicUrl;
+    private String userName;
 
     CallbackManager callbackManager;
 
@@ -78,13 +80,17 @@ public class MainActivity extends AppCompatActivity {
         //imageView.setImageResource(R.drawable.uploadbutton);
         String uri = "https://graph.facebook.com/10208246429418599/picture?height=100&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D";
         Picasso.with(getApplicationContext()).load(uri.toString()).into(imageView);
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        imageView.setScaleType(ImageView.ScaleType.FIT_START);
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
                 ActionBar.LayoutParams.MATCH_PARENT,
                 ActionBar.LayoutParams.MATCH_PARENT);
         actionBar.setCustomView(imageView, lp);
-        actionBar.setWindowTitle("gok");
+        actionBar.setTitle("foker");
+        actionBar.setWindowTitle("gonk");
         actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setLogo(R.drawable.applogo);
+
+
         //homebutton anzeigen
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -96,10 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getFacebookUserInfos() {
         FacebookSdk.sdkInitialize(getApplicationContext());
-        if  (AccessToken.getCurrentAccessToken() != null)
-            Toast.makeText(getApplicationContext(), "ja", Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(getApplicationContext(), "no", Toast.LENGTH_LONG).show();
+
         callbackManager = CallbackManager.Factory.create();
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
@@ -107,10 +110,15 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject json = response.getJSONObject();
                 try {
                     if (json != null) {
-                        String text = "<b>Name :</b> " + json.getString("name") + "<br><br><b>Email :</b> " + "email" + "<br><br><b>Profile link :</b> " + json.getString("link");
-                        Log.d("CONAN: ", "Return from Facebook login, token: " + text);
+                        Log.d("CONAN: ", "Return from Facebook login with user id: " + json.getString("id"));
                         facebookId=json.getString("id");
+                        userName=json.getString("name");
+                        fbProfilePicUrl=json.getString("picture");
                         //TODO: nur hier wird USERID gesetzt, sonst weg!!!!!!!
+                        if  (AccessToken.getCurrentAccessToken() != null)
+                            Toast.makeText(getApplicationContext(), "ja", Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(getApplicationContext(), "no", Toast.LENGTH_LONG).show();
                     }
 
                 } catch (JSONException e) {

@@ -199,7 +199,7 @@ public class NewAdActivity extends Activity {
         params.put("title", title);
         params.put("description", description);
         params.put("keywords", keywords);
-        params.put("userid", "conan");
+        params.put("userid", userId);
         // params.put("price", price);
 
         File file = new File(fileString.toString());
