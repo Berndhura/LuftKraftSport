@@ -124,8 +124,6 @@ public class MainActivity extends AppCompatActivity
         //actionBar.setDisplayHomeAsUpEnabled(true);
         //
 
-
-        getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
     }
 
     private void getFacebookUserInfos() {
@@ -147,6 +145,8 @@ public class MainActivity extends AppCompatActivity
                             Toast.makeText(getApplicationContext(), "ja", Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(getApplicationContext(), "no", Toast.LENGTH_LONG).show();
+                        //wenn userid da, dann abfrage? TODO auch ohne login moeglich
+                        getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                     }
 
                 } catch (JSONException e) {
