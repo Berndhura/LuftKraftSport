@@ -60,6 +60,7 @@ import java.util.List;
 import javax.xml.datatype.Duration;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
@@ -371,8 +372,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.myads) {
+            //show my ads
+            Intent i = new Intent(getApplicationContext(), MyAdsActivity.class);
+            startActivityForResult(i,0);
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
