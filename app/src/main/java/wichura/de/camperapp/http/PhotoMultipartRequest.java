@@ -30,7 +30,7 @@ public class PhotoMultipartRequest<T> extends Request<T> {
     private static final String FILE_PART_NAME = "image";
 
     private MultipartEntityBuilder mBuilder = MultipartEntityBuilder.create();
-    private final Response.Listener<T> mListener;
+    private final Listener<T> mListener;
     private final File mImageFile;
     protected Map<String, String> headers;
 

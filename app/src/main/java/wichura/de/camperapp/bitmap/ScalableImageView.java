@@ -36,7 +36,7 @@ public class ScalableImageView extends ImageView {
             }
             else
             {
-                int width = View.MeasureSpec.getSize(widthMeasureSpec);
+                int width = MeasureSpec.getSize(widthMeasureSpec);
                 int height = width * drawable.getIntrinsicHeight() / drawable.getIntrinsicWidth();
                 setMeasuredDimension(width, height);
             }
