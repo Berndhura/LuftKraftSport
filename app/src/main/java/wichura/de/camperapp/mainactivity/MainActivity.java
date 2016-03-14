@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -99,6 +100,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //TODO setzen von name, bild, usw
+        TextView txt2;
+        txt2 = (TextView) navigationView.inflateHeaderView(R.layout.nav_header_main).findViewById(R.id.textView);
+        txt2.setText(facebookId);
 
 
         // ActionBar actionBar = getSupportActionBar();
@@ -342,6 +348,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
     }
 
     @Override
