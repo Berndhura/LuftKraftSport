@@ -11,5 +11,5 @@ public class Urls {
     public static String DELETE_AD_WITH_APID = "deleteAdWithId/";
     public static String GET_ALL_ADS_URL = "getAllAds/";
     public static String GET_ADS_FOR_KEYWORD_URL = "getAdsWithTag?description=";
-
+    public static String GET_ALL_ADS_FROM_USER  = "getAdsFromUser?userid=";
 }

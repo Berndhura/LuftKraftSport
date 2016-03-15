@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     public static final int REQUEST_ID_FOR_NEW_AD = 1;
     public static final int REQUEST_ID_FOR_FACEBOOK_LOGIN = 2;
     public static final int REQUEST_ID_FOR_OPEN_AD = 3;
+    public static final int REQUEST_ID_FOR_MY_ADS = 4;
 
     private String facebookId;
     private String fbProfilePicUrl;
@@ -102,9 +103,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //TODO setzen von name, bild, usw
-        TextView txt2;
-        txt2 = (TextView) navigationView.inflateHeaderView(R.layout.nav_header_main).findViewById(R.id.textView);
-        txt2.setText(facebookId);
+        //TextView txt2;
+        //txt2 = (TextView) navigationView.inflateHeaderView(R.layout.nav_header_main).findViewById(R.id.textView);
+        //txt2.setText(facebookId);
 
 
         // ActionBar actionBar = getSupportActionBar();
@@ -381,8 +382,9 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.myads) {
             //show my ads
-            Intent i = new Intent(getApplicationContext(), MyAdsActivity.class);
-            startActivityForResult(i,0);
+            Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
+            intent.putExtra("userid", facebookId);
+            startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
 
         } else if (id == R.id.nav_gallery) {
 
