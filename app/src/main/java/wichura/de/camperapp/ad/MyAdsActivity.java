@@ -37,6 +37,7 @@ public class MyAdsActivity extends Activity {
 
     private ListView listView;
     private List<RowItem> rowItems;
+    //TODO:neuen list view adapter schreiben, anpassen auf neue art (kleinanzeigen)
     private CustomListViewAdapter adapter;
 
     private String userId;
@@ -49,7 +50,9 @@ public class MyAdsActivity extends Activity {
 
         userId = getIntent().getStringExtra("userid");
 
-        getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER +userId);
+        rowItems = new ArrayList<RowItem>();
+
+        getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
 
     }
 
@@ -66,7 +69,7 @@ public class MyAdsActivity extends Activity {
                             .excludeFieldsWithoutExposeAnnotation().create();
 
                     final JSONArray listOfAllAds = new JSONArray(response.toString());
-                    rowItems = new ArrayList<RowItem>();
+
                     for (int i = 0; i < listOfAllAds.length(); i++) {
                         // get the titel information JSON object
                         final String title = listOfAllAds.getJSONObject(i)
@@ -79,14 +82,6 @@ public class MyAdsActivity extends Activity {
                 } catch (final JSONException e) {
                     e.printStackTrace();
                 }
-
-               listView = (ListView) findViewById(R.id.list);
-                adapter = new CustomListViewAdapter(
-                        context, R.layout.my_ads_layout, rowItems);
-                listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -95,5 +90,12 @@ public class MyAdsActivity extends Activity {
             }
         });
         queue.add(getAllAdsInJson);
+        //TODO:refactor end
+
+        listView = (ListView) findViewById(R.id.list);
+        adapter = new CustomListViewAdapter(
+                getApplicationContext(), R.layout.my_ads_layout, rowItems);
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

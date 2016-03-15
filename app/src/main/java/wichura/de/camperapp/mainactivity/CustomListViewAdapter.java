@@ -28,6 +28,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         this.context = context;
     }
 
+    //TODO: remove holder, sinnlos?!
     /* private view holder class */
     private class ViewHolder {
         TextView txtTitle;
