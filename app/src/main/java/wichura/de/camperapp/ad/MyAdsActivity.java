@@ -1,12 +1,8 @@
 package wichura.de.camperapp.ad;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,7 +23,6 @@ import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
-import wichura.de.camperapp.mainactivity.CustomListViewAdapter;
 import wichura.de.camperapp.mainactivity.RowItem;
 
 /**
@@ -38,7 +33,7 @@ public class MyAdsActivity extends Activity {
     private ListView listView;
     private List<RowItem> rowItems;
     //TODO:neuen list view adapter schreiben, anpassen auf neue art (kleinanzeigen)
-    private CustomListViewAdapter adapter;
+    private MyAdsListViewAdapter adapter;
 
     private String userId;
 
@@ -59,7 +54,7 @@ public class MyAdsActivity extends Activity {
     private void getAdsJsonForKeyword(String url) {
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(
+        JsonArrayRequest getAllAdsFromUserInJson = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -82,6 +77,12 @@ public class MyAdsActivity extends Activity {
                 } catch (final JSONException e) {
                     e.printStackTrace();
                 }
+
+                listView = (ListView) findViewById(R.id.my_list);
+                adapter = new MyAdsListViewAdapter(getApplicationContext(), R.layout.my_ads_layout, rowItems);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -89,13 +90,12 @@ public class MyAdsActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "Missing network connection!\n" + error.toString(), Toast.LENGTH_LONG).show();
             }
         });
-        queue.add(getAllAdsInJson);
+        queue.add(getAllAdsFromUserInJson);
         //TODO:refactor end
 
-        listView = (ListView) findViewById(R.id.list);
-        adapter = new CustomListViewAdapter(
-                getApplicationContext(), R.layout.my_ads_layout, rowItems);
-        listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+
     }
+
+
+
 }
