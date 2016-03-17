@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#80203040">
 
     <ListView
         android:id="@+id/my_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:listSelector="@drawable/list_selector"
-        android:layout_below="@+id/mainbar"/>
+        android:layout_below="@+id/mainbar"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:background="#FFFFFFFF" />
 
 </LinearLayout>

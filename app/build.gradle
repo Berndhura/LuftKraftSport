@@ -36,7 +36,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.1'
     compile 'com.google.code.gson:gson:2.4'
-    compile 'de.hdodenhof:circleimageview:1.2.1'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.8.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'

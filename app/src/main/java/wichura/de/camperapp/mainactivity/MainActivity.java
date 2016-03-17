@@ -1,38 +1,22 @@
 package wichura.de.camperapp.mainactivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import wichura.de.camperapp.R;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.DrawableRes;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +31,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
@@ -58,13 +43,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.datatype.Duration;
-
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -102,35 +86,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //TODO setzen von name, bild, usw
-        //TextView txt2;
-        //txt2 = (TextView) navigationView.inflateHeaderView(R.layout.nav_header_main).findViewById(R.id.textView);
-        //txt2.setText(facebookId);
-
-
-        // ActionBar actionBar = getSupportActionBar();
-       // actionBar.setDisplayShowCustomEnabled(true);
-        //Show an image in place of the titles
-        //ImageView imageView = new ImageView(this);
-        //imageView.setImageResource(R.drawable.uploadbutton);
-        //String uri = "https://graph.facebook.com/10208246429418599/picture?height=100&width=100&migration_overrides=%7Boctober_2012%3Atrue%7D";
-        //Picasso.with(getApplicationContext()).load(uri.toString()).into(imageView);
-        //imageView.setScaleType(ImageView.ScaleType.FIT_START);
-        //ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-         //       ActionBar.LayoutParams.MATCH_PARENT,
-          //      ActionBar.LayoutParams.MATCH_PARENT);
-       // actionBar.setCustomView(imageView, lp);
-        //actionBar.setTitle("foker");
-        //actionBar.setWindowTitle("gonk");
-        //actionBar.setDisplayShowTitleEnabled(true);
-        //actionBar.setLogo(R.drawable.applogo);
-
-
         //homebutton anzeigen
         //actionBar.setHomeButtonEnabled(true);
         //actionBar.setDisplayHomeAsUpEnabled(true);
-        //
-
     }
 
     private void getFacebookUserInfos() {
@@ -144,11 +102,26 @@ public class MainActivity extends AppCompatActivity
                 try {
                     if (json != null) {
                         Log.d("CONAN: ", "Return from Facebook login with user id: " + json.getString("id"));
-                        facebookId=json.getString("id");
-                        userName=json.getString("name");
-                        fbProfilePicUrl=json.getString("picture");
-                        //TODO: nur hier wird USERID gesetzt, sonst weg!!!!!!!
-                        if  (AccessToken.getCurrentAccessToken() != null)
+                        facebookId = json.getString("id");
+
+                        //set user name
+                        userName = json.getString("name");
+                        TextView nav_user = (TextView) findViewById(R.id.username);
+                        nav_user.setText(userName);
+
+                        //set user profile picture
+                        fbProfilePicUrl = json.getString("picture");
+                        ImageView profilePic = (ImageView) findViewById(R.id.profile_image);
+
+                        Profile profile = Profile.getCurrentProfile();
+                        if (profile != null) {
+                            // mName.setText("tark: " + profile.getName());
+                            // mUserId = profile.getId();
+                            Uri uri = profile.getProfilePictureUri(200, 200);
+                            Picasso.with(getApplicationContext()).load(uri.toString()).into(profilePic);
+                        }
+
+                        if (AccessToken.getCurrentAccessToken() != null)
                             Toast.makeText(getApplicationContext(), "ja", Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(getApplicationContext(), "no", Toast.LENGTH_LONG).show();
@@ -385,12 +358,6 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
             intent.putExtra("userid", facebookId);
             startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
-
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 
