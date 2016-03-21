@@ -17,16 +17,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import java.io.File;
-import java.util.HashMap;
+import java.io.FileNotFoundException;
 
+import cz.msebera.android.httpclient.Header;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.bitmap.BitmapHelper;
-import wichura.de.camperapp.http.MultipartRequest;
 import wichura.de.camperapp.http.Urls;
 
 
@@ -67,7 +67,7 @@ public class NewAdActivity extends Activity {
         mImgOne = (ImageView) findViewById(R.id.imageButton);
         mPrice = (EditText) findViewById(R.id.preis);
 
-        userId= getIntent().getStringExtra("id");
+        userId = getIntent().getStringExtra("id");
         //TODO in db schreiben !!!!
 
 
@@ -185,8 +185,6 @@ public class NewAdActivity extends Activity {
         progress.show();
 
 
-        HashMap<String, String> params = new HashMap<String, String>();
-
         Uri fileUri = Uri.parse(picture.toString());
         Log.i("CONAN", "fileURI: " + fileUri);
 
@@ -196,11 +194,14 @@ public class NewAdActivity extends Activity {
         String fileString = getRealPathFromUri(getApplicationContext(), fileUri); //war bildCompresse
         Log.i("CONAN", "fileString: " + fileString);
 
-        params.put("title", title);
-        params.put("description", description);
-        params.put("keywords", keywords);
-        params.put("userid", userId);
-        // params.put("price", price);
+
+//        HashMap<String, String> params = new HashMap<String, String>();
+//
+//        params.put("title", title);
+//        params.put("description", description);
+//        params.put("keywords", keywords);
+//        params.put("userid", userId);
+//        // params.put("price", price);
 
         File file = new File(fileString.toString());
         Log.i("CONAN", "file: " + file);
@@ -208,33 +209,39 @@ public class NewAdActivity extends Activity {
         final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
         Log.i("CONAN", "newFile: " + reducedPicture);
 
-        MultipartRequest multipartRequest = new MultipartRequest(Urls.MAIN_SERVER_URL + Urls.UPLOAD_NEW_AD_URL,
-                new Response.Listener<String>() {
+//neu
+        RequestParams params = new RequestParams();
+        try {
+            params.put("image", reducedPicture);
+        } catch (FileNotFoundException e) {
+        }
 
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("response", response);
-                        Toast.makeText(getApplicationContext(), "Upload...done!", Toast.LENGTH_SHORT).show();
-                        //jetzt bilder neu laden!! finish() geht zu früh zurück in mainactivity
-                        Boolean deletetd = reducedPicture.delete();
-                        if (!deletetd)
-                            Toast.makeText(getApplicationContext(), "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
-                        progress.dismiss();
-                        finish();
 
-                    }
+        params.put("title", title);
+        params.put("description", description);
+        params.put("keywords", keywords);
+        params.put("userid", userId);
 
-                },
-                new Response.ErrorListener() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post(Urls.MAIN_SERVER_URL + Urls.UPLOAD_NEW_AD_URL, params, new FileAsyncHttpResponseHandler(reducedPicture) {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+                Log.e("Volley Request Error", "no");
+                Toast.makeText(getApplicationContext(), "Upload did not work!\n", Toast.LENGTH_LONG).show();
+            }
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley Request Error", error.getLocalizedMessage());
-                        Toast.makeText(getApplicationContext(), "Upload did not work!\n" + error.toString(), Toast.LENGTH_LONG).show();
-                    }
-
-                }, reducedPicture, params);
-        Volley.newRequestQueue(this).add(multipartRequest);
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, File file) {
+                Log.d("response", "jo");
+                Toast.makeText(getApplicationContext(), "Upload...done!", Toast.LENGTH_SHORT).show();
+                //jetzt bilder neu laden!! finish() geht zu früh zurück in mainactivity
+                Boolean deletetd = reducedPicture.delete();
+                if (!deletetd)
+                    Toast.makeText(getApplicationContext(), "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
+                progress.dismiss();
+                finish();
+            }
+        });
     }
 }
 
