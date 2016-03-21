@@ -195,21 +195,13 @@ public class NewAdActivity extends Activity {
         Log.i("CONAN", "fileString: " + fileString);
 
 
-//        HashMap<String, String> params = new HashMap<String, String>();
-//
-//        params.put("title", title);
-//        params.put("description", description);
-//        params.put("keywords", keywords);
-//        params.put("userid", userId);
-//        // params.put("price", price);
-
         File file = new File(fileString.toString());
         Log.i("CONAN", "file: " + file);
         BitmapHelper bitmapHelper = new BitmapHelper(getApplicationContext());
         final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
         Log.i("CONAN", "newFile: " + reducedPicture);
 
-//neu
+
         RequestParams params = new RequestParams();
         try {
             params.put("image", reducedPicture);
