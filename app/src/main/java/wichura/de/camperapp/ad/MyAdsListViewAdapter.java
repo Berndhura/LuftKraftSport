@@ -97,17 +97,16 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
                 //get ad id and send delete request
                 // String adId = getIntent().getStringExtra("id");
                 String adId = rowItem.getAdId();
-                deleteAdRequest(adId);
-                items.remove((Integer)v.getTag());
-                ((MyAdsActivity) activity).refreshList();
+                deleteAdRequest(adId, v);
             }
         });
+        holder.deleteButton.setTag(position);
 
 
         return convertView;
     }
 
-    private void deleteAdRequest(String adId) {
+    private void deleteAdRequest(String adId, final View view) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(context);
         String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
@@ -116,7 +115,8 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        notifyDataSetChanged();
+                        items.remove((Integer)view.getTag());
+                        ((MyAdsActivity) activity).refreshList();
                     }
                 }, new Response.ErrorListener() {
             @Override
