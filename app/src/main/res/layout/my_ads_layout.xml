@@ -14,7 +14,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginRight="8dp" />
+            android:layout_marginRight="8dp"
+            android:adjustViewBounds="false" />
 
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,7 +35,8 @@
                     android:layout_height="wrap_content"
                     android:text="Melbourne"
                     android:textSize="15dp"
-                    android:textStyle="bold" />
+                    android:textStyle="normal"
+                    android:padding="5dp" />
 
                 <TextView
                     android:id="@+id/date"
@@ -42,8 +44,9 @@
                     android:layout_height="wrap_content"
                     android:text="12.05.16"
                     android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:gravity="right" />
+                    android:textStyle="normal"
+                    android:gravity="right"
+                    android:padding="5dp" />
 
             </LinearLayout>
 
@@ -52,25 +55,49 @@
                 android:id="@+id/my_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="fuk"
-                android:textSize="10dp" />
+                android:text="Title beschreibe deinen Artikel"
+                android:textSize="15dp"
+                android:padding="5dp"
+                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/drei"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="off"
-                android:textSize="10dp" />
+                android:orientation="horizontal"
+                android:padding="0dp"
+                android:weightSum="1">
 
+                <TextView
+                    android:id="@+id/my_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="221€ VB"
+                    android:textSize="15dp"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:textColor="#3d87a0"
+                    android:layout_weight="0.5"/>
+
+                <TextView
+                    android:id="@+id/my_views"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="123"
+                    android:textSize="15dp"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:layout_weight="0.5"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
 
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="37dp"
         android:orientation="horizontal"
         android:weightSum="1">
 

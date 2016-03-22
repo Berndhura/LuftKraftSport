@@ -202,6 +202,7 @@ public class NewAdActivity extends Activity {
         Log.i("CONAN", "newFile: " + reducedPicture);
 
 
+        //todo: add more pics here??
         RequestParams params = new RequestParams();
         try {
             params.put("image", reducedPicture);

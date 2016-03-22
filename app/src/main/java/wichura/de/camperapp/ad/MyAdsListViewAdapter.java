@@ -9,14 +9,22 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.app.AppController;
+import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.RowItem;
 
 /**
@@ -25,12 +33,16 @@ import wichura.de.camperapp.mainactivity.RowItem;
 public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
 
     private Context context;
+    private List<RowItem> items;
+    private Activity activity;
     private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
-    public MyAdsListViewAdapter(final Context context, final int resourceId,
+    public MyAdsListViewAdapter(final Activity activity, final Context context, final int resourceId,
                                 final List<RowItem> items) {
         super(context, resourceId, items);
         this.context = context;
+        this.items = items;
+        this.activity = activity;
     }
 
     //TODO: remove holder, sinnlos?!
@@ -52,7 +64,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.my_ads_layout, null);
             holder = new ViewHolder();
-            //holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
+            holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
             holder.txtTitle = (TextView) convertView.findViewById(R.id.my_title);
             holder.deleteButton = (ImageButton) convertView.findViewById(R.id.my_ad_delete);
             //holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
@@ -84,11 +96,34 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
             public void onClick(View v) {
                 //get ad id and send delete request
                 // String adId = getIntent().getStringExtra("id");
-                Log.d("CONAN", rowItem.getAdId());
-                //deleteAdRequest(adId);
+                String adId = rowItem.getAdId();
+                deleteAdRequest(adId);
+                items.remove((Integer)v.getTag());
+                ((MyAdsActivity) activity).refreshList();
             }
         });
 
+
         return convertView;
+    }
+
+    private void deleteAdRequest(String adId) {
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        notifyDataSetChanged();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(MyAdsActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
+            }
+        });
+        queue.add(stringRequest);
     }
 }

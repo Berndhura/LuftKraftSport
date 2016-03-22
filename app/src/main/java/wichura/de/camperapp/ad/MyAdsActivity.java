@@ -3,6 +3,8 @@ package wichura.de.camperapp.ad;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -11,6 +13,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,9 +35,7 @@ public class MyAdsActivity extends Activity {
 
     private ListView listView;
     private List<RowItem> rowItems;
-    //TODO:neuen list view adapter schreiben, anpassen auf neue art (kleinanzeigen)
     private MyAdsListViewAdapter adapter;
-
     private String userId;
 
     public static final int REQUEST_ID_FOR_OPEN_AD = 3;
@@ -48,6 +49,7 @@ public class MyAdsActivity extends Activity {
         rowItems = new ArrayList<RowItem>();
 
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
+
 
     }
 
@@ -77,11 +79,7 @@ public class MyAdsActivity extends Activity {
                 } catch (final JSONException e) {
                     e.printStackTrace();
                 }
-
-                listView = (ListView) findViewById(R.id.my_list);
-                adapter = new MyAdsListViewAdapter(getApplicationContext(), R.layout.my_ads_layout, rowItems);
-                listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                createAdapter(rowItems);
 
             }
         }, new Response.ErrorListener() {
@@ -92,8 +90,19 @@ public class MyAdsActivity extends Activity {
         });
         queue.add(getAllAdsFromUserInJson);
         //TODO:refactor end
+    }
 
+    private void createAdapter(List<RowItem> rowItems) {
 
+        listView = (ListView) findViewById(R.id.my_list);
+        adapter = new MyAdsListViewAdapter(this, getApplicationContext(), R.layout.my_ads_layout, rowItems);
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void refreshList()
+    {
+        adapter.notifyDataSetChanged();
     }
 
 
