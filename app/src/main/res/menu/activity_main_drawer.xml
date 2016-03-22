@@ -6,6 +6,12 @@
             android:id="@+id/myads"
             android:icon="@drawable/home"
             android:title="My ads" />
+
+        <item
+            android:id="@+id/new_ad"
+            android:icon="@drawable/newad"
+            android:title="New ad"/>
+
     </group>
 
     <item android:title="Settings">

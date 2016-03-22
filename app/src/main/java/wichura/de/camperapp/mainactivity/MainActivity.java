@@ -268,13 +268,6 @@ public class MainActivity extends AppCompatActivity
 
         final int id = item.getItemId();
 
-        if (id == R.id.new_ad) {
-            final Intent intent = new Intent(this, NewAdActivity.class);
-            intent.putExtra("id", facebookId);
-            startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
-            return true;
-        }
-
         if (id == R.id.refresh) {
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
             return true;
@@ -358,6 +351,12 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
             intent.putExtra("userid", facebookId);
             startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
+        }
+        if (id == R.id.new_ad) {
+            final Intent intent = new Intent(this, NewAdActivity.class);
+            intent.putExtra("id", facebookId);
+            startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
+            return true;
 
         } else if (id == R.id.nav_share) {
 
