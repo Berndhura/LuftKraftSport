@@ -20,6 +20,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.app.AppController;
@@ -35,12 +36,12 @@ public class OpenAdActivity extends Activity {
     private Button mDelButton;
     private String mAdId;
 
-    private NetworkImageView imgView;
+    private ImageView imgView;
 
     //TODO
     //use swipe function from CustomSwipeAdapter to swipe pictures
     private CustomSwipeAdapter adapter;
-    private NetworkImageView viewPager;
+    private ImageView viewPager;
 
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
@@ -55,7 +56,7 @@ public class OpenAdActivity extends Activity {
         //swipe the pictures, preparation
         adapter = new CustomSwipeAdapter(this);
         //error! this has to be a viewpager obj in layout xml file! TODO!
-        viewPager = (NetworkImageView) findViewById(R.id.icon);
+        viewPager = (ImageView) findViewById(R.id.icon);
         //viewPager.setAdapter(adapter);
 
 
@@ -65,7 +66,7 @@ public class OpenAdActivity extends Activity {
         mDescText = (TextView) findViewById(R.id.description);
         mLocationText = (TextView) findViewById(R.id.location);
         mPhoneText = (TextView) findViewById(R.id.phone);
-        imgView = (NetworkImageView) findViewById(R.id.icon);
+        imgView = (ImageView) findViewById(R.id.icon);
         mDelButton = (Button) findViewById(R.id.delButton);
 
 
@@ -86,16 +87,14 @@ public class OpenAdActivity extends Activity {
         Log.i("CONAN", "Y " +  size.y);
 
 
-
-
-
-        NetworkImageView picture = (NetworkImageView) imgView
+        ImageView picture = (ImageView) imgView
                 .findViewById(R.id.icon);
-        // picture.setMinimumWidth(width);
-        picture.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        picture.setMaxWidth(size.x);
-        picture.setMaxHeight(size.y);
-        picture.setImageUrl(pictureUri, imageLoader);
+
+        Picasso.with(getApplicationContext())
+                .load(pictureUri)
+                .resize(100, 100)
+                .centerCrop()
+                .into(imgView);
 
         mDelButton.setOnClickListener(new View.OnClickListener() {
             @Override

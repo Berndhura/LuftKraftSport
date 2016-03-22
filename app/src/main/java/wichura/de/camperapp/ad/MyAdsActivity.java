@@ -104,7 +104,4 @@ public class MyAdsActivity extends Activity {
     {
         adapter.notifyDataSetChanged();
     }
-
-
-
 }

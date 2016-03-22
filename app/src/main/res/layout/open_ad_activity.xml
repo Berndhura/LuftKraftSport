@@ -36,9 +36,9 @@
             android:layout_marginTop="5dp" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView" />
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="200dp"/>
 
         <TextView
             android:id="@+id/price"
@@ -48,7 +48,7 @@
             android:paddingBottom="10dp"
             android:textSize="1dp" />
 
-        <com.android.volley.toolbox.NetworkImageView
+        <ImageView
             android:id="@+id/icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
