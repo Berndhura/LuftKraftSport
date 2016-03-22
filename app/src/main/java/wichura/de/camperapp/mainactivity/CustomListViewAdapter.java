@@ -7,20 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.app.AppController;
 
 public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
     private Context context;
-    private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
     public CustomListViewAdapter(final Context context, final int resourceId,
                                  final List<RowItem> items) {
@@ -53,18 +51,18 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        if (imageLoader == null)
-            imageLoader = AppController.getInstance().getImageLoader();
-
-        //From Volley, also use this in layout xml!
-        NetworkImageView thumbNail = (NetworkImageView) convertView
-                .findViewById(R.id.icon);
+        ImageView thumbNail = (ImageView) convertView.findViewById(R.id.icon);
 
         // getting ad data for the row
         final RowItem rowItem = getItem(position);
-        //set image
-        thumbNail.setImageUrl(rowItem.getUrl(), imageLoader);
-        Log.i("IM_URLS: ", rowItem.getUrl());
+
+        Picasso.with(context)
+                .load(rowItem.getUrl())
+                .resize(100, 100)
+                .centerCrop()
+                .into(thumbNail);
+
+        Log.d("CONAN, get pic URLs: ", rowItem.getUrl());
         //set Keywords
         holder.txtDesc.setText(rowItem.getKeywords());
         //set Title
