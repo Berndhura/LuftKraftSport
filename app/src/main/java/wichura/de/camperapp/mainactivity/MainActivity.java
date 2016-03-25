@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFacebookUserInfos();
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
 
         setContentView(R.layout.activity_main);
 
@@ -86,13 +87,14 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        getFacebookUserInfos();
+
         //homebutton anzeigen
         //actionBar.setHomeButtonEnabled(true);
         //actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void getFacebookUserInfos() {
-        FacebookSdk.sdkInitialize(getApplicationContext());
 
         callbackManager = CallbackManager.Factory.create();
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -168,7 +170,7 @@ public class MainActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
 
-                listView = (ListView) findViewById(R.id.list);
+                listView = (ListView) findViewById(R.id.main_list);
                 adapter = new CustomListViewAdapter(
                         context, R.layout.list_item, rowItems);
                 listView.setAdapter(adapter);
