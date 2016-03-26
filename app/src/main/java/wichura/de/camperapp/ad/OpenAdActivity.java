@@ -1,6 +1,9 @@
 package wichura.de.camperapp.ad;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.VoiceInteractor;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -126,25 +129,43 @@ public class OpenAdActivity extends Activity {
 
     }
 
-    private void deleteAdRequest(String adId) {
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
+    private void deleteAdRequest(final String adId) {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.delete)
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        finish();
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        finish();
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        queue.add(stringRequest);
+                        dialog.dismiss();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
-            }
-        });
+                })
 
-        queue.add(stringRequest);
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        myQuittingDialogBox.show();
     }
 
     public static JSONObject getLocationInfo(String address) {
