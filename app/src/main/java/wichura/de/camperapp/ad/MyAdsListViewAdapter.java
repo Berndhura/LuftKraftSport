@@ -1,7 +1,9 @@
 package wichura.de.camperapp.ad;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +51,8 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         TextView txtTitle;
         TextView txtDesc;
         TextView txtPrice;
-        ImageButton deleteButton;
+        TextView txtLocation;
+        ImageView deleteButton;
     }
 
     @Override
@@ -61,15 +64,16 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         ViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.my_ads_layout, null);
-        }
-        holder = new ViewHolder();
-        holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
-        holder.txtTitle = (TextView) convertView.findViewById(R.id.my_title);
-        holder.deleteButton = (ImageButton) convertView.findViewById(R.id.my_ad_delete);
-        //holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
-        convertView.setTag(holder);
-        //  } else
-        //     holder = (ViewHolder) convertView.getTag();
+
+            holder = new ViewHolder();
+            holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
+            holder.txtTitle = (TextView) convertView.findViewById(R.id.my_title);
+            holder.txtLocation = (TextView) convertView.findViewById(R.id.location);
+            holder.deleteButton = (ImageView) convertView.findViewById(R.id.my_ad_delete);
+            //holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
+            convertView.setTag(holder);
+        } else
+            holder = (ViewHolder) convertView.getTag();
 
         ImageView thumbNail = (ImageView) convertView.findViewById(R.id.my_icon);
 
@@ -93,7 +97,8 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         //set Title
         holder.txtTitle.setText(rowItem.getTitle());
         //set Price
-       // holder.txtPrice.setText("99");
+        // holder.txtPrice.setText("99");
+        holder.txtLocation.setText("Melbourne");
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,24 +115,65 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         return convertView;
     }
 
-    private void deleteAdRequest(String adId, final View view) {
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(context);
-        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
+    private void deleteAdRequest(final String adId, final View view) {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(context)
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.delete)
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        items.remove((Integer) view.getTag());
-                        ((MyAdsActivity) activity).refreshList();
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        RequestQueue queue = Volley.newRequestQueue(context);
+                        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        clear();
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(activity, "Something went wrong...", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        queue.add(stringRequest);
+                        dialog.dismiss();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(activity, "Something went wrong...", Toast.LENGTH_LONG).show();
-            }
-        });
-        queue.add(stringRequest);
+                })
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        myQuittingDialogBox.show();
+
+
+
+
+
+//        // Instantiate the RequestQueue.
+//        RequestQueue queue = Volley.newRequestQueue(context);
+//        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
+//
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        items.remove((Integer) view.getTag());
+//                        ((MyAdsActivity) activity).refreshList();
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(activity, "Something went wrong...", Toast.LENGTH_LONG).show();
+//            }
+//        });
+//        queue.add(stringRequest);
     }
 }

@@ -130,7 +130,7 @@ public class OpenAdActivity extends Activity {
     }
 
     private void deleteAdRequest(final String adId) {
-        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle("Delete")
                 .setMessage("Do you want to Delete")

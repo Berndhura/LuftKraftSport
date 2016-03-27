@@ -17,13 +17,13 @@
     <item android:title="Settings">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Search" />
+                android:id="@+id/login_out"
+                android:icon="@drawable/com_facebook_button_icon"
+                android:title="Login" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Logout" />
+                android:id="@+id/refresh"
+                android:icon="@drawable/ic_action_refresh"
+                android:title="Refresh" />
         </menu>
     </item>
 

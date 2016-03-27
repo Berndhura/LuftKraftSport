@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/background_list_elements">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -35,6 +36,7 @@
                     android:layout_height="wrap_content"
                     android:text="Melbourne"
                     android:textSize="15dp"
+                    android:textColor="#3d87a0"
                     android:textStyle="normal"
                     android:padding="5dp" />
 
@@ -44,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:text="12.05.16"
                     android:textSize="15dp"
+                    android:textColor="#3d87a0"
                     android:textStyle="normal"
                     android:gravity="right"
                     android:padding="5dp" />
@@ -57,7 +60,9 @@
                 android:layout_height="wrap_content"
                 android:text="Title beschreibe deinen Artikel"
                 android:textSize="15dp"
+                android:textColor="#3d87a0"
                 android:padding="5dp"
+                android:gravity="left"
                 android:textStyle="bold" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -86,6 +91,7 @@
                     android:textSize="15dp"
                     android:padding="5dp"
                     android:textStyle="bold"
+                    android:textColor="#3d87a0"
                     android:layout_weight="0.5"
                     android:textAlignment="center" />
 
@@ -106,21 +112,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/newad"
-            android:layout_weight="0.33"/>
+            android:layout_weight="0.33"
+            android:padding="5dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/my_ad_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/delete"
-            android:layout_weight="0.33"/>
+            android:layout_weight="0.33"
+            android:padding="5dp" />
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"
-            android:layout_weight="0.33"/>
+            android:layout_weight="0.33"
+            android:padding="5dp" />
 
 
     </LinearLayout>
