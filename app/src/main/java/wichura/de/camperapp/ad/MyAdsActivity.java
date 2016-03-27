@@ -2,9 +2,11 @@ package wichura.de.camperapp.ad;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -98,6 +100,32 @@ public class MyAdsActivity extends Activity {
         adapter = new MyAdsListViewAdapter(this, getApplicationContext(), R.layout.my_ads_layout, rowItems);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        //TODO refactor, same in mainactivity for list elements
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(final AdapterView<?> arg0,
+                                    final View arg1, final int position, final long arg3) {
+
+                final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
+
+                //open new details page with sel. item
+                final Intent intent = new Intent(getApplicationContext(),
+                        OpenAdActivity.class);
+                intent.putExtra("uri", rowItem.getUrl());
+                intent.putExtra("id", rowItem.getAdId());
+                intent.putExtra("title", rowItem.getTitle());
+                intent.putExtra("description", rowItem.getDescription());
+                intent.putExtra("location", rowItem.getLocation());
+                intent.putExtra("phone", rowItem.getPhone());
+                intent.putExtra("userid", rowItem.getUserid());
+                startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
+
+                Toast.makeText(getApplicationContext(), rowItem.getAdId(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void refreshList()
