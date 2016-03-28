@@ -2,76 +2,82 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="0dp"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="0dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
         android:padding="0dp"
-        android:weightSum="1"
-        android:layout_alignParentTop="true">
+        android:weightSum="1">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="170dp"
             android:background="@drawable/side_nav_bar"
+            android:orientation="vertical"
             android:weightSum="1">
 
-            <!--<View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/ct"
-                android:src="@drawable/gradient_shape"/>
-                -->
+                android:layout_height="170dp"
+                android:background="@drawable/side_nav_bar"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
-            <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButton"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/empty_photo"
-            android:layout_margin="20dp"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="true"/>
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:layout_weight="0.33"
+                    android:src="@drawable/empty_photo" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton2"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/applogo"
-                android:layout_margin="20dp"/>
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:layout_weight="0.33"
+                    android:src="@drawable/empty_photo" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton3"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/applogo"
-                android:layout_margin="20dp"/>
+                <ImageButton
+                    android:id="@+id/imageButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:layout_weight="0.33"
+                    android:src="@drawable/empty_photo" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/keywords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
             android:layout_weight="0.2"
+            android:background="@android:color/transparent"
+            android:gravity="top"
             android:hint="Was verkaufst Du..."
-            android:background="@android:color/transparent"
-            android:gravity="top"
-            android:singleLine="false"
-            android:layout_margin="10dp" />
+            android:singleLine="false" />
 
         <View
             android:layout_width="match_parent"
@@ -79,15 +85,15 @@
             android:background="@android:color/darker_gray" />
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
             android:layout_weight="0.6"
-            android:hint="Beschreibe es..."
             android:background="@android:color/transparent"
             android:gravity="top"
-            android:layout_margin="10dp" />
+            android:hint="Beschreibe es..." />
 
         <View
             android:layout_width="match_parent"
@@ -95,22 +101,22 @@
             android:background="@android:color/darker_gray" />
 
         <EditText
+            android:id="@+id/preis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/preis"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
             android:layout_weight="0.1"
-            android:gravity="top"
             android:background="@android:color/transparent"
-            android:hint="Preis..."
-            android:layout_margin="10dp" />
+            android:gravity="top"
+            android:hint="Preis..." />
 
         <Button
+            android:id="@+id/uploadButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Angebot starten"
             android:layout_weight="0.1"
-            android:id="@+id/uploadButton"
-            android:background="#639bc5" />
+            android:background="#639bc5"
+            android:text="Angebot starten" />
     </LinearLayout>
 </RelativeLayout>

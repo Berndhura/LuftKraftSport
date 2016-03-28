@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:dividerPadding="7dp"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:background="#DDE9ED">
 
     <ListView
         android:id="@+id/my_list"
@@ -14,6 +16,7 @@
         android:paddingRight="10dp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:dividerHeight="10.0sp"/>
+        android:dividerHeight="10.0sp"
+        android:background="#DDE9ED"/>
 
 </LinearLayout>

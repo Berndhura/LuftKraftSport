@@ -95,7 +95,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         //set Keywords
         // holder.txtDesc.setText(rowItem.getKeywords());
         //set Title
-        holder.txtTitle.setText(rowItem.getTitle());
+        holder.txtTitle.setText("asdasdadasdasdasdasdasdasd");//(rowItem.getTitle());
         //set Price
         // holder.txtPrice.setText("99");
         holder.txtLocation.setText("Melbourne");

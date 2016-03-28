@@ -109,7 +109,6 @@ public class NewAdActivity extends Activity {
                 final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-
             }
         });
     }
@@ -221,11 +220,12 @@ public class NewAdActivity extends Activity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
                 Log.e("Volley Request Error", "no");
                 Toast.makeText(getApplicationContext(), "Upload did not work!\n", Toast.LENGTH_LONG).show();
+                progress.dismiss();
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, File file) {
-                Log.d("response", "jo");
+                Log.d("CONAN", "Picture uploaded");
                 Toast.makeText(getApplicationContext(), "Upload...done!", Toast.LENGTH_SHORT).show();
                 //jetzt bilder neu laden!! finish() geht zu früh zurück in mainactivity
                 Boolean deletetd = reducedPicture.delete();
