@@ -189,9 +189,6 @@ public class MainActivity extends AppCompatActivity
                         intent.putExtra("phone", rowItem.getPhone());
                         intent.putExtra("userid", rowItem.getUserid());
                         startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
-
-                        Toast.makeText(getApplicationContext(), rowItem.getAdId(),
-                                Toast.LENGTH_SHORT).show();
                     }
                 });
             }

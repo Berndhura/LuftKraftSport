@@ -44,7 +44,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.list_item, null);
             holder = new ViewHolder();
-            holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
+            //holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
             holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
             holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
             convertView.setTag(holder);
@@ -64,11 +64,11 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
         Log.d("CONAN, get pic URLs: ", rowItem.getUrl());
         //set Keywords
-        holder.txtDesc.setText(rowItem.getKeywords());
+        //holder.txtDesc.setText(rowItem.getKeywords());
         //set Title
         holder.txtTitle.setText(rowItem.getTitle());
         //set Price
-        holder.txtPrice.setText("99");
+        holder.txtPrice.setText("123 €");
 
         return convertView;
     }

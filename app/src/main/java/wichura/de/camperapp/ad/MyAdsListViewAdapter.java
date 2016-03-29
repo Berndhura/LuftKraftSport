@@ -66,7 +66,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
             convertView = mInflater.inflate(R.layout.my_ads_layout, null);
 
             holder = new ViewHolder();
-            holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
+           // holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
             holder.txtTitle = (TextView) convertView.findViewById(R.id.my_title);
             holder.txtLocation = (TextView) convertView.findViewById(R.id.location);
             holder.deleteButton = (ImageView) convertView.findViewById(R.id.my_ad_delete);
