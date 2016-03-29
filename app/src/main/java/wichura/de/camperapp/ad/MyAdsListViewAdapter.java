@@ -37,7 +37,6 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
     private List<RowItem> items;
     private Activity activity;
 
-
     public MyAdsListViewAdapter(final Activity activity, final Context context, final int resourceId,
                                 final List<RowItem> items) {
         super(context, resourceId, items);
@@ -116,7 +115,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
     }
 
     private void deleteAdRequest(final String adId, final View view) {
-        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(context)
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(activity)
                 //set message, title, and icon
                 .setTitle("Delete")
                 .setMessage("Do you want to Delete")
@@ -132,7 +131,11 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
                                 new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
-                                        clear();
+                                        String pos = view.getTag().toString();
+                                        int position = Integer.parseInt(pos);
+                                        remove(getItem(position));
+                                        notifyDataSetChanged();
+                                        //TODO: wenn leer, finish()
                                     }
                                 }, new Response.ErrorListener() {
                             @Override
