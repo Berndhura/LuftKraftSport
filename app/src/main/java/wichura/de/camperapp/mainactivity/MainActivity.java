@@ -170,6 +170,8 @@ public class MainActivity extends AppCompatActivity
                 listView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 
+                Toast.makeText(getApplicationContext(), "Results: "+ rowItems.size(), Toast.LENGTH_LONG).show();
+
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
