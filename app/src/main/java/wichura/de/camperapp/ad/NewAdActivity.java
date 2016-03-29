@@ -176,12 +176,14 @@ public class NewAdActivity extends Activity {
     //http://stackoverflow.com/questions/18288864/how-to-multipart-data-using-android-volley
     public void multiPost() {
 
-        progress = new ProgressDialog(this);
+        progress = new MyProgressDialog(this);
         progress.setTitle("Please Wait!!");
         progress.setMessage("Wait!!");
         progress.setCancelable(false);
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+       // progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.show();
+
+        //findViewById(R.id.avloadingIndicatorView).setVisibility(View.VISIBLE);
 
 
         Uri fileUri = Uri.parse(picture.toString());
