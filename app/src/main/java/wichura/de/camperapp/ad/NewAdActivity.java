@@ -177,10 +177,7 @@ public class NewAdActivity extends Activity {
     public void multiPost() {
 
         progress = new MyProgressDialog(this);
-        progress.setTitle("Please Wait!!");
-        progress.setMessage("Wait!!");
         progress.setCancelable(false);
-       // progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.show();
 
         //findViewById(R.id.avloadingIndicatorView).setVisibility(View.VISIBLE);
