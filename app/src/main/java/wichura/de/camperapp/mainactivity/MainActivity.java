@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
+import android.view.View.OnClickListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity
     private String fbProfilePicUrl;
     private String userName;
 
+
+
     CallbackManager callbackManager;
 
     @Override
@@ -71,11 +75,13 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -87,11 +93,11 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         getFacebookUserInfos();
-
-        //homebutton anzeigen
-        //actionBar.setHomeButtonEnabled(true);
-        //actionBar.setDisplayHomeAsUpEnabled(true);
+//        Intent startPageIntent = new Intent(getApplicationContext(), StartActivity.class);
+//        startActivityForResult(startPageIntent,45);
     }
+
+
 
     private void getFacebookUserInfos() {
 
@@ -202,67 +208,13 @@ public class MainActivity extends AppCompatActivity
         });
         queue.add(getAllAdsInJson);
     }
-/*
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-
-        SearchManager sM = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        final MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-
-        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-        EditText searchPlate = (EditText) searchView.findViewById(searchPlateId);
-        searchPlate.setTextColor(getResources().getColor(R.color.com_facebook_blue));
-        searchPlate.setBackgroundResource(R.drawable.ic_action_settings);
-        searchPlate.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-
-        searchView.setSearchableInfo(sM.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(true);
-        searchView.setSubmitButtonEnabled(true);
-
-
-        if (searchView != null) {
-            searchView.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    Log.d("query: ", query);
-                    getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    return false;
-                }
-            });
-        }
-
-        MenuItem loginItem = menu.findItem(R.id.login);
-        MenuItem profileItem = menu.findItem(R.id.profile);
-
-        if (facebookId != null) {
-            loginItem.setVisible(false);
-            profileItem.setVisible(true);
-        } else {
-            loginItem.setVisible(true);
-            profileItem.setVisible(false);
-        }
-
-        return super.onCreateOptionsMenu(menu);
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-
         final int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -291,7 +243,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -302,13 +253,6 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

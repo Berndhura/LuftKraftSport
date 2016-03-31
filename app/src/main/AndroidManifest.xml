@@ -44,6 +44,11 @@
             android:name="wichura.de.camperapp.ad.MyAdsActivity"
             android:label="@string/title_open_my_ads_page" />
 
+        <activity
+            android:name="wichura.de.camperapp.mainactivity.StartActivity"
+            android:label="@string/title_open_my_ads_page" />
+
+
 
         <activity
             android:name="com.facebook.FacebookActivity"
