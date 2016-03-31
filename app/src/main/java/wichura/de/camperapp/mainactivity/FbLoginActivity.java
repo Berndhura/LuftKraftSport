@@ -30,6 +30,7 @@ import com.squareup.picasso.Picasso;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import wichura.de.camperapp.R;
 
