@@ -1,5 +1,6 @@
 package wichura.de.camperapp.mainactivity;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -48,6 +50,7 @@ import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
+
 import android.view.View.OnClickListener;
 
 public class MainActivity extends AppCompatActivity
@@ -61,11 +64,11 @@ public class MainActivity extends AppCompatActivity
     public static final int REQUEST_ID_FOR_FACEBOOK_LOGIN = 2;
     public static final int REQUEST_ID_FOR_OPEN_AD = 3;
     public static final int REQUEST_ID_FOR_MY_ADS = 4;
+    private static final int REQUEST_ID_FOR_SEARCH = 5;
 
     private String facebookId;
     private String fbProfilePicUrl;
     private String userName;
-
 
 
     CallbackManager callbackManager;
@@ -75,6 +78,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -82,6 +87,7 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -96,7 +102,6 @@ public class MainActivity extends AppCompatActivity
 //        Intent startPageIntent = new Intent(getApplicationContext(), StartActivity.class);
 //        startActivityForResult(startPageIntent,45);
     }
-
 
 
     private void getFacebookUserInfos() {
@@ -176,7 +181,7 @@ public class MainActivity extends AppCompatActivity
                 listView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 
-                Toast.makeText(getApplicationContext(), "Results: "+ rowItems.size(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Results: " + rowItems.size(), Toast.LENGTH_LONG).show();
 
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -199,6 +204,7 @@ public class MainActivity extends AppCompatActivity
                         startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
                     }
                 });
+                setProgressBarIndeterminateVisibility(false);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -241,6 +247,13 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == REQUEST_ID_FOR_OPEN_AD) {
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
         }
+
+        if (requestCode == REQUEST_ID_FOR_SEARCH) {
+            String query = data.getStringExtra("KEYWORDS");
+            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL +query);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+        }
     }
 
     @Override
@@ -272,6 +285,11 @@ public class MainActivity extends AppCompatActivity
             final Intent intent = new Intent(this, NewAdActivity.class);
             intent.putExtra("id", facebookId);
             startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
+            return true;
+
+        } else if (id == R.id.search) {
+            final Intent searchIntent = new Intent(this, SearchActivity.class);
+            startActivityForResult(searchIntent, REQUEST_ID_FOR_SEARCH);
             return true;
 
         } else if (id == R.id.login_out) {
