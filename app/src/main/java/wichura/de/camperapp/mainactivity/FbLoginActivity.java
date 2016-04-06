@@ -26,11 +26,16 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
 import com.squareup.picasso.Picasso;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 import wichura.de.camperapp.R;
 
@@ -141,6 +146,36 @@ public class FbLoginActivity extends Activity {
 
         tracker.startTracking();
         profileTracker.startTracking();
+
+
+        /*
+        GOOGLE+ Login
+        -------------------------------------------------------------------------------------------
+         */
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestProfile()
+                .requestScopes(new Scope(Scopes.PLUS_ME))
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .build();
+
+        // Build a GoogleApiClient with access to the Google Sign-In API and the
+        // options specified by gso.
+        final GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                //TODO: this does not work....
+                // .enableAutoManage(this, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        SignInButton googleButton = (SignInButton) findViewById(R.id.sign_in_button);
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, 88);//RC_SIGN_IN);
+            }
+        });
     }
 
     private void backButton() {
@@ -154,11 +189,11 @@ public class FbLoginActivity extends Activity {
                 data.putExtra(Constants.FACEBOOK_ACCESS_TOKEN, token);
 
                 setResult(RESULT_OK, data);
-                if(profile != null){
+                if (profile != null) {
                     Intent main = new Intent(FbLoginActivity.this, MainActivity.class);
                     main.putExtra("name", profile.getFirstName());
                     main.putExtra("surname", profile.getLastName());
-                    main.putExtra("imageUrl", profile.getProfilePictureUri(200,200).toString());
+                    main.putExtra("imageUrl", profile.getProfilePictureUri(200, 200).toString());
                     startActivity(main);
 
                 }
