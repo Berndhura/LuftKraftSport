@@ -34,6 +34,7 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
@@ -54,8 +55,10 @@ import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private ListView listView;
     private List<RowItem> rowItems;
@@ -69,6 +72,8 @@ public class MainActivity extends AppCompatActivity
 
     private String facebookId;
     private String userName;
+
+    private GoogleApiClient mGoogleApiClient;
 
 
     CallbackManager callbackManager;
@@ -99,7 +104,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //facebook login
-        if (AccessToken.getCurrentAccessToken()!=null) {
+        if (AccessToken.getCurrentAccessToken() != null) {
             getFacebookUserInfo();
         } else {
             Log.d("CONAN: ", "NOPE ");
@@ -115,23 +120,36 @@ public class MainActivity extends AppCompatActivity
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .build();
 
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 //TODO: this does not work....
-                // .enableAutoManage(this, this /* OnConnectionFailedListener */)
+                .enableAutoManage(this, null /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-        mGoogleApiClient.connect();
-
-        if (mGoogleApiClient.isConnected()) {
-            Log.d("CONAN: ", "google+ logged in ");
-        } else {
-            Log.d("CONAN: ", "google+ NOPE logged");
-        }
-
-
 
 //        Intent startPageIntent = new Intent(getApplicationContext(), StartActivity.class);
 //        startActivityForResult(startPageIntent,45);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null)
+            mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.d("CONAN: ", "google+ connected... ");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
 
