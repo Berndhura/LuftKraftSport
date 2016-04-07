@@ -214,6 +214,8 @@ public class FbLoginActivity extends Activity  {
             mGoogleApiClient.connect();
         }
     }
+
+
 //    @Override
 //    public void onConnectionSuspended(int i) {
 //        mGoogleApiClient.connect();

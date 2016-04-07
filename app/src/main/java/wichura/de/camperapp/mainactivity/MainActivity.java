@@ -1,6 +1,5 @@
 package wichura.de.camperapp.mainactivity;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,7 +32,11 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
@@ -52,8 +54,6 @@ import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
 
-import android.view.View.OnClickListener;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_ID_FOR_SEARCH = 5;
 
     private String facebookId;
-    private String fbProfilePicUrl;
     private String userName;
 
 
@@ -99,13 +98,44 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        getFacebookUserInfos();
+        //facebook login
+        if (AccessToken.getCurrentAccessToken()!=null) {
+            getFacebookUserInfo();
+        } else {
+            Log.d("CONAN: ", "NOPE ");
+            getFacebookUserInfo();
+        }
+
+        //google login
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestProfile()
+                .requestId()
+                .requestScopes(new Scope(Scopes.PLUS_ME))
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .build();
+
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                //TODO: this does not work....
+                // .enableAutoManage(this, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+
+        if (mGoogleApiClient.isConnected()) {
+            Log.d("CONAN: ", "google+ logged in ");
+        } else {
+            Log.d("CONAN: ", "google+ NOPE logged");
+        }
+
+
+
 //        Intent startPageIntent = new Intent(getApplicationContext(), StartActivity.class);
 //        startActivityForResult(startPageIntent,45);
     }
 
 
-    private void getFacebookUserInfos() {
+    private void getFacebookUserInfo() {
 
         callbackManager = CallbackManager.Factory.create();
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -114,32 +144,27 @@ public class MainActivity extends AppCompatActivity
                 JSONObject json = response.getJSONObject();
                 try {
                     if (json != null) {
-                        Log.d("CONAN: ", "Return from Facebook login with user id: " + json.getString("id"));
+                        //user id
+                        Log.d("CONAN: ", "user id facebook: " + json.getString("id"));
                         facebookId = json.getString("id");
 
-                        //set user name
+                        //user name
                         userName = json.getString("name");
-                        TextView nav_user = (TextView) findViewById(R.id.username);
-                        nav_user.setText(userName);
+                        setProfileName(userName);
 
-                        //set user profile picture
-                        fbProfilePicUrl = json.getString("picture");
-                        ImageView profilePic = (ImageView) findViewById(R.id.profile_image);
-
+                        //user profile picture
                         Profile profile = Profile.getCurrentProfile();
                         if (profile != null) {
-                            // mName.setText("tark: " + profile.getName());
-                            // mUserId = profile.getId();
                             Uri uri = profile.getProfilePictureUri(200, 200);
-                            Picasso.with(getApplicationContext()).load(uri.toString()).into(profilePic);
+                            setProfilePicture(uri);
+                        } else {
+                            //TODO: und nu
                         }
-                        //wenn userid da, dann abfrage? TODO auch ohne login moeglich
+                        //TODO auch ohne login moeglich
                         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-
                 }
             }
         });
@@ -147,6 +172,16 @@ public class MainActivity extends AppCompatActivity
         parameters.putString("fields", "id,name,link,picture");
         request.setParameters(parameters);
         request.executeAsync();
+    }
+
+    private void setProfilePicture(Uri uri) {
+        ImageView profilePic = (ImageView) findViewById(R.id.profile_image);
+        Picasso.with(getApplicationContext()).load(uri.toString()).into(profilePic);
+    }
+
+    private void setProfileName(String name) {
+        TextView nav_user = (TextView) findViewById(R.id.username);
+        nav_user.setText(name);
     }
 
     private void getAdsJsonForKeyword(String url) {
@@ -236,7 +271,6 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
             //TODO:possible null if user login is Google+
             facebookId = data.getStringExtra(Constants.FACEBOOK_ID);
-            fbProfilePicUrl = data.getStringExtra(Constants.FACEBOOK_PROFILE_PIC_URL);
             String fbToken = data.getStringExtra(Constants.FACEBOOK_ACCESS_TOKEN);
             Log.d("CONAN: ", "Return from Facebook login, userid: " + facebookId);
             Log.d("CONAN: ", "Return from Facebook login, token: " + fbToken);
@@ -252,7 +286,7 @@ public class MainActivity extends AppCompatActivity
 
         if (requestCode == REQUEST_ID_FOR_SEARCH) {
             String query = data.getStringExtra("KEYWORDS");
-            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL +query);
+            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
         }
