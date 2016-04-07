@@ -40,6 +40,13 @@
         android:id="@+id/backButton"
         android:layout_gravity="center_horizontal" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout Google+"
+        android:id="@+id/logoutGoogleButton"
+        android:layout_gravity="center_horizontal" />
+
     <EditText
         android:layout_width="197dp"
         android:layout_height="wrap_content"

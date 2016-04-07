@@ -27,11 +27,16 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
 
 import java.security.MessageDigest;
@@ -42,7 +47,7 @@ import wichura.de.camperapp.R;
 /**
  * Created by ich on 28.07.2015.
  */
-public class FbLoginActivity extends Activity {
+public class FbLoginActivity extends Activity  {
 
     private TextView mName;
     private String mUserId;
@@ -52,6 +57,7 @@ public class FbLoginActivity extends Activity {
     private AccessToken token;
 
     private Button backButton;
+    private Button logoutGoogleButton;
 
     Profile profile;
 
@@ -84,6 +90,8 @@ public class FbLoginActivity extends Activity {
 
         }
     };
+    private GoogleApiClient mGoogleApiClient;
+    private int RC_SIGN_IN =9;
 
 
     @Override
@@ -121,6 +129,8 @@ public class FbLoginActivity extends Activity {
 
         backButton();
 
+        logoutGooglePlus();
+
 
         AccessTokenTracker tracker = new AccessTokenTracker() {
             @Override
@@ -156,13 +166,16 @@ public class FbLoginActivity extends Activity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestProfile()
+                .requestId()
                 .requestScopes(new Scope(Scopes.PLUS_ME))
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .build();
 
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
-        final GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+        //TODO: this does not work....
+// .enableAutoManage(this, this /* OnConnectionFailedListener */)
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 //TODO: this does not work....
                 // .enableAutoManage(this, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -173,9 +186,57 @@ public class FbLoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signInIntent, 88);//RC_SIGN_IN);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //add this to connect Google Client
+        mGoogleApiClient.connect();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Stop the Google Client when activity is stopped
+        if(mGoogleApiClient.isConnected())
+        {
+            mGoogleApiClient.disconnect();
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mGoogleApiClient.isConnected())
+        {
+            mGoogleApiClient.connect();
+        }
+    }
+//    @Override
+//    public void onConnectionSuspended(int i) {
+//        mGoogleApiClient.connect();
+//    }
+//    @Override
+//    public void onConnectionFailed(ConnectionResult connectionResult) {
+//        if(!connectionResult.hasResolution())
+//        {
+//           // apiAvailability.getErrorDialog(MainActivity.this,connectionResult.getErrorCode(),requestcode).show();
+//        }
+//    }
+
+    private void logoutGooglePlus() {
+
+        logoutGoogleButton = (Button) findViewById(R.id.logoutGoogleButton);
+        logoutGoogleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();//
+                finish();
+            }
+        });
+
     }
 
     private void backButton() {
@@ -210,5 +271,41 @@ public class FbLoginActivity extends Activity {
         data.putExtra(Constants.FACEBOOK_PROFILE_PIC_URL, mFacebookPicUrl);
 
         mCallbackMgt.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            int requestcode=requestCode;
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+        else
+        {
+            //failed to connect
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        // Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            String name=   acct.getDisplayName();
+            String email=acct.getEmail();
+            String id= acct.getIdToken();
+            String userGoogleId = acct.getId();
+            Uri userUri = acct.getPhotoUrl();
+            String name3=   acct.getDisplayName();
+        } else {
+            // Signed out, show unauthenticated UI.
+        }
+    }
+
+    private void signOut() {
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // ...
+                    }
+                });
     }
 }
