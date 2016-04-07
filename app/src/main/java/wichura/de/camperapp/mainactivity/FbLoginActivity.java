@@ -307,7 +307,7 @@ public class FbLoginActivity extends Activity  {
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        // ...
+                        Log.d("CONAN: ", "google+ logout");
                     }
                 });
     }

@@ -288,10 +288,9 @@ public class MainActivity extends AppCompatActivity implements
         //back from Facebock login/logout page
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
             //TODO:possible null if user login is Google+
-            facebookId = data.getStringExtra(Constants.FACEBOOK_ID);
-            String fbToken = data.getStringExtra(Constants.FACEBOOK_ACCESS_TOKEN);
+            //facebookId = data.getStringExtra(Constants.FACEBOOK_ID);
+            //String fbToken = data.getStringExtra(Constants.FACEBOOK_ACCESS_TOKEN);
             Log.d("CONAN: ", "Return from Facebook login, userid: " + facebookId);
-            Log.d("CONAN: ", "Return from Facebook login, token: " + fbToken);
 
             //load new Options Menu cause of user is logged in now
             invalidateOptionsMenu();
