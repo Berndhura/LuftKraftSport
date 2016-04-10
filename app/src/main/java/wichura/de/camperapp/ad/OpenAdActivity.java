@@ -37,6 +37,7 @@ import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.mainactivity.Constants;
 
 public class OpenAdActivity extends Activity {
 
@@ -49,12 +50,14 @@ public class OpenAdActivity extends Activity {
     private TextView mLocationText;
     private TextView mPhoneText;
     private Button mDelButton;
+    private Button mBookmarButton;
     private String mAdId;
 
     private ImageView imgView;
 
     private int displayHeight;
     private int displayWidth;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -65,6 +68,9 @@ public class OpenAdActivity extends Activity {
 
         getDisplaydimension();
 
+        //Volley request queue for delete, bookmark...
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+
         mTitleText = (TextView) findViewById(R.id.title);
         mPrice = (TextView) findViewById(R.id.price);
         mDescText = (TextView) findViewById(R.id.description);
@@ -72,6 +78,7 @@ public class OpenAdActivity extends Activity {
         //mPhoneText = (TextView) findViewById(R.id.phone);
         imgView = (ImageView) findViewById(R.id.imageView);
         mDelButton = (Button) findViewById(R.id.delButton);
+        mBookmarButton = (Button) findViewById(R.id.bookmarkButton);
 
 
         //get data from Intent
@@ -105,6 +112,16 @@ public class OpenAdActivity extends Activity {
             }
         });
 
+        mBookmarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO : user Constants
+                String adId = getIntent().getStringExtra("id");
+                String userId = getIntent().getStringExtra(Constants.USER_ID);
+                bookmarkAd(adId, userId);
+            }
+        });
+
         Log.i("CONAN", "MyClass.getView() OPEN " + pictureUri);
 
         //map fragment in app : https://developers.google.com/maps/documentation/android-api/start#die_xml-layoutdatei
@@ -113,6 +130,26 @@ public class OpenAdActivity extends Activity {
         //getLocationInfo()
         //now get Lat and Lng  from  getLatLong()
         // this:  http://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
+
+    }
+
+    private void bookmarkAd(String adId, String userId) {
+
+        //TODO: check parameter with capital I is in user
+        String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_AD + "?adId=" + adId + "?userId=" + userId;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(),"Ad is bookmarked!", Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(stringRequest);
 
     }
 
@@ -140,7 +177,6 @@ public class OpenAdActivity extends Activity {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //your deleting code
-                        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                         String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                                 new Response.Listener<String>() {
@@ -154,7 +190,7 @@ public class OpenAdActivity extends Activity {
                                 Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
                             }
                         });
-                        queue.add(stringRequest);
+                        requestQueue.add(stringRequest);
                         dialog.dismiss();
                     }
                 })

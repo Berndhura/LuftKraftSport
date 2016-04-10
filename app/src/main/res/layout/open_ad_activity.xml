@@ -92,7 +92,7 @@
             android:text="Delete" />
 
         <Button
-            android:id="@+id/likeButton"
+            android:id="@+id/bookmarkButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="1dp"

@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.d("CONAN: ", "Do the login ");
                 }
             }
         });
@@ -255,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements
                         intent.putExtra("location", rowItem.getLocation());
                         intent.putExtra("phone", rowItem.getPhone());
                         intent.putExtra("userid", rowItem.getUserid());
+                        intent.putExtra(Constants.USER_ID, facebookId); //TODO refactor to general user id (google+,facebook,myId)
                         startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
                     }
                 });
