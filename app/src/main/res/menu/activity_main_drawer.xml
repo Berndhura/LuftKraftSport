@@ -8,6 +8,11 @@
             android:title="My ads" />
 
         <item
+            android:id="@+id/bookmarks"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Bookmarks"/>
+
+        <item
             android:id="@+id/new_ad"
             android:icon="@drawable/newad"
             android:title="New ad"/>

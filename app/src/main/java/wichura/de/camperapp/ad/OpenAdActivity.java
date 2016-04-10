@@ -136,7 +136,7 @@ public class OpenAdActivity extends Activity {
     private void bookmarkAd(String adId, String userId) {
 
         //TODO: check parameter with capital I is in user
-        String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_AD + "?adId=" + adId + "?userId=" + userId;
+        String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_AD + "?adId=" + adId + "&userId=" + userId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override

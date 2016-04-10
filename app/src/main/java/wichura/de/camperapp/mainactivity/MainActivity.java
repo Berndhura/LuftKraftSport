@@ -356,8 +356,11 @@ public class MainActivity extends AppCompatActivity implements
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
             drawer.closeDrawer(GravityCompat.START);
             return true;
+        } else if (id == R.id.bookmarks) {
+            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
         }
-
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
