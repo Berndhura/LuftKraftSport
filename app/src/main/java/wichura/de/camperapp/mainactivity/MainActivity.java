@@ -40,6 +40,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.DataAsyncHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -49,6 +52,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
@@ -357,7 +361,25 @@ public class MainActivity extends AppCompatActivity implements
             drawer.closeDrawer(GravityCompat.START);
             return true;
         } else if (id == R.id.bookmarks) {
-            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId);
+
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.post(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId, new DataAsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    String bookmarks = responseBody.toString();
+                    //TODO: split list -> request ads from server , one request better? do not split!
+                    Log.d("CONAN: ", "Boolmarks from user with id: "+ facebookId +": " + bookmarks);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                }
+            });
+            //show data for bookmarks:
+            //TODO: show ads for bookmarks (get ads for ids interface in server!!!)
+            //getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_AD_WITH_ID + id_from_bookmarks);
+
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }
