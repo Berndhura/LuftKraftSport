@@ -43,6 +43,7 @@ import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.DataAsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -363,16 +364,15 @@ public class MainActivity extends AppCompatActivity implements
         } else if (id == R.id.bookmarks) {
 
             AsyncHttpClient client = new AsyncHttpClient();
-            client.post(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId, new DataAsyncHttpResponseHandler() {
+            client.post(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId, new TextHttpResponseHandler() {
                 @Override
-                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    String bookmarks = responseBody.toString();
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    String bookmarks = responseString;
                     //TODO: split list -> request ads from server , one request better? do not split!
-                    Log.d("CONAN: ", "Boolmarks from user with id: "+ facebookId +": " + bookmarks);
+                    Log.d("CONAN", "Boolmarks from user with id: "+ facebookId +": " + bookmarks);
                 }
-
                 @Override
-                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 
                 }
             });
