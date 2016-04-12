@@ -94,7 +94,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         //set Keywords
         // holder.txtDesc.setText(rowItem.getKeywords());
         //set Title
-        holder.txtTitle.setText("asdasdadasdasdasdasdasdasd");//(rowItem.getTitle());
+        holder.txtTitle.setText(rowItem.getTitle());
         //set Price
         // holder.txtPrice.setText("99");
         holder.txtLocation.setText("Melbourne");
@@ -155,28 +155,5 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
                 })
                 .create();
         myQuittingDialogBox.show();
-
-
-
-
-
-//        // Instantiate the RequestQueue.
-//        RequestQueue queue = Volley.newRequestQueue(context);
-//        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
-//
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        items.remove((Integer) view.getTag());
-//                        ((MyAdsActivity) activity).refreshList();
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(activity, "Something went wrong...", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        queue.add(stringRequest);
     }
 }
