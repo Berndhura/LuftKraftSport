@@ -362,20 +362,24 @@ public class MainActivity extends AppCompatActivity implements
             drawer.closeDrawer(GravityCompat.START);
             return true;
         } else if (id == R.id.bookmarks) {
+//URL: Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId
 
-            AsyncHttpClient client = new AsyncHttpClient();
-            client.post(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId, new TextHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    String bookmarks = responseString;
-                    //TODO: split list -> request ads from server , one request better? do not split!
-                    Log.d("CONAN", "Boolmarks from user with id: "+ facebookId +": " + bookmarks);
-                }
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId);
 
-                }
-            });
+
+//            AsyncHttpClient client = new AsyncHttpClient();
+//            client.post(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId, new TextHttpResponseHandler() {
+//                @Override
+//                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+//                    String[] bookmarks = responseString.split(",");
+//                    //TODO: split list -> request ads from server , one request better? do not split!
+//                    Log.d("CONAN", "Boolmarks from user with id: "+ facebookId +": " + bookmarks);
+//                }
+//                @Override
+//                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//
+//                }
+//            });
             //show data for bookmarks:
             //TODO: show ads for bookmarks (get ads for ids interface in server!!!)
             //getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_AD_WITH_ID + id_from_bookmarks);
