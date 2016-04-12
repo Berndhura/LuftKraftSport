@@ -130,7 +130,6 @@ public class FbLoginActivity extends Activity  {
 
         logoutGooglePlus();
 
-
         AccessTokenTracker tracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {

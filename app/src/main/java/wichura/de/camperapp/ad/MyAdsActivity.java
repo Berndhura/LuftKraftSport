@@ -1,7 +1,6 @@
 package wichura.de.camperapp.ad;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +25,7 @@ import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.mainactivity.RowItem;
 
 /**
@@ -49,8 +49,6 @@ public class MyAdsActivity extends Activity {
         rowItems = new ArrayList<RowItem>();
 
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
-
-
     }
 
     private void getAdsJsonForKeyword(String url) {
@@ -60,7 +58,6 @@ public class MyAdsActivity extends Activity {
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Context context = getApplicationContext();
                 try {
                     final Gson gson = new GsonBuilder()
                             .excludeFieldsWithoutExposeAnnotation().create();
@@ -69,18 +66,15 @@ public class MyAdsActivity extends Activity {
 
                     for (int i = 0; i < listOfAllAds.length(); i++) {
                         // get the titel information JSON object
-                        final String title = listOfAllAds.getJSONObject(i)
-                                .toString();
+                        final String title = listOfAllAds.getJSONObject(i).toString();
                         //use RowItem class to get from GSON
                         final RowItem rowItem = gson.fromJson(title, RowItem.class);
-
                         rowItems.add(rowItem);
                     }
                 } catch (final JSONException e) {
                     e.printStackTrace();
                 }
                 createAdapter(rowItems);
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -107,16 +101,15 @@ public class MyAdsActivity extends Activity {
                                     final View arg1, final int position, final long arg3) {
 
                 final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
-
                 //open new details page with sel. item
                 final Intent intent = new Intent(getApplicationContext(),
                         OpenAdActivity.class);
-                intent.putExtra("uri", rowItem.getUrl());
-                intent.putExtra("id", rowItem.getAdId());
-                intent.putExtra("title", rowItem.getTitle());
-                intent.putExtra("description", rowItem.getDescription());
-                intent.putExtra("location", rowItem.getLocation());
-                intent.putExtra("phone", rowItem.getPhone());
+                intent.putExtra(Constants.URI, rowItem.getUrl());
+                intent.putExtra(Constants.ID, rowItem.getAdId());
+                intent.putExtra(Constants.TITLE, rowItem.getTitle());
+                intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
+                intent.putExtra(Constants.LOCATION, rowItem.getLocation());
+                intent.putExtra(Constants.PHONE, rowItem.getPhone());
                 intent.putExtra("userid", rowItem.getUserid());
                 startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
             }

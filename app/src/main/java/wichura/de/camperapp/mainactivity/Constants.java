@@ -10,4 +10,14 @@ public class Constants {
     public static final String USER_ID = "user_id";
     public static final String AD_ID = "ad_id";
     public static final String FACEBOOK_ACCESS_TOKEN = "facebook_access_token";
+
+
+    //Intent
+    public static final String URI = "uri";
+    public static final String ID = "id";
+    public static final String TITLE = "title";
+    public static final String DESCRIPTION = "description";
+    public static final String LOCATION = "location";
+    public static final String PHONE = "phone";
+    //public static final String USER_ID = "userid";
 }

@@ -40,10 +40,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.DataAsyncHttpResponseHandler;
-import com.loopj.android.http.TextHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -53,7 +49,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
@@ -254,12 +249,12 @@ public class MainActivity extends AppCompatActivity implements
                         //open new details page with sel. item
                         final Intent intent = new Intent(getApplicationContext(),
                                 OpenAdActivity.class);
-                        intent.putExtra("uri", rowItem.getUrl());
-                        intent.putExtra("id", rowItem.getAdId());
-                        intent.putExtra("title", rowItem.getTitle());
-                        intent.putExtra("description", rowItem.getDescription());
-                        intent.putExtra("location", rowItem.getLocation());
-                        intent.putExtra("phone", rowItem.getPhone());
+                        intent.putExtra(Constants.URI, rowItem.getUrl());
+                        intent.putExtra(Constants.ID, rowItem.getAdId());
+                        intent.putExtra(Constants.TITLE, rowItem.getTitle());
+                        intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
+                        intent.putExtra(Constants.LOCATION, rowItem.getLocation());
+                        intent.putExtra(Constants.PHONE, rowItem.getPhone());
                         intent.putExtra("userid", rowItem.getUserid());
                         intent.putExtra(Constants.USER_ID, facebookId); //TODO refactor to general user id (google+,facebook,myId)
                         startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
@@ -324,19 +319,16 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             super.onBackPressed();
         }
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
+        int id = item.getItemId();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         if (id == R.id.myads) {
-            //show my ads
             Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
             intent.putExtra("userid", facebookId);
             startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
@@ -362,28 +354,7 @@ public class MainActivity extends AppCompatActivity implements
             drawer.closeDrawer(GravityCompat.START);
             return true;
         } else if (id == R.id.bookmarks) {
-//URL: Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId
-
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId);
-
-
-//            AsyncHttpClient client = new AsyncHttpClient();
-//            client.post(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId, new TextHttpResponseHandler() {
-//                @Override
-//                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-//                    String[] bookmarks = responseString.split(",");
-//                    //TODO: split list -> request ads from server , one request better? do not split!
-//                    Log.d("CONAN", "Boolmarks from user with id: "+ facebookId +": " + bookmarks);
-//                }
-//                @Override
-//                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//
-//                }
-//            });
-            //show data for bookmarks:
-            //TODO: show ads for bookmarks (get ads for ids interface in server!!!)
-            //getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_AD_WITH_ID + id_from_bookmarks);
-
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }

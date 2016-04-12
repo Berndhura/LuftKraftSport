@@ -2,7 +2,6 @@ package wichura.de.camperapp.ad;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.VoiceInteractor;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -66,7 +65,7 @@ public class OpenAdActivity extends Activity {
 
         setContentView(R.layout.open_ad_activity);
 
-        getDisplaydimension();
+        getDisplayDimensions();
 
         //Volley request queue for delete, bookmark...
         requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -82,10 +81,9 @@ public class OpenAdActivity extends Activity {
 
 
         //get data from Intent
-        pictureUri = getIntent().getStringExtra("uri");
-
-        mTitleText.setText("Titel der Anzeige");//(getIntent().getStringExtra("title"));
-        mPrice.setText("102€");//(getIntent().getStringExtra("title"));
+        pictureUri = getIntent().getStringExtra(Constants.URI);
+        mTitleText.setText(getIntent().getStringExtra("title"));
+        mPrice.setText("102€");
         mDescText.setText("Die einfachste Möglichkeit, Ihre App in Aktion zu sehen, besteht darin, ein Android-Gerät " +
                 "an Ihren Computer anzuschließen. Befolgen Sie die Anweisungen, um Entwickleroptionen in Ihrem Android-Gerät zu" +
                 " aktivieren und Ihre Anwendung und Ihr System so zu konfigurieren, dass das Gerät erkannt wird.");//(getIntent().getStringExtra("description"));
@@ -106,7 +104,7 @@ public class OpenAdActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //get ad id and send delete request
-                String adId = getIntent().getStringExtra("id");
+                String adId = getIntent().getStringExtra(Constants.ID);
                 Log.i("CONAN", "ApId: " + mAdId);
                 deleteAdRequest(adId);
             }
@@ -116,7 +114,7 @@ public class OpenAdActivity extends Activity {
             @Override
             public void onClick(View view) {
                 //TODO : user Constants
-                String adId = getIntent().getStringExtra("id");
+                String adId = getIntent().getStringExtra(Constants.ID);
                 String userId = getIntent().getStringExtra(Constants.USER_ID);
                 bookmarkAd(adId, userId);
             }
@@ -141,7 +139,7 @@ public class OpenAdActivity extends Activity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(),"Ad is bookmarked!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -153,7 +151,7 @@ public class OpenAdActivity extends Activity {
 
     }
 
-    private void getDisplaydimension() {
+    private void getDisplayDimensions() {
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -163,16 +161,14 @@ public class OpenAdActivity extends Activity {
 
         displayWidth = size.x;
         displayHeight = size.y;
-
     }
 
     private void deleteAdRequest(final String adId) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
-                .setTitle("Delete")
-                .setMessage("Do you want to Delete")
+                .setTitle("Delete Ad")
+                .setMessage("Do you want to delete this ad?")
                 .setIcon(R.drawable.delete)
-
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
