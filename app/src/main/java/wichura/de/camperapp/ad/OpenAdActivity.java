@@ -57,6 +57,9 @@ public class OpenAdActivity extends Activity {
     private int displayHeight;
     private int displayWidth;
     private RequestQueue requestQueue;
+    private boolean isBookmarked;
+    private boolean isMyAd;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -78,6 +81,16 @@ public class OpenAdActivity extends Activity {
         imgView = (ImageView) findViewById(R.id.imageView);
         mDelButton = (Button) findViewById(R.id.delButton);
         mBookmarButton = (Button) findViewById(R.id.bookmarkButton);
+
+        //TODO: check DB if bookmarked!
+        isBookmarked = false;
+        if (isBookmarked) {
+            mBookmarButton.setText("Remove bookmark!");
+        } else {
+            mBookmarButton.setText("Bookmark");
+        }
+        //TODO check if user owns this ad
+        isMyAd = true;
 
 
         //get data from Intent
@@ -116,11 +129,15 @@ public class OpenAdActivity extends Activity {
                 //TODO : user Constants
                 String adId = getIntent().getStringExtra(Constants.ID);
                 String userId = getIntent().getStringExtra(Constants.USER_ID);
-                bookmarkAd(adId, userId);
+                if (isBookmarked) {
+                    delBookmark(adId, userId);
+                } else {
+                    bookmarkAd(adId, userId);
+                }
             }
         });
 
-        Log.i("CONAN", "MyClass.getView() OPEN " + pictureUri);
+        Log.d("CONAN", "MyClass.getView() OPEN " + pictureUri);
 
         //map fragment in app : https://developers.google.com/maps/documentation/android-api/start#die_xml-layoutdatei
         //TODO: show location on map fragment
@@ -140,6 +157,8 @@ public class OpenAdActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(getApplicationContext(), "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
+                        mBookmarButton.setText("Remove Bookmark");
+                        isBookmarked = true;
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -150,6 +169,29 @@ public class OpenAdActivity extends Activity {
         requestQueue.add(stringRequest);
 
     }
+
+    private void delBookmark(String adId, String userId) {
+
+        //TODO: check parameter with capital I is in user
+        String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_DELETE + "?adId=" + adId + "&userId=" + userId;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(), "Bookmark deleted!", Toast.LENGTH_SHORT).show();
+                        mBookmarButton.setText("Remove Bookmark");
+                        isBookmarked = false;
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(stringRequest);
+
+    }
+
 
     private void getDisplayDimensions() {
 

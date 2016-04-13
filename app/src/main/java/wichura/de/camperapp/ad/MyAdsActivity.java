@@ -30,6 +30,7 @@ import wichura.de.camperapp.mainactivity.RowItem;
 
 /**
  * Created by Bernd Wichura on 14.03.2016.
+ *
  */
 public class MyAdsActivity extends Activity {
 

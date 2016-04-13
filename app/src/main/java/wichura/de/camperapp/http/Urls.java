@@ -2,6 +2,7 @@ package wichura.de.camperapp.http;
 
 /**
  * Created by bwichura on 13.11.2015.
+ *
  */
 public class Urls {
 
@@ -13,6 +14,7 @@ public class Urls {
     public static final String GET_ADS_FOR_KEYWORD_URL = "getAdsWithTag?description=";
     public static final String GET_ALL_ADS_FROM_USER  = "getAdsFromUser?userid=";
     public static final String BOOKMARK_AD = "bookmark";
+    public static final String BOOKMARK_DELETE = "deleteBookmark";
     public static final String GET_BOOKMARKED_ADS_URL = "getMyBookmarkedAds?userId=";
 }
 
