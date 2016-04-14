@@ -62,7 +62,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         //set Title
         holder.txtTitle.setText(rowItem.getTitle());
         //set Price
-        holder.txtPrice.setText("123 €");
+        holder.txtPrice.setText(rowItem.getPrice());
         return convertView;
     }
 }

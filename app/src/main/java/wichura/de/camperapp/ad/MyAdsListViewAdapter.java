@@ -69,7 +69,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
             holder.txtTitle = (TextView) convertView.findViewById(R.id.my_title);
             holder.txtLocation = (TextView) convertView.findViewById(R.id.location);
             holder.deleteButton = (ImageView) convertView.findViewById(R.id.my_ad_delete);
-            //holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
+            holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -80,7 +80,6 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         final RowItem rowItem = getItem(position);
 
         Log.d("CONAN, get pict URLs: ", rowItem.getUrl());
-        //--------------------
 
         Picasso.with(context)
                 .load(rowItem.getUrl())
@@ -88,15 +87,8 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
                 .centerCrop()
                 .into(thumbNail);
 
-        //____________________
-
-
-        //set Keywords
-        // holder.txtDesc.setText(rowItem.getKeywords());
-        //set Title
         holder.txtTitle.setText(rowItem.getTitle());
-        //set Price
-        // holder.txtPrice.setText("99");
+        holder.txtPrice.setText(rowItem.getPrice());
         holder.txtLocation.setText("Melbourne");
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {

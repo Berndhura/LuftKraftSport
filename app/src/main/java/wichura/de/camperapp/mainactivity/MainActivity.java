@@ -255,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements
                         intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
                         intent.putExtra(Constants.LOCATION, rowItem.getLocation());
                         intent.putExtra(Constants.PHONE, rowItem.getPhone());
+                        intent.putExtra(Constants.PRICE, rowItem.getPrice());
                         intent.putExtra("userid", rowItem.getUserid());
                         intent.putExtra(Constants.USER_ID, facebookId); //TODO refactor to general user id (google+,facebook,myId)
                         startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);

@@ -2,6 +2,7 @@ package wichura.de.camperapp.mainactivity;
 
 /**
  * Created by Bernd Wichura on 22.01.2016.
+ *
  */
 public class Constants {
 
@@ -19,5 +20,6 @@ public class Constants {
     public static final String DESCRIPTION = "description";
     public static final String LOCATION = "location";
     public static final String PHONE = "phone";
+    public static final String PRICE = "price";
     //public static final String USER_ID = "userid";
 }

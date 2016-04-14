@@ -95,8 +95,8 @@ public class OpenAdActivity extends Activity {
 
         //get data from Intent
         pictureUri = getIntent().getStringExtra(Constants.URI);
-        mTitleText.setText(getIntent().getStringExtra("title"));
-        mPrice.setText("102€");
+        mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
+        mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
         mDescText.setText("Die einfachste Möglichkeit, Ihre App in Aktion zu sehen, besteht darin, ein Android-Gerät " +
                 "an Ihren Computer anzuschließen. Befolgen Sie die Anweisungen, um Entwickleroptionen in Ihrem Android-Gerät zu" +
                 " aktivieren und Ihre Anwendung und Ihr System so zu konfigurieren, dass das Gerät erkannt wird.");//(getIntent().getStringExtra("description"));
@@ -179,7 +179,7 @@ public class OpenAdActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(getApplicationContext(), "Bookmark deleted!", Toast.LENGTH_SHORT).show();
-                        mBookmarButton.setText("Remove Bookmark");
+                        mBookmarButton.setText("Bookmark");
                         isBookmarked = false;
                     }
                 }, new Response.ErrorListener() {

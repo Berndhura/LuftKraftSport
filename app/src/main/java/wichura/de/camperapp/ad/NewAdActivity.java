@@ -212,6 +212,7 @@ public class NewAdActivity extends Activity {
         params.put("description", description);
         params.put("keywords", keywords);
         params.put("userid", userId);
+        params.put("price", price);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.post(Urls.MAIN_SERVER_URL + Urls.UPLOAD_NEW_AD_URL, params, new FileAsyncHttpResponseHandler(reducedPicture) {
