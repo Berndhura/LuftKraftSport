@@ -6,6 +6,7 @@ public class AdItem {
 
     public static final String ITEM_SEP = System.getProperty("line.separator");
 
+    //todo constants
     public final static String TITLE = "title";
     public final static String APID = "id";
     public final static String FILENAME = "";

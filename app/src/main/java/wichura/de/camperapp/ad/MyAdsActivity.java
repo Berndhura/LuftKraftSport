@@ -111,6 +111,7 @@ public class MyAdsActivity extends Activity {
                 intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
                 intent.putExtra(Constants.LOCATION, rowItem.getLocation());
                 intent.putExtra(Constants.PHONE, rowItem.getPhone());
+                intent.putExtra(Constants.PRICE, rowItem.getPrice());
                 intent.putExtra("userid", rowItem.getUserid());
                 startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
             }

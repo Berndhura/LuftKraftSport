@@ -30,6 +30,7 @@ import wichura.de.camperapp.mainactivity.RowItem;
 
 /**
  * Created by Bernd Wichura on 16.03.2016.
+ *
  */
 public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
 
@@ -48,7 +49,6 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
     /* private view holder class */
     private class ViewHolder {
         TextView txtTitle;
-        TextView txtDesc;
         TextView txtPrice;
         TextView txtLocation;
         ImageView deleteButton;
@@ -69,7 +69,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
             holder.txtTitle = (TextView) convertView.findViewById(R.id.my_title);
             holder.txtLocation = (TextView) convertView.findViewById(R.id.location);
             holder.deleteButton = (ImageView) convertView.findViewById(R.id.my_ad_delete);
-            holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
+            holder.txtPrice = (TextView) convertView.findViewById(R.id.my_price);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();

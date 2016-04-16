@@ -1,7 +1,5 @@
 package wichura.de.camperapp.mainactivity;
 
-import android.graphics.Bitmap;
-
 import com.google.gson.annotations.Expose;
 
 public class RowItem {
@@ -26,8 +24,6 @@ public class RowItem {
     private String location;
     @Expose
     private String userid;
-
-    private Bitmap image;
 
     public RowItem(final int imageId,
                    final String title,
@@ -103,18 +99,6 @@ public class RowItem {
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    public Bitmap getImage() {
-        return image;
-    }
-
-    public int getImageId() {
-        return imageId;
-    }
-
-    public void setImageId(final int imageId) {
-        this.imageId = imageId;
     }
 
     public String getKeywords() {

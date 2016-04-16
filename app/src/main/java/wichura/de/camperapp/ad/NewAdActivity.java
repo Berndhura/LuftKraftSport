@@ -208,6 +208,7 @@ public class NewAdActivity extends Activity {
         }
 
 
+        //todo constants? sind url paramater!! sollten aber passen
         params.put("title", title);
         params.put("description", description);
         params.put("keywords", keywords);
