@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +24,8 @@ import com.loopj.android.http.RequestParams;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Calendar;
+import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 import wichura.de.camperapp.R;
@@ -49,6 +52,7 @@ public class NewAdActivity extends Activity {
     private String price;
     private String picture;
     private String userId;
+    private long date;
 
     private ProgressDialog progress;
 
@@ -80,19 +84,12 @@ public class NewAdActivity extends Activity {
                 final String descString = mDescText.getText().toString();
                 final String price = mPrice.getText().toString();
                 final String keyWordsString = "zelt";
+                final long date = System.currentTimeMillis();
 
                 // Package ToDoItem data into an Intent
                 final Intent data = new Intent();
-                AdItem.packageIntent(
-                        data,
-                        titleString,
-                        "apid",
-                        descString,
-                        keyWordsString,
-                        mImage,
-                        "TODO",
-                        "PHONE",
-                        price);
+                AdItem.packageIntent(data, titleString, "apid", descString, keyWordsString, mImage,
+                        "TODO", "PHONE", price, date);
 
                 sendHttpToServer(data);
                 setResult(RESULT_OK, data);
@@ -151,6 +148,7 @@ public class NewAdActivity extends Activity {
         keywords = data.getStringExtra(AdItem.KEYWORDS);
         picture = data.getStringExtra(AdItem.FILENAME);
         price = data.getStringExtra(AdItem.PRICE);
+        date = data.getLongExtra(AdItem.DATE, 0);
 
         Log.d("query", title + description + keywords + picture);
 
@@ -214,6 +212,7 @@ public class NewAdActivity extends Activity {
         params.put("keywords", keywords);
         params.put("userid", userId);
         params.put("price", price);
+        params.put("date", date);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.post(Urls.MAIN_SERVER_URL + Urls.UPLOAD_NEW_AD_URL, params, new FileAsyncHttpResponseHandler(reducedPicture) {
