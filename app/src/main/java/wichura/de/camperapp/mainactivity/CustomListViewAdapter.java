@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import wichura.de.camperapp.R;
@@ -29,6 +30,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
     private class ViewHolder {
         TextView txtTitle;
         TextView txtPrice;
+        TextView txtDate;
     }
 
     @Override
@@ -39,10 +41,11 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
         ViewHolder holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.list_item, null);
+            convertView = mInflater.inflate(R.layout.list_item, parent, false);
             holder = new ViewHolder();
             holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
             holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
+            holder.txtDate = (TextView) convertView.findViewById(R.id.creation_date);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -59,10 +62,9 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
                 .into(thumbNail);
 
         Log.d("CONAN, get pic URLs: ", rowItem.getUrl());
-        //set Title
         holder.txtTitle.setText(rowItem.getTitle());
-        //set Price
         holder.txtPrice.setText(rowItem.getPrice());
+        holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
         return convertView;
     }
 }

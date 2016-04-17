@@ -15,7 +15,7 @@ public class RowItem {
     @Expose
     private String phone;
     @Expose
-    private String date;
+    private long date;
     @Expose
     private String price;
     @Expose
@@ -32,7 +32,7 @@ public class RowItem {
                    final String url,
                    final String des,
                    final String phone,
-                   final String date,
+                   final long date,
                    final String price,
                    final String location,
                    final String userid) {
@@ -69,11 +69,11 @@ public class RowItem {
         this.location = location;
     }
 
-    public String getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
