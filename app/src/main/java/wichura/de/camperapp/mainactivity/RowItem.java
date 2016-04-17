@@ -69,9 +69,7 @@ public class RowItem {
         this.location = location;
     }
 
-    public long getDate() {
-        return date;
-    }
+    public long getDate() {return date;}
 
     public void setDate(long date) {
         this.date = date;

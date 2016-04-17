@@ -41,13 +41,13 @@
                     android:padding="5dp" />
 
                 <TextView
-                    android:id="@+id/date"
+                    android:id="@+id/my_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:textColor="#3d87a0"
                     android:textStyle="normal"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:padding="5dp" />
 
             </LinearLayout>

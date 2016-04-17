@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -46,10 +47,9 @@ public class OpenAdActivity extends Activity {
     private TextView mTitleText;
     private TextView mPrice;
     private TextView mDescText;
-    private TextView mLocationText;
-    private TextView mPhoneText;
+    private TextView mDateText;
     private Button mDelButton;
-    private Button mBookmarButton;
+    private Button mBookmarkButton;
     private String mAdId;
 
     private ImageView imgView;
@@ -76,18 +76,17 @@ public class OpenAdActivity extends Activity {
         mTitleText = (TextView) findViewById(R.id.title);
         mPrice = (TextView) findViewById(R.id.price);
         mDescText = (TextView) findViewById(R.id.description);
-        // mLocationText = (TextView) findViewById(R.id.location);
-        //mPhoneText = (TextView) findViewById(R.id.phone);
+        mDateText = (TextView) findViewById(R.id.ad_date);
         imgView = (ImageView) findViewById(R.id.imageView);
         mDelButton = (Button) findViewById(R.id.delButton);
-        mBookmarButton = (Button) findViewById(R.id.bookmarkButton);
+        mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
 
         //TODO: check DB if bookmarked!
         isBookmarked = false;
         if (isBookmarked) {
-            mBookmarButton.setText("Remove bookmark!");
+            mBookmarkButton.setText("Remove bookmark!");
         } else {
-            mBookmarButton.setText("Bookmark");
+            mBookmarkButton.setText("Bookmark");
         }
         //TODO check if user owns this ad
         isMyAd = true;
@@ -97,11 +96,8 @@ public class OpenAdActivity extends Activity {
         pictureUri = getIntent().getStringExtra(Constants.URI);
         mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
         mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
-        mDescText.setText("Die einfachste Möglichkeit, Ihre App in Aktion zu sehen, besteht darin, ein Android-Gerät " +
-                "an Ihren Computer anzuschließen. Befolgen Sie die Anweisungen, um Entwickleroptionen in Ihrem Android-Gerät zu" +
-                " aktivieren und Ihre Anwendung und Ihr System so zu konfigurieren, dass das Gerät erkannt wird.");//(getIntent().getStringExtra("description"));
-        // mLocationText.setText(getIntent().getStringExtra("location"));
-        //mPhoneText.setText(getIntent().getStringExtra("phone"));
+        mDescText.setText(getIntent().getStringExtra(Constants.TITLE));
+        mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE,0)));
         mAdId = getIntent().getStringExtra("id");
 
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
@@ -123,7 +119,7 @@ public class OpenAdActivity extends Activity {
             }
         });
 
-        mBookmarButton.setOnClickListener(new View.OnClickListener() {
+        mBookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO : user Constants
@@ -157,7 +153,7 @@ public class OpenAdActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(getApplicationContext(), "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
-                        mBookmarButton.setText("Remove Bookmark");
+                        mBookmarkButton.setText("Remove Bookmark");
                         isBookmarked = true;
                     }
                 }, new Response.ErrorListener() {
@@ -179,7 +175,7 @@ public class OpenAdActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(getApplicationContext(), "Bookmark deleted!", Toast.LENGTH_SHORT).show();
-                        mBookmarButton.setText("Bookmark");
+                        mBookmarkButton.setText("Bookmark");
                         isBookmarked = false;
                     }
                 }, new Response.ErrorListener() {

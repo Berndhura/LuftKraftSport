@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import wichura.de.camperapp.R;
@@ -51,6 +51,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         TextView txtTitle;
         TextView txtPrice;
         TextView txtLocation;
+        TextView txtDate;
         ImageView deleteButton;
     }
 
@@ -62,14 +63,14 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
 
         ViewHolder holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.my_ads_layout, null);
+            convertView = mInflater.inflate(R.layout.my_ads_layout, parent, false);
 
             holder = new ViewHolder();
-           // holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
             holder.txtTitle = (TextView) convertView.findViewById(R.id.my_title);
             holder.txtLocation = (TextView) convertView.findViewById(R.id.my_location);
             holder.deleteButton = (ImageView) convertView.findViewById(R.id.my_ad_delete);
             holder.txtPrice = (TextView) convertView.findViewById(R.id.my_price);
+            holder.txtDate = (TextView) convertView.findViewById(R.id.my_date);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -90,6 +91,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtTitle.setText(rowItem.getTitle());
         holder.txtPrice.setText(rowItem.getPrice());
         holder.txtLocation.setText("Melbourne");
+        holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +142,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
                     }
                 })
 
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
