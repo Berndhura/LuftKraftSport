@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -45,6 +48,7 @@ import wichura.de.camperapp.R;
 
 /**
  * Created by ich on 28.07.2015.
+ *
  */
 public class FbLoginActivity extends Activity  {
 
@@ -116,15 +120,18 @@ public class FbLoginActivity extends Activity  {
 
         mCallbackMgt = CallbackManager.Factory.create();
 
+
         setContentView(R.layout.fb_login_activity);
+
+        TextView tv = (TextView) findViewById(R.id.register);
+        tv.setText(Html.fromHtml("<a href=\"http://www.google.com\">Register</a>"));
+        tv.setClickable(true);
+        tv.setMovementMethod (LinkMovementMethod.getInstance());
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("user_friends");
 
         loginButton.registerCallback(mCallbackMgt, mCallback);
-
-        mName = (EditText) findViewById(R.id.name);
-        picture = (ImageView) findViewById(R.id.profilePic);
 
         backButton();
 
@@ -180,6 +187,7 @@ public class FbLoginActivity extends Activity  {
                 .build();
 
         SignInButton googleButton = (SignInButton) findViewById(R.id.sign_in_button);
+        setGooglePlusButtonText(googleButton, "Login with GOOGLE");
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -228,39 +236,39 @@ public class FbLoginActivity extends Activity  {
 
     private void logoutGooglePlus() {
 
-        logoutGoogleButton = (Button) findViewById(R.id.logoutGoogleButton);
-        logoutGoogleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signOut();//
-                finish();
-            }
-        });
+//        logoutGoogleButton = (Button) findViewById(R.id.logoutGoogleButton);
+//        logoutGoogleButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                signOut();//
+//                finish();
+//            }
+//        });
 
     }
 
     private void backButton() {
-        backButton = (Button) findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent data = new Intent();
-                data.putExtra(Constants.FACEBOOK_ID, mUserId);
-                data.putExtra(Constants.FACEBOOK_PROFILE_PIC_URL, mFacebookPicUrl);
-                data.putExtra(Constants.FACEBOOK_ACCESS_TOKEN, token);
-
-                setResult(RESULT_OK, data);
-                if (profile != null) {
-                    Intent main = new Intent(FbLoginActivity.this, MainActivity.class);
-                    main.putExtra("name", profile.getFirstName());
-                    main.putExtra("surname", profile.getLastName());
-                    main.putExtra("imageUrl", profile.getProfilePictureUri(200, 200).toString());
-                    startActivity(main);
-
-                }
-                finish();
-            }
-        });
+//        backButton = (Button) findViewById(R.id.backButton);
+//        backButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final Intent data = new Intent();
+//                data.putExtra(Constants.FACEBOOK_ID, mUserId);
+//                data.putExtra(Constants.FACEBOOK_PROFILE_PIC_URL, mFacebookPicUrl);
+//                data.putExtra(Constants.FACEBOOK_ACCESS_TOKEN, token);
+//
+//                setResult(RESULT_OK, data);
+//                if (profile != null) {
+//                    Intent main = new Intent(FbLoginActivity.this, MainActivity.class);
+//                    main.putExtra("name", profile.getFirstName());
+//                    main.putExtra("surname", profile.getLastName());
+//                    main.putExtra("imageUrl", profile.getProfilePictureUri(200, 200).toString());
+//                    startActivity(main);
+//
+//                }
+//                finish();
+//            }
+//        });
     }
 
     @Override
@@ -309,5 +317,20 @@ public class FbLoginActivity extends Activity  {
                         Log.d("CONAN: ", "google+ logout");
                     }
                 });
+    }
+
+    protected void setGooglePlusButtonText(SignInButton signInButton,
+                                           String buttonText) {
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setTextSize(15);
+                tv.setTypeface(null, Typeface.NORMAL);
+                tv.setText(buttonText);
+                return;
+            }
+        }
     }
 }
