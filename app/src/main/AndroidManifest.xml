@@ -35,7 +35,7 @@
 
         <activity
             android:name="wichura.de.camperapp.mainactivity.FbLoginActivity"
-            android:label="@string/title_new_add_page" />
+            android:label="@string/title_login_page" />
 
         <activity
             android:name="wichura.de.camperapp.ad.OpenAdActivity"

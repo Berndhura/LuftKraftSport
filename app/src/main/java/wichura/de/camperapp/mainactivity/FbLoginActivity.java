@@ -129,6 +129,8 @@ public class FbLoginActivity  extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         TextView tv = (TextView) findViewById(R.id.register);
         tv.setText(Html.fromHtml("<a href=\"http://www.google.com\">Register</a>"));
