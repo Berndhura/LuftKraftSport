@@ -65,9 +65,7 @@ public class OpenAdActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.open_ad_activity);
-
         getDisplayDimensions();
 
         //Volley request queue for delete, bookmark...
@@ -203,14 +201,12 @@ public class OpenAdActivity extends Activity {
 
     private void deleteAdRequest(final String adId) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
-                //set message, title, and icon
                 .setTitle("Delete Ad")
                 .setMessage("Do you want to delete this ad?")
                 .setIcon(R.drawable.delete)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        //your deleting code
                         String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                                 new Response.Listener<String>() {
@@ -228,7 +224,6 @@ public class OpenAdActivity extends Activity {
                         dialog.dismiss();
                     }
                 })
-
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

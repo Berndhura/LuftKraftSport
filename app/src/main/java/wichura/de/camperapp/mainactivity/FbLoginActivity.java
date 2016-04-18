@@ -9,6 +9,9 @@ import android.content.pm.Signature;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Base64;
@@ -50,7 +53,7 @@ import wichura.de.camperapp.R;
  * Created by ich on 28.07.2015.
  *
  */
-public class FbLoginActivity extends Activity  {
+public class FbLoginActivity  extends AppCompatActivity {
 
     private TextView mName;
     private String mUserId;
@@ -101,6 +104,7 @@ public class FbLoginActivity extends Activity  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+
         // Initialize the SDK before executing any other operations,
         // especially, if you're using Facebook UI elements.
         try {
@@ -122,6 +126,9 @@ public class FbLoginActivity extends Activity  {
 
 
         setContentView(R.layout.fb_login_activity);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.login_toolbar);
+        setSupportActionBar(toolbar);
 
         TextView tv = (TextView) findViewById(R.id.register);
         tv.setText(Html.fromHtml("<a href=\"http://www.google.com\">Register</a>"));

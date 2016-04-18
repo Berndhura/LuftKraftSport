@@ -332,6 +332,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
