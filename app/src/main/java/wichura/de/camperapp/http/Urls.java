@@ -16,6 +16,7 @@ public class Urls {
     public static final String BOOKMARK_AD = "bookmark";
     public static final String BOOKMARK_DELETE = "deleteBookmark";
     public static final String GET_BOOKMARKED_ADS_URL = "getMyBookmarkedAds?userId=";
+    public static final String LOGIN_USER = "loginUser";
 }
 
 // Http Request for single data eg string something

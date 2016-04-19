@@ -23,6 +23,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -46,6 +52,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.Urls;
 
 /**
  * Created by ich on 28.07.2015.
@@ -53,6 +60,7 @@ import wichura.de.camperapp.R;
 public class FbLoginActivity extends AppCompatActivity {
 
     private String mUserId;
+    private String mEmailUserId;
     private String mFacebookPicUrl;
     private AccessToken token;
     private Profile profile;
@@ -125,9 +133,7 @@ public class FbLoginActivity extends AppCompatActivity {
 
                     String email = _emailText.getText().toString();
                     String password = _passwordText.getText().toString();
-
-
-
+                    sendLoginRequest(email, password, progressDialog);
                 }
             });
         }
@@ -309,7 +315,7 @@ public class FbLoginActivity extends AppCompatActivity {
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
 
-       // _loginButton.setEnabled(true);
+        // _loginButton.setEnabled(true);
     }
 
     public boolean validate() {
@@ -333,6 +339,33 @@ public class FbLoginActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+
+    private void sendLoginRequest(String email, String password, final ProgressDialog progressDialog) {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        String url = Urls.MAIN_SERVER_URL + Urls.LOGIN_USER + "?email=" + email + "&password=" + password;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        if (!response.equals("wrong")) {
+                            Toast.makeText(getApplicationContext(), "User in", Toast.LENGTH_SHORT).show();
+                            mEmailUserId = response;
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Wrong user or password. Try again!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                Toast.makeText(FbLoginActivity.this, "Network problems...Try again!", Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 }
 
