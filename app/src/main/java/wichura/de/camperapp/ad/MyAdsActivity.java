@@ -31,7 +31,6 @@ import wichura.de.camperapp.mainactivity.RowItem;
 
 /**
  * Created by Bernd Wichura on 14.03.2016.
- *
  */
 public class MyAdsActivity extends AppCompatActivity {
 
@@ -60,9 +59,7 @@ public class MyAdsActivity extends AppCompatActivity {
         }
 
         userId = getIntent().getStringExtra("userid");
-
         rowItems = new ArrayList<RowItem>();
-
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
     }
 
@@ -131,9 +128,5 @@ public class MyAdsActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
             }
         });
-    }
-
-    public void refreshList() {
-        adapter.notifyDataSetChanged();
     }
 }

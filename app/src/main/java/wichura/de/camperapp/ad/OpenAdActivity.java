@@ -1,10 +1,11 @@
 package wichura.de.camperapp.ad;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -39,7 +40,7 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 
-public class OpenAdActivity extends Activity {
+public class OpenAdActivity extends AppCompatActivity {
 
     private static double longitute;
     private static double latitude;
@@ -66,6 +67,20 @@ public class OpenAdActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.open_ad_activity);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.open_ad_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+        }
+
         getDisplayDimensions();
 
         //Volley request queue for delete, bookmark...
@@ -95,7 +110,7 @@ public class OpenAdActivity extends Activity {
         mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
         mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
         mDescText.setText(getIntent().getStringExtra(Constants.TITLE));
-        mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE,0)));
+        mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
         mAdId = getIntent().getStringExtra("id");
 
         int ratio = Math.round((float) displayWidth / (float) displayWidth);

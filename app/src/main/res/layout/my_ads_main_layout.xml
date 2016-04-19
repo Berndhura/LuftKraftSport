@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#DDE9ED"
     android:dividerPadding="7dp"
     android:focusableInTouchMode="true"
-    android:background="#DDE9ED">
-
+    android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -30,24 +29,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/com_facebook_button_like_icon_selected"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:src="@drawable/com_facebook_button_like_icon_selected" />
 
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-
     <ListView
         android:id="@+id/my_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#DDE9ED"
+        android:dividerHeight="10.0sp"
         android:listSelector="@drawable/list_selector"
+        android:paddingBottom="20dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:dividerHeight="10.0sp"
-        android:background="#DDE9ED"/>
+        android:paddingTop="20dp" />
 
 </LinearLayout>

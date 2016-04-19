@@ -97,9 +97,7 @@ public class FbLoginActivity extends AppCompatActivity {
 
         mCallbackMgt = CallbackManager.Factory.create();
 
-
         setContentView(R.layout.fb_login_activity);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         if (toolbar != null) {
