@@ -7,7 +7,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +17,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +53,8 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
 
 /**
- * Created by ich on 28.07.2015.
+ * Created by Bernd Wichura on 28.07.2015.
+ * Camper App
  */
 public class FbLoginActivity extends AppCompatActivity {
 
@@ -67,6 +66,8 @@ public class FbLoginActivity extends AppCompatActivity {
 
     private EditText _emailText;
     private EditText _passwordText;
+
+    private LoginButton loginButton;
 
     private CallbackManager mCallbackMgt;
     private GoogleApiClient mGoogleApiClient;
@@ -126,7 +127,7 @@ public class FbLoginActivity extends AppCompatActivity {
                     }
 
                     final ProgressDialog progressDialog = new ProgressDialog(FbLoginActivity.this,
-                            R.style.AppTheme_NoActionBar);
+                            R.style.AppTheme);
                     progressDialog.setIndeterminate(true);
                     progressDialog.setMessage("Authenticating...");
                     progressDialog.show();
@@ -147,7 +148,7 @@ public class FbLoginActivity extends AppCompatActivity {
         tv.setClickable(true);
         tv.setMovementMethod(LinkMovementMethod.getInstance());
 
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton = (LoginButton) findViewById(R.id.login_button);
         if (loginButton != null) {
             loginButton.setReadPermissions("user_friends");
             loginButton.registerCallback(mCallbackMgt, mCallback);
@@ -209,6 +210,7 @@ public class FbLoginActivity extends AppCompatActivity {
             });
         }
     }
+
 
     private FacebookCallback<LoginResult> initFacebookCallback() {
         return new FacebookCallback<LoginResult>() {
@@ -353,6 +355,7 @@ public class FbLoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         if (!response.equals("wrong")) {
                             Toast.makeText(getApplicationContext(), "User in", Toast.LENGTH_SHORT).show();
+                            //TODO get userid back to mainActiv
                             mEmailUserId = response;
                         } else {
                             Toast.makeText(getApplicationContext(), "Wrong user or password. Try again!", Toast.LENGTH_SHORT).show();

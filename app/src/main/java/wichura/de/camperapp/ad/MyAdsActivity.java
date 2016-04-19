@@ -1,8 +1,9 @@
 package wichura.de.camperapp.ad;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -32,7 +33,7 @@ import wichura.de.camperapp.mainactivity.RowItem;
  * Created by Bernd Wichura on 14.03.2016.
  *
  */
-public class MyAdsActivity extends Activity {
+public class MyAdsActivity extends AppCompatActivity {
 
     private ListView listView;
     private List<RowItem> rowItems;
@@ -44,6 +45,19 @@ public class MyAdsActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_ads_main_layout);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_ads_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+        }
 
         userId = getIntent().getStringExtra("userid");
 
