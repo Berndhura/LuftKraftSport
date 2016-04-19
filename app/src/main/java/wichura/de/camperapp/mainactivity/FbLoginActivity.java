@@ -1,6 +1,7 @@
 package wichura.de.camperapp.mainactivity;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -16,9 +17,11 @@ import android.text.method.LinkMovementMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -53,6 +56,9 @@ public class FbLoginActivity extends AppCompatActivity {
     private String mFacebookPicUrl;
     private AccessToken token;
     private Profile profile;
+
+    private EditText _emailText;
+    private EditText _passwordText;
 
     private CallbackManager mCallbackMgt;
     private GoogleApiClient mGoogleApiClient;
@@ -100,13 +106,35 @@ public class FbLoginActivity extends AppCompatActivity {
         }
 
         ImageView okButton = (ImageView) findViewById(R.id.ok_button);
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                //TODO send request
-            }
-        });
+        if (okButton != null) {
+            okButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO send request
+
+                    if (!validate()) {
+                        onLoginFailed();
+                        return;
+                    }
+
+                    final ProgressDialog progressDialog = new ProgressDialog(FbLoginActivity.this,
+                            R.style.AppTheme_NoActionBar);
+                    progressDialog.setIndeterminate(true);
+                    progressDialog.setMessage("Authenticating...");
+                    progressDialog.show();
+
+                    String email = _emailText.getText().toString();
+                    String password = _passwordText.getText().toString();
+
+
+
+                }
+            });
+        }
+
+        _emailText = (EditText) findViewById(R.id.login_name);
+        _passwordText = (EditText) findViewById(R.id.password);
+
 
         TextView tv = (TextView) findViewById(R.id.register);
         tv.setText(Html.fromHtml("<a href=\"http://www.google.com\">Register</a>"));
@@ -275,6 +303,36 @@ public class FbLoginActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+
+    public void onLoginFailed() {
+        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+
+       // _loginButton.setEnabled(true);
+    }
+
+    public boolean validate() {
+        boolean valid = true;
+
+        String email = _emailText.getText().toString();
+        String password = _passwordText.getText().toString();
+
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _emailText.setError("enter a valid email address");
+            valid = false;
+        } else {
+            _emailText.setError(null);
+        }
+
+        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
+            _passwordText.setError("between 4 and 10 alphanumeric characters");
+            valid = false;
+        } else {
+            _passwordText.setError(null);
+        }
+
+        return valid;
     }
 }
 
