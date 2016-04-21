@@ -1,6 +1,7 @@
 package wichura.de.camperapp.ad;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -116,11 +118,30 @@ public class OpenAdActivity extends AppCompatActivity {
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
 
 
+        final ProgressDialog progressDialog = new ProgressDialog(OpenAdActivity.this,
+                R.style.AppTheme);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading data...");
+        progressDialog.show();
+
+
         Picasso.with(getApplicationContext())
                 .load(pictureUri)
+                .placeholder(R.drawable.empty_photo)
                 .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
                 .centerCrop()
-                .into(imgView);
+                .into(imgView,  new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onError() {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
 
         mDelButton.setOnClickListener(new View.OnClickListener() {
             @Override

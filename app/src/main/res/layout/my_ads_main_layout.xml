@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DDE9ED"
     android:dividerPadding="7dp"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
@@ -40,7 +39,6 @@
         android:id="@+id/my_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#DDE9ED"
         android:dividerHeight="10.0sp"
         android:listSelector="@drawable/list_selector"
         android:paddingBottom="20dp"
