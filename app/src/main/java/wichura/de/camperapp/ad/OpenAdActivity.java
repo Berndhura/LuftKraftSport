@@ -12,6 +12,7 @@ import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -123,7 +124,6 @@ public class OpenAdActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading data...");
         progressDialog.show();
-
 
         Picasso.with(getApplicationContext())
                 .load(pictureUri)

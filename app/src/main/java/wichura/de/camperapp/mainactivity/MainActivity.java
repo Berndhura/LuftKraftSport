@@ -86,10 +86,12 @@ public class MainActivity extends AppCompatActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+            getSupportActionBar().setDisplayUseLogoEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
 
         //facebook login
         if (AccessToken.getCurrentAccessToken() != null) {
@@ -204,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void setProfileName(String name) {
         TextView nav_user = (TextView) findViewById(R.id.username);
-        nav_user.setText(name);
+        if (nav_user != null) nav_user.setText(name);
     }
 
     private void getAdsJsonForKeyword(String url) {
@@ -282,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        final int id = item.getItemId();
+        //final int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 
@@ -320,10 +322,12 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        if (drawer != null) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -358,14 +362,14 @@ public class MainActivity extends AppCompatActivity implements
 
         } else if (id == R.id.refresh) {
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
-            drawer.closeDrawer(GravityCompat.START);
+            if (drawer != null) drawer.closeDrawer(GravityCompat.START);
             return true;
         } else if (id == R.id.bookmarks) {
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId);
-            drawer.closeDrawer(GravityCompat.START);
+            if (drawer != null) drawer.closeDrawer(GravityCompat.START);
             return true;
         }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        if (drawer != null) drawer.closeDrawer(GravityCompat.START);
+        return super.onOptionsItemSelected(item);
     }
 }
