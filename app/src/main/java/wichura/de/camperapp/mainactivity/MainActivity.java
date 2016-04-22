@@ -31,6 +31,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.flurry.android.FlurryAgent;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -53,6 +54,7 @@ import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
+
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -83,6 +85,18 @@ public class MainActivity extends AppCompatActivity implements
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
+
+        // configure Flurry
+        FlurryAgent.setLogEnabled(true);
+        FlurryAgent.setCaptureUncaughtExceptions(true);
+        FlurryAgent.setLogLevel(Log.ERROR);
+        //FlurryAgent.onError(String errorId, String message, Throwable exception)
+
+
+        // init Flurry
+        FlurryAgent.init(this, "3Q9GDM9TDX77WDGBN25S");
+
+        FlurryAgent.logEvent("Article_Read");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
