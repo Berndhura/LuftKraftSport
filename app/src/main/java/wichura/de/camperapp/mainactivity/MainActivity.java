@@ -117,10 +117,23 @@ public class MainActivity extends AppCompatActivity implements
         if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
 
         //facebook login
+        ImageView login = (ImageView) findViewById(R.id.login_button);
         if (AccessToken.getCurrentAccessToken() != null) {
+            Log.d("CONAN: ", "Facebook access token ok");
+            login.setEnabled(false);
             getFacebookUserInfo();
         } else {
-            Log.d("CONAN: ", "NOPE ");
+            Log.d("CONAN: ", "Facebook access token null ");
+            //TODO enable login button in toolbar
+
+            login.setEnabled(true);
+            login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO open login
+                    Log.d("CONAN: ", "go to login");
+                }
+            });
             getFacebookUserInfo();
         }
 
