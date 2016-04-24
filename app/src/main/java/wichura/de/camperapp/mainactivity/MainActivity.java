@@ -79,8 +79,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private GoogleApiClient mGoogleApiClient;
 
-
     CallbackManager callbackManager;
+    private ImageView profilePic;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,12 +94,8 @@ public class MainActivity extends AppCompatActivity implements
         FlurryAgent.setLogEnabled(true);
         FlurryAgent.setCaptureUncaughtExceptions(true);
         FlurryAgent.setLogLevel(Log.ERROR);
-        //FlurryAgent.onError(String errorId, String message, Throwable exception)
-
-
         // init Flurry
         FlurryAgent.init(this, "3Q9GDM9TDX77WDGBN25S");
-
         FlurryAgent.logEvent("Article_Read");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -110,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements
             getSupportActionBar().setHomeButtonEnabled(true);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -122,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements
         //facebook login
         loginBtn = (ImageView) findViewById(R.id.login_button);
         updateLoginButton();
-
 
         //google login
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -216,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void setProfilePicture(Uri uri) {
-        ImageView profilePic = (ImageView) findViewById(R.id.profile_image);
+        profilePic = (ImageView) findViewById(R.id.profile_image);
         Picasso.with(getApplicationContext()).load(uri.toString()).into(profilePic);
     }
 
@@ -330,14 +326,12 @@ public class MainActivity extends AppCompatActivity implements
         if (requestCode == REQUEST_ID_FOR_SEARCH) {
             String query = data.getStringExtra("KEYWORDS");
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
         }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null) {
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
@@ -352,9 +346,11 @@ public class MainActivity extends AppCompatActivity implements
             Log.d("CONAN: ", "Facebook access token ok");
             loginBtn.setEnabled(false);
             loginBtn.setVisibility(View.GONE);
+            isUserLogedIn = true;
             getFacebookUserInfo();
         } else {
             Log.d("CONAN: ", "Facebook access token null");
+            isUserLogedIn = false;
             loginBtn.setEnabled(true);
             loginBtn.setVisibility(View.VISIBLE);
             loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -369,15 +365,11 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-
-
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         if (id == R.id.myads) {
             Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
