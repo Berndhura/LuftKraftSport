@@ -121,17 +121,18 @@ public class MainActivity extends AppCompatActivity implements
         if (AccessToken.getCurrentAccessToken() != null) {
             Log.d("CONAN: ", "Facebook access token ok");
             login.setEnabled(false);
+            login.setVisibility(View.GONE);
             getFacebookUserInfo();
         } else {
             Log.d("CONAN: ", "Facebook access token null ");
-            //TODO enable login button in toolbar
-
             login.setEnabled(true);
+            login.setVisibility(View.VISIBLE);
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO open login
-                    Log.d("CONAN: ", "go to login");
+                    Log.d("CONAN: ", "open login page");
+                    Intent i = new Intent(getApplicationContext(), FbLoginActivity.class);
+                    startActivityForResult(i,REQUEST_ID_FOR_FACEBOOK_LOGIN);
                 }
             });
             getFacebookUserInfo();
@@ -324,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements
         }
         //back from Facebock login/logout page
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
+            getFacebookUserInfo();
             //TODO:possible null if user login is Google+
             //facebookId = data.getStringExtra(Constants.FACEBOOK_ID);
             //String fbToken = data.getStringExtra(Constants.FACEBOOK_ACCESS_TOKEN);

@@ -11,6 +11,7 @@ import wichura.de.camperapp.R;
 
 /**
  * Created by Bernd Wichura on 05.04.2016.
+ *
  */
 
 public class SearchActivity  extends Activity {

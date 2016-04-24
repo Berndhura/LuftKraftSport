@@ -260,6 +260,7 @@ public class FbLoginActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -275,6 +276,7 @@ public class FbLoginActivity extends AppCompatActivity {
         } else {
             //failed to connect
         }
+        finish();
     }
 
     private void handleSignInResult(GoogleSignInResult result) {

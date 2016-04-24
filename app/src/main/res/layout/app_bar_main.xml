@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/applogo" />
+                android:src="@drawable/common_full_open_on_phone" />
 
         </RelativeLayout>
 
