@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private String facebookId;
     private String userName;
+    private Boolean isUserLogedIn;
+
+    private ImageView loginBtn;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -117,26 +120,9 @@ public class MainActivity extends AppCompatActivity implements
         if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
 
         //facebook login
-        ImageView login = (ImageView) findViewById(R.id.login_button);
-        if (AccessToken.getCurrentAccessToken() != null) {
-            Log.d("CONAN: ", "Facebook access token ok");
-            login.setEnabled(false);
-            login.setVisibility(View.GONE);
-            getFacebookUserInfo();
-        } else {
-            Log.d("CONAN: ", "Facebook access token null ");
-            login.setEnabled(true);
-            login.setVisibility(View.VISIBLE);
-            login.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("CONAN: ", "open login page");
-                    Intent i = new Intent(getApplicationContext(), FbLoginActivity.class);
-                    startActivityForResult(i,REQUEST_ID_FOR_FACEBOOK_LOGIN);
-                }
-            });
-            getFacebookUserInfo();
-        }
+        loginBtn = (ImageView) findViewById(R.id.login_button);
+        updateLoginButton();
+
 
         //google login
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -202,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements
 
                         //user name
                         userName = json.getString("name");
+                        Log.d("CONAN: ", "user name facebook: " + json.getString("name"));
                         setProfileName(userName);
 
                         //user profile picture
@@ -209,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements
                         if (profile != null) {
                             Uri uri = profile.getProfilePictureUri(200, 200);
                             setProfilePicture(uri);
+                            isUserLogedIn = true;
                         } else {
                             //TODO: und nu
                         }
@@ -323,17 +311,16 @@ public class MainActivity extends AppCompatActivity implements
 
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
         }
-        //back from Facebock login/logout page
+        //back from Facebook login/logout page
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
             getFacebookUserInfo();
+            updateLoginButton();
             //TODO:possible null if user login is Google+
             //facebookId = data.getStringExtra(Constants.FACEBOOK_ID);
             //String fbToken = data.getStringExtra(Constants.FACEBOOK_ACCESS_TOKEN);
             Log.d("CONAN: ", "Return from Facebook login, userid: " + facebookId);
-
             //load new Options Menu cause of user is logged in now
             invalidateOptionsMenu();
-            //set Profile pic with URL:
         }
 
         if (requestCode == REQUEST_ID_FOR_OPEN_AD) {
@@ -359,6 +346,30 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
     }
+
+    private void updateLoginButton() {
+        if (AccessToken.getCurrentAccessToken() != null) {
+            Log.d("CONAN: ", "Facebook access token ok");
+            loginBtn.setEnabled(false);
+            loginBtn.setVisibility(View.GONE);
+            getFacebookUserInfo();
+        } else {
+            Log.d("CONAN: ", "Facebook access token null");
+            loginBtn.setEnabled(true);
+            loginBtn.setVisibility(View.VISIBLE);
+            loginBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("CONAN: ", "open login page");
+                    Intent i = new Intent(getApplicationContext(), FbLoginActivity.class);
+                    startActivityForResult(i, REQUEST_ID_FOR_FACEBOOK_LOGIN);
+                }
+            });
+            getFacebookUserInfo();
+        }
+    }
+
+
 
 
     @SuppressWarnings("StatementWithEmptyBody")
