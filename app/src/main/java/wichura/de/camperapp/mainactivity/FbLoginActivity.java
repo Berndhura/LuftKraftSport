@@ -357,6 +357,11 @@ public class FbLoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "User in", Toast.LENGTH_SHORT).show();
                             //TODO get userid back to mainActiv
                             mEmailUserId = response;
+                            Intent data = new Intent();
+                            data.putExtra(Constants.EMAIL_USR_ID, mEmailUserId);
+                            data.putExtra(Constants.USR_TYPE, Constants.EMAIL_USER);
+                            setResult(RESULT_OK, data);
+                            finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "Wrong user or password. Try again!", Toast.LENGTH_SHORT).show();
                         }

@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements
     CallbackManager callbackManager;
     private ImageView profilePic;
     private DrawerLayout drawer;
+    private String userIDForEmailUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,6 +310,13 @@ public class MainActivity extends AppCompatActivity implements
         }
         //back from Facebook login/logout page
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
+
+            if (data.getStringExtra(Constants.USR_TYPE).equals(Constants.EMAIL_USER)) {
+                userIDForEmailUser = data.getStringExtra(Constants.EMAIL_USR_ID);
+                return;
+            }
+
+            //TODO: add return type for facebook login... google+
             getFacebookUserInfo();
             updateLoginButton();
             //TODO:possible null if user login is Google+
@@ -378,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements
         }
         if (id == R.id.new_ad) {
             final Intent intent = new Intent(this, NewAdActivity.class);
+            //TODO: get type of user: facebook, google+ or email, set id...
             intent.putExtra("id", facebookId);
             startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
             return true;

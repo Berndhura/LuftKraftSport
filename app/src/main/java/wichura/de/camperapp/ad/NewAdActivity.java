@@ -72,7 +72,7 @@ public class NewAdActivity extends Activity {
         mPrice = (EditText) findViewById(R.id.preis);
 
         userId = getIntent().getStringExtra("id");
-        //TODO in db schreiben !!!!
+        //TODO: user more constants...facebook, google+ or emailuser
 
 
         final Button submitButton = (Button) findViewById(R.id.uploadButton);
