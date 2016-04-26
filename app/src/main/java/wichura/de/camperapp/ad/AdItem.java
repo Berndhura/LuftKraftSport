@@ -8,7 +8,7 @@ public class AdItem {
 
     //todo constants
     public final static String TITLE = "title";
-    public final static String APID = "id";
+    public final static String ADID = "id";
     public final static String FILENAME = "";
     public final static String DESC = "description";
     public final static String KEYWORDS = "keywords";
@@ -45,7 +45,7 @@ public class AdItem {
     public AdItem(final Intent intent) {
 
         mTitle = intent.getStringExtra(AdItem.TITLE);
-        mApId = intent.getStringExtra(AdItem.APID);
+        mApId = intent.getStringExtra(AdItem.ADID);
         mDesc = intent.getStringExtra(AdItem.DESC);
         mFilename = intent.getStringExtra(AdItem.FILENAME);
         mKeywords = intent.getStringExtra(AdItem.KEYWORDS);
@@ -94,7 +94,7 @@ public class AdItem {
                                      final String phone, final String price, final long date) {
 
         intent.putExtra(AdItem.TITLE, title);
-        intent.putExtra(AdItem.APID, apid);
+        intent.putExtra(AdItem.ADID, apid);
         intent.putExtra(AdItem.DESC, desc);
         intent.putExtra(AdItem.KEYWORDS, keyw);
         intent.putExtra(AdItem.FILENAME, fileURI);
