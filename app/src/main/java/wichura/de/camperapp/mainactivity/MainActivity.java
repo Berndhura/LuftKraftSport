@@ -214,8 +214,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void setProfilePicture(Uri uri) {
-        profilePic = (ImageView) findViewById(R.id.profile_image);
-        Picasso.with(getApplicationContext()).load(uri.toString()).into(profilePic);
+        if (uri != null) {
+            profilePic = (ImageView) findViewById(R.id.profile_image);
+            Picasso.with(getApplicationContext()).load(uri.toString()).into(profilePic);
+        } else {
+            profilePic.setImageResource(R.drawable.applogo);
+        }
+
     }
 
     private void setProfileName(String name) {
@@ -316,6 +321,7 @@ public class MainActivity extends AppCompatActivity implements
                 userIdForEmailUser = data.getStringExtra(Constants.EMAIL_USR_ID);
                 userNameForEmailUser = data.getStringExtra(Constants.USER_NAME);
                 setProfileName(userNameForEmailUser);
+                setProfilePicture(null);
                 return;
             }
 
