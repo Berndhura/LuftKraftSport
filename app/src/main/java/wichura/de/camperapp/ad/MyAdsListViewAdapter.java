@@ -97,7 +97,6 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
             @Override
             public void onClick(View v) {
                 //get ad id and send delete request
-                // String adId = getIntent().getStringExtra("id");
                 String adId = rowItem.getAdId();
                 deleteAdRequest(adId, v);
             }

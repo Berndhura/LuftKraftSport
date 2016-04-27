@@ -9,7 +9,7 @@ public class Constants {
     public static final String FACEBOOK_PROFILE_PIC_URL = "facebook_profile_pic_url";
     public static final String FACEBOOK_ID = "facebook_id";
     public static final String USER_ID = "user_id";
-    public static final String FACEBOOK_ACCESS_TOKEN = "facebook_access_token";
+   // public static final String FACEBOOK_ACCESS_TOKEN = "facebook_access_token";
 
 
     //Intent
@@ -24,5 +24,4 @@ public class Constants {
     public static final String EMAIL_USR_ID = "email_user_id";
     public static final String USR_TYPE = "user_type";
     public static final String EMAIL_USER = "email_user";
-    //public static final String USER_ID = "userid";
 }
