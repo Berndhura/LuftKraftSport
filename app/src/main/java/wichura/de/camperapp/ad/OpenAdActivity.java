@@ -12,7 +12,6 @@ import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -114,7 +113,7 @@ public class OpenAdActivity extends AppCompatActivity {
         mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
         mDescText.setText(getIntent().getStringExtra(Constants.TITLE));
         mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
-        mAdId = getIntent().getStringExtra("id");
+        mAdId = getIntent().getStringExtra(Constants.AD_ID);
 
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
 
@@ -147,8 +146,8 @@ public class OpenAdActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //get ad id and send delete request
-                String adId = getIntent().getStringExtra(Constants.ID);
-                Log.i("CONAN", "ApId: " + mAdId);
+                String adId = getIntent().getStringExtra(Constants.AD_ID);
+                Log.i("CONAN", "AdId: " + mAdId);
                 deleteAdRequest(adId);
             }
         });
@@ -157,7 +156,7 @@ public class OpenAdActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO : user Constants
-                String adId = getIntent().getStringExtra(Constants.ID);
+                String adId = getIntent().getStringExtra(Constants.AD_ID);
                 String userId = getIntent().getStringExtra(Constants.USER_ID);
                 if (isBookmarked) {
                     delBookmark(adId, userId);

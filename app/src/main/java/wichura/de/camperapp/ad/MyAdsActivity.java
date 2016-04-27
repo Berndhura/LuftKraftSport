@@ -118,7 +118,7 @@ public class MyAdsActivity extends AppCompatActivity {
                 final Intent intent = new Intent(getApplicationContext(),
                         OpenAdActivity.class);
                 intent.putExtra(Constants.URI, rowItem.getUrl());
-                intent.putExtra(Constants.ID, rowItem.getAdId());
+                intent.putExtra(Constants.AD_ID, rowItem.getAdId());
                 intent.putExtra(Constants.TITLE, rowItem.getTitle());
                 intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
                 intent.putExtra(Constants.LOCATION, rowItem.getLocation());
