@@ -356,10 +356,12 @@ public class FbLoginActivity extends AppCompatActivity {
                         if (!response.equals("wrong")) {
                             Toast.makeText(getApplicationContext(), "User in", Toast.LENGTH_SHORT).show();
                             //TODO get userid back to mainActiv
-                            mEmailUserId = response;
+                            String[] userInfos = response.split(",");
+                            mEmailUserId = userInfos[0];
                             Intent data = new Intent();
                             data.putExtra(Constants.EMAIL_USR_ID, mEmailUserId);
-                            data.putExtra(Constants.USR_TYPE, Constants.EMAIL_USER);
+                            data.putExtra(Constants.USER_NAME, userInfos[1]);
+                            data.putExtra(Constants.USER_TYPE, Constants.EMAIL_USER);
                             setResult(RESULT_OK, data);
                             finish();
                         } else {

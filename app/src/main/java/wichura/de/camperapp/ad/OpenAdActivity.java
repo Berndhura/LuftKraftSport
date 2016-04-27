@@ -137,8 +137,9 @@ public class OpenAdActivity extends AppCompatActivity {
 
                     @Override
                     public void onError() {
-                        // TODO Auto-generated method stub
-
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "No network connection!", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 });
 

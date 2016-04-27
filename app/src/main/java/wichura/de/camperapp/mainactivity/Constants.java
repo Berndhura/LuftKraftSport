@@ -22,6 +22,7 @@ public class Constants {
     public static final String PRICE = "price";
     public static final String DATE = "date";
     public static final String EMAIL_USR_ID = "email_user_id";
-    public static final String USR_TYPE = "user_type";
+    public static final String USER_TYPE = "user_type";
     public static final String EMAIL_USER = "email_user";
+    public static final String USER_NAME = "user_name";
 }

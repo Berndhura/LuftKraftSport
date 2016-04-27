@@ -82,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements
     CallbackManager callbackManager;
     private ImageView profilePic;
     private DrawerLayout drawer;
-    private String userIDForEmailUser;
+    private String userIdForEmailUser;
+    private String userNameForEmailUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,8 +312,10 @@ public class MainActivity extends AppCompatActivity implements
         //back from Facebook login/logout page
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
 
-            if (data.getStringExtra(Constants.USR_TYPE).equals(Constants.EMAIL_USER)) {
-                userIDForEmailUser = data.getStringExtra(Constants.EMAIL_USR_ID);
+            if (data.getStringExtra(Constants.USER_TYPE).equals(Constants.EMAIL_USER)) {
+                userIdForEmailUser = data.getStringExtra(Constants.EMAIL_USR_ID);
+                userNameForEmailUser = data.getStringExtra(Constants.USER_NAME);
+                setProfileName(userNameForEmailUser);
                 return;
             }
 
