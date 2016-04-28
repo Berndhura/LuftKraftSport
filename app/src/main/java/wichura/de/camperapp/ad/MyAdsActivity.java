@@ -59,7 +59,7 @@ public class MyAdsActivity extends AppCompatActivity {
             });
         }
 
-        userId = getIntent().getStringExtra("userid");
+        userId = getIntent().getStringExtra(Constants.USER_ID);
         rowItems = new ArrayList<RowItem>();
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
     }

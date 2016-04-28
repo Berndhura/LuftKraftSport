@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements
 
         if (id == R.id.myads) {
             Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
-            intent.putExtra("userid", facebookId);
+            intent.putExtra(Constants.USER_ID, facebookId);
             startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
         }
         if (id == R.id.new_ad) {
