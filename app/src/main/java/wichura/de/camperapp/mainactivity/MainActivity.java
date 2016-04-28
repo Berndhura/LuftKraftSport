@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout drawer;
     private String userIdForEmailUser;
     private String userNameForEmailUser;
+    private String userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -317,22 +318,24 @@ public class MainActivity extends AppCompatActivity implements
         //back from Facebook login/logout page
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
 
-            if (data.getStringExtra(Constants.USER_TYPE).equals(Constants.EMAIL_USER)) {
-                userIdForEmailUser = data.getStringExtra(Constants.EMAIL_USR_ID);
-                userNameForEmailUser = data.getStringExtra(Constants.USER_NAME);
-                setProfileName(userNameForEmailUser);
-                setProfilePicture(null);
-                return;
-            }
+            if (data != null) { //just back from login page without data
+                if (data.getStringExtra(Constants.USER_TYPE).equals(Constants.EMAIL_USER)) {
+                    userIdForEmailUser = data.getStringExtra(Constants.EMAIL_USR_ID);
+                    userNameForEmailUser = data.getStringExtra(Constants.USER_NAME);
+                    userType = Constants.EMAIL_USER;
+                    //TODO set pic name in drawer
+                    //setProfileName(userNameForEmailUser);
+                    //setProfilePicture(null);
+                    getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                }
 
-            //TODO: add return type for facebook login... google+
-            getFacebookUserInfo();
+                if (data.getStringExtra(Constants.USER_TYPE).equals(Constants.FACEBOOK_USER)) {
+                    userType = Constants.FACEBOOK_USER;
+                    getFacebookUserInfo();
+                }
+            }
             updateLoginButton();
-            //TODO:possible null if user login is Google+
-            //facebookId = data.getStringExtra(Constants.FACEBOOK_ID);
-            //String fbToken = data.getStringExtra(Constants.FACEBOOK_ACCESS_TOKEN);
-            Log.d("CONAN: ", "Return from Facebook login, userid: " + facebookId);
-            //load new Options Menu cause of user is logged in now
+            Log.d("CONAN: ", "Return from login, userid: " + facebookId);
             invalidateOptionsMenu();
         }
 
@@ -390,13 +393,22 @@ public class MainActivity extends AppCompatActivity implements
 
         if (id == R.id.myads) {
             Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
-            intent.putExtra(Constants.USER_ID, facebookId);
+            if (userType.equals(Constants.EMAIL_USER)) {
+                intent.putExtra(Constants.USER_ID, userIdForEmailUser);
+            }
+            if (userType.equals(Constants.FACEBOOK_USER)) {
+                intent.putExtra(Constants.USER_ID, facebookId);
+            }
             startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
         }
         if (id == R.id.new_ad) {
             final Intent intent = new Intent(this, NewAdActivity.class);
-            //TODO: get type of user: facebook, google+ or email, set id...
-            intent.putExtra("id", facebookId);
+            if (userType.equals(Constants.EMAIL_USER)) {
+                intent.putExtra(Constants.USER_ID, userIdForEmailUser);
+            }
+            if (userType.equals(Constants.FACEBOOK_USER)) {
+                intent.putExtra(Constants.USER_ID, facebookId);
+            }
             startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
             return true;
 

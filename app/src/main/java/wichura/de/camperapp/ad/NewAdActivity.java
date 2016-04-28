@@ -31,6 +31,7 @@ import cz.msebera.android.httpclient.Header;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.bitmap.BitmapHelper;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.mainactivity.Constants;
 
 
 public class NewAdActivity extends Activity {
@@ -71,8 +72,7 @@ public class NewAdActivity extends Activity {
         mImgOne = (ImageView) findViewById(R.id.imageButton);
         mPrice = (EditText) findViewById(R.id.preis);
 
-        userId = getIntent().getStringExtra("id");
-        //TODO: user more constants...facebook, google+ or emailuser
+        userId = getIntent().getStringExtra(Constants.USER_ID);
 
 
         final Button submitButton = (Button) findViewById(R.id.uploadButton);
