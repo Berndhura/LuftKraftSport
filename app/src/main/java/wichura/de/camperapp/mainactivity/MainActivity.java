@@ -32,12 +32,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.flurry.android.FlurryAgent;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
@@ -57,9 +52,7 @@ import wichura.de.camperapp.http.Urls;
 
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        NavigationView.OnNavigationItemSelectedListener {
 
     private ListView listView;
     private List<RowItem> rowItems;
@@ -89,18 +82,16 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //get Facebook access token
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        //load main layout
         setContentView(R.layout.activity_main);
 
-        // configure Flurry
-        FlurryAgent.setLogEnabled(true);
-        FlurryAgent.setCaptureUncaughtExceptions(true);
-        FlurryAgent.setLogLevel(Log.ERROR);
-        // init Flurry
-        FlurryAgent.init(this, "3Q9GDM9TDX77WDGBN25S");
-        FlurryAgent.logEvent("Article_Read");
+        //configure Flurry for analysis
+        configureFlurry();
 
+        //load toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -110,67 +101,29 @@ public class MainActivity extends AppCompatActivity implements
             getSupportActionBar().setHomeButtonEnabled(true);
         }
 
+        //init drawer
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        //init navigationbar
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
 
-        //facebook login
+        //
         loginBtn = (ImageView) findViewById(R.id.login_button);
         updateLoginButton();
-
-        //google login
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestProfile()
-                .requestId()
-                .requestScopes(new Scope(Scopes.PLUS_ME))
-                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                //TODO: this does not work....
-                .enableAutoManage(this, null /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-//        Intent startPageIntent = new Intent(getApplicationContext(), StartActivity.class);
-//        startActivityForResult(startPageIntent,45);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null)
-            mGoogleApiClient.connect();
+    private void configureFlurry() {
+        FlurryAgent.setLogEnabled(true);
+        FlurryAgent.setCaptureUncaughtExceptions(true);
+        FlurryAgent.setLogLevel(Log.ERROR);
+        FlurryAgent.init(this, "3Q9GDM9TDX77WDGBN25S");
+        FlurryAgent.logEvent("mainactivity started");
     }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-//        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-//                mGoogleApiClient);
-//        if (mLastLocation != null) {
-//            mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-//            mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
-//        }
-
-        Log.d("CONAN: ", "google+ connected... ");
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
 
     private void getFacebookUserInfo() {
 
@@ -184,12 +137,10 @@ public class MainActivity extends AppCompatActivity implements
                         //user id
                         Log.d("CONAN: ", "user id facebook: " + json.getString("id"));
                         facebookId = json.getString("id");
-
-                        //user name
                         userName = json.getString("name");
+                        userType = Constants.FACEBOOK_USER;
                         Log.d("CONAN: ", "user name facebook: " + json.getString("name"));
                         setProfileName(userName);
-
                         //user profile picture
                         Profile profile = Profile.getCurrentProfile();
                         if (profile != null) {
@@ -221,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             profilePic.setImageResource(R.drawable.applogo);
         }
-
     }
 
     private void setProfileName(String name) {
@@ -231,25 +181,21 @@ public class MainActivity extends AppCompatActivity implements
 
     private void getAdsJsonForKeyword(String url) {
         RequestQueue queue = Volley.newRequestQueue(this);
-
         JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Context context = getApplicationContext();
                 try {
-                    final Gson gson = new GsonBuilder()
-                            .excludeFieldsWithoutExposeAnnotation().create();
-
+                    final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
                     final JSONArray listOfAllAds = new JSONArray(response.toString());
                     rowItems = new ArrayList<RowItem>();
                     for (int i = 0; i < listOfAllAds.length(); i++) {
-                        // get the titel information JSON object
+                        // get the title information JSON object
                         final String title = listOfAllAds.getJSONObject(i)
                                 .toString();
                         //use RowItem class to get from GSON
                         final RowItem rowItem = gson.fromJson(title, RowItem.class);
-
                         rowItems.add(rowItem);
                     }
                 } catch (final JSONException e) {
