@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -178,11 +179,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void setProfilePicture(Uri uri) {
+        ImageView proPic = (ImageView) findViewById(R.id.profile_image);
         if (uri != null) {
-            profilePic = (ImageView) findViewById(R.id.profile_image);
-            Picasso.with(getApplicationContext()).load(uri.toString()).into(profilePic);
+            Picasso.with(getApplicationContext()).load(uri.toString()).into(proPic);
         } else {
-            profilePic.setImageResource(R.drawable.applogo);
+            proPic.setImageResource(R.drawable.applogo);
         }
     }
 
@@ -283,9 +284,9 @@ public class MainActivity extends AppCompatActivity implements
                     userType = Constants.EMAIL_USER;
                     Log.d("CONAN: ", "email user name: " + userNameForEmailUser);
                     Log.d("CONAN: ", "email user id: " + userIdForEmailUser);
-                    //TODO set pic name in drawer
-                    //setProfileName(userNameForEmailUser);
-                    //setProfilePicture(null);
+
+                    //update picture and name in drawer
+                    invalidateOptionsMenu();
 
                     //save login data into shared preferences
                     SharedPreferences settings = getSharedPreferences("UserInfo", 0);
@@ -307,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements
             }
             updateLoginButton();
             Log.d("CONAN: ", "Return from login, userid: " + facebookId);
-            invalidateOptionsMenu();
+           // invalidateOptionsMenu();
         }
 
         if (requestCode == REQUEST_ID_FOR_OPEN_AD) {
@@ -319,6 +320,14 @@ public class MainActivity extends AppCompatActivity implements
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
             drawer.closeDrawer(GravityCompat.START);
         }
+    }
+    @Override
+    public boolean  onCreateOptionsMenu(Menu menu) {
+       //TODO works only for email user now
+        Log.d("CONAN: ", "user name, id: " + userNameForEmailUser + ", "+ userIdForEmailUser);
+        setProfileName(userNameForEmailUser);
+        setProfilePicture(null);
+        return true;
     }
 
     @Override
