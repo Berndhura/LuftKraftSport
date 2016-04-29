@@ -2,6 +2,7 @@ package wichura.de.camperapp.mainactivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -32,7 +33,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.flurry.android.FlurryAgent;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
@@ -70,14 +70,12 @@ public class MainActivity extends AppCompatActivity implements
 
     private ImageView loginBtn;
 
-    private GoogleApiClient mGoogleApiClient;
-
     CallbackManager callbackManager;
     private ImageView profilePic;
     private DrawerLayout drawer;
     private String userIdForEmailUser;
     private String userNameForEmailUser;
-    private String userType;
+    private String userType="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +112,21 @@ public class MainActivity extends AppCompatActivity implements
 
         //
         loginBtn = (ImageView) findViewById(R.id.login_button);
+
+        updateLoginStatus();
         updateLoginButton();
+        getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+    }
+
+    private void updateLoginStatus() {
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        userNameForEmailUser = settings.getString(Constants.USER_NAME, "");
+        userIdForEmailUser = settings.getString(Constants.USER_ID, "");
+        userType = settings.getString(Constants.USER_TYPE, "");
+        isUserLogedIn = true;
+        //setProfilePicture(null);
+        //setProfileName(userNameForEmailUser);
+        Log.d("CONAN: ", "user name, id: " + userNameForEmailUser + ", "+ userIdForEmailUser);
     }
 
     private void configureFlurry() {
@@ -189,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements
                 try {
                     final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
                     final JSONArray listOfAllAds = new JSONArray(response.toString());
-                    rowItems = new ArrayList<RowItem>();
+                    rowItems = new ArrayList<>();
                     for (int i = 0; i < listOfAllAds.length(); i++) {
                         // get the title information JSON object
                         final String title = listOfAllAds.getJSONObject(i)
@@ -269,9 +281,22 @@ public class MainActivity extends AppCompatActivity implements
                     userIdForEmailUser = data.getStringExtra(Constants.EMAIL_USR_ID);
                     userNameForEmailUser = data.getStringExtra(Constants.USER_NAME);
                     userType = Constants.EMAIL_USER;
+                    Log.d("CONAN: ", "email user name: " + userNameForEmailUser);
+                    Log.d("CONAN: ", "email user id: " + userIdForEmailUser);
                     //TODO set pic name in drawer
                     //setProfileName(userNameForEmailUser);
                     //setProfilePicture(null);
+
+                    //save login data into shared preferences
+                    SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(Constants.USER_NAME, userNameForEmailUser);
+                    editor.putString(Constants.USER_ID, userIdForEmailUser);
+                    editor.putString(Constants.USER_TYPE, Constants.EMAIL_USER);
+                    editor.apply();
+                    isUserLogedIn = true;
+
+                    //updateloginButton()
                     getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 }
 
@@ -341,11 +366,14 @@ public class MainActivity extends AppCompatActivity implements
             Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
             if (userType.equals(Constants.EMAIL_USER)) {
                 intent.putExtra(Constants.USER_ID, userIdForEmailUser);
-            }
-            if (userType.equals(Constants.FACEBOOK_USER)) {
+                startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
+            } else if (userType.equals(Constants.FACEBOOK_USER)) {
                 intent.putExtra(Constants.USER_ID, facebookId);
+                startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
+            } else {
+                Log.d("CONAN: ", "no login data");
+                Toast.makeText(getApplicationContext(),"Log in please...",Toast.LENGTH_LONG).show();
             }
-            startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
         }
         if (id == R.id.new_ad) {
             final Intent intent = new Intent(this, NewAdActivity.class);
