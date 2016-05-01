@@ -3,6 +3,7 @@ package wichura.de.camperapp.ad;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -115,6 +116,8 @@ public class OpenAdActivity extends AppCompatActivity {
         mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
         mAdId = getIntent().getStringExtra(Constants.AD_ID);
 
+        sendRequestForViewCount(mAdId);
+
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
 
 
@@ -176,6 +179,22 @@ public class OpenAdActivity extends AppCompatActivity {
         //now get Lat and Lng  from  getLatLong()
         // this:  http://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
 
+    }
+
+    private void sendRequestForViewCount(String mAdId) {
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        String url = Urls.MAIN_SERVER_URL + Urls.COUNT_VIEW + "?adId=" + mAdId;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //increase view count
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {}
+        });
+        requestQueue.add(stringRequest);
     }
 
     private void bookmarkAd(String adId, String userId) {
