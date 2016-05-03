@@ -60,7 +60,7 @@ public class MyAdsActivity extends AppCompatActivity {
         }
 
         userId = getIntent().getStringExtra(Constants.USER_ID);
-        rowItems = new ArrayList<RowItem>();
+        rowItems = new ArrayList<>();
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
     }
 
@@ -125,6 +125,7 @@ public class MyAdsActivity extends AppCompatActivity {
                 intent.putExtra(Constants.PHONE, rowItem.getPhone());
                 intent.putExtra(Constants.PRICE, rowItem.getPrice());
                 intent.putExtra(Constants.DATE, rowItem.getDate());
+                intent.putExtra(Constants.VIEWS, rowItem.getViews());
                 intent.putExtra("userid", rowItem.getUserid());
                 startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
             }

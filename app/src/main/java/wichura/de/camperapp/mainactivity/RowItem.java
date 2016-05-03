@@ -24,6 +24,8 @@ public class RowItem {
     private String location;
     @Expose
     private String userid;
+    @Expose
+    private String views;
 
     public RowItem(final int imageId,
                    final String title,
@@ -35,7 +37,8 @@ public class RowItem {
                    final long date,
                    final String price,
                    final String location,
-                   final String userid) {
+                   final String userid,
+                   final String views) {
         this.imageId = imageId;
         this.title = title;
         this.id = id;
@@ -47,6 +50,11 @@ public class RowItem {
         this.price = price;
         this.location = location;
         this.userid = userid;
+        this.views = views;
+    }
+
+    public String getViews() {
+        return views;
     }
 
     public String getUserid() {

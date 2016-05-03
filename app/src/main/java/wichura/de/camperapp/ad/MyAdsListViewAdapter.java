@@ -52,6 +52,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         TextView txtPrice;
         TextView txtLocation;
         TextView txtDate;
+        TextView txtViews;
         ImageView deleteButton;
     }
 
@@ -71,6 +72,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
             holder.deleteButton = (ImageView) convertView.findViewById(R.id.my_ad_delete);
             holder.txtPrice = (TextView) convertView.findViewById(R.id.my_price);
             holder.txtDate = (TextView) convertView.findViewById(R.id.my_date);
+            holder.txtViews = (TextView) convertView.findViewById(R.id.my_views);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -92,6 +94,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtPrice.setText(rowItem.getPrice());
         holder.txtLocation.setText("Melbourne");
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
+        holder.txtViews.setText(rowItem.getViews());
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
