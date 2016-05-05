@@ -81,6 +81,14 @@
                     android:textColor="#3d87a0"
                     android:layout_weight="0.5"/>
 
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="#3d87a0"
+                    android:src="@drawable/vieweye"/>
+
+
                 <TextView
                     android:id="@+id/my_views"
                     android:layout_width="match_parent"

@@ -112,7 +112,7 @@ public class OpenAdActivity extends AppCompatActivity {
         pictureUri = getIntent().getStringExtra(Constants.URI);
         mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
         mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
-        mDescText.setText(getIntent().getStringExtra(Constants.TITLE));
+        mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
         mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
         mAdId = getIntent().getStringExtra(Constants.AD_ID);
 

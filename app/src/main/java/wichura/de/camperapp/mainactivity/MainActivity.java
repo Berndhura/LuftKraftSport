@@ -114,9 +114,14 @@ public class MainActivity extends AppCompatActivity implements
         //
         loginBtn = (ImageView) findViewById(R.id.login_button);
 
+//        Intent i = new Intent(getApplicationContext(),StartActivity.class);
+//        startActivityForResult(i, 66);
+
         updateLoginStatus();
         updateLoginButton();
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+
+
     }
 
     private void updateLoginStatus() {
