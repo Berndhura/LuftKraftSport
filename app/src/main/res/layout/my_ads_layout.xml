@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textColor="#3d87a0"
-                    android:src="@drawable/vieweye"/>
+                    android:src="@drawable/eye"/>
 
 
                 <TextView

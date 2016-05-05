@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center_horizontal"
@@ -41,8 +40,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="0.33"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/empty_photo" />
+                    android:scaleType="centerInside"
+                    android:src="@drawable/empty_photo"
+                    android:padding="0sp" />
 
                 <ImageButton
                     android:id="@+id/imageButton2"
@@ -52,7 +52,8 @@
                     android:layout_weight="0.33"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/empty_photo" />
+                    android:src="@drawable/empty_photo"
+                    android:padding="0sp" />
 
                 <ImageButton
                     android:id="@+id/imageButton3"
@@ -62,7 +63,8 @@
                     android:layout_weight="0.33"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/empty_photo" />
+                    android:src="@drawable/empty_photo"
+                    android:padding="0sp" />
 
             </LinearLayout>
 

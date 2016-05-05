@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,7 +32,6 @@ import wichura.de.camperapp.mainactivity.RowItem;
 
 /**
  * Created by Bernd Wichura on 14.03.2016.
- *
  */
 public class MyAdsActivity extends AppCompatActivity {
 
@@ -62,6 +62,18 @@ public class MyAdsActivity extends AppCompatActivity {
         userId = getIntent().getStringExtra(Constants.USER_ID);
         rowItems = new ArrayList<>();
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
+
+        ImageView newButton = (ImageView) findViewById(R.id.new_button);
+        if (newButton != null) {
+            newButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Intent intent = new Intent(getApplicationContext(), NewAdActivity.class);
+                    //TODO userid and return code !!!
+                    startActivityForResult(intent, 13);
+                }
+            });
+        }
     }
 
     private void getAdsJsonForKeyword(String url) {

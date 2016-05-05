@@ -24,12 +24,12 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <ImageView
-                android:id="@+id/ok_button"
+                android:id="@+id/new_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/com_facebook_button_like_icon_selected" />
+                android:src="@drawable/plus" />
 
         </RelativeLayout>
 

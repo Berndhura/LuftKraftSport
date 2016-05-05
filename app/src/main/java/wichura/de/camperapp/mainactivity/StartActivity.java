@@ -9,6 +9,7 @@ import wichura.de.camperapp.R;
 
 /**
  * Created by Bernd Wichura on 31.03.2016.
+ *
  */
 public class StartActivity  extends Activity{
 
