@@ -322,9 +322,11 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         if (requestCode == REQUEST_ID_FOR_SEARCH) {
-            String query = data.getStringExtra("KEYWORDS");
-            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
-            drawer.closeDrawer(GravityCompat.START);
+            if (data != null) {
+                String query = data.getStringExtra("KEYWORDS");
+                getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
+                drawer.closeDrawer(GravityCompat.START);
+            }
         }
     }
     @Override
