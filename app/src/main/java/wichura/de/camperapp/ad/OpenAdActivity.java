@@ -146,15 +146,17 @@ public class OpenAdActivity extends AppCompatActivity {
                     }
                 });
 
-        mDelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //get ad id and send delete request
-                String adId = getIntent().getStringExtra(Constants.AD_ID);
-                Log.i("CONAN", "AdId: " + mAdId);
-                deleteAdRequest(adId);
-            }
-        });
+        if (isOwnAd()) {
+            mDelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //get ad id and send delete request
+                    String adId = getIntent().getStringExtra(Constants.AD_ID);
+                    Log.i("CONAN", "AdId: " + mAdId);
+                    deleteAdRequest(adId);
+                }
+            });
+        }
 
         mBookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +181,10 @@ public class OpenAdActivity extends AppCompatActivity {
         //now get Lat and Lng  from  getLatLong()
         // this:  http://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
 
+    }
+
+    private boolean isOwnAd() {
+        return getIntent().getStringExtra(Constants.USER_ID_FROM_AD).equals(getIntent().getStringExtra(Constants.USER_ID));
     }
 
     private void sendRequestForViewCount(String mAdId) {

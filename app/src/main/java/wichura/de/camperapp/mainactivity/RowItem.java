@@ -23,7 +23,7 @@ public class RowItem {
     @Expose
     private String location;
     @Expose
-    private String userid;
+    private String userId;
     @Expose
     private String views;
 
@@ -49,7 +49,7 @@ public class RowItem {
         this.date = date;
         this.price = price;
         this.location = location;
-        this.userid = userid;
+        this.userId = userid;
         this.views = views;
     }
 
@@ -57,12 +57,12 @@ public class RowItem {
         return views;
     }
 
-    public String getUserid() {
-        return userid;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getAdId() {return id; }

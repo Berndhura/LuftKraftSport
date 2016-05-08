@@ -138,7 +138,7 @@ public class MyAdsActivity extends AppCompatActivity {
                 intent.putExtra(Constants.PRICE, rowItem.getPrice());
                 intent.putExtra(Constants.DATE, rowItem.getDate());
                 intent.putExtra(Constants.VIEWS, rowItem.getViews());
-                intent.putExtra("userid", rowItem.getUserid());
+                intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
                 startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
             }
         });
