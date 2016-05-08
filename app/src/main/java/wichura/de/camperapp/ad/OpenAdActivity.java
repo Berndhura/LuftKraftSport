@@ -3,7 +3,6 @@ package wichura.de.camperapp.ad;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +52,7 @@ public class OpenAdActivity extends AppCompatActivity {
     private TextView mPrice;
     private TextView mDescText;
     private TextView mDateText;
-    private Button mDelButton;
+    private Button mDelAndMsgButton;
     private Button mBookmarkButton;
     private String mAdId;
 
@@ -94,7 +94,8 @@ public class OpenAdActivity extends AppCompatActivity {
         mDescText = (TextView) findViewById(R.id.description);
         mDateText = (TextView) findViewById(R.id.ad_date);
         imgView = (ImageView) findViewById(R.id.imageView);
-        mDelButton = (Button) findViewById(R.id.delButton);
+        mDelAndMsgButton = (Button) findViewById(R.id.delButton);
+
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
 
         //TODO: check DB if bookmarked!
@@ -132,7 +133,7 @@ public class OpenAdActivity extends AppCompatActivity {
                 .placeholder(R.drawable.empty_photo)
                 .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
                 .centerCrop()
-                .into(imgView,  new Callback() {
+                .into(imgView, new Callback() {
                     @Override
                     public void onSuccess() {
                         progressDialog.dismiss();
@@ -147,13 +148,24 @@ public class OpenAdActivity extends AppCompatActivity {
                 });
 
         if (isOwnAd()) {
-            mDelButton.setOnClickListener(new View.OnClickListener() {
+            mDelAndMsgButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //get ad id and send delete request
                     String adId = getIntent().getStringExtra(Constants.AD_ID);
                     Log.i("CONAN", "AdId: " + mAdId);
                     deleteAdRequest(adId);
+                }
+            });
+        } else {
+            mDelAndMsgButton.setText("Send message");
+            mDelAndMsgButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //send a message to ad owner
+                    String adId = getIntent().getStringExtra(Constants.AD_ID);
+                    String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
+                    sendMessage(adId, ownerId);
                 }
             });
         }
@@ -183,8 +195,34 @@ public class OpenAdActivity extends AppCompatActivity {
 
     }
 
+    private void sendMessage(final String adId, final String ownerId) {
+        //send a message
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final EditText edittext = new EditText(OpenAdActivity.this);
+        alert.setTitle("Send a message");
+        alert.setView(edittext);
+        alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String message = edittext.getText().toString();
+                sendMessageRequest(message, adId, ownerId);
+            }
+        });
+        alert.setNegativeButton("not yet", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //just go away...
+            }
+        });
+        alert.show();
+    }
+
+
     private boolean isOwnAd() {
         return getIntent().getStringExtra(Constants.USER_ID_FROM_AD).equals(getIntent().getStringExtra(Constants.USER_ID));
+    }
+
+    private void sendMessageRequest(String message, String adId, String ownerId) {
+        //TODO send it to server...
+        int i=0;
     }
 
     private void sendRequestForViewCount(String mAdId) {
@@ -198,7 +236,8 @@ public class OpenAdActivity extends AppCompatActivity {
                     }
                 }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {}
+            public void onErrorResponse(VolleyError error) {
+            }
         });
         requestQueue.add(stringRequest);
     }
