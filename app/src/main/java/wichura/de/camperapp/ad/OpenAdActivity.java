@@ -47,12 +47,6 @@ public class OpenAdActivity extends AppCompatActivity {
 
     private static double longitute;
     private static double latitude;
-    private String pictureUri;
-    private TextView mTitleText;
-    private TextView mPrice;
-    private TextView mDescText;
-    private TextView mDateText;
-    private Button mDelAndMsgButton;
     private Button mBookmarkButton;
     private String mAdId;
 
@@ -89,12 +83,12 @@ public class OpenAdActivity extends AppCompatActivity {
         //Volley request queue for delete, bookmark...
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        mTitleText = (TextView) findViewById(R.id.title);
-        mPrice = (TextView) findViewById(R.id.price);
-        mDescText = (TextView) findViewById(R.id.description);
-        mDateText = (TextView) findViewById(R.id.ad_date);
+        TextView mTitleText = (TextView) findViewById(R.id.title);
+        TextView mPrice = (TextView) findViewById(R.id.price);
+        TextView mDescText = (TextView) findViewById(R.id.description);
+        TextView mDateText = (TextView) findViewById(R.id.ad_date);
         imgView = (ImageView) findViewById(R.id.imageView);
-        mDelAndMsgButton = (Button) findViewById(R.id.delButton);
+        Button mDelAndMsgButton = (Button) findViewById(R.id.delButton);
 
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
 
@@ -110,7 +104,7 @@ public class OpenAdActivity extends AppCompatActivity {
 
 
         //get data from Intent
-        pictureUri = getIntent().getStringExtra(Constants.URI);
+        String pictureUri = getIntent().getStringExtra(Constants.URI);
         mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
         mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
         mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
@@ -222,7 +216,6 @@ public class OpenAdActivity extends AppCompatActivity {
 
     private void sendMessageRequest(String message, String adId, String ownerId) {
         //TODO send it to server...
-        int i=0;
     }
 
     private void sendRequestForViewCount(String mAdId) {
@@ -243,8 +236,6 @@ public class OpenAdActivity extends AppCompatActivity {
     }
 
     private void bookmarkAd(String adId, String userId) {
-
-        //TODO: check parameter with capital I is in user
         String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_AD + "?adId=" + adId + "&userId=" + userId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -261,7 +252,6 @@ public class OpenAdActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(stringRequest);
-
     }
 
     private void delBookmark(String adId, String userId) {
@@ -368,9 +358,7 @@ public class OpenAdActivity extends AppCompatActivity {
     }
 
     public static boolean getLatLong(JSONObject jsonObject) {
-
         try {
-
             longitute = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
                     .getDouble("lng");
@@ -378,12 +366,9 @@ public class OpenAdActivity extends AppCompatActivity {
             latitude = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
                     .getDouble("lat");
-
         } catch (JSONException e) {
             return false;
-
         }
-
         return true;
     }
 }

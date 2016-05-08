@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-
     private void updateLoginStatus() {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         userNameForEmailUser = settings.getString(Constants.USER_NAME, "");
@@ -356,6 +355,7 @@ public class MainActivity extends AppCompatActivity implements
             getFacebookUserInfo();
         } else {
             Log.d("CONAN: ", "Facebook access token null");
+            //TODO: false ist hier falsch, wenn anders eingelogged G+ oder email, also anders checken sharedPrefs!!!
             isUserLogedIn = false;
             loginBtn.setEnabled(true);
             loginBtn.setVisibility(View.VISIBLE);
@@ -378,6 +378,12 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.myads) {
+            //TODO wenn shared prefs fertig checke ob user eingelogged, dann wieder einkommentieren
+//            if (!isUserLogedIn) {
+//                final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
+//                startActivityForResult(facebookIntent, REQUEST_ID_FOR_FACEBOOK_LOGIN);
+//                return true;
+//            }
             Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
             if (userType.equals(Constants.EMAIL_USER)) {
                 intent.putExtra(Constants.USER_ID, userIdForEmailUser);
@@ -391,6 +397,12 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
         if (id == R.id.new_ad) {
+            //TODO wenn shared prefs fertig checke ob user eingelogged, dann wieder einkommentieren
+//            if (!isUserLogedIn) {
+//                final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
+//                startActivityForResult(facebookIntent, REQUEST_ID_FOR_FACEBOOK_LOGIN);
+//                return true;
+//            }
             final Intent intent = new Intent(this, NewAdActivity.class);
             if (userType.equals(Constants.EMAIL_USER)) {
                 intent.putExtra(Constants.USER_ID, userIdForEmailUser);
