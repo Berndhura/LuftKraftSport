@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -140,6 +141,7 @@ public class MyAdsActivity extends AppCompatActivity {
                 intent.putExtra(Constants.DATE, rowItem.getDate());
                 intent.putExtra(Constants.VIEWS, rowItem.getViews());
                 intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
+                intent.putExtra(Constants.USER_ID, userId);
                 startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
             }
         });

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -72,7 +73,9 @@ public class NewAdActivity extends Activity {
         mImgOne = (ImageView) findViewById(R.id.imageButton);
         mPrice = (EditText) findViewById(R.id.preis);
 
-        userId = getIntent().getStringExtra(Constants.USER_ID);
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        final String id = settings.getString(Constants.USER_ID, "");
+        userId = id;
 
 
         final Button submitButton = (Button) findViewById(R.id.uploadButton);
@@ -213,6 +216,7 @@ public class NewAdActivity extends Activity {
         params.put("userid", userId);
         params.put("price", price);
         params.put("date", date);
+        Log.d("CONAN", "userid bei upload: "+userId);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.post(Urls.MAIN_SERVER_URL + Urls.UPLOAD_NEW_AD_URL, params, new FileAsyncHttpResponseHandler(reducedPicture) {
