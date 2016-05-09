@@ -24,6 +24,12 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextColor="@android:color/white" />
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="123"/>
+
             <ImageView
                 android:id="@+id/login_button"
                 android:layout_width="wrap_content"

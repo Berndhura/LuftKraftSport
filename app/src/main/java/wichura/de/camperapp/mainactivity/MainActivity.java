@@ -12,9 +12,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout drawer;
     private String userIdForEmailUser;
     private String userNameForEmailUser;
-    private String userType="";
+    private String userType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +100,17 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+            //getSupportActionBar().setLogo(R.mipmap.ic_launcher);
             getSupportActionBar().setDisplayUseLogoEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
+
+//        Toolbar.LayoutParams layoutParams = new Toolbar.LayoutParams(
+//                ViewGroup.LayoutParams.WRAP_CONTENT,
+//                ViewGroup.LayoutParams.WRAP_CONTENT,
+//                Gravity.TOP | Gravity.RIGHT);
 
         //init drawer
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -158,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements
         isUserLogedIn = true;
         //setProfilePicture(null);
         //setProfileName(userNameForEmailUser);
-        Log.d("CONAN: ", "user name, id: " + userNameForEmailUser + ", "+ userIdForEmailUser);
+        Log.d("CONAN: ", "user name, id: " + userNameForEmailUser + ", " + userIdForEmailUser);
     }
 
     private void configureFlurry() {
@@ -354,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements
 
             updateLoginButton();
             Log.d("CONAN: ", "Return from login, userid: " + facebookId);
-           // invalidateOptionsMenu();
+            // invalidateOptionsMenu();
         }
 
         if (requestCode == REQUEST_ID_FOR_OPEN_AD) {
@@ -371,9 +380,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean  onCreateOptionsMenu(Menu menu) {
-       //TODO works only for email user now
-        Log.d("CONAN: ", "user name, id: " + userNameForEmailUser + ", "+ userIdForEmailUser);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //TODO works only for email user now
+        Log.d("CONAN: ", "user name, id: " + userNameForEmailUser + ", " + userIdForEmailUser);
         setProfileName(userNameForEmailUser);
         setProfilePicture(null);
         return true;
@@ -437,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements
                 startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
             } else {
                 Log.d("CONAN: ", "no login data");
-                Toast.makeText(getApplicationContext(),"Log in please...",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Log in please...", Toast.LENGTH_LONG).show();
             }
         }
         if (id == R.id.new_ad) {

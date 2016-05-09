@@ -39,11 +39,12 @@
         android:id="@+id/my_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="10.0sp"
+        android:dividerHeight="5sp"
         android:listSelector="@drawable/list_selector"
-        android:paddingBottom="20dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="20dp" />
+        android:paddingBottom="0dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="0dp"
+        android:background="#ffffff"/>
 
 </LinearLayout>
