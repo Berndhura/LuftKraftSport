@@ -28,11 +28,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.flurry.android.FlurryAgent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -49,6 +51,7 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
+import wichura.de.camperapp.http.HttpHelper;
 import wichura.de.camperapp.http.Urls;
 
 
@@ -118,6 +121,32 @@ public class MainActivity extends AppCompatActivity implements
         updateLoginButton();
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
 
+        AccessTokenTracker tracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
+
+            }
+        };
+
+        ProfileTracker profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
+                if (newProfile != null) {
+                    String userId = newProfile.getId();
+                    String name = newProfile.getName();
+
+                    SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(Constants.USER_NAME, name);
+                    editor.putString(Constants.USER_ID, userId);
+                    editor.putString(Constants.USER_TYPE, Constants.FACEBOOK_USER);
+                    editor.apply();
+                }
+            }
+        };
+
+        tracker.startTracking();
+        profileTracker.startTracking();
 
     }
 
@@ -166,6 +195,12 @@ public class MainActivity extends AppCompatActivity implements
                             //TODO: und nu
                         }
                         //TODO auch ohne login moeglich
+                        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putString(Constants.USER_NAME, userName);
+                        editor.putString(Constants.USER_ID, facebookId);
+                        editor.putString(Constants.USER_TYPE, Constants.FACEBOOK_USER);
+                        editor.apply();
                         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                     }
                 } catch (JSONException e) {
@@ -303,12 +338,20 @@ public class MainActivity extends AppCompatActivity implements
                     //updateloginButton()
                     getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 }
-
-                if (data.getStringExtra(Constants.USER_TYPE).equals(Constants.FACEBOOK_USER)) {
-                    userType = Constants.FACEBOOK_USER;
-                    getFacebookUserInfo();
-                }
             }
+            //come back from login as Facebook user
+
+            SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+            final String name = settings.getString(Constants.USER_NAME, "");
+            final String id = settings.getString(Constants.USER_ID, "");
+            final String type = settings.getString(Constants.USER_TYPE, "");
+
+            if (type.equals(Constants.FACEBOOK_USER)) {
+                //create new user in DB in case of first login
+                HttpHelper httpHelper = new HttpHelper(getApplicationContext());
+                httpHelper.createNewUser(name, id);
+            }
+
             updateLoginButton();
             Log.d("CONAN: ", "Return from login, userid: " + facebookId);
            // invalidateOptionsMenu();
@@ -326,6 +369,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
     }
+
     @Override
     public boolean  onCreateOptionsMenu(Menu menu) {
        //TODO works only for email user now
@@ -428,7 +472,9 @@ public class MainActivity extends AppCompatActivity implements
             if (drawer != null) drawer.closeDrawer(GravityCompat.START);
             return true;
         } else if (id == R.id.bookmarks) {
-            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId);
+            SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+            String userId = settings.getString(Constants.USER_ID, "");
+            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + userId);
             if (drawer != null) drawer.closeDrawer(GravityCompat.START);
             return true;
         }
