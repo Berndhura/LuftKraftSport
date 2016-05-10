@@ -12,11 +12,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -141,7 +139,10 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
                 if (newProfile != null) {
-                    String userId = newProfile.getId();
+                    String userId = newProfile
+
+
+                            .getId();
                     String name = newProfile.getName();
 
                     SharedPreferences settings = getSharedPreferences("UserInfo", 0);
@@ -156,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements
 
         tracker.startTracking();
         profileTracker.startTracking();
-
     }
 
     private void updateLoginStatus() {

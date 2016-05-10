@@ -1,34 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:weightSum="2">
 
     <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
-        android:src="@drawable/background1"/>
+        android:src="@drawable/background1" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
 
         <Button
+            android:id="@+id/firstStartButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="POST AN AD"
-            android:id="@+id/firstStartButton"
             android:layout_gravity="center"
-            android:background="#3d87a0"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="#3d87a0"
+            android:text="POST AN AD" />
+
+        <Button
+            android:id="@+id/show_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="#3d87a0"
+            android:text="SHOW LATEST ADS" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TENTS"
+                android:layout_weight="0.5"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"/>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LAMPS"
+                android:layout_weight="0.5"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="10dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>

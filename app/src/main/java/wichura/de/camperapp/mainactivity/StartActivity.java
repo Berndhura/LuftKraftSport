@@ -1,6 +1,7 @@
 package wichura.de.camperapp.mainactivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import wichura.de.camperapp.R;
 public class StartActivity  extends Activity{
 
     private Button startButton;
+    private Button showButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,9 @@ public class StartActivity  extends Activity{
         setContentView(R.layout.start_page_layout);
 
         startButton = initStartButton();
+        showButton = initShowButton();
+
+
     }
 
     private Button initStartButton() {
@@ -29,9 +34,24 @@ public class StartActivity  extends Activity{
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                Intent intent = new Intent(StartActivity.this, MainActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
         return startButton;
+    }
+
+    private Button initShowButton() {
+        showButton = (Button) findViewById(R.id.show_button);
+        showButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Intent intent = new Intent(StartActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        return showButton;
     }
 }

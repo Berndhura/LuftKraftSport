@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/background_list_elements">
+    android:background="@drawable/background_list_elements"
+    android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -34,21 +34,21 @@
                     android:id="@+id/my_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:text="Melbourne"
-                    android:textSize="15dp"
                     android:textColor="#3d87a0"
-                    android:textStyle="normal"
-                    android:padding="5dp" />
+                    android:textSize="15dp"
+                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/my_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="#3d87a0"
-                    android:textStyle="normal"
                     android:gravity="end"
-                    android:padding="5dp" />
+                    android:padding="5dp"
+                    android:textColor="#3d87a0"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
 
             </LinearLayout>
 
@@ -57,11 +57,11 @@
                 android:id="@+id/my_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Title beschreibe deinen Artikel"
-                android:textSize="15dp"
-                android:textColor="#3d87a0"
-                android:padding="5dp"
                 android:gravity="left"
+                android:padding="5dp"
+                android:text="Title beschreibe deinen Artikel"
+                android:textColor="#3d87a0"
+                android:textSize="15dp"
                 android:textStyle="bold" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -75,30 +75,41 @@
                     android:id="@+id/my_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
+                    android:layout_weight="0.5"
                     android:padding="5dp"
-                    android:textStyle="bold"
                     android:textColor="#3d87a0"
-                    android:layout_weight="0.5"/>
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textColor="#3d87a0"
-                    android:src="@drawable/eye"/>
-
-
-                <TextView
-                    android:id="@+id/my_views"
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:padding="5dp"
-                    android:textStyle="bold"
-                    android:textColor="#3d87a0"
+                    android:orientation="horizontal"
+                    android:padding="0dp"
                     android:layout_weight="0.5"
-                    android:textAlignment="center" />
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_visibility_black_18dp"
+                        android:layout_weight="0.5"
+                        android:textColor="#3d87a0" />
+
+
+                    <TextView
+                        android:id="@+id/my_views"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:padding="5dp"
+                        android:textAlignment="center"
+                        android:textColor="#3d87a0"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="left" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -109,7 +120,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="@android:color/darker_gray" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -118,29 +129,11 @@
         android:weightSum="1">
 
         <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/newad"
-            android:layout_weight="0.33"
-            android:padding="5dp" />
-
-        <ImageView
             android:id="@+id/my_ad_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/delete"
-            android:layout_weight="0.33"
-            android:padding="5dp" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:layout_weight="0.33"
-            android:padding="5dp" />
-
+            android:padding="5dp"
+            android:src="@drawable/delete" />
 
     </LinearLayout>
 
