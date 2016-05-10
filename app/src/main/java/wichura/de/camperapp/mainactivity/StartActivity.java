@@ -1,5 +1,6 @@
 package wichura.de.camperapp.mainactivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,7 @@ import wichura.de.camperapp.R;
  * Created by Bernd Wichura on 31.03.2016.
  *
  */
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends Activity {
 
     private Button startButton;
     private Button showButton;
@@ -24,10 +25,10 @@ public class StartActivity extends AppCompatActivity {
 
         setContentView(R.layout.start_page_layout);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.start_toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-        }
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.start_toolbar);
+//        if (toolbar != null) {
+//            setSupportActionBar(toolbar);
+//        }
 
         startButton = initStartButton();
         showButton = initShowButton();
