@@ -215,7 +215,23 @@ public class OpenAdActivity extends AppCompatActivity {
     }
 
     private void sendMessageRequest(String message, String adId, String ownerId) {
-        //TODO send it to server...
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        String url = Urls.MAIN_SERVER_URL + Urls.SEND_MESSAGE +
+                "?message=" + message.replaceAll(" ", "%20") + "&idFrom=" + ownerId + "&idTo=" + adId;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //save message done
+                        if (response.equals("ok"))
+                            Toast.makeText(getApplicationContext(), "Message sent...", Toast.LENGTH_LONG);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
     private void sendRequestForViewCount(String mAdId) {
