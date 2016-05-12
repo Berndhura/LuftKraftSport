@@ -224,7 +224,7 @@ public class OpenAdActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         //save message done
                         if (response.equals("ok"))
-                            Toast.makeText(getApplicationContext(), "Message sent...", Toast.LENGTH_LONG);
+                            Toast.makeText(getApplicationContext(), "Message sent...", Toast.LENGTH_LONG).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
