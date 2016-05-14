@@ -23,7 +23,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <!-- GCM
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
@@ -35,7 +35,7 @@
         </receiver>
 
         <service
-            android:name="wichura.de.camperapp.MyGcmListenerService"
+            android:name="wichura.de.camperapp.gcm.MyGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -43,13 +43,12 @@
         </service>
 
         <service
-            android:name="wichura.de.camperapp.MyInstanceIDListenerService"
+            android:name="wichura.de.camperapp.gcm.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
-        -->
 
         <activity
             android:name=".mainactivity.StartActivity"
