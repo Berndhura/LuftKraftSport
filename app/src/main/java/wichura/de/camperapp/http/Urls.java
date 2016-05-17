@@ -20,6 +20,7 @@ public class Urls {
     public static final String COUNT_VIEW = "viewCount";
     public static final String CREATE_USER = "createUser";
     public static final String SEND_MESSAGE = "saveMessage";
+    public static final String SEND_TOKEN_FOR_GCM = "sendToken";
 }
 
 // Http Request for single data eg string something

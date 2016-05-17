@@ -6,7 +6,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -14,6 +21,7 @@ import com.google.android.gms.iid.InstanceID;
 import java.io.IOException;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.Urls;
 
 /**
  * Created by Bernd Wichura on 14.05.2016.
@@ -39,6 +47,7 @@ public class RegistrationIntentService extends IntentService {
             // See https://developers.google.com/cloud-messaging/android/start for details on this file.
             // [START get_token]
             InstanceID instanceID = InstanceID.getInstance(this);
+            Log.d("CONAN", "BLASI:" +getString(R.string.gcm_defaultSenderId));
             String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             // [END get_token]
@@ -75,7 +84,26 @@ public class RegistrationIntentService extends IntentService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        String url = Urls.MAIN_SERVER_URL + Urls.SEND_TOKEN_FOR_GCM + "?token=" + token;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (!response.equals("wrong")) {
+                            Toast.makeText(getApplicationContext(), "Token sent", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Network problems...Try again!", Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
     /**

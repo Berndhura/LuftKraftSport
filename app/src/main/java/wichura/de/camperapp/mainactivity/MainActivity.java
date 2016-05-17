@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private ProgressBar mRegistrationProgressBar;
-    private TextView mInformationTextView;
     private boolean isReceiverRegistered;
 
 
@@ -187,9 +186,9 @@ public class MainActivity extends AppCompatActivity implements
                 boolean sentToken = sharedPreferences
                         .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
                 if (sentToken) {
-                    mInformationTextView.setText("send");
+                    Log.d("CONAN", "token bekommen");
                 } else {
-                    mInformationTextView.setText("nbix");
+                    Log.d("CONAN", "token nix bekommen");
                 }
             }
         };
@@ -202,6 +201,20 @@ public class MainActivity extends AppCompatActivity implements
             startService(intent);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver();
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        isReceiverRegistered = false;
+        super.onPause();
+    }
+
 
     private void registerReceiver(){
         if(!isReceiverRegistered) {
