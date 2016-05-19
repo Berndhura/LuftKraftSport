@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.mainactivity.Constants;
 
 /**
  * Created by Bernd Wichura on 14.05.2016.
@@ -84,8 +85,11 @@ public class RegistrationIntentService extends IntentService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        String userId = settings.getString(Constants.USER_ID, "");
+
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        String url = Urls.MAIN_SERVER_URL + Urls.SEND_TOKEN_FOR_GCM + "?token=" + token;
+        String url = Urls.MAIN_SERVER_URL + Urls.SEND_TOKEN_FOR_GCM + "?token=" + token + "&userId" +  userId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
