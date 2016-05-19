@@ -89,7 +89,7 @@ public class RegistrationIntentService extends IntentService {
         String userId = settings.getString(Constants.USER_ID, "");
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        String url = Urls.MAIN_SERVER_URL + Urls.SEND_TOKEN_FOR_GCM + "?token=" + token + "&userId" +  userId;
+        String url = Urls.MAIN_SERVER_URL + Urls.SEND_TOKEN_FOR_GCM + "?token=" + token + "&userId=" +  userId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
