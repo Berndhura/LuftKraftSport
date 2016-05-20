@@ -217,7 +217,7 @@ public class OpenAdActivity extends AppCompatActivity {
     private void sendMessageRequest(String message, String adId, String ownerId) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         String url = Urls.MAIN_SERVER_URL + Urls.SEND_MESSAGE +
-                "?message=" + message.replaceAll(" ", "%20") + "&idFrom=" + ownerId + "&idTo=" + adId;
+                "?message=" + message.replaceAll(" ", "%20") + "&idFrom=" + adId + "&idTo=" + ownerId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
