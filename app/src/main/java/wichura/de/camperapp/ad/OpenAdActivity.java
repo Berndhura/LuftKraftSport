@@ -3,6 +3,7 @@ package wichura.de.camperapp.ad;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -159,7 +160,9 @@ public class OpenAdActivity extends AppCompatActivity {
                     //send a message to ad owner
                     String adId = getIntent().getStringExtra(Constants.AD_ID);
                     String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
-                    sendMessage(adId, ownerId);
+                    SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+                    String sender = settings.getString(Constants.USER_ID, "");
+                    sendMessage(adId, ownerId, sender);
                 }
             });
         }
@@ -189,7 +192,7 @@ public class OpenAdActivity extends AppCompatActivity {
 
     }
 
-    private void sendMessage(final String adId, final String ownerId) {
+    private void sendMessage(final String adId, final String ownerId, final String sender) {
         //send a message
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(OpenAdActivity.this);
@@ -198,7 +201,7 @@ public class OpenAdActivity extends AppCompatActivity {
         alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String message = edittext.getText().toString();
-                sendMessageRequest(message, adId, ownerId);
+                sendMessageRequest(message, adId, ownerId, sender);
             }
         });
         alert.setNegativeButton("not yet", new DialogInterface.OnClickListener() {
@@ -214,10 +217,10 @@ public class OpenAdActivity extends AppCompatActivity {
         return getIntent().getStringExtra(Constants.USER_ID_FROM_AD).equals(getIntent().getStringExtra(Constants.USER_ID));
     }
 
-    private void sendMessageRequest(String message, String adId, String ownerId) {
+    private void sendMessageRequest(String message, String adId, String ownerId, String sender) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         String url = Urls.MAIN_SERVER_URL + Urls.SEND_MESSAGE +
-                "?message=" + message.replaceAll(" ", "%20") + "&idFrom=" + adId + "&idTo=" + ownerId;
+                "?message=" + message.replaceAll(" ", "%20") + "&idFrom=" + sender + "&idTo=" + ownerId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
