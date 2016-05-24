@@ -21,22 +21,6 @@ public class Urls {
     public static final String CREATE_USER = "createUser";
     public static final String SEND_MESSAGE = "saveMessage";
     public static final String SEND_TOKEN_FOR_GCM = "sendToken";
+    public static final String GET_ALL_MESSAGES_FOR_USER = "getAllMessagesForUser";
 }
-
-// Http Request for single data eg string something
-
-
-//            AsyncHttpClient client = new AsyncHttpClient();
-//            client.post(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + facebookId, new TextHttpResponseHandler() {
-//                @Override
-//                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-//                    String[] bookmarks = responseString.split(",");
-//
-//                    Log.d("CONAN", "Boolmarks from user with id: "+ facebookId +": " + bookmarks);
-//                }
-//                @Override
-//                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//
-//                }
-//            });
 

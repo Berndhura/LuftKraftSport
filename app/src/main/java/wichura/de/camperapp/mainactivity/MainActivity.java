@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements
     public static final int REQUEST_ID_FOR_OPEN_AD = 3;
     public static final int REQUEST_ID_FOR_MY_ADS = 4;
     private static final int REQUEST_ID_FOR_SEARCH = 5;
+    private static final int REQUEST_ID_FOR_MESSAGES = 6;
 
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -216,8 +217,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    private void registerReceiver(){
-        if(!isReceiverRegistered) {
+    private void registerReceiver() {
+        if (!isReceiverRegistered) {
             LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                     new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
             isReceiverRegistered = true;
@@ -566,6 +567,10 @@ public class MainActivity extends AppCompatActivity implements
             String userId = settings.getString(Constants.USER_ID, "");
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + userId);
             if (drawer != null) drawer.closeDrawer(GravityCompat.START);
+            return true;
+        } else if (id == R.id.messages_from_user) {
+            final Intent msgIntent = new Intent(this, MessagesActivity.class);
+            startActivityForResult(msgIntent, REQUEST_ID_FOR_MESSAGES);
             return true;
         }
         if (drawer != null) drawer.closeDrawer(GravityCompat.START);

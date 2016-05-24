@@ -22,6 +22,11 @@
             android:icon="@drawable/abc_ic_search"
             android:title="Search"/>
 
+        <item
+            android:id="@+id/messages_from_user"
+            android:icon="@drawable/com_facebook_button_send_icon"
+            android:title="Messages"/>
+
     </group>
 
     <item android:title="Settings">

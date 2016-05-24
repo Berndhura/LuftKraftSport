@@ -61,10 +61,6 @@ public class RowItem {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getAdId() {return id; }
 
     public void setId(String id) {this.id = id;}
@@ -73,15 +69,7 @@ public class RowItem {
         return location;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public long getDate() {return date;}
-
-    public void setDate(long date) {
-        this.date = date;
-    }
 
     public String getPrice() {
         return price;
@@ -95,24 +83,12 @@ public class RowItem {
         return phone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    public String getKeywords() {
-        return keywords;
-    }
-
-    public void setKeywords(final String keyw) {
-        this.keywords = keyw;
     }
 
     public String getTitle() {
