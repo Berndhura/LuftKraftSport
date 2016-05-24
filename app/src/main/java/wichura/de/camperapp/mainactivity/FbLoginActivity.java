@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -40,6 +41,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.gcm.QuickstartPreferences;
 import wichura.de.camperapp.http.Urls;
 
 /**
@@ -182,6 +184,9 @@ public class FbLoginActivity extends AppCompatActivity {
                     editor.putString(Constants.USER_ID, profile.getId());
                     editor.putString(Constants.USER_TYPE, Constants.FACEBOOK_USER);
                     editor.apply();
+
+                    Intent loginComplete = new Intent(Constants.LOGIN_COMPLETE);
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
                 }
             }
 

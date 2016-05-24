@@ -29,4 +29,7 @@ public class Constants {
     public static final String DATE = "date";
     public static final String VIEWS = "views";
     public static final String USER_ID_FROM_AD ="user_id_from_ad" ;
+
+    //Broadcast messages
+    public static final String LOGIN_COMPLETE = "loginComplete";
 }

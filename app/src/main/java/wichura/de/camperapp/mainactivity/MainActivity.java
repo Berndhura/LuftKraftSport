@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements
     private String userType = "";
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private BroadcastReceiver mLoginBroadcastReceiver;
     private ProgressBar mRegistrationProgressBar;
     private boolean isReceiverRegistered;
 
