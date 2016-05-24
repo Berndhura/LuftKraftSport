@@ -15,7 +15,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.http.HttpHelper;
 import wichura.de.camperapp.http.Urls;
 
 /**
