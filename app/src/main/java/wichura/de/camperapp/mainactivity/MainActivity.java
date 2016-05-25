@@ -95,11 +95,14 @@ public class MainActivity extends AppCompatActivity implements
     private String userNameForEmailUser;
     private String userType = "";
 
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private BroadcastReceiver mLoginBroadcastReceiver;
-    private ProgressBar mRegistrationProgressBar;
-    private boolean isReceiverRegistered;
+    //Google Cloud Messages
+    private BroadcastReceiver mGcmRegistrationBroadcastReceiver;
+    private ProgressBar mGcmRegistrationProgressBar;
+    private boolean isGcmReceiverRegistered;
 
+    //login
+    private BroadcastReceiver mLoginBroadcastReceiver;
+    private boolean isLoginReceiverRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,51 +181,73 @@ public class MainActivity extends AppCompatActivity implements
         tracker.startTracking();
         profileTracker.startTracking();
 
-        mRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+        mGcmRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
+        mGcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
+                mGcmRegistrationProgressBar.setVisibility(ProgressBar.GONE);
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sentToken = sharedPreferences
                         .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
                 if (sentToken) {
-                    Log.d("CONAN", "token bekommen");
+                    Log.d("CONAN", "Token from GCM received");
                 } else {
-                    Log.d("CONAN", "token nix bekommen");
+                    Log.d("CONAN", "Did not get a Token from GCM!");
                 }
             }
         };
 
-        registerReceiver();
+        registerGcmReceiver();
 
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
+
+        mLoginBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //mache was weil login is fertig -> update  profile bild und user name
+            }
+        };
+
+        registerLoginReceiver();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver();
+        registerGcmReceiver();
+        registerLoginReceiver();
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
-        isReceiverRegistered = false;
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGcmRegistrationBroadcastReceiver);
+        isGcmReceiverRegistered = false;
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoginBroadcastReceiver);
+        isLoginReceiverRegistered = false;
+
         super.onPause();
     }
 
+    private void registerLoginReceiver() {
+        if (!isLoginReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mLoginBroadcastReceiver,
+                    new IntentFilter(Constants.LOGIN_COMPLETE));
+            isLoginReceiverRegistered = true;
+        }
+    }
 
-    private void registerReceiver() {
-        if (!isReceiverRegistered) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+
+    private void registerGcmReceiver() {
+        if (!isGcmReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mGcmRegistrationBroadcastReceiver,
                     new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
-            isReceiverRegistered = true;
+            isGcmReceiverRegistered = true;
         }
     }
 
