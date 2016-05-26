@@ -27,7 +27,7 @@ public class HttpHelper {
         this.context = ctx;
     }
 
-    public void createNewUser(final String name, final String id) {
+    public void updateUserInDb(final String name, final String id) {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         String url = Urls.MAIN_SERVER_URL + Urls.CREATE_USER + "?name=" + name.replaceAll(" ", "%20") + "&id=" + id;
@@ -35,7 +35,6 @@ public class HttpHelper {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        progressDialog.dismiss();
                         //TODO toasts weg , logs dafuer
                         if (!response.equals("wrong")) {
                             Toast.makeText(context, "new user created", Toast.LENGTH_SHORT).show();
@@ -48,6 +47,30 @@ public class HttpHelper {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // progressDialog.dismiss();
+                Toast.makeText(context, "Network problems...Try again!", Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+
+    public void saveTokenInDb(String token, String userId) {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        String url = Urls.MAIN_SERVER_URL + Urls.SEND_TOKEN_FOR_GCM + "?token=" + token + "&userId=" +  userId;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (!response.equals("wrong")) {
+                            Toast.makeText(context, "Token sent", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, "Network problems...Try again!", Toast.LENGTH_LONG).show();
             }
         });

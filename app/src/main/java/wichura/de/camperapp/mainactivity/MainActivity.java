@@ -162,10 +162,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
                 if (newProfile != null) {
-                    String userId = newProfile
-
-
-                            .getId();
+                    String userId = newProfile.getId();
                     String name = newProfile.getName();
 
                     SharedPreferences settings = getSharedPreferences("UserInfo", 0);
@@ -174,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements
                     editor.putString(Constants.USER_ID, userId);
                     editor.putString(Constants.USER_TYPE, Constants.FACEBOOK_USER);
                     editor.apply();
+
+                    Intent loginComplete = new Intent(Constants.LOGIN_COMPLETE);
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
                 }
             }
         };
@@ -210,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onReceive(Context context, Intent intent) {
                 //mache was weil login is fertig -> update  profile bild und user name
+                Toast.makeText(MainActivity.this, "BROADCAST LOGIN RECEIVED", Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -425,38 +426,19 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ID_FOR_NEW_AD) {
 
+        if (requestCode == REQUEST_ID_FOR_NEW_AD) {
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
         }
+
         //back from Facebook login/logout page
         if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
 
             if (data != null) { //just back from login page without data
-                if (data.getStringExtra(Constants.USER_TYPE).equals(Constants.EMAIL_USER)) {
-                    userIdForEmailUser = data.getStringExtra(Constants.EMAIL_USR_ID);
-                    userNameForEmailUser = data.getStringExtra(Constants.USER_NAME);
-                    userType = Constants.EMAIL_USER;
-                    Log.d("CONAN: ", "email user name: " + userNameForEmailUser);
-                    Log.d("CONAN: ", "email user id: " + userIdForEmailUser);
-
-                    //update picture and name in drawer
-                    invalidateOptionsMenu();
-
-                    //save login data into shared preferences
-                    SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(Constants.USER_NAME, userNameForEmailUser);
-                    editor.putString(Constants.USER_ID, userIdForEmailUser);
-                    editor.putString(Constants.USER_TYPE, Constants.EMAIL_USER);
-                    editor.apply();
-                    isUserLogedIn = true;
-
-                    //updateloginButton()
-                    getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
-                }
+                //update picture and name in drawer
+                invalidateOptionsMenu();
+                getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
             }
-            //come back from login as Facebook user
 
             SharedPreferences settings = getSharedPreferences("UserInfo", 0);
             final String name = settings.getString(Constants.USER_NAME, "");
@@ -466,7 +448,11 @@ public class MainActivity extends AppCompatActivity implements
             if (type.equals(Constants.FACEBOOK_USER)) {
                 //create new user in DB in case of first login
                 HttpHelper httpHelper = new HttpHelper(getApplicationContext());
-                httpHelper.createNewUser(name, id);
+                httpHelper.updateUserInDb(name, id);
+
+                //request Token from GCM and update in DB
+                //TODO how to get GCM token here?
+                //httpHelper.saveTokenInDb(token, id);
             }
 
             updateLoginButton();
@@ -536,6 +522,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        final String name = settings.getString(Constants.USER_NAME, "");
+        final String userId = settings.getString(Constants.USER_ID, "");
+        final String type = settings.getString(Constants.USER_TYPE, "");
+
         int id = item.getItemId();
 
         if (id == R.id.myads) {
@@ -588,12 +579,12 @@ public class MainActivity extends AppCompatActivity implements
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
             if (drawer != null) drawer.closeDrawer(GravityCompat.START);
             return true;
+
         } else if (id == R.id.bookmarks) {
-            SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-            String userId = settings.getString(Constants.USER_ID, "");
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + userId);
             if (drawer != null) drawer.closeDrawer(GravityCompat.START);
             return true;
+
         } else if (id == R.id.messages_from_user) {
             final Intent msgIntent = new Intent(this, MessagesActivity.class);
             startActivityForResult(msgIntent, REQUEST_ID_FOR_MESSAGES);

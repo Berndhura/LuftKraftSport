@@ -21,6 +21,7 @@ import com.google.android.gms.iid.InstanceID;
 import java.io.IOException;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.HttpHelper;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 
@@ -84,30 +85,12 @@ public class RegistrationIntentService extends IntentService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
+    public void sendRegistrationToServer(String token) {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         String userId = settings.getString(Constants.USER_ID, "");
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        String url = Urls.MAIN_SERVER_URL + Urls.SEND_TOKEN_FOR_GCM + "?token=" + token + "&userId=" +  userId;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (!response.equals("wrong")) {
-                            Toast.makeText(getApplicationContext(), "Token sent", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Network problems...Try again!", Toast.LENGTH_LONG).show();
-            }
-        });
-        requestQueue.add(stringRequest);
+        HttpHelper httpHelper = new HttpHelper(getApplicationContext());
+        httpHelper.saveTokenInDb(token, userId);
     }
 
     /**

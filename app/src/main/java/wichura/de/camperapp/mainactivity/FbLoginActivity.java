@@ -50,7 +50,6 @@ import wichura.de.camperapp.http.Urls;
  */
 public class FbLoginActivity extends AppCompatActivity {
 
-    private String mEmailUserId;
     private AccessToken token;
     private Profile profile;
 
@@ -104,13 +103,10 @@ public class FbLoginActivity extends AppCompatActivity {
             okButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO send request
-
                     if (!validate()) {
                         onLoginFailed();
                         return;
                     }
-
                     final ProgressDialog progressDialog = new ProgressDialog(FbLoginActivity.this,
                             R.style.AppTheme);
                     progressDialog.setIndeterminate(true);
@@ -247,12 +243,14 @@ public class FbLoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "User in", Toast.LENGTH_SHORT).show();
                             //TODO get userid back to mainActiv
                             String[] userInfos = response.split(",");
-                            mEmailUserId = userInfos[0];
-                            Intent data = new Intent();
-                            data.putExtra(Constants.EMAIL_USR_ID, mEmailUserId);
-                            data.putExtra(Constants.USER_NAME, userInfos[1]);
-                            data.putExtra(Constants.USER_TYPE, Constants.EMAIL_USER);
-                            setResult(RESULT_OK, data);
+
+                            SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putString(Constants.USER_NAME, userInfos[1]);
+                            editor.putString(Constants.USER_ID, userInfos[0]);
+                            editor.putString(Constants.USER_TYPE, Constants.EMAIL_USER);
+                            editor.apply();
+
                             finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "Wrong user or password. Try again!", Toast.LENGTH_SHORT).show();
