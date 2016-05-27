@@ -43,6 +43,8 @@ import com.facebook.ProfileTracker;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
@@ -215,6 +217,9 @@ public class MainActivity extends AppCompatActivity implements
         };
 
         registerLoginReceiver();
+
+        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+        Toast.makeText(MainActivity.this, gcm.toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -445,14 +450,31 @@ public class MainActivity extends AppCompatActivity implements
             final String id = settings.getString(Constants.USER_ID, "");
             final String type = settings.getString(Constants.USER_TYPE, "");
 
-            if (type.equals(Constants.FACEBOOK_USER)) {
+            if (type.equals(Constants.EMAIL_USER)) {
                 //create new user in DB in case of first login
                 HttpHelper httpHelper = new HttpHelper(getApplicationContext());
                 httpHelper.updateUserInDb(name, id);
 
                 //request Token from GCM and update in DB
                 //TODO how to get GCM token here?
-                //httpHelper.saveTokenInDb(token, id);
+//                try {
+//                    InstanceID instanceID = InstanceID.getInstance(this);
+//                    Log.d("CONAN", "BLASI:" + getString(R.string.gcm_defaultSenderId));
+//                    String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+//                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+//                    httpHelper.saveTokenInDb(token, id);
+//                } catch (Exception e) {
+//                    Log.d(TAG, "Failed to complete token refresh", e);
+//                    // If an exception happens while fetching the new token or updating our registration data
+//                    // on a third-party server, this ensures that we'll attempt the update at a later time.
+//                    // sharedPreferences.edit().putBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false).apply();
+//                }
+                if (checkPlayServices()) {
+                    // Start IntentService to register this application with GCM.
+                    Intent intent = new Intent(this, RegistrationIntentService.class);
+                    startService(intent);
+                }
+
             }
 
             updateLoginButton();
