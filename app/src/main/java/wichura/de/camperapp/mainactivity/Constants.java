@@ -30,4 +30,5 @@ public class Constants {
 
     //Broadcast messages
     public static final String LOGIN_COMPLETE = "loginComplete";
+    public static final String SENDER_ID = "sender";
 }

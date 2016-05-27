@@ -456,29 +456,15 @@ public class MainActivity extends AppCompatActivity implements
                 httpHelper.updateUserInDb(name, id);
 
                 //request Token from GCM and update in DB
-                //TODO how to get GCM token here?
-//                try {
-//                    InstanceID instanceID = InstanceID.getInstance(this);
-//                    Log.d("CONAN", "BLASI:" + getString(R.string.gcm_defaultSenderId));
-//                    String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-//                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-//                    httpHelper.saveTokenInDb(token, id);
-//                } catch (Exception e) {
-//                    Log.d(TAG, "Failed to complete token refresh", e);
-//                    // If an exception happens while fetching the new token or updating our registration data
-//                    // on a third-party server, this ensures that we'll attempt the update at a later time.
-//                    // sharedPreferences.edit().putBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false).apply();
-//                }
                 if (checkPlayServices()) {
                     // Start IntentService to register this application with GCM.
                     Intent intent = new Intent(this, RegistrationIntentService.class);
                     startService(intent);
                 }
-
             }
 
             updateLoginButton();
-            Log.d("CONAN: ", "Return from login, userid: " + facebookId);
+            Log.d("CONAN: ", "Return from login, userid: " + id);
             // invalidateOptionsMenu();
         }
 

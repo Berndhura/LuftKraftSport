@@ -14,6 +14,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.mainactivity.MainActivity;
 
 /**
@@ -35,6 +36,8 @@ public class MyGcmListenerService  extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
+        String sender = data.getString("sender");
+        String adId = data.getString("adId");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
@@ -56,7 +59,7 @@ public class MyGcmListenerService  extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(message);
+        sendNotification(message, sender, adId);
         // [END_EXCLUDE]
     }
     // [END receive_message]
@@ -66,9 +69,9 @@ public class MyGcmListenerService  extends GcmListenerService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message) {
+    private void sendNotification(String message, String sender, String adId) {
         Intent intent = new Intent(this, MainActivity.class);
-        //intent.putExtra(RegistrationConstants.SENDER_ID, from);
+        intent.putExtra(Constants.SENDER_ID, adId);
         //intent.putExtra(RegistrationConstants.EXTRA_KEY_BUNDLE, data);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
