@@ -16,6 +16,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.mainactivity.MainActivity;
+import wichura.de.camperapp.mainactivity.MessagesActivity;
 
 /**
  * Created by Bernd Wichura on 14.05.2016.
@@ -70,9 +71,10 @@ public class MyGcmListenerService  extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message, String sender, String adId) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(Constants.SENDER_ID, adId);
-        //intent.putExtra(RegistrationConstants.EXTRA_KEY_BUNDLE, data);
+        Intent intent = new Intent(this, MessagesActivity.class);
+        intent.putExtra(Constants.SENDER_ID, sender);
+        intent.putExtra(Constants.AD_ID, adId);
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

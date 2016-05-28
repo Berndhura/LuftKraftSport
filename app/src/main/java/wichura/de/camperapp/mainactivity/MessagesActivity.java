@@ -30,10 +30,12 @@ public class MessagesActivity extends Activity {
         setContentView(R.layout.messages_layout);
 
         msg = (TextView) findViewById(R.id.messages);
+        String adId = getIntent().getStringExtra(Constants.AD_ID);
+        String sender = getIntent().getStringExtra(Constants.SENDER_ID);
 
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         String userId = settings.getString(Constants.USER_ID, "");
-        getMessages(userId);
+        getMessages(userId, sender, adId);
     }
 
 
@@ -43,9 +45,9 @@ public class MessagesActivity extends Activity {
         finish();
     }
 
-    private void getMessages(String userId) {
+    private void getMessages(String userId, String sender, String adId) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        String url = Urls.MAIN_SERVER_URL + Urls.GET_ALL_MESSAGES_FOR_USER + "?userId=" + userId;
+        String url = Urls.MAIN_SERVER_URL + Urls.GET_ALL_MESSAGES_FOR_USER + "?userId=" + userId + "&sender=" + sender  + "&adId=" + adId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override

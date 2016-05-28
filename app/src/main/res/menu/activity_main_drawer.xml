@@ -9,7 +9,7 @@
 
         <item
             android:id="@+id/bookmarks"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/star"
             android:title="Bookmarks"/>
 
         <item
@@ -24,7 +24,7 @@
 
         <item
             android:id="@+id/messages_from_user"
-            android:icon="@drawable/com_facebook_button_send_icon"
+            android:icon="@drawable/email"
             android:title="Messages"/>
 
     </group>
