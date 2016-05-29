@@ -29,11 +29,11 @@
     </android.support.design.widget.AppBarLayout>
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/startImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="0dp"
         android:layout_weight="1"
         android:src="@drawable/background1" />
 

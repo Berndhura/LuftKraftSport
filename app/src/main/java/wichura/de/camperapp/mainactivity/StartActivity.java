@@ -33,6 +33,8 @@ public class StartActivity extends Activity {
     private  int displayWidth;
     private  int displayHeight;
 
+    private ImageView startImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +51,9 @@ public class StartActivity extends Activity {
 
         getDisplayDimensions();
 
+        startImage = (ImageView) findViewById(R.id.startImage);
 
+        scaleImage(startImage);
     }
 
     private Button initStartButton() {
