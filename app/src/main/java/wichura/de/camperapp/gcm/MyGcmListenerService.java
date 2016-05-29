@@ -15,8 +15,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.mainactivity.MainActivity;
-import wichura.de.camperapp.mainactivity.MessagesActivity;
+import wichura.de.camperapp.messages.MessagesActivity;
 
 /**
  * Created by Bernd Wichura on 14.05.2016.

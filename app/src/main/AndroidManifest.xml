@@ -93,7 +93,7 @@
             android:label="@string/title_search_page" />
 
         <activity
-            android:name="wichura.de.camperapp.mainactivity.MessagesActivity"
+            android:name=".messages.MessagesActivity"
             android:label="@string/title_message_page" />
 
         <activity

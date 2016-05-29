@@ -44,7 +44,6 @@ import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
@@ -64,6 +63,7 @@ import wichura.de.camperapp.gcm.QuickstartPreferences;
 import wichura.de.camperapp.gcm.RegistrationIntentService;
 import wichura.de.camperapp.http.HttpHelper;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.messages.MessagesActivity;
 
 
 public class MainActivity extends AppCompatActivity implements
