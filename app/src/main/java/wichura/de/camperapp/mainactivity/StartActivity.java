@@ -1,8 +1,6 @@
 package wichura.de.camperapp.mainactivity;
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -10,8 +8,6 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -23,15 +19,17 @@ import java.util.NoSuchElementException;
 
 import wichura.de.camperapp.R;
 
+
 /**
  * Created by Bernd Wichura on 31.03.2016.
+ * Camper App
  */
 public class StartActivity extends Activity {
 
     private Button startButton;
     private Button showButton;
-    private  int displayWidth;
-    private  int displayHeight;
+    private int displayWidth;
+    private int displayHeight;
 
     private ImageView startImage;
 
@@ -61,21 +59,7 @@ public class StartActivity extends Activity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(StartActivity.this)
-                                .setSmallIcon(R.drawable.applogo)
-                                .setContentTitle("My notification")
-                                .setContentText("Hello World!");
-
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                // notificationID allows you to update the notification later on.
-                mNotificationManager.notify(33 , mBuilder.build());
-
-
-//                Intent intent = new Intent(StartActivity.this, MainActivity.class);
-//                startActivity(intent);
-//                finish();
+                //do was
             }
         });
         return startButton;
@@ -168,6 +152,6 @@ public class StartActivity extends Activity {
 
     private int dpToPx(int dp) {
         float density = getApplicationContext().getResources().getDisplayMetrics().density;
-        return Math.round((float)dp * density);
+        return Math.round((float) dp * density);
     }
 }
