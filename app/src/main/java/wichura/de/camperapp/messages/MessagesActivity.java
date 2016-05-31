@@ -1,10 +1,14 @@
 package wichura.de.camperapp.messages;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,16 +31,12 @@ import java.util.List;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.mainactivity.CustomListViewAdapter;
-import wichura.de.camperapp.mainactivity.RowItem;
 
 /**
  * Created by ich on 22.05.2016.
  * Camper App
  */
-public class MessagesActivity extends Activity {
-
-    private TextView msg;
+public class MessagesActivity extends AppCompatActivity {
 
     private List<MsgRowItem> rowItems;
 
@@ -44,12 +44,13 @@ public class MessagesActivity extends Activity {
 
     private MessageListViewAdapter adapter;
 
+    private TextView newMessage;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.messages_layout);
 
-       // msg = (TextView) findViewById(R.id.messages);
         String adId = getIntent().getStringExtra(Constants.AD_ID);
         String sender = getIntent().getStringExtra(Constants.SENDER_ID);
 
@@ -59,6 +60,28 @@ public class MessagesActivity extends Activity {
 
         listView = (ListView) findViewById(R.id.message_list);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+        }
+
+        ImageView newMsgBtn = (ImageView) findViewById(R.id.new_msg_button);
+        if (newMsgBtn != null) {
+            newMsgBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    newMessage = (TextView) findViewById(R.id.txt_new_message);
+                }
+            });
+        }
 
     }
 

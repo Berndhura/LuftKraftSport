@@ -25,10 +25,8 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
         this.context = context;
     }
 
-    /* private view holder class */
     private class ViewHolder {
         TextView message;
-
     }
 
     @Override
@@ -46,10 +44,8 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-
         // getting ad data for the row
         final MsgRowItem rowItem = getItem(position);
-
 
         holder.message.setText(rowItem.getMessage());
         // holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
