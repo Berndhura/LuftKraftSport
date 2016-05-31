@@ -538,12 +538,13 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.myads) {
-            //TODO wenn shared prefs fertig checke ob user eingelogged, dann wieder einkommentieren
-//            if (!isUserLogedIn) {
-//                final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
-//                startActivityForResult(facebookIntent, REQUEST_ID_FOR_FACEBOOK_LOGIN);
-//                return true;
-//            }
+            //if not logged in
+            if (name.equals("")) {
+                final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
+                startActivityForResult(facebookIntent, REQUEST_ID_FOR_FACEBOOK_LOGIN);
+                return true;
+            }
+            //TODO use sharedPrefs
             Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
             if (userType.equals(Constants.EMAIL_USER)) {
                 intent.putExtra(Constants.USER_ID, userIdForEmailUser);
