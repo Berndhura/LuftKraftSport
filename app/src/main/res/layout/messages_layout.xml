@@ -5,9 +5,10 @@
     android:orientation="vertical">
 
 
-    <TextView
+    <ListView
+        android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/messages"
-        android:layout_gravity="center_horizontal" />
+        android:listSelector="@drawable/list_selector"
+        android:layout_below="@+id/mainbar"/>
 </LinearLayout>

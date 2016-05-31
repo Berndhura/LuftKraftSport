@@ -27,6 +27,7 @@ import java.util.List;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.mainactivity.CustomListViewAdapter;
 import wichura.de.camperapp.mainactivity.RowItem;
 
 /**
@@ -41,12 +42,14 @@ public class MessagesActivity extends Activity {
 
     private ListView listView;
 
+    private MessageListViewAdapter adapter;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.messages_layout);
 
-        msg = (TextView) findViewById(R.id.messages);
+       // msg = (TextView) findViewById(R.id.messages);
         String adId = getIntent().getStringExtra(Constants.AD_ID);
         String sender = getIntent().getStringExtra(Constants.SENDER_ID);
 
@@ -54,7 +57,9 @@ public class MessagesActivity extends Activity {
         String userId = settings.getString(Constants.USER_ID, "");
         getMessages(userId, sender, adId);
 
-        listView = (ListView) findViewById(R.id.main_list);
+        listView = (ListView) findViewById(R.id.message_list);
+
+
     }
 
 
@@ -87,6 +92,12 @@ public class MessagesActivity extends Activity {
                 } catch (final JSONException e) {
                     e.printStackTrace();
                 }
+
+                adapter = new MessageListViewAdapter(
+                        context, R.layout.list_item, rowItems);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
             }
         }, new Response.ErrorListener() {
             @Override
