@@ -15,9 +15,7 @@ public class Constants {
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-    public static final String FACEBOOK_PROFILE_PIC_URL = "facebook_profile_pic_url";
     public static final String FACEBOOK_USER = "facebook_user";
-    // public static final String FACEBOOK_ACCESS_TOKEN = "facebook_access_token";
 
     public static final String USER_ID = "user_id";
     public static final String USER_NAME = "user_name";

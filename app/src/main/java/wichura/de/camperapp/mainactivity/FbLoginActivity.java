@@ -133,35 +133,6 @@ public class FbLoginActivity extends AppCompatActivity {
             loginButton.setReadPermissions("user_friends");
             loginButton.registerCallback(mCallbackMgt, mCallback);
         }
-
-//        AccessTokenTracker tracker = new AccessTokenTracker() {
-//            @Override
-//            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
-//
-//            }
-//        };
-//
-//        ProfileTracker profileTracker = new ProfileTracker() {
-//            @Override
-//            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-//                if (newProfile != null) {
-//                    mUserId = newProfile.getId();
-//                    Uri uri = newProfile.getProfilePictureUri(100, 100);
-//                    String name = newProfile.getName();
-//                    mFacebookPicUrl = uri.toString();
-//                    Log.d("Facebookbild", uri.toString());
-//
-//                    SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-//                    SharedPreferences.Editor editor = settings.edit();
-//                    editor.putString(Constants.USER_NAME, name);
-//                    editor.putString(Constants.USER_ID, mUserId);
-//                    editor.putString(Constants.USER_TYPE, Constants.FACEBOOK_USER);
-//                    editor.apply();
-//                }
-//            }
-//        };
-//        tracker.startTracking();
-//        profileTracker.startTracking();
     }
 
     private FacebookCallback<LoginResult> initFacebookCallback() {

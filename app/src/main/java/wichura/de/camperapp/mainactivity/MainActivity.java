@@ -43,7 +43,6 @@ import com.facebook.ProfileTracker;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
@@ -145,9 +144,8 @@ public class MainActivity extends AppCompatActivity implements
                     setUserPreferences("", "");
                     setProfileName("");
                     setProfilePicture(null);
+                    updateLoginButton();
                 }
-
-
             }
         };
 
@@ -158,19 +156,13 @@ public class MainActivity extends AppCompatActivity implements
                     String userId = newProfile.getId();
                     String name = newProfile.getName();
 
-                    SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(Constants.USER_NAME, name);
-                    editor.putString(Constants.USER_ID, userId);
-                    editor.putString(Constants.USER_TYPE, Constants.FACEBOOK_USER);
-                    editor.apply();
+                    setUserPreferences(name, userId);
 
                     Intent loginComplete = new Intent(Constants.LOGIN_COMPLETE);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
                 }
             }
         };
-
         tracker.startTracking();
         profileTracker.startTracking();
 
@@ -293,12 +285,8 @@ public class MainActivity extends AppCompatActivity implements
                             //TODO: und nu
                         }
                         //TODO auch ohne login moeglich
-                        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(Constants.USER_NAME, userName);
-                        editor.putString(Constants.USER_ID, userId);
-                        editor.putString(Constants.USER_TYPE, Constants.FACEBOOK_USER);
-                        editor.apply();
+                        setUserPreferences(userName, userId);
+
                         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                     }
                 } catch (JSONException e) {
@@ -420,6 +408,8 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             updateLoginButton();
+            setProfileName(getUserName());
+            setProfilePicture(null);
             Log.d("CONAN: ", "Return from login, userid: " + getUserId());
             // invalidateOptionsMenu();
         }
@@ -456,14 +446,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void updateLoginButton() {
-        if (AccessToken.getCurrentAccessToken() != null) {
-            Log.d("CONAN: ", "Facebook access token ok");
-            loginBtn.setEnabled(false);
-            loginBtn.setVisibility(View.GONE);
-            getFacebookUserInfo();
-        } else {
-            Log.d("CONAN: ", "Facebook access token null");
-            //TODO: false ist hier falsch, wenn anders eingelogged G+ oder email, also anders checken sharedPrefs!!!
+        if (getUserId().equals("")) {
+            Log.d("CONAN: ", "enable login button");
             loginBtn.setEnabled(true);
             loginBtn.setVisibility(View.VISIBLE);
             loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -472,7 +456,12 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                 }
             });
-            getFacebookUserInfo();
+            getFacebookUserInfo();  //TODO richtig hier?
+        } else {
+            Log.d("CONAN: ", "disable login button");
+            loginBtn.setEnabled(false);
+            loginBtn.setVisibility(View.GONE);
+            getFacebookUserInfo();  //TODO richtig hier?
         }
     }
 
