@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         //init navigationbar
@@ -281,12 +281,9 @@ public class MainActivity extends AppCompatActivity implements
                         if (profile != null) {
                             Uri uri = profile.getProfilePictureUri(200, 200);
                             setProfilePicture(uri);
-                        } else {
-                            //TODO: und nu
                         }
                         //TODO auch ohne login moeglich
                         setUserPreferences(userName, userId);
-
                         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                     }
                 } catch (JSONException e) {
