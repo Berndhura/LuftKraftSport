@@ -73,29 +73,14 @@ public class MainActivity extends AppCompatActivity implements
     private List<RowItem> rowItems;
     private CustomListViewAdapter adapter;
 
-    public static final int REQUEST_ID_FOR_NEW_AD = 1;
-    public static final int REQUEST_ID_FOR_FACEBOOK_LOGIN = 2;
-    public static final int REQUEST_ID_FOR_OPEN_AD = 3;
-    public static final int REQUEST_ID_FOR_MY_ADS = 4;
-    private static final int REQUEST_ID_FOR_SEARCH = 5;
-    private static final int REQUEST_ID_FOR_MESSAGES = 6;
 
-
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
 
-    private String facebookId;
-    private String userName;
-    private Boolean isUserLogedIn;
 
     private ImageView loginBtn;
 
     CallbackManager callbackManager;
-    private ImageView profilePic;
     private DrawerLayout drawer;
-    private String userIdForEmailUser;
-    private String userNameForEmailUser;
-    private String userType = "";
 
     //Google Cloud Messages
     private BroadcastReceiver mGcmRegistrationBroadcastReceiver;
@@ -149,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements
         //
         loginBtn = (ImageView) findViewById(R.id.login_button);
 
-        updateLoginStatus();
         updateLoginButton();
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
 
@@ -211,15 +195,11 @@ public class MainActivity extends AppCompatActivity implements
         mLoginBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                //mache was weil login is fertig -> update  profile bild und user name
                 Toast.makeText(MainActivity.this, "BROADCAST LOGIN RECEIVED", Toast.LENGTH_SHORT).show();
             }
         };
 
         registerLoginReceiver();
-
-        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-        Toast.makeText(MainActivity.this, gcm.toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -262,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                apiAvailability.getErrorDialog(this, resultCode, Constants.PLAY_SERVICES_RESOLUTION_REQUEST)
                         .show();
             } else {
                 Log.i(TAG, "This device is not supported.");
@@ -273,16 +253,6 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    private void updateLoginStatus() {
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-        userNameForEmailUser = settings.getString(Constants.USER_NAME, "");
-        userIdForEmailUser = settings.getString(Constants.USER_ID, "");
-        userType = settings.getString(Constants.USER_TYPE, "");
-        isUserLogedIn = true;
-        //setProfilePicture(null);
-        //setProfileName(userNameForEmailUser);
-        Log.d("CONAN: ", "user name, id: " + userNameForEmailUser + ", " + userIdForEmailUser);
-    }
 
     private void configureFlurry() {
         FlurryAgent.setLogEnabled(true);
@@ -303,9 +273,8 @@ public class MainActivity extends AppCompatActivity implements
                     if (json != null) {
                         //user id
                         Log.d("CONAN: ", "user id facebook: " + json.getString("id"));
-                        facebookId = json.getString("id");
-                        userName = json.getString("name");
-                        userType = Constants.FACEBOOK_USER;
+                        String userId = json.getString("id");
+                        String userName = json.getString("name");
                         Log.d("CONAN: ", "user name facebook: " + json.getString("name"));
                         setProfileName(userName);
                         //user profile picture
@@ -313,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements
                         if (profile != null) {
                             Uri uri = profile.getProfilePictureUri(200, 200);
                             setProfilePicture(uri);
-                            isUserLogedIn = true;
                         } else {
                             //TODO: und nu
                         }
@@ -321,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements
                         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString(Constants.USER_NAME, userName);
-                        editor.putString(Constants.USER_ID, facebookId);
+                        editor.putString(Constants.USER_ID, userId);
                         editor.putString(Constants.USER_TYPE, Constants.FACEBOOK_USER);
                         editor.apply();
                         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
@@ -336,20 +304,6 @@ public class MainActivity extends AppCompatActivity implements
         parameters.putString("fields", "id,name,link,picture");
         request.setParameters(parameters);
         request.executeAsync();
-    }
-
-    private void setProfilePicture(Uri uri) {
-        ImageView proPic = (ImageView) findViewById(R.id.profile_image);
-        if (uri != null) {
-            Picasso.with(getApplicationContext()).load(uri.toString()).into(proPic);
-        } else {
-            proPic.setImageResource(R.drawable.applogo);
-        }
-    }
-
-    private void setProfileName(String name) {
-        TextView nav_user = (TextView) findViewById(R.id.username);
-        if (nav_user != null) nav_user.setText(name);
     }
 
     private void getAdsJsonForKeyword(String url) {
@@ -390,7 +344,6 @@ public class MainActivity extends AppCompatActivity implements
                                             final View arg1, final int position, final long arg3) {
 
                         final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
-
                         //open new details page with sel. item
                         final Intent intent = new Intent(getApplicationContext(),
                                 OpenAdActivity.class);
@@ -404,8 +357,8 @@ public class MainActivity extends AppCompatActivity implements
                         intent.putExtra(Constants.DATE, rowItem.getDate());
                         intent.putExtra(Constants.VIEWS, rowItem.getViews());
                         intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
-                        intent.putExtra(Constants.USER_ID, facebookId); //TODO refactor to general user id (google+,facebook,myId)
-                        startActivityForResult(intent, REQUEST_ID_FOR_OPEN_AD);
+                        intent.putExtra(Constants.USER_ID, getUserId());
+                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
                     }
                 });
                 setProgressBarIndeterminateVisibility(false);
@@ -432,12 +385,12 @@ public class MainActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_ID_FOR_NEW_AD) {
+        if (requestCode == Constants.REQUEST_ID_FOR_NEW_AD) {
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
         }
 
         //back from Facebook login/logout page
-        if (requestCode == REQUEST_ID_FOR_FACEBOOK_LOGIN) {
+        if (requestCode == Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN) {
 
             if (data != null) { //just back from login page without data
                 //update picture and name in drawer
@@ -445,15 +398,11 @@ public class MainActivity extends AppCompatActivity implements
                 getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
             }
 
-            SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-            final String name = settings.getString(Constants.USER_NAME, "");
-            final String id = settings.getString(Constants.USER_ID, "");
-            final String type = settings.getString(Constants.USER_TYPE, "");
 
-            if (type.equals(Constants.EMAIL_USER)) {
+            if (getUserType().equals(Constants.EMAIL_USER)) {
                 //create new user in DB in case of first login
                 HttpHelper httpHelper = new HttpHelper(getApplicationContext());
-                httpHelper.updateUserInDb(name, id);
+                httpHelper.updateUserInDb(getUserName(), getUserId());
 
                 //request Token from GCM and update in DB
                 if (checkPlayServices()) {
@@ -464,17 +413,17 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             updateLoginButton();
-            Log.d("CONAN: ", "Return from login, userid: " + id);
+            Log.d("CONAN: ", "Return from login, userid: " + getUserId());
             // invalidateOptionsMenu();
         }
 
-        if (requestCode == REQUEST_ID_FOR_OPEN_AD) {
+        if (requestCode == Constants.REQUEST_ID_FOR_OPEN_AD) {
             getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
         }
 
-        if (requestCode == REQUEST_ID_FOR_SEARCH) {
+        if (requestCode == Constants.REQUEST_ID_FOR_SEARCH) {
             if (data != null) {
-                String query = data.getStringExtra("KEYWORDS");
+                String query = data.getStringExtra("KEYWORDS");  //TODO: Constants
                 getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
                 drawer.closeDrawer(GravityCompat.START);
             }
@@ -483,9 +432,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //TODO works only for email user now
-        Log.d("CONAN: ", "user name, id: " + userNameForEmailUser + ", " + userIdForEmailUser);
-        setProfileName(userNameForEmailUser);
+        setProfileName(getUserName());
         setProfilePicture(null);
         return true;
     }
@@ -506,12 +453,10 @@ public class MainActivity extends AppCompatActivity implements
             Log.d("CONAN: ", "Facebook access token ok");
             loginBtn.setEnabled(false);
             loginBtn.setVisibility(View.GONE);
-            isUserLogedIn = true;
             getFacebookUserInfo();
         } else {
             Log.d("CONAN: ", "Facebook access token null");
             //TODO: false ist hier falsch, wenn anders eingelogged G+ oder email, also anders checken sharedPrefs!!!
-            isUserLogedIn = false;
             loginBtn.setEnabled(true);
             loginBtn.setVisibility(View.VISIBLE);
             loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -528,9 +473,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        final String userId = getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
-        switch (item.getItemId()) {
+        final String userId = getUserId();
 
+        switch (item.getItemId()) {
             case R.id.myads: {
                 if (userId.equals("")) {
                     startLoginActivity();
@@ -538,10 +483,10 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
                     intent.putExtra(Constants.USER_ID, userId);
-                    startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
+                    startActivityForResult(intent, Constants.REQUEST_ID_FOR_MY_ADS);
+                    return true;
                 }
             }
-
             case R.id.new_ad: {
                 if (userId.equals("")) {
                     startLoginActivity();
@@ -549,27 +494,23 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 final Intent intent = new Intent(this, NewAdActivity.class);
                 intent.putExtra(Constants.USER_ID, userId);
-                startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
+                startActivityForResult(intent, Constants.REQUEST_ID_FOR_NEW_AD);
                 return true;
             }
-
             case R.id.search: {
                 final Intent searchIntent = new Intent(this, SearchActivity.class);
-                startActivityForResult(searchIntent, REQUEST_ID_FOR_SEARCH);
+                startActivityForResult(searchIntent,Constants. REQUEST_ID_FOR_SEARCH);
                 return true;
             }
-
             case R.id.login_out: {
                 startLoginActivity();
                 return true;
             }
-
             case R.id.refresh: {
                 getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
-
             case R.id.bookmarks: {
                 if (userId.equals("")) {
                     startLoginActivity();
@@ -580,14 +521,13 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
                 }
             }
-
             case R.id.messages_from_user: {
                 if (userId.equals("")) {
                     startLoginActivity();
                     return true;
                 } else {
                     final Intent msgIntent = new Intent(this, MessagesActivity.class);
-                    startActivityForResult(msgIntent, REQUEST_ID_FOR_MESSAGES); //TODO welche genau
+                    startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES); //TODO welche genau
                     return true;
                 }
             }
@@ -599,6 +539,34 @@ public class MainActivity extends AppCompatActivity implements
 
     private void startLoginActivity() {
         final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
-        startActivityForResult(facebookIntent, REQUEST_ID_FOR_FACEBOOK_LOGIN);
+        startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
+    }
+
+    private void setProfilePicture(Uri uri) {
+        ImageView proPic = (ImageView) findViewById(R.id.profile_image);
+        if (uri != null) {
+            Picasso.with(getApplicationContext()).load(uri.toString()).into(proPic);
+        } else {
+            if (proPic != null) {
+                proPic.setImageResource(R.drawable.applogo);
+            }
+        }
+    }
+
+    private void setProfileName(String name) {
+        TextView nav_user = (TextView) findViewById(R.id.username);
+        if (nav_user != null) nav_user.setText(name);
+    }
+
+    private String getUserName() {
+        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_NAME, "");
+    }
+
+    private String getUserId() {
+        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+    }
+
+    private String getUserType() {
+        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_TYPE, "");
     }
 }

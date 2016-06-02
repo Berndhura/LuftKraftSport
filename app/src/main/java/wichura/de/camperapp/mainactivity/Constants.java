@@ -6,6 +6,15 @@ package wichura.de.camperapp.mainactivity;
  */
 public class Constants {
 
+    public static final int REQUEST_ID_FOR_NEW_AD = 1;
+    public static final int REQUEST_ID_FOR_FACEBOOK_LOGIN = 2;
+    public static final int REQUEST_ID_FOR_OPEN_AD = 3;
+    public static final int REQUEST_ID_FOR_MY_ADS = 4;
+    public static final int REQUEST_ID_FOR_SEARCH = 5;
+    public static final int REQUEST_ID_FOR_MESSAGES = 6;
+
+    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     public static final String FACEBOOK_PROFILE_PIC_URL = "facebook_profile_pic_url";
     public static final String FACEBOOK_USER = "facebook_user";
     // public static final String FACEBOOK_ACCESS_TOKEN = "facebook_access_token";

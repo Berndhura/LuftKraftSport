@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import java.util.NoSuchElementException;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.ad.NewAdActivity;
 
 
 /**
@@ -59,7 +60,14 @@ public class StartActivity extends Activity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                //do was
+                if (getUserId().equals("")) {
+                    final Intent facebookIntent = new Intent(getApplicationContext(), FbLoginActivity.class);
+                    startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
+                } else {
+                    final Intent intent = new Intent(getApplicationContext(), NewAdActivity.class);
+                    intent.putExtra(Constants.USER_ID, getUserId());
+                    startActivityForResult(intent, Constants.REQUEST_ID_FOR_NEW_AD);
+                }
             }
         });
         return startButton;
@@ -153,5 +161,9 @@ public class StartActivity extends Activity {
     private int dpToPx(int dp) {
         float density = getApplicationContext().getResources().getDisplayMetrics().density;
         return Math.round((float) dp * density);
+    }
+
+    private String getUserId() {
+        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
     }
 }
