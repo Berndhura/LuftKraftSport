@@ -392,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
             if (getUserType().equals(Constants.EMAIL_USER)) {
+                //TODO nur wenn userid da!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 //create new user in DB in case of first login
                 HttpHelper httpHelper = new HttpHelper(getApplicationContext());
                 httpHelper.updateUserInDb(getUserName(), getUserId());
