@@ -517,9 +517,7 @@ public class MainActivity extends AppCompatActivity implements
             loginBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("CONAN: ", "open login page");
-                    Intent i = new Intent(getApplicationContext(), FbLoginActivity.class);
-                    startActivityForResult(i, REQUEST_ID_FOR_FACEBOOK_LOGIN);
+                    startLoginActivity();
                 }
             });
             getFacebookUserInfo();
@@ -530,76 +528,77 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-        final String name = settings.getString(Constants.USER_NAME, "");
-        final String userId = settings.getString(Constants.USER_ID, "");
-        final String type = settings.getString(Constants.USER_TYPE, "");
+        final String userId = getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+        switch (item.getItemId()) {
 
-        int id = item.getItemId();
+            case R.id.myads: {
+                if (userId.equals("")) {
+                    startLoginActivity();
+                    return true;
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
+                    intent.putExtra(Constants.USER_ID, userId);
+                    startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
+                }
+            }
 
-        if (id == R.id.myads) {
-            //if not logged in
-            if (name.equals("")) {
-                final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
-                startActivityForResult(facebookIntent, REQUEST_ID_FOR_FACEBOOK_LOGIN);
+            case R.id.new_ad: {
+                if (userId.equals("")) {
+                    startLoginActivity();
+                    return true;
+                }
+                final Intent intent = new Intent(this, NewAdActivity.class);
+                intent.putExtra(Constants.USER_ID, userId);
+                startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
                 return true;
             }
-            //TODO use sharedPrefs
-            Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
-            if (userType.equals(Constants.EMAIL_USER)) {
-                intent.putExtra(Constants.USER_ID, userIdForEmailUser);
-                startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
-            } else if (userType.equals(Constants.FACEBOOK_USER)) {
-                intent.putExtra(Constants.USER_ID, facebookId);
-                startActivityForResult(intent, REQUEST_ID_FOR_MY_ADS);
-            } else {
-                Log.d("CONAN: ", "no login data");
-                Toast.makeText(getApplicationContext(), "Log in please...", Toast.LENGTH_LONG).show();
+
+            case R.id.search: {
+                final Intent searchIntent = new Intent(this, SearchActivity.class);
+                startActivityForResult(searchIntent, REQUEST_ID_FOR_SEARCH);
+                return true;
+            }
+
+            case R.id.login_out: {
+                startLoginActivity();
+                return true;
+            }
+
+            case R.id.refresh: {
+                getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                if (drawer != null) drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+
+            case R.id.bookmarks: {
+                if (userId.equals("")) {
+                    startLoginActivity();
+                    return true;
+                } else {
+                    getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + userId);
+                    if (drawer != null) drawer.closeDrawer(GravityCompat.START);
+                    return true;
+                }
+            }
+
+            case R.id.messages_from_user: {
+                if (userId.equals("")) {
+                    startLoginActivity();
+                    return true;
+                } else {
+                    final Intent msgIntent = new Intent(this, MessagesActivity.class);
+                    startActivityForResult(msgIntent, REQUEST_ID_FOR_MESSAGES); //TODO welche genau
+                    return true;
+                }
             }
         }
-        if (id == R.id.new_ad) {
-            //TODO wenn shared prefs fertig checke ob user eingelogged, dann wieder einkommentieren
-//            if (!isUserLogedIn) {
-//                final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
-//                startActivityForResult(facebookIntent, REQUEST_ID_FOR_FACEBOOK_LOGIN);
-//                return true;
-//            }
-            final Intent intent = new Intent(this, NewAdActivity.class);
-            if (userType.equals(Constants.EMAIL_USER)) {
-                intent.putExtra(Constants.USER_ID, userIdForEmailUser);
-            }
-            if (userType.equals(Constants.FACEBOOK_USER)) {
-                intent.putExtra(Constants.USER_ID, facebookId);
-            }
-            startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
-            return true;
 
-        } else if (id == R.id.search) {
-            final Intent searchIntent = new Intent(this, SearchActivity.class);
-            startActivityForResult(searchIntent, REQUEST_ID_FOR_SEARCH);
-            return true;
-
-        } else if (id == R.id.login_out) {
-            final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
-            startActivityForResult(facebookIntent, REQUEST_ID_FOR_FACEBOOK_LOGIN);
-            return true;
-
-        } else if (id == R.id.refresh) {
-            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
-            if (drawer != null) drawer.closeDrawer(GravityCompat.START);
-            return true;
-
-        } else if (id == R.id.bookmarks) {
-            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + userId);
-            if (drawer != null) drawer.closeDrawer(GravityCompat.START);
-            return true;
-
-        } else if (id == R.id.messages_from_user) {
-            final Intent msgIntent = new Intent(this, MessagesActivity.class);
-            startActivityForResult(msgIntent, REQUEST_ID_FOR_MESSAGES);
-            return true;
-        }
         if (drawer != null) drawer.closeDrawer(GravityCompat.START);
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startLoginActivity() {
+        final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
+        startActivityForResult(facebookIntent, REQUEST_ID_FOR_FACEBOOK_LOGIN);
     }
 }
