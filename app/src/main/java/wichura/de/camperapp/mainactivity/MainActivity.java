@@ -140,6 +140,13 @@ public class MainActivity extends AppCompatActivity implements
         AccessTokenTracker tracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
+                if (newAccessToken == null) {
+                    //Facebook user logged out: name="" and userId=""
+                    setUserPreferences("", "");
+                    setProfileName("");
+                    setProfilePicture(null);
+                }
+
 
             }
         };
@@ -551,6 +558,14 @@ public class MainActivity extends AppCompatActivity implements
                 proPic.setImageResource(R.drawable.applogo);
             }
         }
+    }
+
+    private void setUserPreferences(String name, String userId) {
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(Constants.USER_NAME, name);
+        editor.putString(Constants.USER_ID, userId);
+        editor.apply();
     }
 
     private void setProfileName(String name) {
