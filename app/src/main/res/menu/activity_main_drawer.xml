@@ -32,9 +32,9 @@
     <item android:title="Settings">
         <menu>
             <item
-                android:id="@+id/login_out"
-                android:icon="@drawable/com_facebook_button_icon"
-                android:title="Login" />
+                android:id="@+id/settings"
+                android:icon="@drawable/ic_action_settings"
+                android:title="Settings" />
             <item
                 android:id="@+id/refresh"
                 android:icon="@drawable/ic_action_refresh"

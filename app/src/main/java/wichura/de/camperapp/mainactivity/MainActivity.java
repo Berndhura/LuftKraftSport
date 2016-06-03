@@ -158,6 +158,18 @@ public class MainActivity extends AppCompatActivity implements
 
                     setUserPreferences(name, userId);
 
+                    //not logged in as FB user: create db entry, GCM token, update login button
+                    if (oldProfile == null && newProfile != null && checkPlayServices() && isUserLoggedIn()) {
+                        HttpHelper httpHelper = new HttpHelper(getApplicationContext());
+                        httpHelper.updateUserInDb(getUserName(), getUserId());
+                        if (checkPlayServices() && isUserLoggedIn()) {
+                            // Start IntentService to register this application with GCM.
+                            Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
+                            startService(intent);
+                        }
+                        updateLoginButton();
+                    }
+
                     Intent loginComplete = new Intent(Constants.LOGIN_COMPLETE);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
                 }
@@ -377,50 +389,61 @@ public class MainActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == Constants.REQUEST_ID_FOR_NEW_AD) {
-            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
-        }
-
-        //back from Facebook login/logout page
-        if (requestCode == Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN) {
-
-            if (data != null) { //just back from login page without data
-                //update picture and name in drawer
-                invalidateOptionsMenu();
+        switch (requestCode) {
+            case Constants.REQUEST_ID_FOR_NEW_AD: {
                 getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                break;
             }
+            case Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN: {
 
+                if (getUserType().equals(Constants.FACEBOOK_USER)) {
+                    //create new user in DB in case of first login
+                    HttpHelper httpHelper = new HttpHelper(getApplicationContext());
+                    httpHelper.updateUserInDb(getUserName(), getUserId());
 
-            if (getUserType().equals(Constants.EMAIL_USER)) {
-                //TODO nur wenn userid da!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //create new user in DB in case of first login
-                HttpHelper httpHelper = new HttpHelper(getApplicationContext());
-                httpHelper.updateUserInDb(getUserName(), getUserId());
-
-                //request Token from GCM and update in DB
-                if (checkPlayServices()) {
-                    // Start IntentService to register this application with GCM.
-                    Intent intent = new Intent(this, RegistrationIntentService.class);
-                    startService(intent);
+                    if (checkPlayServices() && isUserLoggedIn()) {
+                        // Start IntentService to register this application with GCM.
+                        Intent intent = new Intent(this, RegistrationIntentService.class);
+                        startService(intent);
+                    }
                 }
+
+                if (getUserType().equals(Constants.EMAIL_USER) && isUserLoggedIn()) {
+                    //create new user in DB in case of first login
+                    HttpHelper httpHelper = new HttpHelper(getApplicationContext());
+                    httpHelper.updateUserInDb(getUserName(), getUserId());
+
+                    //request Token from GCM and update in DB
+                    if (checkPlayServices() && isUserLoggedIn()) {
+                        // Start IntentService to register this application with GCM.
+                        Intent intent = new Intent(this, RegistrationIntentService.class);
+                        startService(intent);
+                    }
+                }
+
+                updateLoginButton();
+                setProfileName(getUserName());
+                setProfilePicture(null);
+                Log.d("CONAN: ", "Return from login, userid: " + getUserId());
+                break;
             }
-
-            updateLoginButton();
-            setProfileName(getUserName());
-            setProfilePicture(null);
-            Log.d("CONAN: ", "Return from login, userid: " + getUserId());
-            // invalidateOptionsMenu();
-        }
-
-        if (requestCode == Constants.REQUEST_ID_FOR_OPEN_AD) {
-            getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
-        }
-
-        if (requestCode == Constants.REQUEST_ID_FOR_SEARCH) {
-            if (data != null) {
-                String query = data.getStringExtra("KEYWORDS");  //TODO: Constants
-                getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
-                drawer.closeDrawer(GravityCompat.START);
+            case Constants.REQUEST_ID_FOR_OPEN_AD: {
+                getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                break;
+            }
+            case Constants.REQUEST_ID_FOR_SEARCH: {
+                if (data != null) {
+                    String query = data.getStringExtra("KEYWORDS");  //TODO: Constants
+                    getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+                break;
+            }
+            case Constants.REQUEST_ID_FOR_SETTINGS: {
+                updateLoginButton();
+                setProfileName(getUserName());
+                setProfilePicture(null);
+                break;
             }
         }
     }
@@ -493,11 +516,12 @@ public class MainActivity extends AppCompatActivity implements
             }
             case R.id.search: {
                 final Intent searchIntent = new Intent(this, SearchActivity.class);
-                startActivityForResult(searchIntent,Constants. REQUEST_ID_FOR_SEARCH);
+                startActivityForResult(searchIntent, Constants.REQUEST_ID_FOR_SEARCH);
                 return true;
             }
-            case R.id.login_out: {
-                startLoginActivity();
+            case R.id.settings: {
+                final Intent i = new Intent(this, SettingsActivity.class);
+                startActivityForResult(i, Constants.REQUEST_ID_FOR_SETTINGS);
                 return true;
             }
             case R.id.refresh: {
@@ -566,6 +590,10 @@ public class MainActivity extends AppCompatActivity implements
 
     private String getUserId() {
         return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+    }
+
+    private Boolean isUserLoggedIn() {
+        return !getUserId().equals("");
     }
 
     private String getUserType() {

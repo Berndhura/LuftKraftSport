@@ -41,7 +41,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.gcm.QuickstartPreferences;
 import wichura.de.camperapp.http.Urls;
 
 /**
