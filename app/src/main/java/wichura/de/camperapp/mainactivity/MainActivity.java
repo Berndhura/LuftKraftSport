@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements
                     setUserPreferences(name, userId);
 
                     //not logged in as FB user: create db entry, GCM token, update login button
-                    if (oldProfile == null && newProfile != null && checkPlayServices() && isUserLoggedIn()) {
+                    if (oldProfile == null  && checkPlayServices() && isUserLoggedIn()) {
                         HttpHelper httpHelper = new HttpHelper(getApplicationContext());
                         httpHelper.updateUserInDb(getUserName(), getUserId());
                         if (checkPlayServices() && isUserLoggedIn()) {
