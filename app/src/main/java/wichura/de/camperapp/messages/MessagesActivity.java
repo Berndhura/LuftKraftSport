@@ -1,13 +1,16 @@
 package wichura.de.camperapp.messages;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.MessageHelper;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 
@@ -78,13 +82,35 @@ public class MessagesActivity extends AppCompatActivity {
             newMsgBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    newMessage = (TextView) findViewById(R.id.txt_new_message);
+                    sendMessage("1","1","1"); //TODO get the parameter
+                    //newMessage = (TextView) findViewById(R.id.txt_new_message);
                 }
             });
         }
 
     }
 
+
+    private void sendMessage(final String adId, final String ownerId, final String sender) {
+        //send a message
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final EditText edittext = new EditText(MessagesActivity.this);
+        alert.setTitle("Send a message");
+        alert.setView(edittext);
+        alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String message = edittext.getText().toString();
+                MessageHelper msgHelper = new MessageHelper(getApplicationContext());
+                msgHelper.sendMessageRequest(message, adId, ownerId, sender);
+            }
+        });
+        alert.setNegativeButton("not yet", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //just go away...
+            }
+        });
+        alert.show();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
