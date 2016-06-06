@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_margin="5dip"
-        android:src="@drawable/speechbubbletoleft"/>
+        android:src="@drawable/applogo"/>
 
     <TextView android:id="@+id/text" 
         android:layout_height="wrap_content"
