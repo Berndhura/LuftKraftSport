@@ -55,11 +55,11 @@ public class MessagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.messages_layout);
 
-        String adId = getIntent().getStringExtra(Constants.AD_ID);
-        String sender = getIntent().getStringExtra(Constants.SENDER_ID);
+        final String adId = getIntent().getStringExtra(Constants.AD_ID);
+        final String sender = getIntent().getStringExtra(Constants.SENDER_ID);
 
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-        String userId = settings.getString(Constants.USER_ID, "");
+        final String userId = settings.getString(Constants.USER_ID, "");
         getMessages(userId, sender, adId);
 
         listView = (ListView) findViewById(R.id.message_list);
@@ -82,8 +82,7 @@ public class MessagesActivity extends AppCompatActivity {
             newMsgBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    sendMessage("1","1","1"); //TODO get the parameter
-                    //newMessage = (TextView) findViewById(R.id.txt_new_message);
+                    sendMessage(adId, userId, sender); //TODO parameter ok?
                 }
             });
         }
