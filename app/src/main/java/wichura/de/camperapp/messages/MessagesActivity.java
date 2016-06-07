@@ -1,7 +1,6 @@
 package wichura.de.camperapp.messages;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -60,7 +60,9 @@ public class MessagesActivity extends AppCompatActivity {
 
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         final String userId = settings.getString(Constants.USER_ID, "");
-        getMessages(userId, sender, adId);
+        if (!isAllMessagesForUser()) {
+            getMessages(userId, sender, adId);
+        }
 
         listView = (ListView) findViewById(R.id.message_list);
 
@@ -142,7 +144,8 @@ public class MessagesActivity extends AppCompatActivity {
 
 
     private void sendMessage(final String adId, final String ownerId, final String sender) {
-        //send a message
+        //send a message  adId, userId, sender
+        Log.d("CONAN", "send message: " + "adId: " +adId + "ownerId: " + ownerId + "sender: " + sender);
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(MessagesActivity.this);
         alert.setTitle("Send a message");

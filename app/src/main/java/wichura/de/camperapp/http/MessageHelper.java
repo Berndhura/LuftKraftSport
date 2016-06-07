@@ -22,6 +22,7 @@ public class MessageHelper {
     }
 
     public void sendMessageRequest(String message, String adId, String ownerId, String sender) {
+        //adId, userId, sender
         RequestQueue requestQueue = Volley.newRequestQueue(ctx);
         String url = Urls.MAIN_SERVER_URL + Urls.SEND_MESSAGE +
                 "?message=" + message.replaceAll(" ", "%20")
