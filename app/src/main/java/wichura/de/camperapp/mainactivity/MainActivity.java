@@ -545,7 +545,9 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
                 } else {
                     final Intent msgIntent = new Intent(this, MessagesActivity.class);
-                    startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES); //TODO welche genau
+                    msgIntent.putExtra(Constants.USER_ID, userId);
+                    msgIntent.putExtra(Constants.MESSAGES_FOR_USER, true);
+                    startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES);
                     return true;
                 }
             }

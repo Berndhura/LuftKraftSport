@@ -22,5 +22,6 @@ public class Urls {
     public static final String SEND_MESSAGE = "saveMessage";
     public static final String SEND_TOKEN_FOR_GCM = "sendToken";
     public static final String GET_ALL_MESSAGES_FOR_USER = "getAllMessagesForUser";
+    public static final String GET_ALL_MESSAGES_FOR_AD ="getAllMessagesForAd";
 }
 

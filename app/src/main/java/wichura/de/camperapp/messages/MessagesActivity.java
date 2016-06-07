@@ -87,6 +87,48 @@ public class MessagesActivity extends AppCompatActivity {
             });
         }
 
+        if (getIntent().getBooleanExtra(Constants.MESSAGES_FOR_USER, false)) {
+            getMessagesForUser(userId);
+        }
+
+    }
+
+    private void getMessagesForUser(String userId) {
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        String url = Urls.MAIN_SERVER_URL + Urls.GET_ALL_MESSAGES_FOR_USER + "?userId=" + userId;
+
+        JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Context context = getApplicationContext();
+                try {
+                    final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+                    final JSONArray listOfAllAds = new JSONArray(response.toString());
+                    rowItems = new ArrayList<>();
+                    for (int i = 0; i < listOfAllAds.length(); i++) {
+                        final String title = listOfAllAds.getJSONObject(i).toString();
+                        //use RowItem class to get from GSON
+                        final MsgRowItem rowItem = gson.fromJson(title, MsgRowItem.class);
+                        rowItems.add(rowItem);
+                    }
+                } catch (final JSONException e) {
+                    e.printStackTrace();
+                }
+
+                adapter = new MessageListViewAdapter(
+                        context, R.layout.list_item, rowItems);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Missing network connection!\n" + error.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(getAllAdsInJson);
     }
 
 
@@ -121,7 +163,7 @@ public class MessagesActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        String url = Urls.MAIN_SERVER_URL + Urls.GET_ALL_MESSAGES_FOR_USER + "?userId=" + userId + "&sender=" + sender + "&adId=" + adId;
+        String url = Urls.MAIN_SERVER_URL + Urls.GET_ALL_MESSAGES_FOR_AD + "?userId=" + userId + "&sender=" + sender + "&adId=" + adId;
 
         JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override

@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/plus" />
+                android:src="@drawable/ic_add_white_18dp" />
 
         </RelativeLayout>
 
