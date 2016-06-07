@@ -73,6 +73,7 @@ public class MyGcmListenerService  extends GcmListenerService {
         Intent intent = new Intent(this, MessagesActivity.class);
         intent.putExtra(Constants.SENDER_ID, sender);
         intent.putExtra(Constants.AD_ID, adId);
+        intent.putExtra(Constants.MESSAGES_FOR_USER, false);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,

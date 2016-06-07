@@ -77,20 +77,29 @@ public class MessagesActivity extends AppCompatActivity {
             });
         }
 
-        ImageView newMsgBtn = (ImageView) findViewById(R.id.new_msg_button);
-        if (newMsgBtn != null) {
-            newMsgBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    sendMessage(adId, userId, sender); //TODO parameter ok?
-                }
-            });
+        if (!isAllMessagesForUser()) {
+            ImageView newMsgBtn = (ImageView) findViewById(R.id.new_msg_button);
+            if (newMsgBtn != null) {
+                newMsgBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        sendMessage(adId, userId, sender); //TODO parameter ok?
+                    }
+                });
+            }
+        } else {
+            ImageView newMsgBtn = (ImageView) findViewById(R.id.new_msg_button);
+            newMsgBtn.setVisibility(View.GONE);
         }
 
-        if (getIntent().getBooleanExtra(Constants.MESSAGES_FOR_USER, false)) {
+        if (isAllMessagesForUser()) {
             getMessagesForUser(userId);
         }
 
+    }
+
+    private boolean isAllMessagesForUser() {
+        return getIntent().getBooleanExtra(Constants.MESSAGES_FOR_USER, false);
     }
 
     private void getMessagesForUser(String userId) {
