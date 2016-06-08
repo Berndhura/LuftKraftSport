@@ -112,7 +112,7 @@ public class OpenAdActivity extends AppCompatActivity {
         mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
         mAdId = getIntent().getStringExtra(Constants.AD_ID);
 
-       // sendRequestForViewCount(mAdId);
+        sendRequestForViewCount(mAdId);
 
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
 
