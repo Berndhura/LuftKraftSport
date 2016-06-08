@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements
     private CustomListViewAdapter adapter;
 
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "CONAN";
 
 
     private ImageView loginBtn;

@@ -34,7 +34,7 @@ public class SearchActivity  extends Activity {
             public void onClick(View v) {
                 final Intent data = new Intent();
                 data.putExtra("KEYWORDS", ((TextView) findViewById(R.id.keywords)).getText().toString());
-                data.putExtra("DATE", ((TextView) findViewById(R.id.date)).getText().toString());
+                //data.putExtra("DATE", ((TextView) findViewById(R.id.date)).getText().toString());
                 setResult(RESULT_OK, data);
                 finish();
             }
