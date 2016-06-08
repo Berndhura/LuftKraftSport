@@ -1,6 +1,7 @@
 package wichura.de.camperapp.messages;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -61,7 +62,12 @@ public class MessagesActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         final String userId = settings.getString(Constants.USER_ID, "");
         if (!isAllMessagesForUser()) {
-            getMessages(userId, sender, adId);
+            final ProgressDialog progressDialog = new ProgressDialog(MessagesActivity.this,
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Loading data...");
+            progressDialog.show();
+            getMessages(userId, sender, adId, progressDialog);
         }
 
         listView = (ListView) findViewById(R.id.message_list);
@@ -171,7 +177,7 @@ public class MessagesActivity extends AppCompatActivity {
         finish();
     }
 
-    private void getMessages(String userId, String sender, String adId) {
+    private void getMessages(String userId, String sender, String adId, final ProgressDialog pro) {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
@@ -180,6 +186,7 @@ public class MessagesActivity extends AppCompatActivity {
         JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                pro.dismiss();
                 Context context = getApplicationContext();
                 try {
                     final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();

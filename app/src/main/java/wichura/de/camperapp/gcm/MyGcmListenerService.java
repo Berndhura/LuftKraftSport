@@ -38,6 +38,7 @@ public class MyGcmListenerService  extends GcmListenerService {
         String message = data.getString("message");
         String sender = data.getString("sender");
         String adId = data.getString("adId");
+        String name = data.getString("name");
         Log.d(TAG, "Received: sender: " + sender);
         Log.d(TAG, "Received: Message: " + message);
         Log.d(TAG, "Received: ADID: " + adId);
@@ -60,7 +61,7 @@ public class MyGcmListenerService  extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(message, sender, adId);
+        sendNotification(message, sender, adId, name);
         // [END_EXCLUDE]
     }
     // [END receive_message]
@@ -70,7 +71,7 @@ public class MyGcmListenerService  extends GcmListenerService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message, String sender, String adId) {
+    private void sendNotification(String message, String sender, String adId, String name) {
         Intent intent = new Intent(this, MessagesActivity.class);
         intent.putExtra(Constants.SENDER_ID, sender);
         intent.putExtra(Constants.AD_ID, adId);
@@ -84,7 +85,7 @@ public class MyGcmListenerService  extends GcmListenerService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.applogo)
-                .setContentTitle("Camper App")
+                .setContentTitle("Camper App: " + name)
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
