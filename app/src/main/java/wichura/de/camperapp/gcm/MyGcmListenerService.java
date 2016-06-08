@@ -23,7 +23,7 @@ import wichura.de.camperapp.messages.MessagesActivity;
  */
 public class MyGcmListenerService  extends GcmListenerService {
 
-    private static final String TAG = "MyGcmListenerService";
+    private static final String TAG = "CONAN";
 
     /**
      * Called when message is received.
@@ -38,8 +38,9 @@ public class MyGcmListenerService  extends GcmListenerService {
         String message = data.getString("message");
         String sender = data.getString("sender");
         String adId = data.getString("adId");
-        Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Message: " + message);
+        Log.d(TAG, "Received: sender: " + sender);
+        Log.d(TAG, "Received: Message: " + message);
+        Log.d(TAG, "Received: ADID: " + adId);
 
         if (from.startsWith("/topics/")) {
             // message received from some topic.

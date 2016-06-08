@@ -27,7 +27,7 @@ public class MessageHelper {
         String url = Urls.MAIN_SERVER_URL + Urls.SEND_MESSAGE +
                 "?message=" + message.replaceAll(" ", "%20")
                 + "&adId=" + adId
-                + "&idFrom=" + sender + "&idTo=" + ownerId;
+                + "&idFrom=" + ownerId + "&idTo=" + sender;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
