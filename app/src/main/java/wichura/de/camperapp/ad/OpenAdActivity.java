@@ -3,6 +3,7 @@ package wichura.de.camperapp.ad;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.mainactivity.FbLoginActivity;
 
 public class OpenAdActivity extends AppCompatActivity {
 
@@ -154,17 +156,24 @@ public class OpenAdActivity extends AppCompatActivity {
             });
         } else {
             mDelAndMsgButton.setText("Send message");
-            mDelAndMsgButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //send a message to ad owner
-                    String adId = getIntent().getStringExtra(Constants.AD_ID);
-                    String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
-                    SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-                    String sender = settings.getString(Constants.USER_ID, "");
-                    sendMessage(adId, ownerId, sender);
-                }
-            });
+
+                mDelAndMsgButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!getUserId().equals("")) {
+                            //send a message to ad owner
+                            String adId = getIntent().getStringExtra(Constants.AD_ID);
+                            String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
+                            SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+                            String sender = settings.getString(Constants.USER_ID, "");
+                            sendMessage(adId, ownerId, sender);
+                        } else {
+                            final Intent facebookIntent = new Intent(getApplicationContext(), FbLoginActivity.class);
+                            startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
+                        }
+                    }
+                });
+
         }
 
         mBookmarkButton.setOnClickListener(new View.OnClickListener() {
@@ -391,5 +400,9 @@ public class OpenAdActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private String getUserId() {
+        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
     }
 }

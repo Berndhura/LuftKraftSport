@@ -442,6 +442,9 @@ public class MainActivity extends AppCompatActivity implements
             case Constants.REQUEST_ID_FOR_SETTINGS: {
                 updateLoginButton();
                 setProfileName(getUserName());
+                if (!isUserLoggedIn()) {
+                    setProfileName("Please login...");
+                }
                 setProfilePicture(null);
                 break;
             }
@@ -451,6 +454,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         setProfileName(getUserName());
+        if (!isUserLoggedIn()) {
+            setProfileName("Please login...");
+        }
         setProfilePicture(null);
         return true;
     }

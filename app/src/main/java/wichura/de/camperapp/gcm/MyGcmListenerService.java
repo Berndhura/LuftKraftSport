@@ -86,7 +86,7 @@ public class MyGcmListenerService  extends GcmListenerService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.applogo)
-                .setContentTitle("Camper App: " + name)
+                .setContentTitle(name + ": ")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
