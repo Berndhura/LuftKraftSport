@@ -27,20 +27,8 @@ import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
 
-import cz.msebera.android.httpclient.HttpEntity;
-import cz.msebera.android.httpclient.HttpResponse;
-import cz.msebera.android.httpclient.client.ClientProtocolException;
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.client.methods.HttpPost;
-import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
@@ -48,18 +36,15 @@ import wichura.de.camperapp.mainactivity.FbLoginActivity;
 
 public class OpenAdActivity extends AppCompatActivity {
 
-    private static double longitute;
-    private static double latitude;
+    // private static double longitute;
+    //private static double latitude;
     private Button mBookmarkButton;
     private String mAdId;
-
-    private ImageView imgView;
 
     private int displayHeight;
     private int displayWidth;
     private RequestQueue requestQueue;
     private boolean isBookmarked;
-    private boolean isMyAd;
 
 
     @Override
@@ -90,20 +75,18 @@ public class OpenAdActivity extends AppCompatActivity {
         TextView mPrice = (TextView) findViewById(R.id.price);
         TextView mDescText = (TextView) findViewById(R.id.description);
         TextView mDateText = (TextView) findViewById(R.id.ad_date);
-        imgView = (ImageView) findViewById(R.id.imageView);
+        ImageView imgView = (ImageView) findViewById(R.id.imageView);
         Button mDelAndMsgButton = (Button) findViewById(R.id.delButton);
 
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
 
-        //TODO: check DB if bookmarked!
+        //TODO:When open: check if bookmarked
         isBookmarked = false;
         if (isBookmarked) {
             mBookmarkButton.setText("Remove bookmark!");
         } else {
             mBookmarkButton.setText("Bookmark");
         }
-        //TODO check if user owns this ad
-        isMyAd = true;
 
 
         //get data from Intent
@@ -144,7 +127,7 @@ public class OpenAdActivity extends AppCompatActivity {
                     }
                 });
 
-        if (isOwnAd()) {
+        if (isOwnAd() && mDelAndMsgButton != null) {
             mDelAndMsgButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -157,22 +140,22 @@ public class OpenAdActivity extends AppCompatActivity {
         } else {
             mDelAndMsgButton.setText("Send message");
 
-                mDelAndMsgButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!getUserId().equals("")) {
-                            //send a message to ad owner
-                            String adId = getIntent().getStringExtra(Constants.AD_ID);
-                            String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
-                            SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-                            String sender = settings.getString(Constants.USER_ID, "");
-                            sendMessage(adId, ownerId, sender);
-                        } else {
-                            final Intent facebookIntent = new Intent(getApplicationContext(), FbLoginActivity.class);
-                            startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
-                        }
+            mDelAndMsgButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!getUserId().equals("")) {
+                        //send a message to ad owner
+                        String adId = getIntent().getStringExtra(Constants.AD_ID);
+                        String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
+                        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+                        String sender = settings.getString(Constants.USER_ID, "");
+                        sendMessage(adId, ownerId, sender);
+                    } else {
+                        final Intent facebookIntent = new Intent(getApplicationContext(), FbLoginActivity.class);
+                        startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
                     }
-                });
+                }
+            });
 
         }
 
@@ -190,7 +173,7 @@ public class OpenAdActivity extends AppCompatActivity {
             }
         });
 
-        Log.d("CONAN", "MyClass.getView() OPEN " + pictureUri);
+        Log.d("CONAN", "request Picture: " + pictureUri);
 
         //map fragment in app : https://developers.google.com/maps/documentation/android-api/start#die_xml-layoutdatei
         //TODO: show location on map fragment
@@ -220,7 +203,6 @@ public class OpenAdActivity extends AppCompatActivity {
         });
         alert.show();
     }
-
 
     private boolean isOwnAd() {
         return getIntent().getStringExtra(Constants.USER_ID_FROM_AD).equals(getIntent().getStringExtra(Constants.USER_ID));
@@ -285,8 +267,6 @@ public class OpenAdActivity extends AppCompatActivity {
     }
 
     private void delBookmark(String adId, String userId) {
-
-        //TODO: check parameter with capital I is in user
         String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_DELETE + "?adId=" + adId + "&userId=" + userId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -305,7 +285,6 @@ public class OpenAdActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-
 
     private void getDisplayDimensions() {
 
@@ -353,7 +332,27 @@ public class OpenAdActivity extends AppCompatActivity {
         myQuittingDialogBox.show();
     }
 
-    public static JSONObject getLocationInfo(String address) {
+    private String getUserId() {
+        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+    }
+
+     /* public static boolean getLatLong(JSONObject jsonObject) {
+        try {
+            longitute = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
+                    .getJSONObject("geometry").getJSONObject("location")
+                    .getDouble("lng");
+
+            latitude = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
+                    .getJSONObject("geometry").getJSONObject("location")
+                    .getDouble("lat");
+        } catch (JSONException e) {
+            return false;
+        }
+        return true;
+    }*/
+
+
+   /* public static JSONObject getLocationInfo(String address) {
         StringBuilder stringBuilder = new StringBuilder();
         try {
 
@@ -385,24 +384,5 @@ public class OpenAdActivity extends AppCompatActivity {
         }
 
         return jsonObject;
-    }
-
-    public static boolean getLatLong(JSONObject jsonObject) {
-        try {
-            longitute = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lng");
-
-            latitude = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lat");
-        } catch (JSONException e) {
-            return false;
-        }
-        return true;
-    }
-
-    private String getUserId() {
-        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
-    }
+    }*/
 }
