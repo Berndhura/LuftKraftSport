@@ -42,6 +42,7 @@ public class MyGcmListenerService  extends GcmListenerService {
         Log.d(TAG, "Received: sender: " + sender);
         Log.d(TAG, "Received: Message: " + message);
         Log.d(TAG, "Received: ADID: " + adId);
+        Log.d(TAG, "Received: name: " + name);
 
         if (from.startsWith("/topics/")) {
             // message received from some topic.
