@@ -1,6 +1,5 @@
 package wichura.de.camperapp.ad;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,8 +25,6 @@ import com.loopj.android.http.RequestParams;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Calendar;
-import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 import wichura.de.camperapp.R;
@@ -35,7 +33,7 @@ import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 
 
-public class NewAdActivity extends Activity {
+public class NewAdActivity extends AppCompatActivity {
 
     private EditText mTitleText;
     private EditText mDescText;
@@ -62,10 +60,20 @@ public class NewAdActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        //https://www.youtube.com/watch?v=4MFzuP1F-xQ
-
         setContentView(R.layout.new_ad_acivity);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.new_ad_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+        }
 
         // mTitleText = (EditText) findViewById(R.id.title);
         mDescText = (EditText) findViewById(R.id.description);

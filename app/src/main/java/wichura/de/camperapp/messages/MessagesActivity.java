@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -48,8 +47,6 @@ public class MessagesActivity extends AppCompatActivity {
     private ListView listView;
 
     private MessageListViewAdapter adapter;
-
-    private TextView newMessage;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -151,7 +148,7 @@ public class MessagesActivity extends AppCompatActivity {
 
     private void sendMessage(final String adId, final String ownerId, final String sender) {
         //send a message  adId, userId, sender
-        Log.d("CONAN", "send message: " + "adId: " +adId + "ownerId: " + ownerId + "sender: " + sender);
+        Log.d("CONAN", "send message: " + "adId: " + adId + "ownerId: " + ownerId + "sender: " + sender);
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(MessagesActivity.this);
         alert.setTitle("Send a message");
