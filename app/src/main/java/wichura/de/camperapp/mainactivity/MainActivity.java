@@ -423,6 +423,9 @@ public class MainActivity extends AppCompatActivity implements
 
                 updateLoginButton();
                 setProfileName(getUserName());
+                if (!isUserLoggedIn()) {
+                    setProfileName("Please login...");
+                }
                 setProfilePicture(null);
                 Log.d("CONAN: ", "Return from login, userid: " + getUserId());
                 break;
