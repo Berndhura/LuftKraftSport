@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
+    android:weightSum="1"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -31,14 +31,14 @@
     <ListView
         android:id="@+id/message_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0.8"
         android:listSelector="@drawable/list_selector" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_weight="0.2"
         android:orientation="horizontal">
 
@@ -52,11 +52,11 @@
         <ImageView
             android:id="@+id/send_msg_button"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             android:layout_weight="0.1"
-            android:src="@drawable/ic_send_white_24dp" />
+            android:src="@drawable/ic_send_black_36pt" />
 
     </LinearLayout>
 
