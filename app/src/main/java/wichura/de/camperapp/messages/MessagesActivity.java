@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -69,6 +70,8 @@ public class MessagesActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.message_list);
 
+        final EditText text = (EditText) findViewById(R.id.edit_message);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -83,17 +86,17 @@ public class MessagesActivity extends AppCompatActivity {
         }
 
         if (!isAllMessagesForUser()) {
-            ImageView newMsgBtn = (ImageView) findViewById(R.id.new_msg_button);
+            ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
             if (newMsgBtn != null) {
                 newMsgBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        sendMessage(adId, userId, sender); //TODO parameter ok?
+                        sendMessage(adId, userId, sender, text.getText().toString());
                     }
                 });
             }
         } else {
-            ImageView newMsgBtn = (ImageView) findViewById(R.id.new_msg_button);
+            ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
             newMsgBtn.setVisibility(View.GONE);
         }
 
@@ -146,26 +149,12 @@ public class MessagesActivity extends AppCompatActivity {
     }
 
 
-    private void sendMessage(final String adId, final String ownerId, final String sender) {
+    private void sendMessage(final String adId, final String ownerId, final String sender, final String message) {
         //send a message  adId, userId, sender
         Log.d("CONAN", "send message: " + "adId: " + adId + "ownerId: " + ownerId + "sender: " + sender);
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        final EditText edittext = new EditText(MessagesActivity.this);
-        alert.setTitle("Send a message");
-        alert.setView(edittext);
-        alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String message = edittext.getText().toString();
-                MessageHelper msgHelper = new MessageHelper(getApplicationContext());
-                msgHelper.sendMessageRequest(message, adId, ownerId, sender);
-            }
-        });
-        alert.setNegativeButton("not yet", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //just go away...
-            }
-        });
-        alert.show();
+
+        MessageHelper msgHelper = new MessageHelper(getApplicationContext());
+        msgHelper.sendMessageRequest(message, adId, ownerId, sender);
     }
 
     @Override
