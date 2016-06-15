@@ -28,33 +28,18 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <ScrollView
+    <ListView
+        android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.95">
+        android:layout_weight="0.8"
+        android:listSelector="@drawable/list_selector" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ListView
-                android:id="@+id/message_list"
-                android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:layout_below="@+id/mainbar"
-                android:listSelector="@drawable/list_selector" />
-
-
-        </LinearLayout>
-
-
-    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_weight="0.2"
         android:orientation="horizontal">
 
         <EditText
