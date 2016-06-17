@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -71,6 +72,8 @@ public class MessagesActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.message_list);
 
         final EditText text = (EditText) findViewById(R.id.edit_message);
+        text.setInputType(InputType.TYPE_CLASS_TEXT
+                | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
         if (toolbar != null) {
@@ -92,6 +95,7 @@ public class MessagesActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         sendMessage(adId, userId, sender, text.getText().toString());
+                        //TODO add message to list
                     }
                 });
             }
@@ -153,6 +157,8 @@ public class MessagesActivity extends AppCompatActivity {
         //send a message  adId, userId, sender
         Log.d("CONAN", "send message: " + "adId: " + adId + "ownerId: " + ownerId + "sender: " + sender);
 
+        if (message.length() == 0)
+            return;
         MessageHelper msgHelper = new MessageHelper(getApplicationContext());
         msgHelper.sendMessageRequest(message, adId, ownerId, sender);
     }
