@@ -57,6 +57,7 @@ public class MessagesActivity extends AppCompatActivity {
 
         final String adId = getIntent().getStringExtra(Constants.AD_ID);
         final String sender = getIntent().getStringExtra(Constants.SENDER_ID);
+        final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
 
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         final String userId = settings.getString(Constants.USER_ID, "");
@@ -88,6 +89,7 @@ public class MessagesActivity extends AppCompatActivity {
                     finish();
                 }
             });
+            getSupportActionBar().setTitle("From: " + senderName);
         }
 
         if (!isAllMessagesForUser()) {
@@ -120,7 +122,6 @@ public class MessagesActivity extends AppCompatActivity {
         if (isAllMessagesForUser()) {
             getMessagesForUser(userId);
         }
-
     }
 
     private boolean isAllMessagesForUser() {

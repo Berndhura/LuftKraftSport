@@ -40,4 +40,5 @@ public class Constants {
     public static final String LOGIN_COMPLETE = "loginComplete";
     public static final String SENDER_ID = "sender";
     public static final String MESSAGES_FOR_USER = "messagesForUser";
+    public static final String SENDER_NAME = "senderName";
 }

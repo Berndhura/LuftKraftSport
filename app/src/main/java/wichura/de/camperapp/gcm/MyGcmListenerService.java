@@ -75,6 +75,7 @@ public class MyGcmListenerService  extends GcmListenerService {
     private void sendNotification(String message, String sender, String adId, String name) {
         Intent intent = new Intent(this, MessagesActivity.class);
         intent.putExtra(Constants.SENDER_ID, sender);
+        intent.putExtra(Constants.SENDER_NAME, name);
         intent.putExtra(Constants.AD_ID, adId);
         intent.putExtra(Constants.MESSAGES_FOR_USER, false);
 
