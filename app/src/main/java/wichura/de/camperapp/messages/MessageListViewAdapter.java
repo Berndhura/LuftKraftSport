@@ -2,6 +2,7 @@ package wichura.de.camperapp.messages;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,9 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
 
         ViewHolder holder;
         if (convertView == null) {
+
+            Log.d("CONAN", "sender: " + item.getSender());
+            Log.d("CONAN", "userIF: " + getUserId());
 
             if (item.getSender().equals(getUserId())) {
                 //sender -> ich
