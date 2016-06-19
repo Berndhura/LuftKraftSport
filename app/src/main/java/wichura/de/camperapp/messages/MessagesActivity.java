@@ -95,6 +95,7 @@ public class MessagesActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         sendMessage(adId, userId, sender, text.getText().toString());
+                        text.setText(null);
                         //TODO add message to list
                     }
                 });

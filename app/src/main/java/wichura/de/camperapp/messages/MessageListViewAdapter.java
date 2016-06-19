@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.mainactivity.Constants;
 
 /**
  * Created by ich on 31.05.2016.
@@ -27,6 +29,7 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
 
     private class ViewHolder {
         TextView message;
+        TextView date;
     }
 
     @Override
@@ -35,11 +38,22 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
         final LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
+        MsgRowItem item = getItem(position);
+
+
         ViewHolder holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.message_list_item, parent, false);
+
+            if (item.getSender().equals(getUserId())) {
+                //sender -> ich
+                convertView = mInflater.inflate(R.layout.chat_item_sent, parent, false);
+            } else {
+                convertView = mInflater.inflate(R.layout.chat_item_rcv, parent, false);
+            }
+
             holder = new ViewHolder();
             holder.message = (TextView) convertView.findViewById(R.id.message);
+            holder.date = (TextView) convertView.findViewById(R.id.message_date);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -48,7 +62,11 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
         final MsgRowItem rowItem = getItem(position);
 
         holder.message.setText(rowItem.getMessage());
-        // holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
+        holder.date.setText(DateFormat.getDateTimeInstance().format(rowItem.getDate()));
         return convertView;
+    }
+
+    private String getUserId() {
+        return context.getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
     }
 }

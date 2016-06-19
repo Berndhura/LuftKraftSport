@@ -11,7 +11,9 @@ public class MsgRowItem {
     @Expose
     private String message;
     @Expose
-    private String date;
+    private long date;
+    @Expose
+    private String idFrom;
 
     public String getMessage() {
         return message;
@@ -21,12 +23,14 @@ public class MsgRowItem {
         this.message = message;
     }
 
+    public String getSender() { return idFrom;}
 
-    public String getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         this.date = date;
     }
+
 }
