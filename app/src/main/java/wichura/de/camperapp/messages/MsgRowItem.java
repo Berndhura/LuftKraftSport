@@ -8,6 +8,11 @@ import com.google.gson.annotations.Expose;
  */
 public class MsgRowItem {
 
+    public MsgRowItem(String msg) {
+        this.message = msg;
+        this.date = 123123123;
+    }
+
     @Expose
     private String message;
     @Expose
@@ -23,7 +28,9 @@ public class MsgRowItem {
         this.message = message;
     }
 
-    public String getSender() { return idFrom;}
+    public String getSender() {
+        return idFrom;
+    }
 
     public long getDate() {
         return date;

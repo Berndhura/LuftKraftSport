@@ -1,9 +1,7 @@
 package wichura.de.camperapp.messages;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,8 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import wichura.de.camperapp.R;
@@ -49,6 +48,7 @@ public class MessagesActivity extends AppCompatActivity {
     private ListView listView;
 
     private MessageListViewAdapter adapter;
+    private EditText text;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -71,9 +71,11 @@ public class MessagesActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.message_list);
 
-        final EditText text = (EditText) findViewById(R.id.edit_message);
+        text = (EditText) findViewById(R.id.edit_message);
         text.setInputType(InputType.TYPE_CLASS_TEXT
                 | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
         if (toolbar != null) {
@@ -94,8 +96,18 @@ public class MessagesActivity extends AppCompatActivity {
                 newMsgBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        sendMessage(adId, userId, sender, text.getText().toString());
+                        //hide soft input
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+
+                        //add new message to list
+                        MsgRowItem it = new MsgRowItem(text.getText().toString());
+                        rowItems.add(it);
+                        adapter.notifyDataSetChanged();
                         text.setText(null);
+
+                        sendMessage(adId, userId, sender, text.getText().toString());
+
                         //TODO add message to list
                     }
                 });
@@ -141,6 +153,7 @@ public class MessagesActivity extends AppCompatActivity {
                 adapter = new MessageListViewAdapter(
                         context, R.layout.list_item, rowItems);
                 listView.setAdapter(adapter);
+                listView.setSelection(listView.getCount() - 1);
                 adapter.notifyDataSetChanged();
 
             }
@@ -198,8 +211,8 @@ public class MessagesActivity extends AppCompatActivity {
                 adapter = new MessageListViewAdapter(
                         context, R.layout.list_item, rowItems);
                 listView.setAdapter(adapter);
+                listView.setSelection(listView.getCount() - 1);
                 adapter.notifyDataSetChanged();
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -208,7 +221,6 @@ public class MessagesActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(getAllAdsInJson);
-
     }
 }
 
