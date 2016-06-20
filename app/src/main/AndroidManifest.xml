@@ -97,6 +97,10 @@
             android:label="@string/title_message_page" />
 
         <activity
+            android:name=".messages.MessagesOverviewActivity"
+            android:label="@string/title_msg_overview_page" />
+
+        <activity
             android:name=".mainactivity.SettingsActivity"
             android:label="@string/title_settings_page" />
 

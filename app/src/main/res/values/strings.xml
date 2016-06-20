@@ -10,6 +10,7 @@
     <string name="title_search_page">Details</string>
     <string name="title_login_page">Login</string>
     <string name="title_message_page">Messages</string>
+    <string name="title_msg_overview_page">Postbox</string>
     <string name="title_settings_page">Settings</string>
 
     <string name="title_open_my_ads_page">My Ads</string>

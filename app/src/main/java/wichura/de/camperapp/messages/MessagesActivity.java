@@ -29,7 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import wichura.de.camperapp.R;
@@ -118,54 +117,13 @@ public class MessagesActivity extends AppCompatActivity {
             ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
             newMsgBtn.setVisibility(View.GONE);
         }
-
-        if (isAllMessagesForUser()) {
-            getMessagesForUser(userId);
-        }
     }
 
     private boolean isAllMessagesForUser() {
         return getIntent().getBooleanExtra(Constants.MESSAGES_FOR_USER, false);
     }
 
-    private void getMessagesForUser(String userId) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        String url = Urls.MAIN_SERVER_URL + Urls.GET_ALL_MESSAGES_FOR_USER + "?userId=" + userId;
-
-        JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Context context = getApplicationContext();
-                try {
-                    final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-                    final JSONArray listOfAllAds = new JSONArray(response.toString());
-                    rowItems = new ArrayList<>();
-                    for (int i = 0; i < listOfAllAds.length(); i++) {
-                        final String title = listOfAllAds.getJSONObject(i).toString();
-                        //use RowItem class to get from GSON
-                        final MsgRowItem rowItem = gson.fromJson(title, MsgRowItem.class);
-                        rowItems.add(rowItem);
-                    }
-                } catch (final JSONException e) {
-                    e.printStackTrace();
-                }
-
-                adapter = new MessageListViewAdapter(
-                        context, R.layout.list_item, rowItems);
-                listView.setAdapter(adapter);
-                listView.setSelection(listView.getCount() - 1);
-                adapter.notifyDataSetChanged();
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Missing network connection!\n" + error.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
-        requestQueue.add(getAllAdsInJson);
-    }
 
 
     private void sendMessage(final String adId, final String ownerId, final String sender, final String message) {

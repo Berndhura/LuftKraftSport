@@ -63,6 +63,7 @@ import wichura.de.camperapp.gcm.RegistrationIntentService;
 import wichura.de.camperapp.http.HttpHelper;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.messages.MessagesActivity;
+import wichura.de.camperapp.messages.MessagesOverviewActivity;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -553,7 +554,7 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 } else {
-                    final Intent msgIntent = new Intent(this, MessagesActivity.class);
+                    final Intent msgIntent = new Intent(this, MessagesOverviewActivity.class);
                     msgIntent.putExtra(Constants.USER_ID, userId);
                     msgIntent.putExtra(Constants.MESSAGES_FOR_USER, true);
                     startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES);
