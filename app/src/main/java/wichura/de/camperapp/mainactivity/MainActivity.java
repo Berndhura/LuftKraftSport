@@ -62,7 +62,6 @@ import wichura.de.camperapp.gcm.QuickstartPreferences;
 import wichura.de.camperapp.gcm.RegistrationIntentService;
 import wichura.de.camperapp.http.HttpHelper;
 import wichura.de.camperapp.http.Urls;
-import wichura.de.camperapp.messages.MessagesActivity;
 import wichura.de.camperapp.messages.MessagesOverviewActivity;
 
 
