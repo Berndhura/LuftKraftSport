@@ -17,7 +17,6 @@ import wichura.de.camperapp.mainactivity.Constants;
 
 /**
  * Created by ich on 31.05.2016.
- *
  */
 public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
 
@@ -43,24 +42,25 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
 
 
         ViewHolder holder;
-        if (convertView == null) {
 
-            Log.d("CONAN", "sender: " + item.getSender());
-            Log.d("CONAN", "userIF: " + getUserId());
 
-            if (item.getSender().equals(getUserId())) {
-                //sender -> ich
-                convertView = mInflater.inflate(R.layout.chat_item_sent, parent, false);
-            } else {
-                convertView = mInflater.inflate(R.layout.chat_item_rcv, parent, false);
-            }
+        String userId = getUserId();
 
-            holder = new ViewHolder();
-            holder.message = (TextView) convertView.findViewById(R.id.message);
-            holder.date = (TextView) convertView.findViewById(R.id.message_date);
-            convertView.setTag(holder);
-        } else
-            holder = (ViewHolder) convertView.getTag();
+        Log.d("CONAN", "sender: " + item.getSender());
+        Log.d("CONAN", "userId: " + userId);
+        Log.d("CONAN", "message: " + item.getMessage());
+
+        if (item.getSender().equals(userId)) {
+            //sender -> ich
+            convertView = mInflater.inflate(R.layout.chat_item_sent, null);
+        } else {
+            convertView = mInflater.inflate(R.layout.chat_item_rcv, null);
+        }
+
+        holder = new ViewHolder();
+        holder.message = (TextView) convertView.findViewById(R.id.message);
+        holder.date = (TextView) convertView.findViewById(R.id.message_date);
+        convertView.setTag(holder);
 
         // getting ad data for the row
         final MsgRowItem rowItem = getItem(position);
