@@ -50,7 +50,7 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
         Log.d("CONAN", "userId: " + userId);
         Log.d("CONAN", "message: " + item.getMessage());
 
-        if (item.getSender().equals(userId)) {
+        if (item != null && item.getSender().equals(userId)) {
             //sender -> ich
             convertView = mInflater.inflate(R.layout.chat_item_sent, null);
         } else {
