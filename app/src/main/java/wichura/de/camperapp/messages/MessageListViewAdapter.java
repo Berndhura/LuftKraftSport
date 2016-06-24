@@ -50,12 +50,18 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
         Log.d("CONAN", "userId: " + userId);
         Log.d("CONAN", "message: " + item.getMessage());
 
-        if (item != null && item.getSender().equals(userId)) {
-            //sender -> ich
-            convertView = mInflater.inflate(R.layout.chat_item_sent, null);
+        if (item.getSender() != null) {
+            if (item.getSender().equals(userId)) {
+                //sender -> ich
+                convertView = mInflater.inflate(R.layout.chat_item_sent, null);
+            } else {
+                convertView = mInflater.inflate(R.layout.chat_item_rcv, null);
+            }
         } else {
-            convertView = mInflater.inflate(R.layout.chat_item_rcv, null);
+            //Sender null -> you just added an answer to the list -> sent
+            convertView = mInflater.inflate(R.layout.chat_item_sent, null);
         }
+
 
         holder = new ViewHolder();
         holder.message = (TextView) convertView.findViewById(R.id.message);
