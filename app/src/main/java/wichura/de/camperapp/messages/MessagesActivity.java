@@ -54,6 +54,10 @@ public class MessagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.messages_layout);
 
+        text = (EditText) findViewById(R.id.edit_message);
+        text.setInputType(InputType.TYPE_CLASS_TEXT
+                | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+
         final String adId = getIntent().getStringExtra(Constants.AD_ID);
         final String sender = getIntent().getStringExtra(Constants.SENDER_ID);
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
@@ -67,13 +71,13 @@ public class MessagesActivity extends AppCompatActivity {
             progressDialog.setMessage("Loading data...");
             progressDialog.show();
             getMessages(userId, sender, adId, progressDialog);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
         }
 
         listView = (ListView) findViewById(R.id.message_list);
 
-        text = (EditText) findViewById(R.id.edit_message);
-        text.setInputType(InputType.TYPE_CLASS_TEXT
-                | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
 
