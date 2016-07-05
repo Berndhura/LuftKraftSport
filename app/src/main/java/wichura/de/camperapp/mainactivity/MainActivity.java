@@ -106,12 +106,12 @@ public class MainActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+           // getSupportActionBar().setDisplayShowHomeEnabled(true);
             //getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-            getSupportActionBar().setDisplayUseLogoEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setDisplayShowCustomEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            //getSupportActionBar().setDisplayUseLogoEnabled(true);
+            //getSupportActionBar().setHomeButtonEnabled(true);
+            //getSupportActionBar().setDisplayShowCustomEnabled(true);
+            //getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
 
 //        Toolbar.LayoutParams layoutParams = new Toolbar.LayoutParams(

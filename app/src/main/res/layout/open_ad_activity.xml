@@ -36,11 +36,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
+
+
+            <wichura.de.camperapp.util.ProportionalImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp" />
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
