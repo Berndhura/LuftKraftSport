@@ -101,13 +101,13 @@ public class MessagesActivity extends AppCompatActivity {
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
 
+                        sendMessage(adId, userId, sender, text.getText().toString());
+
                         //add new message to list
                         MsgRowItem it = new MsgRowItem(text.getText().toString());
                         rowItems.add(it);
                         adapter.notifyDataSetChanged();
                         text.setText(null);
-
-                        sendMessage(adId, userId, sender, text.getText().toString());
 
                         //TODO add message to list
                     }
@@ -122,8 +122,6 @@ public class MessagesActivity extends AppCompatActivity {
     private boolean isAllMessagesForUser() {
         return getIntent().getBooleanExtra(Constants.MESSAGES_FOR_USER, false);
     }
-
-
 
 
     private void sendMessage(final String adId, final String ownerId, final String sender, final String message) {

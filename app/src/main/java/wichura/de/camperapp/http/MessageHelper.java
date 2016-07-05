@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley;
 
 /**
  * Created by ich on 04.06.2016.
+ * CamperApp
  */
 public class MessageHelper {
 
