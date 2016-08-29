@@ -17,6 +17,7 @@ import wichura.de.camperapp.mainactivity.Constants;
 
 /**
  * Created by ich on 31.05.2016.
+ * Camper App
  */
 public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
 
