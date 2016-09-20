@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import wichura.de.camperapp.R;
@@ -32,6 +33,7 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
     private class ViewHolder {
         TextView title;
         TextView name;
+        TextView date;
     }
 
     @Override
@@ -46,7 +48,8 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
 
             holder = new ViewHolder();
             holder.title = (TextView) convertView.findViewById(R.id.ad_title);
-            holder.name = (TextView) convertView.findViewById(R.id.ad_name);
+            holder.name = (TextView) convertView.findViewById(R.id.user_name);
+            holder.date = (TextView) convertView.findViewById(R.id.msg_date);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -59,6 +62,7 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
 
         holder.title.setText(rowItem.getMessage());
         holder.name.setText(rowItem.getName());
+        holder.date.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
         return convertView;
     }
 

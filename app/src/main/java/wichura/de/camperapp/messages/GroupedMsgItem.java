@@ -14,6 +14,8 @@ public class GroupedMsgItem {
     private String name;
     @Expose
     private String url;
+    @Expose
+    private long date;
 
     public String getUrl() { return url; }
 
@@ -25,5 +27,9 @@ public class GroupedMsgItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public long getDate() {
+        return this.date;
     }
 }

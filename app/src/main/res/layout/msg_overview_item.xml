@@ -6,31 +6,54 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="20sp"
+        android:paddingLeft="20sp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/ad_image"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            app:civ_border_width="2dp"/>
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:civ_border_width="0dp"
+            app:paddingStart="5sp"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/ad_name"
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:paddingLeft="15dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/msg_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textColor="#444444"
+                    android:paddingRight="10dp"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/ad_title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
                 android:textColor="#0f0e0e" />
-
 
         </LinearLayout>
 
