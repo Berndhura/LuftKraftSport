@@ -9,18 +9,16 @@ import com.google.gson.annotations.Expose;
 public class GroupedMsgItem {
 
     @Expose
-    private String adTitle;
+    private String message;
     @Expose
     private String name;
+    @Expose
+    private String url;
 
+    public String getUrl() { return url; }
 
-
-    public String getAdTitle() {
-        return adTitle;
-    }
-
-    public void setAdTitle(String adTitle) {
-        this.adTitle = adTitle;
+    public String getMessage() {
+        return message;
     }
 
     public String getName() { return name;}

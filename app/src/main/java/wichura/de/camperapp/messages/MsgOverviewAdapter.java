@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -51,7 +54,10 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
         // getting ad data for the row
         final GroupedMsgItem rowItem = getItem(position);
 
-        holder.title.setText(rowItem.getAdTitle());
+        ImageView thumbNail = (ImageView) convertView.findViewById(R.id.ad_image);
+        Picasso.with(context).load(rowItem.getUrl()).into(thumbNail);
+
+        holder.title.setText(rowItem.getMessage());
         holder.name.setText(rowItem.getName());
         return convertView;
     }
