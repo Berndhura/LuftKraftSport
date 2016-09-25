@@ -7,9 +7,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -42,6 +44,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
     private MsgOverviewAdapter adapter;
 
     private ListView listView;
+    private TextView totalMessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,11 @@ public class MessagesOverviewActivity extends AppCompatActivity {
                 }
             });
         }
+
+        totalMessages = (TextView) findViewById(R.id.number_of_msgs);
+
+        totalMessages.setText("Maulvieh");
+
 
 
         listView = (ListView) findViewById(R.id.message_overview_list);
@@ -96,6 +104,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
                         final GroupedMsgItem rowItem = gson.fromJson(title, GroupedMsgItem.class);
                         rowItems.add(rowItem);
                     }
+                    getSupportActionBar().setTitle("Messages: " + listOfAllAds.length());
                 } catch (final JSONException e) {
                     e.printStackTrace();
                 }
