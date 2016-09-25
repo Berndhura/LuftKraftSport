@@ -48,11 +48,9 @@ public class StartActivity extends Activity {
         startButton = initStartButton();
         showButton = initShowButton();
 
-        getDisplayDimensions();
 
-        startImage = (ImageView) findViewById(R.id.startImage);
 
-        scaleImage(startImage);
+
     }
 
     private Button initStartButton() {

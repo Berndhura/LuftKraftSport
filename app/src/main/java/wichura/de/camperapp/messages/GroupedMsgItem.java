@@ -16,6 +16,29 @@ public class GroupedMsgItem {
     private String url;
     @Expose
     private long date;
+    @Expose
+    private String idFrom;
+    @Expose
+    private String idTo;
+    @Expose
+    private String adId;
+
+    public String getIdFrom() {
+        return idFrom;
+    }
+
+    public void setIdFrom(String idFrom) {
+        this.idFrom=idFrom;
+    }
+
+    public String getIdTo() {
+        return idTo;
+    }
+
+    public void setIdTo(String idTo) {
+        this.idTo=idTo;
+    }
+
 
     public String getUrl() { return url; }
 
@@ -32,4 +55,6 @@ public class GroupedMsgItem {
     public long getDate() {
         return this.date;
     }
+
+    public String getAdId() { return this.adId; }
 }

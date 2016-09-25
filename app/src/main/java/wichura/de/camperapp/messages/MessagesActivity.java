@@ -55,8 +55,7 @@ public class MessagesActivity extends AppCompatActivity {
         setContentView(R.layout.messages_layout);
 
         text = (EditText) findViewById(R.id.edit_message);
-        text.setInputType(InputType.TYPE_CLASS_TEXT
-                | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        //text.setInputType(InputType.TYPE_CLASS_TEXT  | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
         final String adId = getIntent().getStringExtra(Constants.AD_ID);
         final String sender = getIntent().getStringExtra(Constants.SENDER_ID);
@@ -65,8 +64,7 @@ public class MessagesActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         final String userId = settings.getString(Constants.USER_ID, "");
         if (!isAllMessagesForUser()) {
-            final ProgressDialog progressDialog = new ProgressDialog(MessagesActivity.this,
-                    R.style.AppTheme);
+            final ProgressDialog progressDialog = new ProgressDialog(MessagesActivity.this, R.style.AppTheme);
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Loading data...");
             progressDialog.show();

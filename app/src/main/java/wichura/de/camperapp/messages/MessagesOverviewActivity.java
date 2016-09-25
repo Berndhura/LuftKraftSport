@@ -2,9 +2,13 @@ package wichura.de.camperapp.messages;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -40,9 +44,23 @@ public class MessagesOverviewActivity extends AppCompatActivity {
     private ListView listView;
 
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_overview_layout);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.msg_overview_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+        }
+
 
         listView = (ListView) findViewById(R.id.message_overview_list);
 
@@ -87,7 +105,19 @@ public class MessagesOverviewActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
                 listView.setSelection(listView.getCount() - 1);
                 adapter.notifyDataSetChanged();
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                        final GroupedMsgItem rowItem = (GroupedMsgItem) listView.getItemAtPosition(position);
+                        //open message threat
+                        final Intent intent = new Intent(getApplicationContext(), MessagesActivity.class);
+                        intent.putExtra(Constants.AD_ID, rowItem.getAdId());
+                        intent.putExtra(Constants.SENDER_ID, rowItem.getIdTo());
+                        intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
 
+                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
+                    }
+                });
             }
         }, new Response.ErrorListener() {
             @Override
