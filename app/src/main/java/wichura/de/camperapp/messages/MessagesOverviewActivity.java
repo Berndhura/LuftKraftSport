@@ -1,6 +1,5 @@
 package wichura.de.camperapp.messages;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -43,6 +43,8 @@ public class MessagesOverviewActivity extends AppCompatActivity {
 
     private ListView listView;
 
+    private ProgressBar mMessagesProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,21 +63,18 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             });
         }
 
+        mMessagesProgressBar = (ProgressBar) findViewById(R.id.msg_overview_ProgressBar);
+
         listView = (ListView) findViewById(R.id.message_overview_list);
 
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         final String userId = settings.getString(Constants.USER_ID, "");
 
-        final ProgressDialog progressDialog = new ProgressDialog(MessagesOverviewActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Loading data...");
-        progressDialog.show();
-        getMessagesForUser(userId, progressDialog);
+        getMessagesForUser(userId, mMessagesProgressBar);
 
     }
 
-    private void getMessagesForUser(String userId, final ProgressDialog dlg) {
+    private void getMessagesForUser(String userId, final ProgressBar dlg) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         String url = Urls.MAIN_SERVER_URL + Urls.GET_ALL_MESSAGES_FOR_USER + "?userId=" + userId;
@@ -83,7 +82,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
         JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                dlg.dismiss();
+                dlg.setVisibility(ProgressBar.GONE);
                 Context context = getApplicationContext();
                 try {
                     final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
