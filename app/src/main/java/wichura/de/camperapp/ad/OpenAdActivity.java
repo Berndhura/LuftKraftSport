@@ -1,7 +1,6 @@
 package wichura.de.camperapp.ad;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +46,8 @@ public class OpenAdActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private boolean isBookmarked;
 
+    private ProgressBar mOpenAdProgressBar;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -65,6 +67,8 @@ public class OpenAdActivity extends AppCompatActivity {
                 }
             });
         }
+
+        mOpenAdProgressBar = (ProgressBar) findViewById(R.id.open_Ad_ProgressBar);
 
         getDisplayDimensions();
 
@@ -101,13 +105,6 @@ public class OpenAdActivity extends AppCompatActivity {
 
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
 
-
-        final ProgressDialog progressDialog = new ProgressDialog(OpenAdActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Loading data...");
-        progressDialog.show();
-
         Picasso.with(getApplicationContext())
                 .load(pictureUri)
                 .placeholder(R.drawable.empty_photo)
@@ -116,12 +113,12 @@ public class OpenAdActivity extends AppCompatActivity {
                 .into(imgView, new Callback() {
                     @Override
                     public void onSuccess() {
-                        progressDialog.dismiss();
+                        mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
                     }
 
                     @Override
                     public void onError() {
-                        progressDialog.dismiss();
+                        mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
                         Toast.makeText(getApplicationContext(), "No network connection!", Toast.LENGTH_SHORT).show();
                         finish();
                     }
@@ -379,7 +376,7 @@ public class OpenAdActivity extends AppCompatActivity {
         try {
             jsonObject = new JSONObject(stringBuilder.toString());
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
 
