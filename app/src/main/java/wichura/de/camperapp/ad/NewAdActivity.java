@@ -1,6 +1,5 @@
 package wichura.de.camperapp.ad;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -35,7 +35,6 @@ import wichura.de.camperapp.mainactivity.Constants;
 
 public class NewAdActivity extends AppCompatActivity {
 
-    private EditText mTitleText;
     private EditText mDescText;
     private EditText mKeywords;
     private EditText mPrice;
@@ -54,7 +53,7 @@ public class NewAdActivity extends AppCompatActivity {
     private String userId;
     private long date;
 
-    private ProgressDialog progress;
+    private ProgressBar progress;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -74,6 +73,9 @@ public class NewAdActivity extends AppCompatActivity {
                 }
             });
         }
+
+        progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
+        progress.setVisibility(ProgressBar.GONE);
 
         // mTitleText = (EditText) findViewById(R.id.title);
         mDescText = (EditText) findViewById(R.id.description);
@@ -185,9 +187,7 @@ public class NewAdActivity extends AppCompatActivity {
     //http://stackoverflow.com/questions/18288864/how-to-multipart-data-using-android-volley
     public void multiPost() {
 
-        progress = new MyProgressDialog(this);
-        progress.setCancelable(false);
-        progress.show();
+        progress.setVisibility(ProgressBar.VISIBLE);
 
         //findViewById(R.id.avloadingIndicatorView).setVisibility(View.VISIBLE);
 
@@ -216,15 +216,13 @@ public class NewAdActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
         }
 
-
-        //todo constants? sind url paramater!! sollten aber passen
-        params.put("title", title);
-        params.put("description", description);
-        params.put("keywords", keywords);
-        params.put("userid", userId);
-        params.put("price", price);
-        params.put("date", date);
-        Log.d("CONAN", "userid bei upload: "+userId);
+        params.put(Constants.TITLE, title);
+        params.put(Constants.DESCRIPTION, description);
+        params.put(Constants.KEYWORDS, keywords);
+        params.put("userid", userId);  //TODO: userid vs user_id in server!! server anpassen? -> jo eine stelle dort in saveNewAd
+        params.put(Constants.PRICE, price);
+        params.put(Constants.DATE, date);
+        Log.d("CONAN", "userid bei upload: " + userId);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.post(Urls.MAIN_SERVER_URL + Urls.UPLOAD_NEW_AD_URL, params, new FileAsyncHttpResponseHandler(reducedPicture) {
@@ -232,7 +230,7 @@ public class NewAdActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
                 Log.e("Volley Request Error", "no");
                 Toast.makeText(getApplicationContext(), "Upload did not work!\n", Toast.LENGTH_LONG).show();
-                progress.dismiss();
+                progress.setVisibility(ProgressBar.GONE);
             }
 
             @Override
@@ -243,7 +241,7 @@ public class NewAdActivity extends AppCompatActivity {
                 Boolean deletetd = reducedPicture.delete();
                 if (!deletetd)
                     Toast.makeText(getApplicationContext(), "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
-                progress.dismiss();
+                progress.setVisibility(ProgressBar.GONE);
                 finish();
             }
         });
