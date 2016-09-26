@@ -23,13 +23,6 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextColor="@android:color/white"/>
 
-            <TextView
-                android:id="@+id/number_of_msgs"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"/>
-
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>

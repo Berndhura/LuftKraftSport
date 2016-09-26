@@ -144,19 +144,6 @@ public class MainActivity extends AppCompatActivity implements
         //load toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-           // getSupportActionBar().setDisplayShowHomeEnabled(true);
-            //getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-            //getSupportActionBar().setDisplayUseLogoEnabled(true);
-            //getSupportActionBar().setHomeButtonEnabled(true);
-            //getSupportActionBar().setDisplayShowCustomEnabled(true);
-            //getSupportActionBar().setDisplayShowTitleEnabled(true);
-        }
-
-//        Toolbar.LayoutParams layoutParams = new Toolbar.LayoutParams(
-//                ViewGroup.LayoutParams.WRAP_CONTENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT,
-//                Gravity.TOP | Gravity.RIGHT);
 
         //init drawer
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -368,6 +355,7 @@ public class MainActivity extends AppCompatActivity implements
                         final RowItem rowItem = gson.fromJson(title, RowItem.class);
                         rowItems.add(rowItem);
                     }
+                    showNumberOfAds(listOfAllAds.length());
                 } catch (final JSONException e) {
                     e.printStackTrace();
                 }
@@ -415,6 +403,8 @@ public class MainActivity extends AppCompatActivity implements
         queue.add(getAllAdsInJson);
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -422,6 +412,12 @@ public class MainActivity extends AppCompatActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         //final int id = item.getItemId();
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showNumberOfAds(int numberOfAds) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setSubtitle("Ads: " + numberOfAds);
+        }
     }
 
     @Override
