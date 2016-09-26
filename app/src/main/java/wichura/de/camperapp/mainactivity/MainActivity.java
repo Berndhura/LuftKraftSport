@@ -51,18 +51,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.MyAdsActivity;
@@ -82,10 +72,7 @@ public class MainActivity extends AppCompatActivity implements
     private List<RowItem> rowItems;
     private CustomListViewAdapter adapter;
 
-
     private static final String TAG = "CONAN";
-
-
     private ImageView loginBtn;
 
     CallbackManager callbackManager;
@@ -104,34 +91,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        SSLContext ctx = null;
-        try {
-            ctx = SSLContext.getInstance("TLS");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        try {
-            ctx.init(null, new TrustManager[] {
-                    new X509TrustManager() {
-                        public void checkClientTrusted(X509Certificate[] chain, String authType) {}
-                        public void checkServerTrusted(X509Certificate[] chain, String authType) {}
-                        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[]{}; }
-                    }
-            }, null);
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        }
-        HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
-
-        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        });
-
-
-
         //get Facebook access token
         FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -139,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         //configure Flurry for analysis
-       // configureFlurry();
+        configureFlurry();
 
         //load toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -156,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
 
-        //
         loginBtn = (ImageView) findViewById(R.id.login_button);
 
         updateLoginButton();
@@ -365,8 +323,6 @@ public class MainActivity extends AppCompatActivity implements
                         context, R.layout.list_item, rowItems);
                 listView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
-                Toast.makeText(getApplicationContext(), "Results: " + rowItems.size(), Toast.LENGTH_LONG).show();
 
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
