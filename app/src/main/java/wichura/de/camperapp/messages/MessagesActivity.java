@@ -55,6 +55,9 @@ public class MessagesActivity extends AppCompatActivity {
         setContentView(R.layout.messages_layout);
 
         text = (EditText) findViewById(R.id.edit_message);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        text.clearFocus();
+        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
         //text.setInputType(InputType.TYPE_CLASS_TEXT  | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
         final String adId = getIntent().getStringExtra(Constants.AD_ID);
@@ -69,15 +72,11 @@ public class MessagesActivity extends AppCompatActivity {
             progressDialog.setMessage("Loading data...");
             progressDialog.show();
             getMessages(userId, sender, adId, progressDialog);
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
             imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
         }
 
         listView = (ListView) findViewById(R.id.message_list);
-
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
         if (toolbar != null) {
@@ -110,7 +109,7 @@ public class MessagesActivity extends AppCompatActivity {
                         rowItems.add(it);
                         adapter.notifyDataSetChanged();
                         text.setText(null);
-
+                        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
                         //TODO add message to list
                     }
                 });

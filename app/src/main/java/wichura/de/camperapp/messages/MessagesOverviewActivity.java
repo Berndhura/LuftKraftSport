@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -105,6 +104,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
                         rowItems.add(rowItem);
                     }
                     getSupportActionBar().setTitle("Messages: " + listOfAllAds.length());
+                    getSupportActionBar().setSubtitle("Subtitle");
                 } catch (final JSONException e) {
                     e.printStackTrace();
                 }
