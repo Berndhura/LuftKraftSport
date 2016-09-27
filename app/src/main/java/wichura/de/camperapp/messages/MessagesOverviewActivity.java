@@ -105,6 +105,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
                 listView.setSelection(listView.getCount() - 1);
                 adapter.notifyDataSetChanged();
+                listView.setSelectionAfterHeaderView();
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

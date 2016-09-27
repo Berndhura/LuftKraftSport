@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -55,25 +55,19 @@ public class MessagesActivity extends AppCompatActivity {
         setContentView(R.layout.messages_layout);
 
         text = (EditText) findViewById(R.id.edit_message);
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        text.clearFocus();
-        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-        //text.setInputType(InputType.TYPE_CLASS_TEXT  | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
         final String adId = getIntent().getStringExtra(Constants.AD_ID);
         final String sender = getIntent().getStringExtra(Constants.SENDER_ID);
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
 
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-        final String userId = settings.getString(Constants.USER_ID, "");
+        final String userId = getUserId();
+
         if (!isAllMessagesForUser()) {
             final ProgressDialog progressDialog = new ProgressDialog(MessagesActivity.this, R.style.AppTheme);
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Loading data...");
             progressDialog.show();
             getMessages(userId, sender, adId, progressDialog);
-
-            imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
         }
 
         listView = (ListView) findViewById(R.id.message_list);
@@ -98,9 +92,6 @@ public class MessagesActivity extends AppCompatActivity {
                 newMsgBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //hide soft input
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
 
                         sendMessage(adId, userId, sender, text.getText().toString());
 
@@ -109,8 +100,10 @@ public class MessagesActivity extends AppCompatActivity {
                         rowItems.add(it);
                         adapter.notifyDataSetChanged();
                         text.setText(null);
-                        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
                         //TODO add message to list
+                        listView.setSelection(listView.getCount() - 1);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
                     }
                 });
             }
@@ -118,12 +111,18 @@ public class MessagesActivity extends AppCompatActivity {
             ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
             newMsgBtn.setVisibility(View.GONE);
         }
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+    }
+
+    private String getUserId() {
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        return settings.getString(Constants.USER_ID, "");
     }
 
     private boolean isAllMessagesForUser() {
         return getIntent().getBooleanExtra(Constants.MESSAGES_FOR_USER, false);
     }
-
 
     private void sendMessage(final String adId, final String ownerId, final String sender, final String message) {
         //send a message  adId, userId, sender
