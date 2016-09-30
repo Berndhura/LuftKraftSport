@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
 
@@ -21,6 +22,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.settings_layout);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -34,7 +37,9 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-        setContentView(R.layout.settings_layout);
+        TextView loginInfo = (TextView) findViewById(R.id.login_info_text);
+        loginInfo.setText("Logged in as " + getUserName());
+
 
         Button logoutButton = initLogoutButton();
     }
@@ -51,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        return  logoutBtn;
+        return logoutBtn;
     }
 
     private void updateUserInfo() {
@@ -61,5 +66,10 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putString(Constants.USER_ID, "");
         editor.putString(Constants.USER_TYPE, "");
         editor.apply();
+    }
+
+    private String getUserName() {
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        return settings.getString(Constants.USER_ID,"");
     }
 }
