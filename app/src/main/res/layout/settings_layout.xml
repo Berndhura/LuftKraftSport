@@ -56,6 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Logout"
+            android:textColor="#ffffff"
+            android:background="@color/colorPrimary"
             android:paddingTop="10sp"
             android:paddingBottom="10sp" />
 
@@ -64,7 +66,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="APP INFO"
-            android:id="@+id/appinfo" />
+            android:id="@+id/appinfo"
+            android:paddingTop="10sp" />
 
         <View
             android:layout_width="match_parent"

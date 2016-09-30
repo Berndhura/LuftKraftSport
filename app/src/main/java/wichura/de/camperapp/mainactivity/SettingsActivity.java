@@ -70,6 +70,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     private String getUserName() {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-        return settings.getString(Constants.USER_ID,"");
+        return settings.getString(Constants.USER_NAME,"");
     }
 }

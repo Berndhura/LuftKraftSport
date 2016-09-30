@@ -125,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:background="@color/colorPrimary"
-            android:text="Angebot starten"
+            android:text="Upload ad"
             android:textColor="#ffffff">
         </Button>
     </LinearLayout>
