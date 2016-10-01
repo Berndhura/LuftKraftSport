@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView3"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.48"
-        android:src="@drawable/background1"/>
+        android:layout_weight="0.48">
+    </ImageView>
+        <!--android:src="@drawable/background1"/>-->
 </LinearLayout>

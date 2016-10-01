@@ -1,11 +1,9 @@
 package wichura.de.camperapp.messages;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -42,6 +41,7 @@ import wichura.de.camperapp.mainactivity.Constants;
  */
 public class MessagesActivity extends AppCompatActivity {
 
+    private ProgressBar mMessagesProgressBar;
     private List<MsgRowItem> rowItems;
     private ListView listView;
     private MessageListViewAdapter adapter;
@@ -60,14 +60,6 @@ public class MessagesActivity extends AppCompatActivity {
 
         final String userId = getUserId();
 
-        if (!isAllMessagesForUser()) {
-            final ProgressDialog progressDialog = new ProgressDialog(MessagesActivity.this, R.style.AppTheme);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Loading data...");
-            progressDialog.show();
-            getMessages(userId, sender, adId, progressDialog);
-        }
-
         listView = (ListView) findViewById(R.id.message_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
@@ -84,42 +76,27 @@ public class MessagesActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("From: " + senderName);
         }
 
-        if (!isAllMessagesForUser()) {
-            ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
-            if (newMsgBtn != null) {
-                newMsgBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+        mMessagesProgressBar = (ProgressBar) findViewById(R.id.msg_ProgressBar);
+        getMessages(userId, sender, adId, mMessagesProgressBar);
 
-                        sendMessage(adId, userId, sender, text.getText().toString());
-
-                        //add new message to list
-                        MsgRowItem it = new MsgRowItem(text.getText().toString());
-                        rowItems.add(it);
-                        adapter.notifyDataSetChanged();
-                        text.setText(null);
-                        //TODO add message to list
-                        listView.setSelection(listView.getCount() - 1);
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                    }
-                });
-            }
-        } else {
-            ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
-            newMsgBtn.setVisibility(View.GONE);
+        ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
+        if (newMsgBtn != null) {
+            newMsgBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sendMessage(adId, userId, sender, text.getText().toString());
+                    //add new message to list
+                    MsgRowItem it = new MsgRowItem(text.getText().toString());
+                    rowItems.add(it);
+                    adapter.notifyDataSetChanged();
+                    text.setText(null);
+                    //TODO add message to list
+                    listView.setSelection(listView.getCount() - 1);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+                }
+            });
         }
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-    }
-
-    private String getUserId() {
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-        return settings.getString(Constants.USER_ID, "");
-    }
-
-    private boolean isAllMessagesForUser() {
-        return getIntent().getBooleanExtra(Constants.MESSAGES_FOR_USER, false);
     }
 
     private void sendMessage(final String adId, final String ownerId, final String sender, final String message) {
@@ -132,13 +109,7 @@ public class MessagesActivity extends AppCompatActivity {
         msgHelper.sendMessageRequest(message, adId, ownerId, sender);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        finish();
-    }
-
-    private void getMessages(String userId, String sender, String adId, final ProgressDialog pro) {
+    private void getMessages(String userId, String sender, String adId, final ProgressBar progress) {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
@@ -147,7 +118,7 @@ public class MessagesActivity extends AppCompatActivity {
         JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                pro.dismiss();
+                progress.setVisibility(ProgressBar.GONE);
                 Context context = getApplicationContext();
                 try {
                     final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
@@ -168,6 +139,8 @@ public class MessagesActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
                 listView.setSelection(listView.getCount() - 1);
                 adapter.notifyDataSetChanged();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -177,5 +150,9 @@ public class MessagesActivity extends AppCompatActivity {
         });
         requestQueue.add(getAllAdsInJson);
     }
-}
 
+    private String getUserId() {
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        return settings.getString(Constants.USER_ID, "");
+    }
+}
