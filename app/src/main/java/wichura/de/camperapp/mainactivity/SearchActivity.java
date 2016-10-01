@@ -3,6 +3,8 @@ package wichura.de.camperapp.mainactivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +16,7 @@ import wichura.de.camperapp.R;
  *
  */
 
-public class SearchActivity  extends Activity {
+public class SearchActivity  extends AppCompatActivity {
 
     Button searchButton;
 
@@ -23,6 +25,20 @@ public class SearchActivity  extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.search_activity);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+        }
+
 
         searchButton();
     }

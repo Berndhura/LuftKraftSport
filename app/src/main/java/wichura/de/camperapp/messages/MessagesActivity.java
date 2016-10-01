@@ -43,9 +43,7 @@ import wichura.de.camperapp.mainactivity.Constants;
 public class MessagesActivity extends AppCompatActivity {
 
     private List<MsgRowItem> rowItems;
-
     private ListView listView;
-
     private MessageListViewAdapter adapter;
     private EditText text;
 
