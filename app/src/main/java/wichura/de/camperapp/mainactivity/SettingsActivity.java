@@ -1,5 +1,6 @@
 package wichura.de.camperapp.mainactivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,8 @@ import wichura.de.camperapp.R;
  * CamperApp
  */
 public class SettingsActivity extends AppCompatActivity {
+
+    private TextView loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-        TextView loginInfo = (TextView) findViewById(R.id.login_info_text);
+        loginInfo = (TextView) findViewById(R.id.login_info_text);
         loginInfo.setText("Logged in as " + getUserName());
 
 
@@ -46,17 +49,37 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Button initLogoutButton() {
         Button logoutBtn = (Button) findViewById(R.id.logout_button);
+        if (isUserLoggedIn()) {
+            logoutBtn.setText("LOGOUT");
+        } else {
+            logoutBtn.setText("LOGIN");
+        }
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //logout from Facebook
-                LoginManager.getInstance().logOut();
-                //in case email login just delete sharedPrefs
-                updateUserInfo();
-                finish();
+                if (isUserLoggedIn()) {
+                    //logout from Facebook
+                    LoginManager.getInstance().logOut();
+                    //in case email login just delete sharedPrefs
+                    updateUserInfo();
+                    finish();
+                } else {
+                    final Intent intent = new Intent(getApplicationContext(),
+                            FbLoginActivity.class);
+                    startActivityForResult(intent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
+                }
             }
         });
         return logoutBtn;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN) {
+            initLogoutButton();
+            loginInfo.setText("Logged in as " + getUserName());
+        }
     }
 
     private void updateUserInfo() {
@@ -70,6 +93,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     private String getUserName() {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-        return settings.getString(Constants.USER_NAME,"");
+        return settings.getString(Constants.USER_NAME, "");
+    }
+
+    private Boolean isUserLoggedIn() {
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        return (settings.getString(Constants.USER_ID, "").equals("") ? false : true);
     }
 }
