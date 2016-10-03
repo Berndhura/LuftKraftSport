@@ -16,7 +16,7 @@
                 android:id="@+id/message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/main_color_gray_dk"
+                android:textColor="#000000"
                 android:textSize="14sp"
                 android:maxLines="4"
                 android:paddingBottom="10sp"/>

@@ -40,7 +40,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.8"
-        android:listSelector="@drawable/list_selector"
+        android:divider="@null"
+        android:clickable="false"
+        android:background="#ced5e0"
         tools:listitem="@layout/chat_item_rcv" />
 
 
@@ -48,7 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_weight="0.2"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="#ced5e0">
 
         <EditText
             android:id="@+id/edit_message"
