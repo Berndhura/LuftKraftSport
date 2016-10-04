@@ -81,8 +81,10 @@ public class RegistrationIntentService extends IntentService {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         String userId = settings.getString(Constants.USER_ID, "");
 
-        HttpHelper httpHelper = new HttpHelper(getApplicationContext());
-        httpHelper.saveTokenInDb(token, userId);
+        if (!userId.equals("")) {
+            HttpHelper httpHelper = new HttpHelper(getApplicationContext());
+            httpHelper.saveTokenInDb(token, userId);
+        }
     }
 
     /**
