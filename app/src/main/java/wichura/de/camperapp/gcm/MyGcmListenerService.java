@@ -76,6 +76,8 @@ public class MyGcmListenerService  extends GcmListenerService {
         Intent intent = new Intent(this, MessagesActivity.class);
         intent.putExtra(Constants.SENDER_ID, sender);
         intent.putExtra(Constants.SENDER_NAME, name);
+        intent.putExtra(Constants.ID_FROM, sender);
+        intent.putExtra(Constants.ID_TO, getUserId());
         intent.putExtra(Constants.AD_ID, adId);
         intent.putExtra(Constants.MESSAGES_FOR_USER, false);
 
@@ -97,5 +99,9 @@ public class MyGcmListenerService  extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private String getUserId() {
+        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
     }
 }

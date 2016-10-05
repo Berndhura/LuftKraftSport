@@ -42,4 +42,8 @@ public class Constants {
     public static final String SENDER_ID = "sender";
     public static final String MESSAGES_FOR_USER = "messagesForUser";
     public static final String SENDER_NAME = "senderName";
+    public static final String ID_FROM = "idFrom";
+    public static final String ID_TO = "idTo";
+
+
 }

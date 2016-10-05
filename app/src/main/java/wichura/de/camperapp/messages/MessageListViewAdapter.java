@@ -47,9 +47,9 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
 
         String userId = getUserId();
 
-        Log.d("CONAN", "sender: " + item.getSender());
-        Log.d("CONAN", "userId: " + userId);
-        Log.d("CONAN", "message: " + item.getMessage());
+       // Log.d("CONAN", "sender: " + item.getSender());
+       // Log.d("CONAN", "userId: " + userId);
+       // Log.d("CONAN", "message: " + item.getMessage());
 
         if (item.getSender() != null) {
             if (item.getSender().equals(userId)) {

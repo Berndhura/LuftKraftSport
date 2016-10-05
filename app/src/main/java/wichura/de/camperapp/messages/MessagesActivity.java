@@ -1,7 +1,6 @@
 package wichura.de.camperapp.messages;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -55,8 +54,12 @@ public class MessagesActivity extends AppCompatActivity {
         text = (EditText) findViewById(R.id.edit_message);
 
         final String adId = getIntent().getStringExtra(Constants.AD_ID);
-        final String sender = getIntent().getStringExtra(Constants.SENDER_ID);
+        String sender = getIntent().getStringExtra(Constants.SENDER_ID);
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
+        final String idFrom = getIntent().getStringExtra(Constants.ID_FROM);
+        final String idTo = getIntent().getStringExtra(Constants.ID_TO);
+
+        Log.d("CONAN", "enter message: " + "adId: " + adId + "sender: " + sender + "idFrom: " + idFrom + "idTo: " + idTo);
 
         final String userId = getUserId();
 
@@ -77,14 +80,23 @@ public class MessagesActivity extends AppCompatActivity {
         }
 
         mMessagesProgressBar = (ProgressBar) findViewById(R.id.msg_ProgressBar);
-        getMessages(userId, sender, adId, mMessagesProgressBar);
+        //TODO:richtig
+       // getMessages(userId, sender, adId, mMessagesProgressBar);
+        getMessages(idTo, idFrom, adId, mMessagesProgressBar);
 
         ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
         if (newMsgBtn != null) {
             newMsgBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    sendMessage(adId, userId, sender, text.getText().toString());
+                    //always send an answer to chat partner (the other), not yourself
+                    String localSender;
+                    if (userId.equals(idFrom)) {
+                        localSender = idTo;
+                    } else {
+                        localSender = idFrom;
+                    }
+                    sendMessage(adId, userId, localSender, text.getText().toString());
                     //add new message to list
                     MsgRowItem it = new MsgRowItem(text.getText().toString());
                     rowItems.add(it);
@@ -114,6 +126,7 @@ public class MessagesActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         String url = Urls.MAIN_SERVER_URL + Urls.GET_ALL_MESSAGES_FOR_AD + "?userId=" + userId + "&sender=" + sender + "&adId=" + adId;
+        Log.d("CONAN", "get message: " + "adId: " + adId + " userId: " + userId + " sender: " + sender);
 
         JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override

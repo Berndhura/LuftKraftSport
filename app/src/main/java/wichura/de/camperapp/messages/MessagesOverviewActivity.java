@@ -114,6 +114,8 @@ public class MessagesOverviewActivity extends AppCompatActivity {
                         final Intent intent = new Intent(getApplicationContext(), MessagesActivity.class);
                         intent.putExtra(Constants.AD_ID, rowItem.getAdId());
                         intent.putExtra(Constants.SENDER_ID, rowItem.getIdTo());
+                        intent.putExtra(Constants.ID_FROM, rowItem.getIdFrom());
+                        intent.putExtra(Constants.ID_TO, rowItem.getIdTo());
                         intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
 
                         startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
