@@ -1,8 +1,12 @@
 package wichura.de.camperapp.messages;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -45,16 +49,37 @@ public class MessagesActivity extends AppCompatActivity {
     private ListView listView;
     private MessageListViewAdapter adapter;
     private EditText text;
+    private BroadcastReceiver appendChatScreenMsgReceiver;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //in case MessageActivity is open, new message will be added to list
+        appendChatScreenMsgReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Bundle b = intent.getExtras();
+                if (b != null) {
+                    final String idFrom = getIntent().getStringExtra(Constants.ID_FROM);
+                    MsgRowItem it = new MsgRowItem(b.getString(Constants.MESSAGE));
+                    it.setSender(idFrom);
+                    rowItems.add(it);
+                    adapter.notifyDataSetChanged();
+                    listView.setSelection(listView.getCount() - 1);
+                }
+            }
+        };
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(appendChatScreenMsgReceiver,
+                new IntentFilter("appendChatScreenMsg"));
+
         setContentView(R.layout.messages_layout);
 
         text = (EditText) findViewById(R.id.edit_message);
 
         final String adId = getIntent().getStringExtra(Constants.AD_ID);
-        String sender = getIntent().getStringExtra(Constants.SENDER_ID);
+        final String sender = getIntent().getStringExtra(Constants.SENDER_ID);
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
         final String idFrom = getIntent().getStringExtra(Constants.ID_FROM);
         final String idTo = getIntent().getStringExtra(Constants.ID_TO);
@@ -81,7 +106,7 @@ public class MessagesActivity extends AppCompatActivity {
 
         mMessagesProgressBar = (ProgressBar) findViewById(R.id.msg_ProgressBar);
         //TODO:richtig
-       // getMessages(userId, sender, adId, mMessagesProgressBar);
+        // getMessages(userId, sender, adId, mMessagesProgressBar);
         getMessages(idTo, idFrom, adId, mMessagesProgressBar);
 
         ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
@@ -110,6 +135,41 @@ public class MessagesActivity extends AppCompatActivity {
             });
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setActive();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setActive();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean("active", false);
+        ed.commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setActive();
+    }
+
+    private void setActive() {
+        SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean("active", true);
+        ed.commit();
+    }
+
 
     private void sendMessage(final String adId, final String ownerId, final String sender, final String message) {
         //send a message  adId, userId, sender

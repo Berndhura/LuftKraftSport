@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -59,13 +60,26 @@ public class MyGcmListenerService  extends GcmListenerService {
          */
 
         /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
+         * show a notification indicating to the user
+         * that a message was received when MessageActivity is NOT open
+         *
+         * if MessageActivity IS open, only update chat
          */
-        sendNotification(message, sender, adId, name);
+        if (isMessageActivityActive()) {
+            updateChat(message, sender);
+        } else {
+            sendNotification(message, sender, adId, name);
+        }
         // [END_EXCLUDE]
     }
     // [END receive_message]
+
+    private void updateChat(String message, String sender) {
+        Intent updateChat = new Intent("appendChatScreenMsg");
+        updateChat.putExtra(Constants.MESSAGE, message);
+        updateChat.putExtra(Constants.ID_FROM, sender);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(updateChat);
+    }
 
     /**
      * Create and show a simple notification containing the received GCM message.
@@ -79,7 +93,6 @@ public class MyGcmListenerService  extends GcmListenerService {
         intent.putExtra(Constants.ID_FROM, sender);
         intent.putExtra(Constants.ID_TO, getUserId());
         intent.putExtra(Constants.AD_ID, adId);
-        intent.putExtra(Constants.MESSAGES_FOR_USER, false);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -103,5 +116,9 @@ public class MyGcmListenerService  extends GcmListenerService {
 
     private String getUserId() {
         return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+    }
+
+    private Boolean isMessageActivityActive() {
+        return getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE).getBoolean("active", false);
     }
 }

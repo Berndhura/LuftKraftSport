@@ -41,9 +41,7 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
 
         MsgRowItem item = getItem(position);
 
-
         ViewHolder holder;
-
 
         String userId = getUserId();
 

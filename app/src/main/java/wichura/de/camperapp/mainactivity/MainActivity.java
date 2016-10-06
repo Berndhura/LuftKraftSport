@@ -91,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //TODO: set active false in messageActivity in onDestroy, onStop, on???  BUT NOT HERE
+        SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean("active", false);
+        ed.commit();
+
         //get Facebook access token
         FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -546,7 +552,6 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     final Intent msgIntent = new Intent(this, MessagesOverviewActivity.class);
                     msgIntent.putExtra(Constants.USER_ID, userId);
-                    msgIntent.putExtra(Constants.MESSAGES_FOR_USER, true);
                     startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES);
                     return true;
                 }

@@ -32,6 +32,8 @@ public class MsgRowItem {
         return idFrom;
     }
 
+    public void setSender(String idFrom) { this.idFrom = idFrom;}
+
     public long getDate() {
         return date;
     }
