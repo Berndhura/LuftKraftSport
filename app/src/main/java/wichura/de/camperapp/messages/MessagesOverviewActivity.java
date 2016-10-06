@@ -67,11 +67,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.message_overview_list);
 
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-        final String userId = settings.getString(Constants.USER_ID, "");
-
-        getMessagesForUser(userId, mMessagesProgressBar);
-
+        getMessagesForUser(getUserId(), mMessagesProgressBar);
     }
 
     private void getMessagesForUser(String userId, final ProgressBar dlg) {
@@ -118,7 +114,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
                         intent.putExtra(Constants.ID_TO, rowItem.getIdTo());
                         intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
 
-                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
+                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);
                     }
                 });
             }
@@ -129,5 +125,17 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(getAllAdsInJson);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode==Constants.REQUEST_ID_FOR_MESSAGES) {
+                getMessagesForUser(getUserId(), mMessagesProgressBar);
+            }
+    }
+
+    private String getUserId() {
+        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
     }
 }
