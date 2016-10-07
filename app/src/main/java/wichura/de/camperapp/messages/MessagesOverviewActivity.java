@@ -91,7 +91,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
                         rowItems.add(rowItem);
                     }
                     getSupportActionBar().setTitle("Messages: " + listOfAllAds.length());
-                    getSupportActionBar().setSubtitle("Subtitle");
+                    getSupportActionBar().setSubtitle(getUserName());
                 } catch (final JSONException e) {
                     e.printStackTrace();
                 }
@@ -137,5 +137,9 @@ public class MessagesOverviewActivity extends AppCompatActivity {
 
     private String getUserId() {
         return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+    }
+
+    private String getUserName() {
+        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_NAME, "");
     }
 }
