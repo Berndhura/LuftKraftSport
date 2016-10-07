@@ -36,6 +36,7 @@ public class Constants {
     public static final String VIEWS = "views";
     public static final String USER_ID_FROM_AD ="user_id_from_ad";
     public static final String KEYWORDS = "keywords";
+    public static final String AD_URL = "adURL";
 
     //Broadcast messages
     public static final String LOGIN_COMPLETE = "loginComplete";
@@ -47,5 +48,4 @@ public class Constants {
 
     //Shared Preferences
     public static final String MESSAGE_ACTIVITY = "messageActivity";
-
 }

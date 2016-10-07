@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -26,6 +28,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,12 +86,13 @@ public class MessagesActivity extends AppCompatActivity {
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
         final String idFrom = getIntent().getStringExtra(Constants.ID_FROM);
         final String idTo = getIntent().getStringExtra(Constants.ID_TO);
+        final String adPicUrl = getIntent().getStringExtra(Constants.AD_URL);
 
         Log.d("CONAN", "enter message: " + "adId: " + adId + "sender: " + sender + "idFrom: " + idFrom + "idTo: " + idTo);
 
         final String userId = getUserId();
 
-        listView = (ListView) findViewById(R.id.message_list);
+            listView = (ListView) findViewById(R.id.message_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
         if (toolbar != null) {
@@ -101,12 +105,24 @@ public class MessagesActivity extends AppCompatActivity {
                     finish();
                 }
             });
-            getSupportActionBar().setTitle("From: " + senderName);
+            getSupportActionBar().setTitle(senderName);
+            //getSupportActionBar().setLogo(R.drawable.applogo);
+
+            LayoutInflater mInflater = LayoutInflater.from(this);
+
+           // View mCustomView = mInflater.inflate(R.id.message_toolbar, null);
+
+          //  getSupportActionBar().setCustomView(mCustomView);
+           // getSupportActionBar().setDisplayShowCustomEnabled(true);
+
+            if (adPicUrl != null) {
+                ImageView thumbNail = (ImageView) findViewById(R.id.ad_in_toolbar);
+                Picasso.with(getApplicationContext()).load(adPicUrl.toString()).into(thumbNail);
+            }
         }
 
         mMessagesProgressBar = (ProgressBar) findViewById(R.id.msg_ProgressBar);
-        //TODO:richtig
-        // getMessages(userId, sender, adId, mMessagesProgressBar);
+
         getMessages(idTo, idFrom, adId, mMessagesProgressBar);
 
         ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
@@ -151,10 +167,13 @@ public class MessagesActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
-        SharedPreferences.Editor ed = sp.edit();
-        ed.putBoolean("active", false);
-        ed.commit();
+        setInactive();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        setInactive();
     }
 
     @Override
@@ -163,13 +182,22 @@ public class MessagesActivity extends AppCompatActivity {
         setActive();
     }
 
+    private void setInactive() {
+        SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean("active", false);
+        ed.putString("adId", "");
+        ed.commit();
+    }
+
     private void setActive() {
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", true);
+        ed.putString("adId", getIntent().getStringExtra(Constants.AD_ID));
+        Log.d("adId: ",  getIntent().getStringExtra(Constants.AD_ID));
         ed.commit();
     }
-
 
     private void sendMessage(final String adId, final String ownerId, final String sender, final String message) {
         //send a message  adId, userId, sender

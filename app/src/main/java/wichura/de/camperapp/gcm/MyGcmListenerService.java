@@ -25,6 +25,7 @@ import wichura.de.camperapp.messages.MessagesActivity;
 public class MyGcmListenerService  extends GcmListenerService {
 
     private static final String TAG = "CONAN";
+    private String adId;
 
     /**
      * Called when message is received.
@@ -38,7 +39,7 @@ public class MyGcmListenerService  extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
         String sender = data.getString("sender");
-        String adId = data.getString("adId");
+        adId = data.getString("adId");
         String name = data.getString("name");
         Log.d(TAG, "Received: sender: " + sender);
         Log.d(TAG, "Received: Message: " + message);
@@ -65,7 +66,7 @@ public class MyGcmListenerService  extends GcmListenerService {
          *
          * if MessageActivity IS open, only update chat
          */
-        if (isMessageActivityActive()) {
+        if (isMessageActivityActive() && getAdIdFromSharedPref().equals(adId)) {
             updateChat(message, sender);
         } else {
             sendNotification(message, sender, adId, name);
@@ -116,6 +117,10 @@ public class MyGcmListenerService  extends GcmListenerService {
 
     private String getUserId() {
         return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+    }
+
+    private String getAdIdFromSharedPref() {
+        return getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE).getString("adId", "");
     }
 
     private Boolean isMessageActivityActive() {

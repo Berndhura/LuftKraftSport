@@ -113,7 +113,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
                         intent.putExtra(Constants.ID_FROM, rowItem.getIdFrom());
                         intent.putExtra(Constants.ID_TO, rowItem.getIdTo());
                         intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
-
+                        intent.putExtra(Constants.AD_URL, rowItem.getUrl());
                         startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);
                     }
                 });

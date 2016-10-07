@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", false);
+        ed.putString("adId", "");
         ed.commit();
 
         //get Facebook access token
