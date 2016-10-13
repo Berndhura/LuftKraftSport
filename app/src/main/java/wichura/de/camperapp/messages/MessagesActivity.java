@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -92,7 +91,7 @@ public class MessagesActivity extends AppCompatActivity {
 
         final String userId = getUserId();
 
-            listView = (ListView) findViewById(R.id.message_list);
+        listView = (ListView) findViewById(R.id.message_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
         if (toolbar != null) {
@@ -110,14 +109,28 @@ public class MessagesActivity extends AppCompatActivity {
 
             LayoutInflater mInflater = LayoutInflater.from(this);
 
-           // View mCustomView = mInflater.inflate(R.id.message_toolbar, null);
+            // View mCustomView = mInflater.inflate(R.id.message_toolbar, null);
 
-          //  getSupportActionBar().setCustomView(mCustomView);
-           // getSupportActionBar().setDisplayShowCustomEnabled(true);
+            //  getSupportActionBar().setCustomView(mCustomView);
+            // getSupportActionBar().setDisplayShowCustomEnabled(true);
 
             if (adPicUrl != null) {
                 ImageView thumbNail = (ImageView) findViewById(R.id.ad_in_toolbar);
                 Picasso.with(getApplicationContext()).load(adPicUrl.toString()).into(thumbNail);
+                thumbNail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+/*                      TODO: open openAdActivity, need all information in intent??? like description, title...
+                        TODO: here is the link between message and Ad!!!
+                        final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
+                        intent.putExtra(Constants.URI, getIntent().getStringExtra(Constants.AD_URL));
+                        intent.putExtra(Constants.AD_ID, getIntent().getStringExtra(Constants.AD_ID));
+                        intent.putExtra(Constants.USER_ID, getUserId());
+                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);*/
+                        Toast.makeText(getApplicationContext(), "Open Ad for details", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
         }
 
@@ -195,8 +208,8 @@ public class MessagesActivity extends AppCompatActivity {
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", true);
         ed.putString("adId", getIntent().getStringExtra(Constants.AD_ID));
-        Log.d("adId: ",  getIntent().getStringExtra(Constants.AD_ID));
-        ed.commit();
+        Log.d("adId: ", getIntent().getStringExtra(Constants.AD_ID));
+        ed.apply();
     }
 
     private void sendMessage(final String adId, final String ownerId, final String sender, final String message) {

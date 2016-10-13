@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", false);
         ed.putString("adId", "");
-        ed.commit();
+        ed.apply();
 
         //get Facebook access token
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements
                     setUserPreferences(name, userId);
 
                     //not logged in as FB user: create db entry, GCM token, update login button
-                    if (oldProfile == null  && checkPlayServices() && isUserLoggedIn()) {
+                    if (oldProfile == null && checkPlayServices() && isUserLoggedIn()) {
                         HttpHelper httpHelper = new HttpHelper(getApplicationContext());
                         httpHelper.updateUserInDb(getUserName(), getUserId());
                         if (checkPlayServices() && isUserLoggedIn()) {
@@ -365,7 +365,6 @@ public class MainActivity extends AppCompatActivity implements
         });
         queue.add(getAllAdsInJson);
     }
-
 
 
     @Override
