@@ -9,21 +9,34 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.List;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.ad.OpenAdActivity;
+import wichura.de.camperapp.http.Urls;
 
 public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
     private Context context;
+    private ViewHolder holder;
+    private String[] bookmarks;
 
-    public CustomListViewAdapter(final Context context, final int resourceId, final List<RowItem> items) {
+    public CustomListViewAdapter(final Context context, final int resourceId, final List<RowItem> items, final String bookmarks) {
         super(context, resourceId, items);
         this.context = context;
+        this.bookmarks = bookmarks.split(",");
     }
 
     /* private view holder class */
@@ -31,6 +44,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         TextView txtTitle;
         TextView txtPrice;
         TextView txtDate;
+        ImageView bockmarkStar;
     }
 
     @Override
@@ -39,13 +53,13 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         final LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
-        ViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.list_item, parent, false);
             holder = new ViewHolder();
             holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
             holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
             holder.txtDate = (TextView) convertView.findViewById(R.id.creation_date);
+            holder.bockmarkStar =(ImageView) convertView.findViewById(R.id.bockmark_star);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -65,6 +79,59 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtTitle.setText(rowItem.getTitle());
         holder.txtPrice.setText(rowItem.getPrice());
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
+
+        //bookmark star full for bookmarked ad
+        if (Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
+            holder.bockmarkStar.setImageResource(R.drawable.bockmark_star_full);
+        } else {
+            holder.bockmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+        }
+
+        //click to bookmark/debookmark an ad
+        holder.bockmarkStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
+                    //debookmark()
+                    holder.bockmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+                    notifyDataSetChanged();
+                    Log.d("CONAN", "bookmark weg");
+                } else {
+                    bookmarkAd(rowItem.getAdId(), getUserId());
+                    holder.bockmarkStar.setImageResource(R.drawable.bockmark_star_full);
+                    notifyDataSetChanged();
+                    Log.d("CONAN", "bookmark weg");
+                }
+            }
+        });
+
         return convertView;
+    }
+
+    private void bookmarkAd(String adId, String userId) {
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_AD + "?adId=" + adId + "&userId=" + userId;
+        Log.d("CONAN", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(context, "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
+                        holder.bockmarkStar.setImageResource(R.drawable.bockmark_star_full);
+                        holder.bockmarkStar.refreshDrawableState();
+                        //mBookmarkButton.setText("Remove Bookmark");
+                        //isBookmarked = true;
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Something went wrong...\n"+error.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+
+    private String getUserId() {
+        return context.getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
     }
 }

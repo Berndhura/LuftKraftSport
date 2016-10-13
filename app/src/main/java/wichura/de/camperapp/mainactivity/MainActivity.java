@@ -31,6 +31,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -302,12 +303,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void getAdsJsonForKeyword(String url) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+        final RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Context context = getApplicationContext();
+                final Context context = getApplicationContext();
                 try {
                     final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
                     final JSONArray listOfAllAds = new JSONArray(response.toString());
@@ -325,36 +326,51 @@ public class MainActivity extends AppCompatActivity implements
                     e.printStackTrace();
                 }
 
-                listView = (ListView) findViewById(R.id.main_list);
-                adapter = new CustomListViewAdapter(
-                        context, R.layout.list_item, rowItems);
-                listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                //get Bookmarks AdIds for User
+                String url = Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKS_FOR_USER + "?userId=" + getUserId();
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String bookmarks) {
+                                Log.d("CONAN", "Bookmarks: "+bookmarks);
+                                listView = (ListView) findViewById(R.id.main_list);
+                                adapter = new CustomListViewAdapter(context, R.layout.list_item, rowItems, bookmarks);
+                                listView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
 
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+                                    @Override
+                                    public void onItemClick(final AdapterView<?> arg0,
+                                                            final View arg1, final int position, final long arg3) {
+
+                                        final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
+                                        //open new details page with sel. item
+                                        final Intent intent = new Intent(getApplicationContext(),
+                                                OpenAdActivity.class);
+                                        intent.putExtra(Constants.URI, rowItem.getUrl());
+                                        intent.putExtra(Constants.AD_ID, rowItem.getAdId());
+                                        intent.putExtra(Constants.TITLE, rowItem.getTitle());
+                                        intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
+                                        intent.putExtra(Constants.LOCATION, rowItem.getLocation());
+                                        intent.putExtra(Constants.PHONE, rowItem.getPhone());
+                                        intent.putExtra(Constants.PRICE, rowItem.getPrice());
+                                        intent.putExtra(Constants.DATE, rowItem.getDate());
+                                        intent.putExtra(Constants.VIEWS, rowItem.getViews());
+                                        intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
+                                        intent.putExtra(Constants.USER_ID, getUserId());
+                                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
+                                    }
+                                });
+                            }
+                        }, new Response.ErrorListener() {
                     @Override
-                    public void onItemClick(final AdapterView<?> arg0,
-                                            final View arg1, final int position, final long arg3) {
-
-                        final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
-                        //open new details page with sel. item
-                        final Intent intent = new Intent(getApplicationContext(),
-                                OpenAdActivity.class);
-                        intent.putExtra(Constants.URI, rowItem.getUrl());
-                        intent.putExtra(Constants.AD_ID, rowItem.getAdId());
-                        intent.putExtra(Constants.TITLE, rowItem.getTitle());
-                        intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
-                        intent.putExtra(Constants.LOCATION, rowItem.getLocation());
-                        intent.putExtra(Constants.PHONE, rowItem.getPhone());
-                        intent.putExtra(Constants.PRICE, rowItem.getPrice());
-                        intent.putExtra(Constants.DATE, rowItem.getDate());
-                        intent.putExtra(Constants.VIEWS, rowItem.getViews());
-                        intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
-                        intent.putExtra(Constants.USER_ID, getUserId());
-                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
+                    public void onErrorResponse(VolleyError error) {
                     }
                 });
+                queue.add(stringRequest);
+
+
                 setProgressBarIndeterminateVisibility(false);
             }
         }, new Response.ErrorListener() {

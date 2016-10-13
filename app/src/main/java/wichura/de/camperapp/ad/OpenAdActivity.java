@@ -159,7 +159,6 @@ public class OpenAdActivity extends AppCompatActivity {
         mBookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO : user Constants
                 String adId = getIntent().getStringExtra(Constants.AD_ID);
                 String userId = getIntent().getStringExtra(Constants.USER_ID);
                 if (isBookmarked) {
@@ -246,6 +245,7 @@ public class OpenAdActivity extends AppCompatActivity {
 
     private void bookmarkAd(String adId, String userId) {
         String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_AD + "?adId=" + adId + "&userId=" + userId;
+        Log.d("CONAN", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override

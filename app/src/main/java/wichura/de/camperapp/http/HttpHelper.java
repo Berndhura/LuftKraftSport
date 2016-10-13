@@ -17,14 +17,15 @@ import com.android.volley.toolbox.Volley;
 public class HttpHelper {
 
     private Context context;
+    private RequestQueue requestQueue;
 
     public HttpHelper(Context ctx) {
         this.context = ctx;
+        this.requestQueue =Volley.newRequestQueue(context);
     }
 
     public void updateUserInDb(final String name, final String id) {
 
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
         String url = Urls.MAIN_SERVER_URL + Urls.CREATE_USER + "?name=" + name.replaceAll(" ", "%20") + "&id=" + id;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -50,7 +51,6 @@ public class HttpHelper {
 
     public void saveTokenInDb(String token, String userId) {
 
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
         String url = Urls.MAIN_SERVER_URL + Urls.SEND_TOKEN_FOR_GCM + "?token=" + token + "&userId=" + userId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
