@@ -44,7 +44,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         TextView txtTitle;
         TextView txtPrice;
         TextView txtDate;
-        ImageView bockmarkStar;
+        ImageView bookmarkStar;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
             holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
             holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
             holder.txtDate = (TextView) convertView.findViewById(R.id.creation_date);
-            holder.bockmarkStar =(ImageView) convertView.findViewById(R.id.bockmark_star);
+            holder.bookmarkStar =(ImageView) convertView.findViewById(R.id.bookmark_star);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -82,30 +82,51 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
         //bookmark star full for bookmarked ad
         if (Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
-            holder.bockmarkStar.setImageResource(R.drawable.bockmark_star_full);
+            holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
         } else {
-            holder.bockmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+            holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
         }
 
         //click to bookmark/debookmark an ad
-        holder.bockmarkStar.setOnClickListener(new View.OnClickListener() {
+        holder.bookmarkStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
-                    //debookmark()
-                    holder.bockmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+                    deleteBookmark(rowItem.getAdId(), getUserId());
+                    holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
                     notifyDataSetChanged();
                     Log.d("CONAN", "bookmark weg");
                 } else {
                     bookmarkAd(rowItem.getAdId(), getUserId());
-                    holder.bockmarkStar.setImageResource(R.drawable.bockmark_star_full);
+                    holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
                     notifyDataSetChanged();
-                    Log.d("CONAN", "bookmark weg");
+                    Log.d("CONAN", "bookmark dazu");
                 }
             }
         });
 
         return convertView;
+    }
+
+    private void deleteBookmark(String adId, String userId) {
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_DELETE + "?adId=" + adId + "&userId=" + userId;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(context, "Bookmark deleted!", Toast.LENGTH_SHORT).show();
+                        holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+                        notifyDataSetChanged();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Something went wrong...", Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(stringRequest);
+
     }
 
     private void bookmarkAd(String adId, String userId) {
@@ -116,11 +137,8 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(context, "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
-                        holder.bockmarkStar.setImageResource(R.drawable.bockmark_star_full);
-                        holder.bockmarkStar.refreshDrawableState();
-                        //mBookmarkButton.setText("Remove Bookmark");
-                        //isBookmarked = true;
+                        holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
+                        notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
             @Override
