@@ -48,7 +48,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         final LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -61,8 +61,9 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
             holder.txtDate = (TextView) convertView.findViewById(R.id.creation_date);
             holder.bookmarkStar =(ImageView) convertView.findViewById(R.id.bookmark_star);
             convertView.setTag(holder);
-        } else
+        } else {
             holder = (ViewHolder) convertView.getTag();
+        }
 
         ImageView thumbNail = (ImageView) convertView.findViewById(R.id.icon);
 
@@ -75,7 +76,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
                 .centerCrop()
                 .into(thumbNail);
 
-        Log.d("CONAN, get pic URLs: ", rowItem.getUrl());
+       // Log.d("CONAN, get pic URLs: ", rowItem.getUrl());
         holder.txtTitle.setText(rowItem.getTitle());
         holder.txtPrice.setText(rowItem.getPrice());
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
@@ -95,18 +96,21 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
                     deleteBookmark(rowItem.getAdId(), getUserId());
                     holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
                     notifyDataSetChanged();
+                    Log.d("CONAN  ", position + "");
                     Log.d("CONAN", "bookmark weg");
                 } else {
                     bookmarkAd(rowItem.getAdId(), getUserId());
                     holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
                     notifyDataSetChanged();
                     Log.d("CONAN", "bookmark dazu");
+                    Log.d("CONAN  ", position + "");
                 }
             }
         });
 
         return convertView;
     }
+
 
     private void deleteBookmark(String adId, String userId) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -116,8 +120,6 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(context, "Bookmark deleted!", Toast.LENGTH_SHORT).show();
-                        holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
-                        notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -137,8 +139,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
-                        notifyDataSetChanged();
+                        Toast.makeText(context, "Bookmarked!", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override

@@ -27,12 +27,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -55,6 +53,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
@@ -62,6 +63,7 @@ import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.gcm.QuickstartPreferences;
 import wichura.de.camperapp.gcm.RegistrationIntentService;
 import wichura.de.camperapp.http.HttpHelper;
+import wichura.de.camperapp.http.MyVolley;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.messages.MessagesOverviewActivity;
 
@@ -91,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize Volley
+        MyVolley.init(this);
 
         //TODO: set active false in messageActivity in onDestroy, onStop, on???  BUT NOT HERE
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
@@ -203,6 +208,13 @@ public class MainActivity extends AppCompatActivity implements
         };
 
         registerLoginReceiver();
+
+        Observable.just("one", "two", "three", "four", "five")
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(/* an Observer */);
+
+
     }
 
     @Override
@@ -256,7 +268,6 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-
     private void configureFlurry() {
         FlurryAgent.setLogEnabled(true);
         FlurryAgent.setCaptureUncaughtExceptions(true);
@@ -286,7 +297,6 @@ public class MainActivity extends AppCompatActivity implements
                             Uri uri = profile.getProfilePictureUri(200, 200);
                             setProfilePicture(uri);
                         }
-                        //TODO auch ohne login moeglich
                         setUserPreferences(userName, userId);
                         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                     }
@@ -303,8 +313,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void getAdsJsonForKeyword(String url) {
-        final RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(
+        JsonArrayRequest getAllAdsReq = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -332,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String bookmarks) {
-                                Log.d("CONAN", "Bookmarks: "+bookmarks);
+                                Log.d("CONAN", "Bookmarks: " + bookmarks);
                                 listView = (ListView) findViewById(R.id.main_list);
                                 adapter = new CustomListViewAdapter(context, R.layout.list_item, rowItems, bookmarks);
                                 listView.setAdapter(adapter);
@@ -368,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements
                     public void onErrorResponse(VolleyError error) {
                     }
                 });
-                queue.add(stringRequest);
+                MyVolley.getRequestQueue().add(stringRequest);
 
 
                 setProgressBarIndeterminateVisibility(false);
@@ -379,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements
                 Toast.makeText(getApplicationContext(), "Missing network connection!\n" + error.toString(), Toast.LENGTH_LONG).show();
             }
         });
-        queue.add(getAllAdsInJson);
+        MyVolley.getRequestQueue().add(getAllAdsReq);
     }
 
 

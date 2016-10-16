@@ -30,6 +30,7 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.MyVolley;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.mainactivity.FbLoginActivity;
@@ -43,7 +44,6 @@ public class OpenAdActivity extends AppCompatActivity {
 
     private int displayHeight;
     private int displayWidth;
-    private RequestQueue requestQueue;
     private boolean isBookmarked;
 
     private ProgressBar mOpenAdProgressBar;
@@ -71,9 +71,6 @@ public class OpenAdActivity extends AppCompatActivity {
         mOpenAdProgressBar = (ProgressBar) findViewById(R.id.open_Ad_ProgressBar);
 
         getDisplayDimensions();
-
-        //Volley request queue for delete, bookmark...
-        requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         TextView mTitleText = (TextView) findViewById(R.id.title);
         TextView mPrice = (TextView) findViewById(R.id.price);
@@ -205,7 +202,6 @@ public class OpenAdActivity extends AppCompatActivity {
     }
 
     private void sendMessageRequest(String message, String adId, String ownerId, String sender) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         String url = Urls.MAIN_SERVER_URL + Urls.SEND_MESSAGE +
                 "?message=" + message.replaceAll(" ", "%20")
                 + "&adId=" + adId
@@ -223,7 +219,7 @@ public class OpenAdActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
             }
         });
-        requestQueue.add(stringRequest);
+        MyVolley.getRequestQueue().add(stringRequest);
     }
 
     private void sendRequestForViewCount(String mAdId) {
@@ -260,7 +256,7 @@ public class OpenAdActivity extends AppCompatActivity {
                 Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
             }
         });
-        requestQueue.add(stringRequest);
+        MyVolley.getRequestQueue().add(stringRequest);
     }
 
     private void delBookmark(String adId, String userId) {
@@ -279,7 +275,7 @@ public class OpenAdActivity extends AppCompatActivity {
                 Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
             }
         });
-        requestQueue.add(stringRequest);
+        MyVolley.getRequestQueue().add(stringRequest);
 
     }
 
@@ -316,7 +312,7 @@ public class OpenAdActivity extends AppCompatActivity {
                                 Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
                             }
                         });
-                        requestQueue.add(stringRequest);
+                        MyVolley.getRequestQueue().add(stringRequest);
                         dialog.dismiss();
                     }
                 })
