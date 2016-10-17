@@ -3,7 +3,6 @@ package wichura.de.camperapp.ad;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,20 +17,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.http.MyVolley;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.mainactivity.FbLoginActivity;
 
@@ -47,6 +42,11 @@ public class OpenAdActivity extends AppCompatActivity {
     private boolean isBookmarked;
 
     private ProgressBar mOpenAdProgressBar;
+    private VolleyService volleyService;
+
+    public OpenAdActivity() {
+        volleyService = new VolleyService(OpenAdActivity.this);
+    }
 
 
     @Override
@@ -133,7 +133,6 @@ public class OpenAdActivity extends AppCompatActivity {
             });
         } else {
             mDelAndMsgButton.setText("Send message");
-
             mDelAndMsgButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -141,8 +140,7 @@ public class OpenAdActivity extends AppCompatActivity {
                         //send a message to ad owner
                         String adId = getIntent().getStringExtra(Constants.AD_ID);
                         String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
-                        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-                        String sender = settings.getString(Constants.USER_ID, "");
+                        String sender = getUserId();
                         sendMessage(adId, ownerId, sender);
                     } else {
                         final Intent facebookIntent = new Intent(getApplicationContext(), FbLoginActivity.class);
@@ -197,122 +195,117 @@ public class OpenAdActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private boolean isOwnAd() {
-        return getIntent().getStringExtra(Constants.USER_ID_FROM_AD).equals(getIntent().getStringExtra(Constants.USER_ID));
-    }
-
     private void sendMessageRequest(String message, String adId, String ownerId, String sender) {
         String url = Urls.MAIN_SERVER_URL + Urls.SEND_MESSAGE +
                 "?message=" + message.replaceAll(" ", "%20")
                 + "&adId=" + adId
                 + "&idFrom=" + sender + "&idTo=" + ownerId;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //save message done
-                        if (response.equals("ok"))
-                            Toast.makeText(getApplicationContext(), "Message sent...", Toast.LENGTH_LONG).show();
-                    }
-                }, new Response.ErrorListener() {
+
+        Response.Listener<String> listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //save message done
+                if (response.equals("ok"))
+                    Toast.makeText(getApplicationContext(), "Message sent...", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
             }
-        });
-        MyVolley.getRequestQueue().add(stringRequest);
+        };
+
+        volleyService.sendStringGetRequest(url, listener, errorListener);
     }
 
     private void sendRequestForViewCount(String mAdId) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         String url = Urls.MAIN_SERVER_URL + Urls.COUNT_VIEW + "?adId=" + mAdId;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //increase view count
-                    }
-                }, new Response.ErrorListener() {
+
+        Response.Listener<String> listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //increase view count
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
             }
-        });
-        requestQueue.add(stringRequest);
+        };
+
+        volleyService.sendStringGetRequest(url, listener, errorListener);
     }
 
     private void bookmarkAd(String adId, String userId) {
         String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_AD + "?adId=" + adId + "&userId=" + userId;
-        Log.d("CONAN", url);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
-                        mBookmarkButton.setText("Remove Bookmark");
-                        isBookmarked = true;
-                    }
-                }, new Response.ErrorListener() {
+
+        Response.Listener<String> listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(), "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
+                mBookmarkButton.setText("Remove Bookmark");
+                isBookmarked = true;
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
+                //Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
             }
-        });
-        MyVolley.getRequestQueue().add(stringRequest);
+        };
+
+        volleyService.sendStringGetRequest(url, listener, errorListener);
     }
 
     private void delBookmark(String adId, String userId) {
         String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_DELETE + "?adId=" + adId + "&userId=" + userId;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "Bookmark deleted!", Toast.LENGTH_SHORT).show();
-                        mBookmarkButton.setText("Bookmark");
-                        isBookmarked = false;
-                    }
-                }, new Response.ErrorListener() {
+
+        Response.Listener<String> listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(), "Bookmark deleted!", Toast.LENGTH_SHORT).show();
+                mBookmarkButton.setText("Bookmark");
+                isBookmarked = false;
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
             }
-        });
-        MyVolley.getRequestQueue().add(stringRequest);
+        };
 
-    }
-
-    private void getDisplayDimensions() {
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        Log.i("CONAN", "X " + size.x);
-        Log.i("CONAN", "Y " + size.y);
-
-        displayWidth = size.x;
-        displayHeight = size.y;
+        volleyService.sendStringGetRequest(url, listener, errorListener);
     }
 
     private void deleteAdRequest(final String adId) {
+        final String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
+
+        final Response.Listener<String> listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                finish();
+            }
+        };
+
+        final Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
+            }
+        };
+
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 .setTitle("Delete Ad")
                 .setMessage("Do you want to delete this ad?")
                 .setIcon(R.drawable.delete)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
-                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        finish();
-                                    }
-                                }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        MyVolley.getRequestQueue().add(stringRequest);
+                        volleyService.sendStringGetRequest(url, listener, errorListener);
                         dialog.dismiss();
                     }
                 })
@@ -328,6 +321,23 @@ public class OpenAdActivity extends AppCompatActivity {
     private String getUserId() {
         return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
     }
+
+    private boolean isOwnAd() {
+        return getIntent().getStringExtra(Constants.USER_ID_FROM_AD).equals(getIntent().getStringExtra(Constants.USER_ID));
+    }
+
+    private void getDisplayDimensions() {
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        Log.i("CONAN", "X " + size.x);
+        Log.i("CONAN", "Y " + size.y);
+
+        displayWidth = size.x;
+        displayHeight = size.y;
+    }
+
 
      /* public static boolean getLatLong(JSONObject jsonObject) {
         try {
