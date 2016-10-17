@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -30,7 +31,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -65,6 +65,7 @@ import wichura.de.camperapp.gcm.RegistrationIntentService;
 import wichura.de.camperapp.http.HttpHelper;
 import wichura.de.camperapp.http.MyVolley;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.messages.MessagesOverviewActivity;
 
 
@@ -89,6 +90,13 @@ public class MainActivity extends AppCompatActivity implements
     //login
     private BroadcastReceiver mLoginBroadcastReceiver;
     private boolean isLoginReceiverRegistered;
+
+    //Volley Http service
+    private VolleyService volleyService;
+
+    public MainActivity() {
+        volleyService = new VolleyService(MainActivity.this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,7 +251,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-
     private void registerGcmReceiver() {
         if (!isGcmReceiverRegistered) {
             LocalBroadcastManager.getInstance(this).registerReceiver(mGcmRegistrationBroadcastReceiver,
@@ -337,50 +344,9 @@ public class MainActivity extends AppCompatActivity implements
 
                 //get Bookmarks AdIds for User
                 String url = Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKS_FOR_USER + "?userId=" + getUserId();
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String bookmarks) {
-                                Log.d("CONAN", "Bookmarks: " + bookmarks);
-                                listView = (ListView) findViewById(R.id.main_list);
-                                adapter = new CustomListViewAdapter(context, R.layout.list_item, rowItems, bookmarks);
-                                listView.setAdapter(adapter);
-                                adapter.notifyDataSetChanged();
-
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                                    @Override
-                                    public void onItemClick(final AdapterView<?> arg0,
-                                                            final View arg1, final int position, final long arg3) {
-
-                                        final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
-                                        //open new details page with sel. item
-                                        final Intent intent = new Intent(getApplicationContext(),
-                                                OpenAdActivity.class);
-                                        intent.putExtra(Constants.URI, rowItem.getUrl());
-                                        intent.putExtra(Constants.AD_ID, rowItem.getAdId());
-                                        intent.putExtra(Constants.TITLE, rowItem.getTitle());
-                                        intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
-                                        intent.putExtra(Constants.LOCATION, rowItem.getLocation());
-                                        intent.putExtra(Constants.PHONE, rowItem.getPhone());
-                                        intent.putExtra(Constants.PRICE, rowItem.getPrice());
-                                        intent.putExtra(Constants.DATE, rowItem.getDate());
-                                        intent.putExtra(Constants.VIEWS, rowItem.getViews());
-                                        intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
-                                        intent.putExtra(Constants.USER_ID, getUserId());
-                                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
-                                    }
-                                });
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                });
-                MyVolley.getRequestQueue().add(stringRequest);
-
-
-                setProgressBarIndeterminateVisibility(false);
+                Response.Listener<String> listener = getResponseListenerForBookmarks(context);
+                Response.ErrorListener errorListener = getErrorListenerForBookmarks();
+                volleyService.sendStringGetRequest(url, listener, errorListener);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -391,6 +357,53 @@ public class MainActivity extends AppCompatActivity implements
         MyVolley.getRequestQueue().add(getAllAdsReq);
     }
 
+    @NonNull
+    private Response.ErrorListener getErrorListenerForBookmarks() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        };
+    }
+
+    @NonNull
+    private Response.Listener<String> getResponseListenerForBookmarks(final Context context) {
+        return new Response.Listener<String>() {
+            @Override
+            public void onResponse(String bookmarks) {
+                Log.d("CONAN", "Bookmarks: " + bookmarks);
+                listView = (ListView) findViewById(R.id.main_list);
+                adapter = new CustomListViewAdapter(context, R.layout.list_item, rowItems, bookmarks);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(final AdapterView<?> arg0,
+                                            final View arg1, final int position, final long arg3) {
+
+                        final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
+                        //open new details page with sel. item
+                        final Intent intent = new Intent(getApplicationContext(),
+                                OpenAdActivity.class);
+                        intent.putExtra(Constants.URI, rowItem.getUrl());
+                        intent.putExtra(Constants.AD_ID, rowItem.getAdId());
+                        intent.putExtra(Constants.TITLE, rowItem.getTitle());
+                        intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
+                        intent.putExtra(Constants.LOCATION, rowItem.getLocation());
+                        intent.putExtra(Constants.PHONE, rowItem.getPhone());
+                        intent.putExtra(Constants.PRICE, rowItem.getPrice());
+                        intent.putExtra(Constants.DATE, rowItem.getDate());
+                        intent.putExtra(Constants.VIEWS, rowItem.getViews());
+                        intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
+                        intent.putExtra(Constants.USER_ID, getUserId());
+                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
+                    }
+                });
+                //disable Progressbar
+                setProgressBarIndeterminateVisibility(false);
+            }
+        };
+    }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
