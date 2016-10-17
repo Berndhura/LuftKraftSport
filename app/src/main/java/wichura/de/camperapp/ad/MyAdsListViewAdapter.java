@@ -26,6 +26,7 @@ import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.RowItem;
 
 /**
@@ -116,30 +117,30 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
                 .setTitle("Delete")
                 .setMessage("Do you want to Delete")
                 .setIcon(R.drawable.delete)
-
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //your deleting code
-                        RequestQueue queue = Volley.newRequestQueue(context);
                         String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
-                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        String pos = view.getTag().toString();
-                                        int position = Integer.parseInt(pos);
-                                        remove(getItem(position));
-                                        notifyDataSetChanged();
-                                        //TODO: wenn leer, finish()
-                                    }
-                                }, new Response.ErrorListener() {
+
+                        Response.Listener<String> listener = new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                String pos = view.getTag().toString();
+                                int position = Integer.parseInt(pos);
+                                remove(getItem(position));
+                                notifyDataSetChanged();
+                                //TODO: wenn leer, finish()
+                            }
+                        };
+
+                        Response.ErrorListener errorListener = new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 Toast.makeText(activity, "Something went wrong...", Toast.LENGTH_LONG).show();
                             }
-                        });
-                        queue.add(stringRequest);
+                        };
+                        VolleyService volleyService = new VolleyService(context);
+                        volleyService.sendStringGetRequest(url, listener, errorListener);
                         dialog.dismiss();
                     }
                 })

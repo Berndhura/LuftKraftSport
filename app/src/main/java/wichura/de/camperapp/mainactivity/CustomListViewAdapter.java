@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
 
 public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
@@ -59,7 +58,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
             holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
             holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
             holder.txtDate = (TextView) convertView.findViewById(R.id.creation_date);
-            holder.bookmarkStar =(ImageView) convertView.findViewById(R.id.bookmark_star);
+            holder.bookmarkStar = (ImageView) convertView.findViewById(R.id.bookmark_star);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -76,7 +75,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
                 .centerCrop()
                 .into(thumbNail);
 
-       // Log.d("CONAN, get pic URLs: ", rowItem.getUrl());
+        // Log.d("CONAN, get pic URLs: ", rowItem.getUrl());
         holder.txtTitle.setText(rowItem.getTitle());
         holder.txtPrice.setText(rowItem.getPrice());
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
@@ -144,7 +143,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Something went wrong...\n"+error.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Something went wrong...\n" + error.toString(), Toast.LENGTH_LONG).show();
             }
         });
         requestQueue.add(stringRequest);

@@ -36,8 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.http.MessageHelper;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
 
 /**
@@ -218,8 +218,13 @@ public class MessagesActivity extends AppCompatActivity {
 
         if (message.length() == 0)
             return;
-        MessageHelper msgHelper = new MessageHelper(getApplicationContext());
-        msgHelper.sendMessageRequest(message, adId, ownerId, sender);
+
+        String url = Urls.MAIN_SERVER_URL + Urls.SEND_MESSAGE +
+                "?message=" + message.replaceAll(" ", "%20")
+                + "&adId=" + adId
+                + "&idFrom=" + ownerId + "&idTo=" + sender;
+        VolleyService volleyService = new VolleyService(getApplicationContext());
+        volleyService.sendStringGetRequest(url);
     }
 
     private void getMessages(String userId, String sender, String adId, final ProgressBar progress) {

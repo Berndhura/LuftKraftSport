@@ -8,6 +8,7 @@ import rx.Observable;
 
 /**
  * Created by ich on 16.10.2016.
+ * CamperApp
  */
 
 public class Service {

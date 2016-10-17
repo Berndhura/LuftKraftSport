@@ -62,7 +62,6 @@ import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.gcm.QuickstartPreferences;
 import wichura.de.camperapp.gcm.RegistrationIntentService;
-import wichura.de.camperapp.http.HttpHelper;
 import wichura.de.camperapp.http.MyVolley;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
@@ -165,8 +164,7 @@ public class MainActivity extends AppCompatActivity implements
 
                     //not logged in as FB user: create db entry, GCM token, update login button
                     if (oldProfile == null && checkPlayServices() && isUserLoggedIn()) {
-                        HttpHelper httpHelper = new HttpHelper(getApplicationContext());
-                        httpHelper.updateUserInDb(getUserName(), getUserId());
+                        updateUserInDb(getUserName(), getUserId());
                         if (checkPlayServices() && isUserLoggedIn()) {
                             // Start IntentService to register this application with GCM.
                             Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
@@ -433,8 +431,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 if (getUserType().equals(Constants.FACEBOOK_USER)) {
                     //create new user in DB in case of first login
-                    HttpHelper httpHelper = new HttpHelper(getApplicationContext());
-                    httpHelper.updateUserInDb(getUserName(), getUserId());
+                    updateUserInDb(getUserName(), getUserId());
 
                     if (checkPlayServices() && isUserLoggedIn()) {
                         // Start IntentService to register this application with GCM.
@@ -445,8 +442,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 if (getUserType().equals(Constants.EMAIL_USER) && isUserLoggedIn()) {
                     //create new user in DB in case of first login
-                    HttpHelper httpHelper = new HttpHelper(getApplicationContext());
-                    httpHelper.updateUserInDb(getUserName(), getUserId());
+                    updateUserInDb(getUserName(), getUserId());
 
                     //request Token from GCM and update in DB
                     if (checkPlayServices() && isUserLoggedIn()) {
@@ -471,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements
             }
             case Constants.REQUEST_ID_FOR_SEARCH: {
                 if (data != null) {
-                    String query = data.getStringExtra("KEYWORDS");  //TODO: Constants
+                    String query = data.getStringExtra(Constants.KEYWORDS);
                     getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
                     drawer.closeDrawer(GravityCompat.START);
                 }
@@ -487,6 +483,11 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             }
         }
+    }
+
+    private void updateUserInDb(String name, String userId) {
+        String url = Urls.MAIN_SERVER_URL + Urls.CREATE_USER + "?name=" + name.replaceAll(" ", "%20") + "&id=" + userId;
+        volleyService.sendStringGetRequest(url);
     }
 
     @Override

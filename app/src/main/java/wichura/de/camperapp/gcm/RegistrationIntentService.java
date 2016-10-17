@@ -14,7 +14,8 @@ import com.google.android.gms.iid.InstanceID;
 import java.io.IOException;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.http.HttpHelper;
+import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
 
 /**
@@ -82,8 +83,9 @@ public class RegistrationIntentService extends IntentService {
         String userId = settings.getString(Constants.USER_ID, "");
 
         if (!userId.equals("")) {
-            HttpHelper httpHelper = new HttpHelper(getApplicationContext());
-            httpHelper.saveTokenInDb(token, userId);
+            VolleyService volleyService = new VolleyService(getApplicationContext());
+            String url = Urls.MAIN_SERVER_URL + Urls.SEND_TOKEN_FOR_GCM + "?token=" + token + "&userId=" + userId;
+            volleyService.sendStringGetRequest(url);
         }
     }
 
