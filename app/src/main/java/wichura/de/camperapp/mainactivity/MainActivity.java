@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -27,10 +26,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -42,11 +37,8 @@ import com.facebook.ProfileTracker;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,7 +46,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.MyAdsActivity;
@@ -63,9 +57,12 @@ import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.gcm.QuickstartPreferences;
 import wichura.de.camperapp.gcm.RegistrationIntentService;
 import wichura.de.camperapp.http.MyVolley;
+import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.messages.MessagesOverviewActivity;
+import wichura.de.camperapp.models.AdsAndBookmarks;
+import wichura.de.camperapp.models.RowItem;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -224,6 +221,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //TODO destroy obeservale
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         registerGcmReceiver();
@@ -318,71 +321,57 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void getAdsJsonForKeyword(String url) {
-        JsonArrayRequest getAllAdsReq = new JsonArrayRequest(
-                Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                final Context context = getApplicationContext();
-                try {
-                    final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-                    final JSONArray listOfAllAds = new JSONArray(response.toString());
-                    rowItems = new ArrayList<>();
-                    for (int i = 0; i < listOfAllAds.length(); i++) {
-                        // get the title information JSON object
-                        final String title = listOfAllAds.getJSONObject(i)
-                                .toString();
-                        //use RowItem class to get from GSON
-                        final RowItem rowItem = gson.fromJson(title, RowItem.class);
-                        rowItems.add(rowItem);
-                    }
-                    showNumberOfAds(listOfAllAds.length());
-                } catch (final JSONException e) {
-                    e.printStackTrace();
-                }
+        Service service = new Service();
 
-                //get Bookmarks AdIds for User
-                String url = Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKS_FOR_USER + "?userId=" + getUserId();
-                Response.Listener<String> listener = getResponseListenerForBookmarks(context);
-                Response.ErrorListener errorListener = getErrorListenerForBookmarks();
-                volleyService.sendStringGetRequest(url, listener, errorListener);
-            }
-        }, new Response.ErrorListener() {
+
+
+        Observable<String> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread());
+        Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllAdsForUserObserv().subscribeOn(Schedulers.newThread());
+
+        Observable<AdsAndBookmarks> zipped
+                = Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, new Func2<String, List<RowItem>, AdsAndBookmarks>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Missing network connection!\n" + error.toString(), Toast.LENGTH_LONG).show();
+            public AdsAndBookmarks call(String bookmarks, List<RowItem> ads) {
+                AdsAndBookmarks con = new AdsAndBookmarks();
+                con.setAds(ads);
+                con.setBookmarks(bookmarks);
+                return con;
             }
         });
-        MyVolley.getRequestQueue().add(getAllAdsReq);
-    }
 
-    @NonNull
-    private Response.ErrorListener getErrorListenerForBookmarks() {
-        return new Response.ErrorListener() {
+        zipped.subscribe(new Observer<AdsAndBookmarks>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onCompleted() {
+
             }
-        };
-    }
 
-    @NonNull
-    private Response.Listener<String> getResponseListenerForBookmarks(final Context context) {
-        return new Response.Listener<String>() {
             @Override
-            public void onResponse(String bookmarks) {
-                Log.d("CONAN", "Bookmarks: " + bookmarks);
+            public void onError(Throwable e) {
+                Log.d("CONAN", "Error in Observer: " + e.toString());
+            }
+
+            @Override
+            public void onNext(AdsAndBookmarks element) {
+                rowItems = new ArrayList<>();
+                for (RowItem e : element.getAds()) {
+                    rowItems.add(e);
+                }
+                showNumberOfAds(element.getAds().size());
+
                 listView = (ListView) findViewById(R.id.main_list);
-                adapter = new CustomListViewAdapter(context, R.layout.list_item, rowItems, bookmarks);
+                adapter = new CustomListViewAdapter(
+                        getApplicationContext(),
+                        R.layout.list_item, rowItems,
+                        element.getBookmarks());
+
                 listView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(final AdapterView<?> arg0,
-                                            final View arg1, final int position, final long arg3) {
+                    public void onItemClick(final AdapterView<?> arg0, final View arg1, final int position, final long arg3) {
 
                         final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
-                        //open new details page with sel. item
-                        final Intent intent = new Intent(getApplicationContext(),
-                                OpenAdActivity.class);
+                        final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
                         intent.putExtra(Constants.URI, rowItem.getUrl());
                         intent.putExtra(Constants.AD_ID, rowItem.getAdId());
                         intent.putExtra(Constants.TITLE, rowItem.getTitle());
@@ -397,10 +386,9 @@ public class MainActivity extends AppCompatActivity implements
                         startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
                     }
                 });
-                //disable Progressbar
                 setProgressBarIndeterminateVisibility(false);
             }
-        };
+        });
     }
 
     @Override

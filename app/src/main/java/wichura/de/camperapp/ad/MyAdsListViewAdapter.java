@@ -13,12 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -27,7 +23,7 @@ import java.util.List;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
-import wichura.de.camperapp.mainactivity.RowItem;
+import wichura.de.camperapp.models.RowItem;
 
 /**
  * Created by Bernd Wichura on 16.03.2016.

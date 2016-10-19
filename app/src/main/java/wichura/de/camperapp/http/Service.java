@@ -1,10 +1,18 @@
 package wichura.de.camperapp.http;
 
+import java.util.List;
+
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.http.GET;
 import retrofit.http.Query;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import wichura.de.camperapp.models.RowItem;
+
+import static wichura.de.camperapp.http.Urls.GET_ALL_ADS_URL;
+import static wichura.de.camperapp.http.Urls.GET_BOOKMARKS_FOR_USER;
 
 /**
  * Created by ich on 16.10.2016.
@@ -13,9 +21,9 @@ import rx.Observable;
 
 public class Service {
 
-    private static final String WEB_SERVICE_BASE_URL = "http://api.openweathermap.org/data/2.5";
-    private static final String API_KEY = "insert your api key here";
-    private final OpenWeatherMapWebService mWebService;
+    private static final String WEB_SERVICE_BASE_URL = Urls.MAIN_SERVER_URL;
+
+    private final WebService mWebService;
 
     public Service() {
         RequestInterceptor requestInterceptor = new RequestInterceptor() {
@@ -31,16 +39,33 @@ public class Service {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
-        mWebService = restAdapter.create(OpenWeatherMapWebService.class);
+        mWebService = restAdapter.create(WebService.class);
     }
 
-    private interface OpenWeatherMapWebService {
-        @GET("/weather?units=metric&apikey=" + API_KEY)
-        Observable<String> fetchCurrentWeather(@Query("lon") double longitude,
-                                                                   @Query("lat") double latitude);
+    private interface WebService {
+        @GET(GET_BOOKMARKS_FOR_USER)
+        Observable<String> getBookmarksForUser(@Query("userId") String userId);
 
-        @GET("/forecast/daily?units=metric&cnt=7&apikey=" + API_KEY)
-        Observable<String> fetchWeatherForecasts(
-                @Query("lon") double longitude, @Query("lat") double latitude);
+        @GET(GET_ALL_ADS_URL)
+        Observable<List<RowItem>> getAllAdsForUser();
+
+
     }
+
+    public Observable<String> getBookmarksForUserObserv(String userId) {
+
+        return mWebService.getBookmarksForUser(userId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public Observable<List<RowItem>> getAllAdsForUserObserv() {
+
+        return mWebService.getAllAdsForUser()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
 }

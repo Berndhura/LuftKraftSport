@@ -25,6 +25,7 @@ import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.models.RowItem;
 
 public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 

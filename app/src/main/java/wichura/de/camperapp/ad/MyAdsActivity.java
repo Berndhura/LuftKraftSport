@@ -28,7 +28,7 @@ import java.util.List;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.mainactivity.RowItem;
+import wichura.de.camperapp.models.RowItem;
 
 /**
  * Created by Bernd Wichura on 14.03.2016.

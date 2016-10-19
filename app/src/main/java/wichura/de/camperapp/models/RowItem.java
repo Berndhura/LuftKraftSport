@@ -1,4 +1,4 @@
-package wichura.de.camperapp.mainactivity;
+package wichura.de.camperapp.models;
 
 import com.google.gson.annotations.Expose;
 
