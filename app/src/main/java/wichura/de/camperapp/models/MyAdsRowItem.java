@@ -1,8 +1,8 @@
-package wichura.de.camperapp.ad;
+package wichura.de.camperapp.models;
 
 import android.content.Intent;
 
-public class AdItem {
+public class MyAdsRowItem {
 
     public static final String ITEM_SEP = System.getProperty("line.separator");
 
@@ -27,9 +27,9 @@ public class AdItem {
     private String mPrice = new String();
     private long mDate;
 
-    AdItem(final String title, final String apid, final String desc, final String keyw,
-           final String fileName, final String location, final String phone, final String price,
-           final long date) {
+    MyAdsRowItem(final String title, final String apid, final String desc, final String keyw,
+                 final String fileName, final String location, final String phone, final String price,
+                 final long date) {
         this.mTitle = title;
         this.mApId = apid;
         this.mDesc = desc;
@@ -42,17 +42,17 @@ public class AdItem {
 
     }
 
-    public AdItem(final Intent intent) {
+    public MyAdsRowItem(final Intent intent) {
 
-        mTitle = intent.getStringExtra(AdItem.TITLE);
-        mApId = intent.getStringExtra(AdItem.ADID);
-        mDesc = intent.getStringExtra(AdItem.DESC);
-        mFilename = intent.getStringExtra(AdItem.FILENAME);
-        mKeywords = intent.getStringExtra(AdItem.KEYWORDS);
-        location = intent.getStringExtra((AdItem.LOCATION));
-        phone = intent.getStringExtra(AdItem.PHONE);
-        mPrice = intent.getStringExtra(AdItem.PRICE);
-        mDate = intent.getLongExtra(AdItem.DATE, 0);
+        mTitle = intent.getStringExtra(MyAdsRowItem.TITLE);
+        mApId = intent.getStringExtra(MyAdsRowItem.ADID);
+        mDesc = intent.getStringExtra(MyAdsRowItem.DESC);
+        mFilename = intent.getStringExtra(MyAdsRowItem.FILENAME);
+        mKeywords = intent.getStringExtra(MyAdsRowItem.KEYWORDS);
+        location = intent.getStringExtra((MyAdsRowItem.LOCATION));
+        phone = intent.getStringExtra(MyAdsRowItem.PHONE);
+        mPrice = intent.getStringExtra(MyAdsRowItem.PRICE);
+        mDate = intent.getLongExtra(MyAdsRowItem.DATE, 0);
     }
 
     public String getTitle() {
@@ -93,15 +93,15 @@ public class AdItem {
                                      final String desc, final String keyw, final String fileURI, final String location,
                                      final String phone, final String price, final long date) {
 
-        intent.putExtra(AdItem.TITLE, title);
-        intent.putExtra(AdItem.ADID, apid);
-        intent.putExtra(AdItem.DESC, desc);
-        intent.putExtra(AdItem.KEYWORDS, keyw);
-        intent.putExtra(AdItem.FILENAME, fileURI);
-        intent.putExtra(AdItem.LOCATION, location);
-        intent.putExtra(AdItem.PHONE, phone);
-        intent.putExtra(AdItem.PRICE, price);
-        intent.putExtra(AdItem.DATE, date);
+        intent.putExtra(MyAdsRowItem.TITLE, title);
+        intent.putExtra(MyAdsRowItem.ADID, apid);
+        intent.putExtra(MyAdsRowItem.DESC, desc);
+        intent.putExtra(MyAdsRowItem.KEYWORDS, keyw);
+        intent.putExtra(MyAdsRowItem.FILENAME, fileURI);
+        intent.putExtra(MyAdsRowItem.LOCATION, location);
+        intent.putExtra(MyAdsRowItem.PHONE, phone);
+        intent.putExtra(MyAdsRowItem.PRICE, price);
+        intent.putExtra(MyAdsRowItem.DATE, date);
 
     }
 

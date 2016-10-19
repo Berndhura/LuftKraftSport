@@ -47,6 +47,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements
 
     //Volley Http service
     private VolleyService volleyService;
+
+    private Subscription subscription;
 
     public MainActivity() {
         volleyService = new VolleyService(MainActivity.this);
@@ -223,7 +226,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //TODO destroy obeservale
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
     }
 
     @Override
@@ -323,32 +328,26 @@ public class MainActivity extends AppCompatActivity implements
     private void getAdsJsonForKeyword(String url) {
         Service service = new Service();
 
-
-
         Observable<String> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread());
         Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllAdsForUserObserv().subscribeOn(Schedulers.newThread());
 
-        Observable<AdsAndBookmarks> zipped
+        Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds
                 = Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, new Func2<String, List<RowItem>, AdsAndBookmarks>() {
             @Override
             public AdsAndBookmarks call(String bookmarks, List<RowItem> ads) {
-                AdsAndBookmarks con = new AdsAndBookmarks();
-                con.setAds(ads);
-                con.setBookmarks(bookmarks);
-                return con;
+                AdsAndBookmarks elements = new AdsAndBookmarks();
+                elements.setAds(ads);
+                elements.setBookmarks(bookmarks);
+                return elements;
             }
         });
 
-        zipped.subscribe(new Observer<AdsAndBookmarks>() {
+        subscription = zippedReqForBookmarksAndAds.subscribe(new Observer<AdsAndBookmarks>() {
             @Override
-            public void onCompleted() {
-
-            }
+            public void onCompleted() {}
 
             @Override
-            public void onError(Throwable e) {
-                Log.d("CONAN", "Error in Observer: " + e.toString());
-            }
+            public void onError(Throwable e) { Log.d("CONAN", "Error in Observer: " + e.toString()); }
 
             @Override
             public void onNext(AdsAndBookmarks element) {

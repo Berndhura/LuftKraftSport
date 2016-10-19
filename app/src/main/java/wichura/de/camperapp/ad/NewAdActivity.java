@@ -31,6 +31,7 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.bitmap.BitmapHelper;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.models.MyAdsRowItem;
 
 
 public class NewAdActivity extends AppCompatActivity {
@@ -101,7 +102,7 @@ public class NewAdActivity extends AppCompatActivity {
 
                 // Package ToDoItem data into an Intent
                 final Intent data = new Intent();
-                AdItem.packageIntent(data, titleString, "apid", descString, keyWordsString, mImage,
+                MyAdsRowItem.packageIntent(data, titleString, "apid", descString, keyWordsString, mImage,
                         "TODO", "PHONE", price, date);
 
                 sendHttpToServer(data);
@@ -156,12 +157,12 @@ public class NewAdActivity extends AppCompatActivity {
 
     private void sendHttpToServer(final Intent data) {
 
-        title = data.getStringExtra(AdItem.TITLE);
-        description = data.getStringExtra(AdItem.DESC);
-        keywords = data.getStringExtra(AdItem.KEYWORDS);
-        picture = data.getStringExtra(AdItem.FILENAME);
-        price = data.getStringExtra(AdItem.PRICE);
-        date = data.getLongExtra(AdItem.DATE, 0);
+        title = data.getStringExtra(MyAdsRowItem.TITLE);
+        description = data.getStringExtra(MyAdsRowItem.DESC);
+        keywords = data.getStringExtra(MyAdsRowItem.KEYWORDS);
+        picture = data.getStringExtra(MyAdsRowItem.FILENAME);
+        price = data.getStringExtra(MyAdsRowItem.PRICE);
+        date = data.getLongExtra(MyAdsRowItem.DATE, 0);
 
         Log.d("query", title + description + keywords + picture);
 

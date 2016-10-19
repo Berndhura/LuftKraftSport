@@ -30,9 +30,11 @@ import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.RowItem;
 
+import static wichura.de.camperapp.mainactivity.Constants.REQUEST_ID_FOR_NEW_AD;
+
 /**
  * Created by Bernd Wichura on 14.03.2016.
- *
+ * CamperApp
  */
 public class MyAdsActivity extends AppCompatActivity {
 
@@ -62,6 +64,7 @@ public class MyAdsActivity extends AppCompatActivity {
 
         userId = getIntent().getStringExtra(Constants.USER_ID);
         rowItems = new ArrayList<>();
+
         getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
 
         ImageView newButton = (ImageView) findViewById(R.id.new_button);
@@ -70,8 +73,7 @@ public class MyAdsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     final Intent intent = new Intent(getApplicationContext(), NewAdActivity.class);
-                    //TODO userid and return code !!!
-                    startActivityForResult(intent, 13);
+                    startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
                 }
             });
         }
