@@ -214,13 +214,6 @@ public class MainActivity extends AppCompatActivity implements
         };
 
         registerLoginReceiver();
-
-        Observable.just("one", "two", "three", "four", "five")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(/* an Observer */);
-
-
     }
 
     @Override
@@ -344,10 +337,13 @@ public class MainActivity extends AppCompatActivity implements
 
         subscription = zippedReqForBookmarksAndAds.subscribe(new Observer<AdsAndBookmarks>() {
             @Override
-            public void onCompleted() {}
+            public void onCompleted() {
+            }
 
             @Override
-            public void onError(Throwable e) { Log.d("CONAN", "Error in Observer: " + e.toString()); }
+            public void onError(Throwable e) {
+                Log.d("CONAN", "Error in Observer: " + e.toString());
+            }
 
             @Override
             public void onNext(AdsAndBookmarks element) {

@@ -2,7 +2,7 @@ package wichura.de.camperapp.mainactivity;
 
 /**
  * Created by Bernd Wichura on 22.01.2016.
- *
+ * CamperApp
  */
 public class Constants {
 
