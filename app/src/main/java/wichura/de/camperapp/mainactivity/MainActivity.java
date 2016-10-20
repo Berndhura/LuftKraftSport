@@ -322,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements
         Service service = new Service();
 
         Observable<String> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread());
-        Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllAdsForUserObserv().subscribeOn(Schedulers.newThread());
+        Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllUrlObserv(url).subscribeOn(Schedulers.newThread());
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds
                 = Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, new Func2<String, List<RowItem>, AdsAndBookmarks>() {

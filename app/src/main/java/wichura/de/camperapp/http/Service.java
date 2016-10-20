@@ -6,7 +6,9 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -45,6 +47,11 @@ public class Service {
         @GET(GET_ALL_ADS_URL)
         Observable<List<RowItem>> getAllAdsForUser();
 
+        @GET
+        Observable<List<RowItem>> getAllUrl(@Url String url);
+
+        @GET("anfang/{lastPart}")
+        Observable<List<RowItem>> getExample(@Path("lastPart") String lastPart);
 
     }
 
@@ -59,6 +66,13 @@ public class Service {
     public Observable<List<RowItem>> getAllAdsForUserObserv() {
 
         return mWebService.getAllAdsForUser()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<List<RowItem>> getAllUrlObserv(String url) {
+
+        return mWebService.getAllUrl(url)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
