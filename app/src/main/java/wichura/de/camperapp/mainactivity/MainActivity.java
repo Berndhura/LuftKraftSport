@@ -48,7 +48,6 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.R;
@@ -138,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements
         loginBtn = (ImageView) findViewById(R.id.login_button);
 
         updateLoginButton();
-        getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+        getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
 
         AccessTokenTracker tracker = new AccessTokenTracker() {
             @Override
@@ -304,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements
                             setProfilePicture(uri);
                         }
                         setUserPreferences(userName, userId);
-                        getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                        getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -318,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements
         request.executeAsync();
     }
 
-    private void getAdsJsonForKeyword(String url) {
+    private void getAds(String url) {
         Service service = new Service();
 
         Observable<String> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread());
@@ -407,7 +406,7 @@ public class MainActivity extends AppCompatActivity implements
 
         switch (requestCode) {
             case Constants.REQUEST_ID_FOR_NEW_AD: {
-                getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 break;
             }
             case Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN: {
@@ -445,13 +444,13 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             }
             case Constants.REQUEST_ID_FOR_OPEN_AD: {
-                getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 break;
             }
             case Constants.REQUEST_ID_FOR_SEARCH: {
                 if (data != null) {
                     String query = data.getStringExtra(Constants.KEYWORDS);
-                    getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
+                    getAds(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
                     drawer.closeDrawer(GravityCompat.START);
                 }
                 break;
@@ -553,7 +552,7 @@ public class MainActivity extends AppCompatActivity implements
                 return true;
             }
             case R.id.refresh: {
-                getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
@@ -562,7 +561,7 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 } else {
-                    getAdsJsonForKeyword(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + userId);
+                    getAds(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + userId);
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
                 }
