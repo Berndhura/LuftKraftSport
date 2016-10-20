@@ -2,10 +2,11 @@ package wichura.de.camperapp.http;
 
 import java.util.List;
 
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -26,17 +27,12 @@ public class Service {
     private final WebService mWebService;
 
     public Service() {
-        RequestInterceptor requestInterceptor = new RequestInterceptor() {
-            @Override
-            public void intercept(RequestInterceptor.RequestFacade request) {
-                request.addHeader("Accept", "application/json");
-            }
-        };
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(WEB_SERVICE_BASE_URL)
-                .setRequestInterceptor(requestInterceptor)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+
+        Retrofit  restAdapter = new Retrofit.Builder()
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(WEB_SERVICE_BASE_URL)
                 .build();
 
         mWebService = restAdapter.create(WebService.class);

@@ -43,7 +43,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
-    compile 'com.google.code.gson:gson:2.4'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.8.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -55,9 +54,18 @@ dependencies {
     compile "com.google.android.gms:play-services-gcm:8.4.0"
     compile 'com.flurry.android:analytics:6.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
+
+    //Gson
+    compile 'com.google.code.gson:gson:2.4'
+
+    //RxAndroid
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
-    compile 'com.squareup.retrofit:retrofit:1.8.+'
+
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
