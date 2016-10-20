@@ -63,6 +63,7 @@ import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.messages.MessagesOverviewActivity;
 import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.RowItem;
+import wichura.de.camperapp.presentation.PresenterLayer;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -91,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements
     private VolleyService volleyService;
 
     private Subscription subscription;
+
+    private PresenterLayer presenterLayer;
 
     public MainActivity() {
         volleyService = new VolleyService(MainActivity.this);
@@ -315,6 +318,13 @@ public class MainActivity extends AppCompatActivity implements
         parameters.putString("fields", "id,name,link,picture");
         request.setParameters(parameters);
         request.executeAsync();
+    }
+
+    public void updateAds(List<RowItem> rowItems) {
+        //TODO  update List of Ads
+        Service service = new Service();
+        presenterLayer = new PresenterLayer(this, service);
+        presenterLayer.loadAdData();
     }
 
     private void getAds(String url) {
