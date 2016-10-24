@@ -45,11 +45,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Observer;
 import rx.Subscription;
-import rx.functions.Func2;
-import rx.schedulers.Schedulers;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
@@ -94,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements
     private Subscription subscription;
 
     private PresenterLayer presenterLayer;
+    private Service service;
 
     public MainActivity() {
         volleyService = new VolleyService(MainActivity.this);
@@ -105,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements
 
         // Initialize Volley
         MyVolley.init(this);
+
+        service = new Service();
 
         //TODO: set active false in messageActivity in onDestroy, onStop, on???  BUT NOT HERE
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
@@ -320,79 +319,50 @@ public class MainActivity extends AppCompatActivity implements
         request.executeAsync();
     }
 
-    public void updateAds(List<RowItem> rowItems) {
-        //TODO  update List of Ads
-        Service service = new Service();
-        presenterLayer = new PresenterLayer(this, service);
-        presenterLayer.loadAdData();
+    public void updateAds(AdsAndBookmarks elements) {
+
+        rowItems = new ArrayList<>();
+        for (RowItem e : elements.getAds()) {
+            rowItems.add(e);
+        }
+        showNumberOfAds(elements.getAds().size());
+
+        listView = (ListView) findViewById(R.id.main_list);
+        adapter = new CustomListViewAdapter(
+                getApplicationContext(),
+                R.layout.list_item, rowItems,
+                elements.getBookmarks());
+
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> arg0, final View arg1, final int position, final long arg3) {
+
+                final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
+                final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
+                intent.putExtra(Constants.URI, rowItem.getUrl());
+                intent.putExtra(Constants.AD_ID, rowItem.getAdId());
+                intent.putExtra(Constants.TITLE, rowItem.getTitle());
+                intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
+                intent.putExtra(Constants.LOCATION, rowItem.getLocation());
+                intent.putExtra(Constants.PHONE, rowItem.getPhone());
+                intent.putExtra(Constants.PRICE, rowItem.getPrice());
+                intent.putExtra(Constants.DATE, rowItem.getDate());
+                intent.putExtra(Constants.VIEWS, rowItem.getViews());
+                intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
+                intent.putExtra(Constants.USER_ID, getUserId());
+                startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
+            }
+        });
+        setProgressBarIndeterminateVisibility(false);
     }
 
     private void getAds(String url) {
-        Service service = new Service();
 
-        Observable<String> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread());
-        Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllUrlObserv(url).subscribeOn(Schedulers.newThread());
+        presenterLayer = new PresenterLayer(this, service, getApplicationContext());
+        presenterLayer.loadAdData(url);
 
-        Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds
-                = Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, new Func2<String, List<RowItem>, AdsAndBookmarks>() {
-            @Override
-            public AdsAndBookmarks call(String bookmarks, List<RowItem> ads) {
-                AdsAndBookmarks elements = new AdsAndBookmarks();
-                elements.setAds(ads);
-                elements.setBookmarks(bookmarks);
-                return elements;
-            }
-        });
-
-        subscription = zippedReqForBookmarksAndAds.subscribe(new Observer<AdsAndBookmarks>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d("CONAN", "Error in Observer: " + e.toString());
-            }
-
-            @Override
-            public void onNext(AdsAndBookmarks element) {
-                rowItems = new ArrayList<>();
-                for (RowItem e : element.getAds()) {
-                    rowItems.add(e);
-                }
-                showNumberOfAds(element.getAds().size());
-
-                listView = (ListView) findViewById(R.id.main_list);
-                adapter = new CustomListViewAdapter(
-                        getApplicationContext(),
-                        R.layout.list_item, rowItems,
-                        element.getBookmarks());
-
-                listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(final AdapterView<?> arg0, final View arg1, final int position, final long arg3) {
-
-                        final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
-                        final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-                        intent.putExtra(Constants.URI, rowItem.getUrl());
-                        intent.putExtra(Constants.AD_ID, rowItem.getAdId());
-                        intent.putExtra(Constants.TITLE, rowItem.getTitle());
-                        intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
-                        intent.putExtra(Constants.LOCATION, rowItem.getLocation());
-                        intent.putExtra(Constants.PHONE, rowItem.getPhone());
-                        intent.putExtra(Constants.PRICE, rowItem.getPrice());
-                        intent.putExtra(Constants.DATE, rowItem.getDate());
-                        intent.putExtra(Constants.VIEWS, rowItem.getViews());
-                        intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
-                        intent.putExtra(Constants.USER_ID, getUserId());
-                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
-                    }
-                });
-                setProgressBarIndeterminateVisibility(false);
-            }
-        });
     }
 
     @Override

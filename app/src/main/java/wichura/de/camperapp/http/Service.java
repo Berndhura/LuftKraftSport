@@ -31,7 +31,7 @@ public class Service {
     public Service() {
 
 
-        Retrofit  restAdapter = new Retrofit.Builder()
+        Retrofit restAdapter = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(WEB_SERVICE_BASE_URL)
