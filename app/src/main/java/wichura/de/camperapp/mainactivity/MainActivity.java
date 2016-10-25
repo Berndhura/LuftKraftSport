@@ -61,7 +61,6 @@ import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.presentation.PresenterLayer;
 
-
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
@@ -325,6 +324,7 @@ public class MainActivity extends AppCompatActivity implements
         for (RowItem e : elements.getAds()) {
             rowItems.add(e);
         }
+
         showNumberOfAds(elements.getAds().size());
 
         listView = (ListView) findViewById(R.id.main_list);
