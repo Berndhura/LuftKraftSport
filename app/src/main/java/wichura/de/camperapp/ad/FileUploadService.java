@@ -55,7 +55,7 @@ public class FileUploadService {
         //thumbnail?
         // Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagePath), THUMBSIZE, THUMBSIZE);
 
-        String fileString = getRealPathFromUri(context, fileUri); //war bildCompresse
+        String fileString = getRealPathFromUri(context, fileUri);
         Log.i("CONAN", "fileString: " + fileString);
 
 
@@ -69,7 +69,7 @@ public class FileUploadService {
         //todo: add more pics here??
         RequestParams params = new RequestParams();
         try {
-            params.put("image", reducedPicture);
+            params.put(Constants.IMAGE, reducedPicture);
         } catch (FileNotFoundException e) {
         }
 

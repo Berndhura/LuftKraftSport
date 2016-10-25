@@ -56,9 +56,8 @@ public class NewAdActivity extends AppCompatActivity {
         fileUploadService = new FileUploadService(getApplicationContext(), this);
 
         progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
-        progress.setVisibility(ProgressBar.GONE);
+        hideProgress();
 
-        // mTitleText = (EditText) findViewById(R.id.title);
         mDescText = (EditText) findViewById(R.id.description);
         mKeywords = (EditText) findViewById(R.id.keywords);
         mImgOne = (ImageView) findViewById(R.id.imageButton);

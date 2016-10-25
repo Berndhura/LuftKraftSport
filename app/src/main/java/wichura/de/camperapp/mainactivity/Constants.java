@@ -28,6 +28,7 @@ public class Constants {
     public static final String URI = "uri";
     public static final String AD_ID = "ad_id";
     public static final String TITLE = "title";
+    public static final String IMAGE = "image";
     public static final String DESCRIPTION = "description";
     public static final String LOCATION = "location";
     public static final String PHONE = "phone";
