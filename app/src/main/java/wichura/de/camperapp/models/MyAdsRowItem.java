@@ -9,7 +9,7 @@ public class MyAdsRowItem {
     //todo constants
     public final static String TITLE = "title";
     public final static String ADID = "ad_id";
-    public final static String FILENAME = "";
+    public final static String FILENAME = "filename";
     public final static String DESC = "description";
     public final static String KEYWORDS = "keywords";
     public final static String LOCATION = "location";

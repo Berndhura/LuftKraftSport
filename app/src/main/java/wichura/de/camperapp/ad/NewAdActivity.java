@@ -61,6 +61,7 @@ public class NewAdActivity extends AppCompatActivity {
         mDescText = (EditText) findViewById(R.id.description);
         mKeywords = (EditText) findViewById(R.id.keywords);
         mImgOne = (ImageView) findViewById(R.id.imageButton);
+        mImgTwo = (ImageView) findViewById(R.id.imageButton2);
         mPrice = (EditText) findViewById(R.id.preis);
 
         final Button submitButton = (Button) findViewById(R.id.uploadButton);
@@ -92,7 +93,7 @@ public class NewAdActivity extends AppCompatActivity {
             }
         });
 
-        final ImageButton getPictureButton = (ImageButton) findViewById(R.id.imageButton);
+        final ImageView getPictureButton = (ImageView) findViewById(R.id.imageButton);
 
         getPictureButton.setOnClickListener(new OnClickListener() {
             @Override
