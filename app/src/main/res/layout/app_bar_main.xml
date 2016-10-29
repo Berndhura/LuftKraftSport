@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize">
 
             <android.support.v7.widget.Toolbar
@@ -24,12 +24,6 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextColor="@android:color/white" />
 
-            <ProgressBar
-                android:id="@+id/registrationProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp" />
 
             <ImageView
                 android:id="@+id/login_button"
@@ -38,6 +32,16 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/common_full_open_on_phone" />
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicator="LineScaleParty"
+                app:indicator_color="@color/colorAccent"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/login_button"
+                android:layout_toStartOf="@+id/login_toolbar" />
 
         </RelativeLayout>
 

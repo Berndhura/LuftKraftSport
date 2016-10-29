@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 
 /**
  * Created by ich on 01.09.2015.
+ * Camper App
  */
 public class BitmapHelper {
 
@@ -21,7 +22,7 @@ public class BitmapHelper {
         this.mContext = context;
     }
 
-    public  File saveBitmapToFile(File file) {
+    public File saveBitmapToFile(File file) {
         try {
 
             // BitmapFactory options to downsize the image

@@ -38,6 +38,7 @@ import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,8 +77,9 @@ public class MainActivity extends AppCompatActivity implements
 
     //Google Cloud Messages
     private BroadcastReceiver mGcmRegistrationBroadcastReceiver;
-    private ProgressBar mGcmRegistrationProgressBar;
     private boolean isGcmReceiverRegistered;
+
+    public AVLoadingIndicatorView progressBar;
 
     //login
     private BroadcastReceiver mLoginBroadcastReceiver;
@@ -116,6 +118,9 @@ public class MainActivity extends AppCompatActivity implements
 
         //load main layout
         setContentView(R.layout.activity_main);
+
+        //ProgressBar
+        progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
 
         //configure Flurry for analysis
         configureFlurry();
@@ -181,11 +186,10 @@ public class MainActivity extends AppCompatActivity implements
         tracker.startTracking();
         profileTracker.startTracking();
 
-        mGcmRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
         mGcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                mGcmRegistrationProgressBar.setVisibility(ProgressBar.GONE);
+                progressBar.setVisibility(ProgressBar.GONE);
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sentToken = sharedPreferences

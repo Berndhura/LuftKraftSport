@@ -2,6 +2,7 @@ package wichura.de.camperapp.presentation;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -35,20 +36,21 @@ public class PresenterLayer {
     }
 
     public void loadAdData(String url) {
+        view.progressBar.setVisibility(ProgressBar.VISIBLE);
 
         Observable<String> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread());
         Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllUrlObserv(url).subscribeOn(Schedulers.newThread());
 
-        Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds
-                = Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, new Func2<String, List<RowItem>, AdsAndBookmarks>() {
-            @Override
-            public AdsAndBookmarks call(String bookmarks, List<RowItem> ads) {
-                AdsAndBookmarks elements = new AdsAndBookmarks();
-                elements.setAds(ads);
-                elements.setBookmarks(bookmarks);
-                return elements;
-            }
-        });
+        Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
+                Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, new Func2<String, List<RowItem>, AdsAndBookmarks>() {
+                    @Override
+                    public AdsAndBookmarks call(String bookmarks, List<RowItem> ads) {
+                        AdsAndBookmarks elements = new AdsAndBookmarks();
+                        elements.setAds(ads);
+                        elements.setBookmarks(bookmarks);
+                        return elements;
+                    }
+                });
 
         subscription = zippedReqForBookmarksAndAds.subscribe(new Observer<AdsAndBookmarks>() {
             @Override
@@ -62,6 +64,8 @@ public class PresenterLayer {
 
             @Override
             public void onNext(AdsAndBookmarks element) {
+
+                view.progressBar.setVisibility(ProgressBar.GONE);
                 view.updateAds(element);
             }
         });
