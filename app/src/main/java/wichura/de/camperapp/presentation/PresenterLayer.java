@@ -37,6 +37,7 @@ public class PresenterLayer {
 
     public void loadAdData(String url) {
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
+        Log.d("CONAN", url);
 
         Observable<String> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread());
         Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllUrlObserv(url).subscribeOn(Schedulers.newThread());

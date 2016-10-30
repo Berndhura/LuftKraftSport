@@ -81,6 +81,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtPrice.setText(rowItem.getPrice());
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
 
+        Log.d("CONAN", "bookmarks: "+Arrays.asList(bookmarks));
         //bookmark star full for bookmarked ad
         if (Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
             holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);

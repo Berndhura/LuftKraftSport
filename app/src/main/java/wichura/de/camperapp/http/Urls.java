@@ -15,7 +15,7 @@ public class Urls {
     public static final String GET_ALL_ADS_FROM_USER  = "/getAdsFromUser?userid=";
     public static final String BOOKMARK_AD = "/bookmark";
     public static final String BOOKMARK_DELETE = "/deleteBookmark";
-    public static final String GET_BOOKMARKED_ADS_URL = "/getMyBookmarkedAds?userId=";
+    public static final String GET_BOOKMARKED_ADS_URL = "getMyBookmarkedAds?userId=";
     public static final String LOGIN_USER = "/loginUser";
     public static final String COUNT_VIEW = "/viewCount";
     public static final String CREATE_USER = "/createUser";
