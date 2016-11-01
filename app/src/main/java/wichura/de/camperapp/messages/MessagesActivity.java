@@ -19,31 +19,19 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.http.Urls;
-import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
 
 /**
  * Created by ich on 22.05.2016.
  * Camper App
  */
+
 public class MessagesActivity extends AppCompatActivity {
 
     private ProgressBar mMessagesProgressBar;
@@ -53,9 +41,13 @@ public class MessagesActivity extends AppCompatActivity {
     private EditText text;
     private BroadcastReceiver appendChatScreenMsgReceiver;
 
+    private MessagesPresenter presenter;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        presenter = new MessagesPresenter(this);
 
         //in case MessageActivity is open, new message will be added to list
         appendChatScreenMsgReceiver = new BroadcastReceiver() {
@@ -78,6 +70,7 @@ public class MessagesActivity extends AppCompatActivity {
 
         setContentView(R.layout.messages_layout);
 
+        mMessagesProgressBar = (ProgressBar) findViewById(R.id.msg_ProgressBar);
         text = (EditText) findViewById(R.id.edit_message);
 
         final String adId = getIntent().getStringExtra(Constants.AD_ID);
@@ -114,29 +107,23 @@ public class MessagesActivity extends AppCompatActivity {
             //  getSupportActionBar().setCustomView(mCustomView);
             // getSupportActionBar().setDisplayShowCustomEnabled(true);
 
-            if (adPicUrl != null) {
-                ImageView thumbNail = (ImageView) findViewById(R.id.ad_in_toolbar);
-                Picasso.with(getApplicationContext()).load(adPicUrl.toString()).into(thumbNail);
-                thumbNail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-/*                      TODO: open openAdActivity, need all information in intent??? like description, title...
+            /*                      TODO: open openAdActivity, need all information in intent??? like description, title...
                         TODO: here is the link between message and Ad!!!
                         final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
                         intent.putExtra(Constants.URI, getIntent().getStringExtra(Constants.AD_URL));
                         intent.putExtra(Constants.AD_ID, getIntent().getStringExtra(Constants.AD_ID));
                         intent.putExtra(Constants.USER_ID, getUserId());
                         startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);*/
-                        Toast.makeText(getApplicationContext(), "Open Ad for details", Toast.LENGTH_SHORT).show();
 
-                    }
-                });
+
+            if (adPicUrl != null) {
+                ImageView thumbNail = (ImageView) findViewById(R.id.ad_in_toolbar);
+                Picasso.with(getApplicationContext()).load(adPicUrl.toString()).into(thumbNail);
+                thumbNail.setOnClickListener(v-> Toast.makeText(getApplicationContext(), "Open Ad for details", Toast.LENGTH_SHORT).show());
             }
         }
 
-        mMessagesProgressBar = (ProgressBar) findViewById(R.id.msg_ProgressBar);
-
-        getMessages(idTo, idFrom, adId, mMessagesProgressBar);
+        presenter.loadMessages(idTo, idFrom, adId);
 
         ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
         if (newMsgBtn != null) {
@@ -181,12 +168,14 @@ public class MessagesActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         setInactive();
+        presenter.disableSubscription();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         setInactive();
+        presenter.disableSubscription();
     }
 
     @Override
@@ -219,55 +208,30 @@ public class MessagesActivity extends AppCompatActivity {
         if (message.length() == 0)
             return;
 
-        String url = Urls.MAIN_SERVER_URL + Urls.SEND_MESSAGE +
-                "?message=" + message.replaceAll(" ", "%20")
-                + "&adId=" + adId
-                + "&idFrom=" + ownerId + "&idTo=" + sender;
-        VolleyService volleyService = new VolleyService(getApplicationContext());
-        volleyService.sendStringGetRequest(url);
+        presenter.sendMessage(message.replaceAll(" ", "%20"), adId, ownerId, sender);
     }
 
-    private void getMessages(String userId, String sender, String adId, final ProgressBar progress) {
+    public void showMessages(List<MsgRowItem> msgRowItems) {
+        rowItems = new ArrayList<>();
+        for (MsgRowItem e : msgRowItems) {
+            rowItems.add(e);
+        }
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        adapter = new MessageListViewAdapter(getApplicationContext(), R.layout.list_item, rowItems);
+        listView.setAdapter(adapter);
+        listView.setSelection(listView.getCount() - 1);
+        adapter.notifyDataSetChanged();
 
-        String url = Urls.MAIN_SERVER_URL + Urls.GET_ALL_MESSAGES_FOR_AD + "?userId=" + userId + "&sender=" + sender + "&adId=" + adId;
-        Log.d("CONAN", "get message: " + "adId: " + adId + " userId: " + userId + " sender: " + sender);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+    }
 
-        JsonArrayRequest getAllAdsInJson = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                progress.setVisibility(ProgressBar.GONE);
-                Context context = getApplicationContext();
-                try {
-                    final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-                    final JSONArray listOfAllAds = new JSONArray(response.toString());
-                    rowItems = new ArrayList<>();
-                    for (int i = 0; i < listOfAllAds.length(); i++) {
-                        final String title = listOfAllAds.getJSONObject(i).toString();
-                        //use RowItem class to get from GSON
-                        final MsgRowItem rowItem = gson.fromJson(title, MsgRowItem.class);
-                        rowItems.add(rowItem);
-                    }
-                } catch (final JSONException e) {
-                    e.printStackTrace();
-                }
+    public void enableProgress() {
+        mMessagesProgressBar.setVisibility(ProgressBar.VISIBLE);
+    }
 
-                adapter = new MessageListViewAdapter(
-                        context, R.layout.list_item, rowItems);
-                listView.setAdapter(adapter);
-                listView.setSelection(listView.getCount() - 1);
-                adapter.notifyDataSetChanged();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Missing network connection!\n" + error.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
-        requestQueue.add(getAllAdsInJson);
+    public void disableProgress() {
+        mMessagesProgressBar.setVisibility(ProgressBar.GONE);
     }
 
     private String getUserId() {

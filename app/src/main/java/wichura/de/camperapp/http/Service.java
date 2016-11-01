@@ -14,10 +14,13 @@ import retrofit2.http.Url;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import wichura.de.camperapp.messages.MsgRowItem;
 import wichura.de.camperapp.models.RowItem;
 
 import static wichura.de.camperapp.http.Urls.GET_ALL_ADS_URL;
+import static wichura.de.camperapp.http.Urls.GET_ALL_MESSAGES_FOR_AD;
 import static wichura.de.camperapp.http.Urls.GET_BOOKMARKS_FOR_USER;
+import static wichura.de.camperapp.http.Urls.SEND_MESSAGE;
 
 /**
  * Created by ich on 16.10.2016.
@@ -62,11 +65,35 @@ public class Service {
         @GET("anfang/{lastPart}")
         Observable<List<RowItem>> getExample(@Path("lastPart") String lastPart);
 
+        @GET(GET_ALL_MESSAGES_FOR_AD)
+        Observable<List<MsgRowItem>>getAllMessagesForAd(
+                @Query("userId") String userId,
+                @Query("sender") String sender,
+                @Query("adId") String adId);
+
+        @GET(SEND_MESSAGE)
+        Observable<String> sendMessage(
+                @Query("message") String message,
+                @Query("adId") String adId,
+                @Query("idFrom") String idFrom,
+                @Query("idTo") String idTo);
+    }
+
+    public Observable<String> sendMessagesObserv(String message, String adId, String idFrom, String idTo) {
+        return mWebService.sendMessage(message, adId, idFrom, idTo)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<String> getBookmarksForUserObserv(String userId) {
 
         return mWebService.getBookmarksForUser(userId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<List<MsgRowItem>> getAllMessagesForAdObserv(String userId, String sender, String adId) {
+        return mWebService.getAllMessagesForAd(userId, sender, adId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -85,6 +112,4 @@ public class Service {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
-
 }

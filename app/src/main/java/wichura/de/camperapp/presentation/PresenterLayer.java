@@ -39,8 +39,8 @@ public class PresenterLayer {
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
         Log.d("CONAN", url);
 
-        Observable<String> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread());
-        Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllUrlObserv(url).subscribeOn(Schedulers.newThread());
+        Observable<String> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId());
+        Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllUrlObserv(url);
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                 Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, new Func2<String, List<RowItem>, AdsAndBookmarks>() {
