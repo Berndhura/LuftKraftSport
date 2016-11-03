@@ -13,6 +13,7 @@ import rx.schedulers.Schedulers;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.AdsAndBookmarks;
+import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.models.RowItem;
 
 /**
@@ -35,16 +36,16 @@ public class PresenterLayerMyAd {
 
     public void loadMyAdsData(String url) {
 
-        Observable<String> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread());
+        Observable<Bookmarks> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread());
         Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllUrlObserv(url).subscribeOn(Schedulers.newThread());
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds
-                = Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, new Func2<String, List<RowItem>, AdsAndBookmarks>() {
+                = Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, new Func2<Bookmarks, List<RowItem>, AdsAndBookmarks>() {
             @Override
-            public AdsAndBookmarks call(String bookmarks, List<RowItem> ads) {
+            public AdsAndBookmarks call(Bookmarks bookmarks, List<RowItem> ads) {
                 AdsAndBookmarks elements = new AdsAndBookmarks();
                 elements.setAds(ads);
-                elements.setBookmarks(bookmarks);
+                elements.setBookmarks(bookmarks.getBookmarks());
                 return elements;
             }
         });

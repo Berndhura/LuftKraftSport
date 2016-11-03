@@ -15,6 +15,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.messages.MsgRowItem;
+import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.models.RowItem;
 
 import static wichura.de.camperapp.http.Urls.GET_ALL_ADS_URL;
@@ -54,7 +55,7 @@ public class Service {
 
     private interface WebService {
         @GET(GET_BOOKMARKS_FOR_USER)
-        Observable<String> getBookmarksForUser(@Query("userId") String userId);
+        Observable<Bookmarks> getBookmarksForUser(@Query("userId") String userId);
 
         @GET(GET_ALL_ADS_URL)
         Observable<List<RowItem>> getAllAdsForUser();
@@ -85,7 +86,7 @@ public class Service {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<String> getBookmarksForUserObserv(String userId) {
+    public Observable<Bookmarks> getBookmarksForUserObserv(String userId) {
 
         return mWebService.getBookmarksForUser(userId)
                 .subscribeOn(Schedulers.newThread())
