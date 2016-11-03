@@ -91,14 +91,9 @@ public class MessagesActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+            toolbar.setNavigationOnClickListener((view) -> finish());
             getSupportActionBar().setTitle(senderName);
-            //getSupportActionBar().setLogo(R.drawable.applogo);
+
 
             LayoutInflater mInflater = LayoutInflater.from(this);
 

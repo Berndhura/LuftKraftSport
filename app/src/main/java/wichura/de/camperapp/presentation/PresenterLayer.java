@@ -9,8 +9,6 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.functions.Func2;
-import rx.schedulers.Schedulers;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.mainactivity.MainActivity;
@@ -44,14 +42,13 @@ public class PresenterLayer {
         Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllUrlObserv(url);
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
-                Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, new Func2<Bookmarks, List<RowItem>, AdsAndBookmarks>() {
-                    @Override
-                    public AdsAndBookmarks call(Bookmarks bookmarks, List<RowItem> ads) {
-                        AdsAndBookmarks elements = new AdsAndBookmarks();
-                        elements.setAds(ads);
-                        elements.setBookmarks(bookmarks.getBookmarks());
-                        return elements;
-                    }
+                Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
+                {
+
+                    AdsAndBookmarks elements = new AdsAndBookmarks();
+                    elements.setAds(ads);
+                    elements.setBookmarks(bookmarks.getBookmarks());
+                    return elements;
                 });
 
         subscription = zippedReqForBookmarksAndAds.subscribe(new Observer<AdsAndBookmarks>() {
