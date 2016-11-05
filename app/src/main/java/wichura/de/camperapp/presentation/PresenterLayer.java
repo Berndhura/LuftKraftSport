@@ -35,6 +35,7 @@ public class PresenterLayer {
     }
 
     public void loadAdData(String url) {
+        //view.loadingView();
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
         Log.d("CONAN", url);
 
@@ -64,6 +65,7 @@ public class PresenterLayer {
             @Override
             public void onNext(AdsAndBookmarks element) {
 
+                //view.normalView();
                 view.progressBar.setVisibility(ProgressBar.GONE);
                 view.updateAds(element);
             }

@@ -97,6 +97,14 @@ public class MainActivity extends AppCompatActivity implements
         volleyService = new VolleyService(MainActivity.this);
     }
 
+    public void normalView() {
+        setContentView(R.layout.activity_main);
+    }
+
+    public void loadingView() {
+        setContentView(R.layout.test);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements
         loginBtn = (ImageView) findViewById(R.id.login_button);
 
         updateLoginButton();
-        getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
 
         AccessTokenTracker tracker = new AccessTokenTracker() {
             @Override
@@ -218,6 +225,8 @@ public class MainActivity extends AppCompatActivity implements
         };
 
         registerLoginReceiver();
+
+        getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
     }
 
     @Override
@@ -611,4 +620,6 @@ public class MainActivity extends AppCompatActivity implements
     private String getUserType() {
         return getSharedPreferences("UserInfo", 0).getString(Constants.USER_TYPE, "");
     }
+
+
 }
