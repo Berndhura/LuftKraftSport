@@ -60,6 +60,7 @@ public class PresenterLayer {
             @Override
             public void onError(Throwable e) {
                 Log.d("CONAN", "Error in Observer: " + e.toString());
+                view.showEmptyView();
             }
 
             @Override
@@ -67,6 +68,7 @@ public class PresenterLayer {
 
                 //view.normalView();
                 view.progressBar.setVisibility(ProgressBar.GONE);
+                view.hideEmptyView();
                 view.updateAds(element);
             }
         });

@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private PresenterLayer presenterLayer;
     private Service service;
+    private CustomListViewAdapter adapter;
 
     public MainActivity() {
         volleyService = new VolleyService(MainActivity.this);
@@ -192,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements
         mGcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                progressBar.setVisibility(ProgressBar.GONE);
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sentToken = sharedPreferences
@@ -326,6 +325,29 @@ public class MainActivity extends AppCompatActivity implements
         request.executeAsync();
     }
 
+    /*
+        Updates the empty list view with contextually relevant information that the user can
+        use to determine why they aren't seeing ads.
+     */
+    public void showEmptyView() {
+        //if ( adapter.getCount() == 0 ) {
+        TextView tv = (TextView) findViewById(R.id.recyclerview_ads_list_empty);
+        tv.setVisibility(View.VISIBLE);
+
+        // if cursor is empty, why? do we have an invalid location
+        Log.d("CONAN", "nix");
+    }
+
+    public void hideEmptyView() {
+        //if ( adapter.getCount() == 0 ) {
+        TextView tv = (TextView) findViewById(R.id.recyclerview_ads_list_empty);
+        tv.setVisibility(View.GONE);
+
+        // if cursor is empty, why? do we have an invalid location
+        Log.d("CONAN", "nix");
+    }
+
+
     public void updateAds(AdsAndBookmarks elements) {
 
         List<RowItem> rowItems = new ArrayList<>();
@@ -336,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements
         showNumberOfAds(elements.getAds().size());
 
         listView = (ListView) findViewById(R.id.main_list);
-        CustomListViewAdapter adapter = new CustomListViewAdapter(
+        adapter = new CustomListViewAdapter(
                 getApplicationContext(),
                 R.layout.list_item, rowItems,
                 elements.getBookmarks());

@@ -2,6 +2,7 @@ package wichura.de.camperapp.mainactivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.IntDef;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +35,16 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
     private Context context;
     private ViewHolder holder;
     private String[] bookmarks;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID,  LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
+    public @interface LocationStatus {}
+
+    public static final int LOCATION_STATUS_OK = 0;
+    public static final int LOCATION_STATUS_SERVER_DOWN = 1;
+    public static final int LOCATION_STATUS_SERVER_INVALID = 2;
+    public static final int LOCATION_STATUS_UNKNOWN = 3;
+    public static final int LOCATION_STATUS_INVALID = 4;
 
     public CustomListViewAdapter(final Context context, final int resourceId, final List<RowItem> items, final String bookmarks) {
         super(context, resourceId, items);
