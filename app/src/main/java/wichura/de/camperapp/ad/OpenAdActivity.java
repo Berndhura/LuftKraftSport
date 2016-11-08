@@ -122,45 +122,37 @@ public class OpenAdActivity extends AppCompatActivity {
                 });
 
         if (isOwnAd() && mDelAndMsgButton != null) {
-            mDelAndMsgButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //get ad id and send delete request
-                    String adId = getIntent().getStringExtra(Constants.AD_ID);
-                    Log.i("CONAN", "AdId: " + mAdId);
-                    deleteAdRequest(adId);
-                }
+            mDelAndMsgButton.setOnClickListener((view) -> {
+                //get ad id and send delete request
+                String adId = getIntent().getStringExtra(Constants.AD_ID);
+                Log.i("CONAN", "AdId: " + mAdId);
+                deleteAdRequest(adId);
             });
         } else {
             mDelAndMsgButton.setText("Send message");
-            mDelAndMsgButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!getUserId().equals("")) {
-                        //send a message to ad owner
-                        String adId = getIntent().getStringExtra(Constants.AD_ID);
-                        String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
-                        String sender = getUserId();
-                        sendMessage(adId, ownerId, sender);
-                    } else {
-                        final Intent facebookIntent = new Intent(getApplicationContext(), FbLoginActivity.class);
-                        startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
-                    }
+            mDelAndMsgButton.setOnClickListener((view) -> {
+
+                if (!getUserId().equals("")) {
+                    //send a message to ad owner
+                    String adId = getIntent().getStringExtra(Constants.AD_ID);
+                    String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
+                    String sender = getUserId();
+                    sendMessage(adId, ownerId, sender);
+                } else {
+                    final Intent facebookIntent = new Intent(getApplicationContext(), FbLoginActivity.class);
+                    startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
                 }
             });
-
         }
 
-        mBookmarkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String adId = getIntent().getStringExtra(Constants.AD_ID);
-                String userId = getIntent().getStringExtra(Constants.USER_ID);
-                if (isBookmarked) {
-                    delBookmark(adId, userId);
-                } else {
-                    bookmarkAd(adId, userId);
-                }
+        mBookmarkButton.setOnClickListener((view) -> {
+
+            String adId = getIntent().getStringExtra(Constants.AD_ID);
+            String userId = getIntent().getStringExtra(Constants.USER_ID);
+            if (isBookmarked) {
+                delBookmark(adId, userId);
+            } else {
+                bookmarkAd(adId, userId);
             }
         });
 
@@ -181,16 +173,12 @@ public class OpenAdActivity extends AppCompatActivity {
         final EditText edittext = new EditText(OpenAdActivity.this);
         alert.setTitle("Send a message");
         alert.setView(edittext);
-        alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String message = edittext.getText().toString();
-                sendMessageRequest(message, adId, ownerId, sender);
-            }
+        alert.setPositiveButton("Send", (dicalog, whichButton) -> {
+            String message = edittext.getText().toString();
+            sendMessageRequest(message, adId, ownerId, sender);
         });
-        alert.setNegativeButton("not yet", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //just go away...
-            }
+        alert.setNegativeButton("not yet", (dismissDialog, whichButton) -> {
+            //just go awa}
         });
         alert.show();
     }
@@ -201,19 +189,15 @@ public class OpenAdActivity extends AppCompatActivity {
                 + "&adId=" + adId
                 + "&idFrom=" + sender + "&idTo=" + ownerId;
 
-        Response.Listener<String> listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //save message done
-                if (response.equals("ok"))
-                    Toast.makeText(getApplicationContext(), "Message sent...", Toast.LENGTH_LONG).show();
-            }
+        Response.Listener<String> listener = (response) -> {
+            //save message done
+            if (response.equals("ok"))
+                Toast.makeText(getApplicationContext(), "Message sent...", Toast.LENGTH_LONG).show();
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
+        Response.ErrorListener errorListener = (error) -> {
+            //
+            Log.d("CONAN", error.networkResponse.toString());
         };
 
         volleyService.sendStringGetRequest(url, listener, errorListener);
@@ -222,17 +206,12 @@ public class OpenAdActivity extends AppCompatActivity {
     private void sendRequestForViewCount(String mAdId) {
         String url = Urls.MAIN_SERVER_URL + Urls.COUNT_VIEW + "?adId=" + mAdId;
 
-        Response.Listener<String> listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //increase view count
-            }
+        Response.Listener<String> listener = (response) -> {
+            //increase view count
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
+        Response.ErrorListener errorListener = (error) -> {
+            //error
         };
 
         volleyService.sendStringGetRequest(url, listener, errorListener);

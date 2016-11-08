@@ -5,11 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -45,12 +42,7 @@ public class NewAdActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+            toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
         fileUploadService = new FileUploadService(getApplicationContext(), this);
@@ -65,43 +57,37 @@ public class NewAdActivity extends AppCompatActivity {
         mPrice = (EditText) findViewById(R.id.preis);
 
         final Button submitButton = (Button) findViewById(R.id.uploadButton);
-        submitButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(final View v) {
+        submitButton.setOnClickListener((v) -> {
 
-                final String titleString = mKeywords.getText().toString();
-                final String descString = mDescText.getText().toString();
-                final String price = mPrice.getText().toString();
-                final String keyWordsString = "zelt";
-                final long date = System.currentTimeMillis();
+            final String titleString = mKeywords.getText().toString();
+            final String descString = mDescText.getText().toString();
+            final String price = mPrice.getText().toString();
+            final String keyWordsString = "zelt";
+            final long date = System.currentTimeMillis();
 
-                final Intent data = new Intent();
-                MyAdsRowItem.packageIntent(
-                        data,
-                        titleString,
-                        "apid",
-                        descString,
-                        keyWordsString,
-                        mImage,
-                        "TODO",
-                        "PHONE",
-                        price,
-                        date);
+            final Intent data = new Intent();
+            MyAdsRowItem.packageIntent(
+                    data,
+                    titleString,
+                    "apid",
+                    descString,
+                    keyWordsString,
+                    mImage,
+                    "TODO",
+                    "PHONE",
+                    price,
+                    date);
 
-                fileUploadService.multiPost(data);
-                setResult(RESULT_OK, data);
-            }
+            fileUploadService.multiPost(data);
+            setResult(RESULT_OK, data);
         });
 
         final ImageView getPictureButton = (ImageView) findViewById(R.id.imageButton);
 
-        getPictureButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-            }
+        getPictureButton.setOnClickListener((v) -> {
+            final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, SELECT_PHOTO);
         });
     }
 
