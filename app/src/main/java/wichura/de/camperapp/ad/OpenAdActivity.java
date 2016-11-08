@@ -60,12 +60,7 @@ public class OpenAdActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+            toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
         mOpenAdProgressBar = (ProgressBar) findViewById(R.id.open_Ad_ProgressBar);

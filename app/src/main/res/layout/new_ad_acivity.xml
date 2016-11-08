@@ -33,6 +33,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <!-- set a scroll view around for landscape mode here -->
+
     <include layout="@layout/new_ad_center_layout"/>
+
 
 </LinearLayout>
