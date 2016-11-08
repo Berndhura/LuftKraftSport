@@ -110,20 +110,20 @@ public class NewAdActivity extends AppCompatActivity {
                         case 1: {
                             mImgOne = (ImageView) findViewById(R.id.imageButton);
                             Picasso
-                                .with(getApplicationContext())
-                                .load(selectedImage)
-                                .fit()
-                                .into(mImgOne);
+                                    .with(getApplicationContext())
+                                    .load(selectedImage)
+                                    .fit()
+                                    .into(mImgOne);
                             pictureCount++;
                             break;
                         }
                         case 2: {
                             mImgTwo = (ImageView) findViewById(R.id.imageButton);
                             Picasso
-                                .with(getApplicationContext())
-                                .load(selectedImage)
-                                .fit()
-                                .into(mImgTwo);
+                                    .with(getApplicationContext())
+                                    .load(selectedImage)
+                                    .fit()
+                                    .into(mImgTwo);
                             pictureCount++;
                             break;
                         }
