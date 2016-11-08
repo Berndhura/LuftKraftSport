@@ -5,8 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by bwichura on 04.11.2016.
- * Camper app
+ * Created by ich on 06.11.2016.
+ * Camper App
  */
 
 public class Utility {

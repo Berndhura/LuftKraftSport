@@ -33,16 +33,6 @@
                 android:layout_marginRight="10dp"
                 android:src="@drawable/common_full_open_on_phone" />
 
-            <com.wang.avi.AVLoadingIndicatorView
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:indicator="LineScaleParty"
-                app:indicator_color="@color/colorAccent"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/login_button"
-                android:layout_toStartOf="@+id/login_toolbar" />
-
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>

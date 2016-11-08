@@ -19,10 +19,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +29,6 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.flurry.android.FlurryAgent;
@@ -66,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
     private ListView listView;
-    private List<RowItem> rowItems;
-    private CustomListViewAdapter adapter;
 
     private static final String TAG = "CONAN";
     private ImageView loginBtn;
@@ -92,9 +87,18 @@ public class MainActivity extends AppCompatActivity implements
 
     private PresenterLayer presenterLayer;
     private Service service;
+    private CustomListViewAdapter adapter;
 
     public MainActivity() {
         volleyService = new VolleyService(MainActivity.this);
+    }
+
+    public void normalView() {
+        setContentView(R.layout.activity_main);
+    }
+
+    public void loadingView() {
+        setContentView(R.layout.test);
     }
 
     @Override
@@ -143,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements
         loginBtn = (ImageView) findViewById(R.id.login_button);
 
         updateLoginButton();
-        getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
 
         AccessTokenTracker tracker = new AccessTokenTracker() {
             @Override
@@ -189,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements
         mGcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                progressBar.setVisibility(ProgressBar.GONE);
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sentToken = sharedPreferences
@@ -218,6 +220,8 @@ public class MainActivity extends AppCompatActivity implements
         };
 
         registerLoginReceiver();
+
+        getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
     }
 
     @Override
@@ -289,42 +293,64 @@ public class MainActivity extends AppCompatActivity implements
     private void getFacebookUserInfo() {
 
         callbackManager = CallbackManager.Factory.create();
-        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-                JSONObject json = response.getJSONObject();
-                try {
-                    if (json != null) {
-                        //user id
-                        Log.d("CONAN: ", "user id facebook: " + json.getString("id"));
-                        String userId = json.getString("id");
-                        String userName = json.getString("name");
-                        Log.d("CONAN: ", "user name facebook: " + json.getString("name"));
-                        setProfileName(userName);
-                        //user profile picture
-                        Profile profile = Profile.getCurrentProfile();
-                        if (profile != null) {
-                            Uri uri = profile.getProfilePictureUri(200, 200);
-                            setProfilePicture(uri);
-                        }
-                        setUserPreferences(userName, userId);
-                        getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
+
+            JSONObject json = response.getJSONObject();
+            try {
+                if (json != null) {
+                    //user id
+                    Log.d("CONAN: ", "user id facebook: " + json.getString("id"));
+                    String userId = json.getString("id");
+                    String userName = json.getString("name");
+                    Log.d("CONAN: ", "user name facebook: " + json.getString("name"));
+                    setProfileName(userName);
+                    //user profile picture
+                    Profile profile = Profile.getCurrentProfile();
+                    if (profile != null) {
+                        Uri uri = profile.getProfilePictureUri(200, 200);
+                        setProfilePicture(uri);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.d("CONAN: ", "Do the login ");
+                    setUserPreferences(userName, userId);
+                    getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("CONAN: ", "Do the login ");
             }
         });
+
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,link,picture");
         request.setParameters(parameters);
         request.executeAsync();
     }
 
+    /*
+        Updates the empty list view with contextually relevant information that the user can
+        use to determine why they aren't seeing ads.
+     */
+    public void showEmptyView() {
+        //if ( adapter.getCount() == 0 ) {
+        TextView tv = (TextView) findViewById(R.id.recyclerview_ads_list_empty);
+        tv.setVisibility(View.VISIBLE);
+
+        // if cursor is empty, why? do we have an invalid location
+        Log.d("CONAN", "nix");
+    }
+
+    public void hideEmptyView() {
+        //if ( adapter.getCount() == 0 ) {
+        TextView tv = (TextView) findViewById(R.id.recyclerview_ads_list_empty);
+        tv.setVisibility(View.GONE);
+
+        // if cursor is empty, why? do we have an invalid location
+        Log.d("CONAN", "nix");
+    }
+
+
     public void updateAds(AdsAndBookmarks elements) {
 
-        rowItems = new ArrayList<>();
+        List<RowItem> rowItems = new ArrayList<>();
         for (RowItem e : elements.getAds()) {
             rowItems.add(e);
         }
@@ -339,27 +365,22 @@ public class MainActivity extends AppCompatActivity implements
 
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(final AdapterView<?> arg0, final View arg1, final int position, final long arg3) {
-
-                final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
-                final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-                intent.putExtra(Constants.URI, rowItem.getUrl());
-                intent.putExtra(Constants.AD_ID, rowItem.getAdId());
-                intent.putExtra(Constants.TITLE, rowItem.getTitle());
-                intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
-                intent.putExtra(Constants.LOCATION, rowItem.getLocation());
-                intent.putExtra(Constants.PHONE, rowItem.getPhone());
-                intent.putExtra(Constants.PRICE, rowItem.getPrice());
-                intent.putExtra(Constants.DATE, rowItem.getDate());
-                intent.putExtra(Constants.VIEWS, rowItem.getViews());
-                intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
-                intent.putExtra(Constants.USER_ID, getUserId());
-                startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
-            }
+        listView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
+            final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
+            final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
+            intent.putExtra(Constants.URI, rowItem.getUrl());
+            intent.putExtra(Constants.AD_ID, rowItem.getAdId());
+            intent.putExtra(Constants.TITLE, rowItem.getTitle());
+            intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
+            intent.putExtra(Constants.LOCATION, rowItem.getLocation());
+            intent.putExtra(Constants.PHONE, rowItem.getPhone());
+            intent.putExtra(Constants.PRICE, rowItem.getPrice());
+            intent.putExtra(Constants.DATE, rowItem.getDate());
+            intent.putExtra(Constants.VIEWS, rowItem.getViews());
+            intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
+            intent.putExtra(Constants.USER_ID, getUserId());
+            startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
         });
-        setProgressBarIndeterminateVisibility(false);
     }
 
     private void getAds(String url) {
@@ -482,12 +503,7 @@ public class MainActivity extends AppCompatActivity implements
             Log.d("CONAN: ", "enable login button");
             loginBtn.setEnabled(true);
             loginBtn.setVisibility(View.VISIBLE);
-            loginBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startLoginActivity();
-                }
-            });
+            loginBtn.setOnClickListener((view) -> startLoginActivity());
             getFacebookUserInfo();  //TODO richtig hier?
         } else {
             Log.d("CONAN: ", "disable login button");
@@ -611,4 +627,6 @@ public class MainActivity extends AppCompatActivity implements
     private String getUserType() {
         return getSharedPreferences("UserInfo", 0).getString(Constants.USER_TYPE, "");
     }
+
+
 }
