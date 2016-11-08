@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.squareup.picasso.Picasso;
+
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.models.MyAdsRowItem;
 
@@ -107,13 +109,21 @@ public class NewAdActivity extends AppCompatActivity {
                     switch (pictureCount) {
                         case 1: {
                             mImgOne = (ImageView) findViewById(R.id.imageButton);
-                            mImgOne.setImageURI(selectedImage);
+                            Picasso
+                                .with(getApplicationContext())
+                                .load(selectedImage)
+                                .fit()
+                                .into(mImgOne);
                             pictureCount++;
                             break;
                         }
                         case 2: {
                             mImgTwo = (ImageView) findViewById(R.id.imageButton);
-                            mImgTwo.setImageURI(selectedImage);
+                            Picasso
+                                .with(getApplicationContext())
+                                .load(selectedImage)
+                                .fit()
+                                .into(mImgTwo);
                             pictureCount++;
                             break;
                         }
