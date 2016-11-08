@@ -62,7 +62,7 @@ import wichura.de.camperapp.presentation.PresenterLayer;
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
-    private ListView listView;
+    public ListView listView;
 
     private static final String TAG = "CONAN";
     private ImageView loginBtn;
@@ -93,13 +93,6 @@ public class MainActivity extends AppCompatActivity implements
         volleyService = new VolleyService(MainActivity.this);
     }
 
-    public void normalView() {
-        setContentView(R.layout.activity_main);
-    }
-
-    public void loadingView() {
-        setContentView(R.layout.test);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

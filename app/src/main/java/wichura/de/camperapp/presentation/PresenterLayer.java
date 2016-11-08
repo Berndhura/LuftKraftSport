@@ -2,6 +2,7 @@ package wichura.de.camperapp.presentation;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import java.util.List;
@@ -35,7 +36,9 @@ public class PresenterLayer {
     }
 
     public void loadAdData(String url) {
-        //view.loadingView();
+        if (view.listView!=null) {
+            view.listView.setVisibility(View.INVISIBLE);
+        }
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
         Log.d("CONAN", url);
 
@@ -65,9 +68,8 @@ public class PresenterLayer {
 
             @Override
             public void onNext(AdsAndBookmarks element) {
-
-                //view.normalView();
                 view.progressBar.setVisibility(ProgressBar.GONE);
+                if (view.listView!=null) {view.listView.setVisibility(View.VISIBLE);}
                 view.hideEmptyView();
                 view.updateAds(element);
             }

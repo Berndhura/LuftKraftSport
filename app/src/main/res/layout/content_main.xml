@@ -37,6 +37,6 @@
         app:layout_anchorGravity="fill" />
 
 
-    <include layout="@layout/test" />
+    <include layout="@layout/load_indicator" />
 
 </FrameLayout>
