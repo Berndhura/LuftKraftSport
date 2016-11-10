@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +36,9 @@ import wichura.de.camperapp.mainactivity.Constants;
 
 public class MessagesActivity extends AppCompatActivity {
 
-    private ProgressBar mMessagesProgressBar;
+    //public AVLoadingIndicatorView progressBar;
     private List<MsgRowItem> rowItems;
-    private ListView listView;
+    public ListView listView;
     private MessageListViewAdapter adapter;
     private EditText text;
     private BroadcastReceiver appendChatScreenMsgReceiver;
@@ -70,7 +72,8 @@ public class MessagesActivity extends AppCompatActivity {
 
         setContentView(R.layout.messages_layout);
 
-        mMessagesProgressBar = (ProgressBar) findViewById(R.id.msg_ProgressBar);
+        listView = (ListView) findViewById(R.id.message_list);
+        //progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
         text = (EditText) findViewById(R.id.edit_message);
 
         final String adId = getIntent().getStringExtra(Constants.AD_ID);
@@ -83,8 +86,6 @@ public class MessagesActivity extends AppCompatActivity {
         Log.d("CONAN", "enter message: " + "adId: " + adId + "sender: " + sender + "idFrom: " + idFrom + "idTo: " + idTo);
 
         final String userId = getUserId();
-
-        listView = (ListView) findViewById(R.id.message_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
         if (toolbar != null) {
@@ -111,11 +112,11 @@ public class MessagesActivity extends AppCompatActivity {
                         startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);*/
 
 
-            if (adPicUrl != null) {
+           /* if (adPicUrl != null) {
                 ImageView thumbNail = (ImageView) findViewById(R.id.ad_in_toolbar);
-                Picasso.with(getApplicationContext()).load(adPicUrl.toString()).into(thumbNail);
+                Picasso.with(getApplicationContext()).load(adPicUrl).into(thumbNail);
                 thumbNail.setOnClickListener(v-> Toast.makeText(getApplicationContext(), "Open Ad for details", Toast.LENGTH_SHORT).show());
-            }
+            }*/
         }
 
         presenter.loadMessages(idTo, idFrom, adId);
@@ -221,16 +222,14 @@ public class MessagesActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
     }
 
-    public void enableProgress() {
-        mMessagesProgressBar.setVisibility(ProgressBar.VISIBLE);
-    }
-
-    public void disableProgress() {
-        mMessagesProgressBar.setVisibility(ProgressBar.GONE);
-    }
 
     private String getUserId() {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         return settings.getString(Constants.USER_ID, "");
+    }
+
+    public void showLinkToAdButton() {
+        Button link = (Button) findViewById(R.id.link_to_ad_button);
+        link.setOnClickListener(view -> Log.d("CONAN", "link!"));
     }
 }

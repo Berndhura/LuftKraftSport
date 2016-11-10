@@ -1,6 +1,8 @@
 package wichura.de.camperapp.messages;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -28,7 +30,11 @@ public class MessagesPresenter {
     }
 
     public void loadMessages(String userId, String sender, String adId) {
-        view.enableProgress();
+
+        /*if (view.listView!=null) {
+            view.listView.setVisibility(View.INVISIBLE);
+        }*/
+        //view.enableProgress();
 
         Observable<List<MsgRowItem>> getMessagesForAdObserv = service.getAllMessagesForAdObserv(userId, sender, adId);
 
@@ -47,8 +53,12 @@ public class MessagesPresenter {
 
                     @Override
                     public void onNext(List<MsgRowItem> msgRowItems) {
-                        view.disableProgress();
+                       // view.progressBar.setVisibility(ProgressBar.GONE);
+                        /*if (view.listView!=null) {
+                            view.listView.setVisibility(View.VISIBLE);
+                        }*/
                         view.showMessages(msgRowItems);
+                        view.showLinkToAdButton();
                     }
                 });
     }

@@ -12,36 +12,40 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <!--de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/ad_in_toolbar"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
                 app:civ_border_width="0dp"
                 app:paddingStart="5sp"
-                android:layout_margin="5sp"/>
+                android:layout_margin="5sp"/-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/message_toolbar"
-                android:layout_width="match_parent"
+                android:layout_width="180dp"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 android:layout_toRightOf="@+id/ad_in_toolbar"
                 android:layout_toEndOf="@+id/ad_in_toolbar" />
 
-            <ProgressBar
+            <Button
+                android:id="@+id/link_to_ad_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:id="@+id/msg_ProgressBar" />
+                android:background="@drawable/rounded_corners"
+                android:text="GO TO AD"
+                android:textColor="#639bc5"
+                android:layout_toLeftOf="@+id/msg_ProgressBar"
+                android:layout_weight="0.35" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -49,15 +53,18 @@
     <ListView
         android:id="@+id/message_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="0.8"
         android:divider="@null"
         android:clickable="false"
         android:background="#ced5e0"
         tools:listitem="@layout/chat_item_rcv" />
 
+    <!--include layout="@layout/load_indicator" /-->
+
 
     <LinearLayout
+        android:id="@+id/send_msg_lin_layout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_weight="0.2"
