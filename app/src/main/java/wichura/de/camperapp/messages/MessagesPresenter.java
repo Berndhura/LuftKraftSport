@@ -33,9 +33,9 @@ public class MessagesPresenter {
 
         /*if (view.listView!=null) {
             view.listView.setVisibility(View.INVISIBLE);
-        }*/
-        //view.enableProgress();
-
+        }
+        view.enableProgress();
+*/
         Observable<List<MsgRowItem>> getMessagesForAdObserv = service.getAllMessagesForAdObserv(userId, sender, adId);
 
         subscription = getMessagesForAdObserv
@@ -53,8 +53,8 @@ public class MessagesPresenter {
 
                     @Override
                     public void onNext(List<MsgRowItem> msgRowItems) {
-                       // view.progressBar.setVisibility(ProgressBar.GONE);
-                        /*if (view.listView!=null) {
+                        /*view.progressBar.setVisibility(ProgressBar.GONE);
+                        if (view.listView!=null) {
                             view.listView.setVisibility(View.VISIBLE);
                         }*/
                         view.showMessages(msgRowItems);

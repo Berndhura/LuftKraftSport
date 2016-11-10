@@ -222,6 +222,13 @@ public class MessagesActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
     }
 
+   // public void enableProgress() {
+    //    progressBar.setVisibility(ProgressBar.VISIBLE);
+    //}
+
+   // public void disableProgress() {
+    //    progressBar.setVisibility(ProgressBar.GONE);
+   // }
 
     private String getUserId() {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
