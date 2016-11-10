@@ -116,7 +116,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         holder.bookmarkStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
+                if (bookmarks!=null && Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
                     deleteBookmark(rowItem.getAdId(), getUserId());
                     holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
                     notifyDataSetChanged();
