@@ -49,7 +49,11 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
     public CustomListViewAdapter(final Context context, final int resourceId, final List<RowItem> items, final String bookmarks) {
         super(context, resourceId, items);
         this.context = context;
-        this.bookmarks = bookmarks.split(",");
+        if (bookmarks!=null) {
+            this.bookmarks = bookmarks.split(",");
+        } else {
+            this.bookmarks = null;
+        }
     }
 
     /* private view holder class */
@@ -94,12 +98,18 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtPrice.setText(rowItem.getPrice());
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
 
-        Log.d("CONAN", "bookmarks: "+Arrays.asList(bookmarks));
+        if (bookmarks != null) {
+            Log.d("CONAN", "bookmarks: " + Arrays.asList(bookmarks));
+        }
         //bookmark star full for bookmarked ad
-        if (Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
-            holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
-        } else {
+        if (bookmarks == null) {
             holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+        } else {
+            if (Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
+                holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
+            } else {
+                holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+            }
         }
 
         //click to bookmark/debookmark an ad
