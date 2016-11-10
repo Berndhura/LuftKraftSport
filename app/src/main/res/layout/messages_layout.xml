@@ -28,22 +28,21 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/message_toolbar"
-                android:layout_width="180dp"
+                android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                android:layout_toRightOf="@+id/ad_in_toolbar"
-                android:layout_toEndOf="@+id/ad_in_toolbar" />
+                android:layout_weight="0.7" />
 
             <Button
                 android:id="@+id/link_to_ad_button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_corners"
                 android:text="GO TO AD"
                 android:textColor="#639bc5"
-                android:layout_toLeftOf="@+id/msg_ProgressBar"
-                android:layout_weight="0.35" />
+                android:layout_weight="0.3"
+                android:layout_margin="8dp" />
 
         </LinearLayout>
 
