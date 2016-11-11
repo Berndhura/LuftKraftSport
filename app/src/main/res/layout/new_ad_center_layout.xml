@@ -17,7 +17,6 @@
         app:srcCompat="@drawable/empty_photo"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/keywords"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp" />
 
 
@@ -33,7 +32,9 @@
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="16dp"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintLeft_creator="1" />
 
     <EditText
         android:id="@+id/keywords"
@@ -63,7 +64,9 @@
         app:layout_constraintBottom_toTopOf="@+id/description"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keywords" />
+        app:layout_constraintTop_toBottomOf="@+id/keywords"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintLeft_creator="1" />
 
     <EditText
         android:id="@+id/description"
@@ -97,7 +100,9 @@
         app:layout_constraintBottom_toTopOf="@+id/preis"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintLeft_creator="1" />
 
     <EditText
         android:id="@+id/preis"
