@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.models.RowItem;
 
 /**
  * Created by ich on 22.05.2016.
@@ -204,7 +206,7 @@ public class MessagesActivity extends AppCompatActivity {
         if (message.length() == 0)
             return;
 
-        presenter.sendMessage(message.replaceAll(" ", "%20"), adId, ownerId, sender);
+        presenter.sendMessage(message, adId, ownerId, sender);
     }
 
     public void showMessages(List<MsgRowItem> msgRowItems) {
@@ -237,6 +239,25 @@ public class MessagesActivity extends AppCompatActivity {
 
     public void showLinkToAdButton() {
         Button link = (Button) findViewById(R.id.link_to_ad_button);
-        link.setOnClickListener(view -> Log.d("CONAN", "link!"));
+        link.setOnClickListener((view) -> {
+            String adId = getIntent().getStringExtra(Constants.AD_ID);
+            presenter.getAd(adId);
+        });
+    }
+
+    public void openAdActivityFor(RowItem rowItem) {
+        final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
+        intent.putExtra(Constants.URI, rowItem.getUrl());
+        intent.putExtra(Constants.AD_ID, rowItem.getAdId());
+        intent.putExtra(Constants.TITLE, rowItem.getTitle());
+        intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
+        intent.putExtra(Constants.LOCATION, rowItem.getLocation());
+        intent.putExtra(Constants.PHONE, rowItem.getPhone());
+        intent.putExtra(Constants.PRICE, rowItem.getPrice());
+        intent.putExtra(Constants.DATE, rowItem.getDate());
+        intent.putExtra(Constants.VIEWS, rowItem.getViews());
+        intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
+        intent.putExtra(Constants.USER_ID, getUserId());
+        startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
     }
 }

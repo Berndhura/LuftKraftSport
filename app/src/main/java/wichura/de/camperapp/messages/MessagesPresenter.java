@@ -12,6 +12,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.http.Service;
+import wichura.de.camperapp.models.RowItem;
 
 /**
  * Created by ich on 01.11.2016.
@@ -90,5 +91,27 @@ public class MessagesPresenter {
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
+    }
+
+    public void getAd(String adId) {
+        service.getAdObserv(adId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<RowItem>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(RowItem ad) {
+                        view.openAdActivityFor(ad);
+                    }
+                });
     }
 }
