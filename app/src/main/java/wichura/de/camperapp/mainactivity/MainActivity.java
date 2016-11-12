@@ -642,6 +642,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d("CONAN", "KEY:"+key);
         if ( key.equals("UserInfo"))  {
             Log.d("CONAN", "jooooooooooo");
         }
