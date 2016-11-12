@@ -60,7 +60,8 @@ import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.presentation.PresenterLayer;
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     public ListView listView;
 
@@ -230,6 +231,8 @@ public class MainActivity extends AppCompatActivity implements
         super.onResume();
         registerGcmReceiver();
         registerLoginReceiver();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sp.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -239,6 +242,9 @@ public class MainActivity extends AppCompatActivity implements
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoginBroadcastReceiver);
         isLoginReceiverRegistered = false;
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sp.unregisterOnSharedPreferenceChangeListener(this);
 
         super.onPause();
     }
@@ -421,6 +427,18 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 if (getUserType().equals(Constants.EMAIL_USER) && isUserLoggedIn()) {
+                    //create new user in DB in case of first login
+                    updateUserInDb(getUserName(), getUserId());
+
+                    //request Token from GCM and update in DB
+                    if (checkPlayServices() && isUserLoggedIn()) {
+                        // Start IntentService to register this application with GCM.
+                        Intent intent = new Intent(this, RegistrationIntentService.class);
+                        startService(intent);
+                    }
+                }
+
+                if (getUserType().equals(Constants.GOOGLE_USER) && isUserLoggedIn()) {
                     //create new user in DB in case of first login
                     updateUserInDb(getUserName(), getUserId());
 
@@ -622,4 +640,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if ( key.equals("UserInfo"))  {
+            Log.d("CONAN", "jooooooooooo");
+        }
+    }
 }

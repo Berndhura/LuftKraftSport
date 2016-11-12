@@ -13,6 +13,7 @@ public class Constants {
     public static final int REQUEST_ID_FOR_SEARCH = 5;
     public static final int REQUEST_ID_FOR_MESSAGES = 6;
     public static final int REQUEST_ID_FOR_SETTINGS = 7;
+    public static final int RC_SIGN_IN = 8;
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -22,6 +23,7 @@ public class Constants {
     public static final String USER_NAME = "user_name";
     public static final String USER_TYPE = "user_type";
 
+    public static final String GOOGLE_USER = "google_user";
     public static final String EMAIL_USER = "email_user";
 
     //Intent

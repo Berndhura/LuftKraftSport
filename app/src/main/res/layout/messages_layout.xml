@@ -85,7 +85,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             android:layout_weight="0.1"
-            android:src="@drawable/ic_send_black_36pt" />
+            android:src="@drawable/ic_send_black_36pt"
+            android:padding="8dp" />
 
     </LinearLayout>
 

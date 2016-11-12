@@ -17,11 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -224,13 +219,13 @@ public class MessagesActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
     }
 
-   // public void enableProgress() {
+    // public void enableProgress() {
     //    progressBar.setVisibility(ProgressBar.VISIBLE);
     //}
 
-   // public void disableProgress() {
+    // public void disableProgress() {
     //    progressBar.setVisibility(ProgressBar.GONE);
-   // }
+    // }
 
     private String getUserId() {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
