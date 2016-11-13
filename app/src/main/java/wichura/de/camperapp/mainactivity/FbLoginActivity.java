@@ -171,7 +171,7 @@ public class FbLoginActivity extends AppCompatActivity {
         _passwordText = (EditText) findViewById(R.id.password);
 
         TextView tv = (TextView) findViewById(R.id.register);
-        tv.setText(Html.fromHtml("<a href=\"http://www.google.com\">Register</a>"));
+        tv.setText(Html.fromHtml("<a href=\"http://ec2-52-32-84-19.us-west-2.compute.amazonaws.com:8080/2ndHandOz\">Register</a>"));
         tv.setClickable(true);
         tv.setMovementMethod(LinkMovementMethod.getInstance());
 
