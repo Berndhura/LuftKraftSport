@@ -25,10 +25,12 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.mainactivity.FbLoginActivity;
+import wichura.de.camperapp.models.Bookmarks;
 
 public class OpenAdActivity extends AppCompatActivity {
 
@@ -44,6 +46,8 @@ public class OpenAdActivity extends AppCompatActivity {
     private ProgressBar mOpenAdProgressBar;
     private VolleyService volleyService;
 
+    private PresenterLayerOpenAd presenter;
+
     public OpenAdActivity() {
         volleyService = new VolleyService(OpenAdActivity.this);
     }
@@ -54,6 +58,8 @@ public class OpenAdActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.open_ad_activity);
+
+        presenter = new PresenterLayerOpenAd(this, new Service(), getApplicationContext());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.open_ad_toolbar);
         if (toolbar != null) {
@@ -74,17 +80,6 @@ public class OpenAdActivity extends AppCompatActivity {
         ImageView imgView = (ImageView) findViewById(R.id.imageView);
         Button mDelAndMsgButton = (Button) findViewById(R.id.delButton);
 
-        mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
-
-        //TODO:When open: check if bookmarked
-        isBookmarked = false;
-        if (isBookmarked) {
-            mBookmarkButton.setText("Remove bookmark!");
-        } else {
-            mBookmarkButton.setText("Bookmark");
-        }
-
-
         //get data from Intent
         String pictureUri = getIntent().getStringExtra(Constants.URI);
         mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
@@ -92,6 +87,11 @@ public class OpenAdActivity extends AppCompatActivity {
         mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
         mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
         mAdId = getIntent().getStringExtra(Constants.AD_ID);
+
+        mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
+        mBookmarkButton.setClickable(false);
+        //loadBookmarks for user
+        presenter.loadBookmarksForUser();
 
         sendRequestForViewCount(mAdId);
 
@@ -160,6 +160,18 @@ public class OpenAdActivity extends AppCompatActivity {
         //now get Lat and Lng  from  getLatLong()
         // this:  http://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
 
+    }
+
+    public void updateBookmarkButton(Bookmarks bm) {
+        isBookmarked = false;
+        if (bm.getBookmarks().contains(mAdId)) {
+            mBookmarkButton.setText("Remove bookmark!");
+            mBookmarkButton.setClickable(true);
+            isBookmarked = true;
+        } else {
+            mBookmarkButton.setText("Bookmark");
+            mBookmarkButton.setClickable(true);
+        }
     }
 
     private void sendMessage(final String adId, final String ownerId, final String sender) {
