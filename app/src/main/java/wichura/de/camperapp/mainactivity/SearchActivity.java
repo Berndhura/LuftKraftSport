@@ -31,29 +31,19 @@ public class SearchActivity  extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+            toolbar.setNavigationOnClickListener((view) -> finish());
         }
-
-
         searchButton();
     }
 
     private void searchButton() {
         searchButton = (Button) findViewById(R.id.search_button);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent data = new Intent();
-                data.putExtra("KEYWORDS", ((TextView) findViewById(R.id.keywords)).getText().toString());
-                //data.putExtra("DATE", ((TextView) findViewById(R.id.date)).getText().toString());
-                setResult(RESULT_OK, data);
-                finish();
-            }
+        searchButton.setOnClickListener(view -> {
+            final Intent data = new Intent();
+            data.putExtra(Constants.KEYWORDS, ((TextView) findViewById(R.id.keywords)).getText().toString());
+            //data.putExtra("DATE", ((TextView) findViewById(R.id.date)).getText().toString());
+            setResult(RESULT_OK, data);
+            finish();
         });
     }
 }

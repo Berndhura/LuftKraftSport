@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements
         MyVolley.init(this);
 
         service = new Service();
+        presenterLayer = new PresenterLayer(this, service, getApplicationContext());
 
         //TODO: set active false in messageActivity in onDestroy, onStop, on???  BUT NOT HERE
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
@@ -383,10 +384,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void getAds(String url) {
-
-        presenterLayer = new PresenterLayer(this, service, getApplicationContext());
         presenterLayer.loadAdData(url);
-
     }
 
     @Override
