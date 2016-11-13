@@ -40,6 +40,8 @@ public class Constants {
     public static final String USER_ID_FROM_AD ="user_id_from_ad";
     public static final String KEYWORDS = "keywords";
     public static final String AD_URL = "adURL";
+    public static final String PRICE_FROM = "price_from";
+    public static final String PRICE_TO = "price_to";
 
     //Broadcast messages
     public static final String LOGIN_COMPLETE = "loginComplete";

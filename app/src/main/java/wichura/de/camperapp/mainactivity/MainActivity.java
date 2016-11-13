@@ -463,8 +463,11 @@ public class MainActivity extends AppCompatActivity implements
             }
             case Constants.REQUEST_ID_FOR_SEARCH: {
                 if (data != null) {
-                    String query = data.getStringExtra(Constants.KEYWORDS);
-                    getAds(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + query);
+                    String keyword = data.getStringExtra(Constants.KEYWORDS);
+                    String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
+                    String priceTo = data.getStringExtra(Constants.PRICE_TO);
+                    getAds(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + keyword
+                            + "&priceFrom=" + priceFrom + "&priceTo=" + priceTo);
                     drawer.closeDrawer(GravityCompat.START);
                 }
                 break;

@@ -11,7 +11,7 @@ public class Urls {
     public static final String UPLOAD_NEW_AD_URL = "/saveNewAd/";
     public static final String DELETE_AD_WITH_APID = "/deleteAdWithId/";
     public static final String GET_ALL_ADS_URL = "getAllAds";
-    public static final String GET_ADS_FOR_KEYWORD_URL = "/getAdsWithTag?description=";
+    public static final String GET_ADS_FOR_KEYWORD_URL = "getAdsWithTag?description=";
     public static final String GET_AD = "getAd";
     public static final String GET_ALL_ADS_FROM_USER  = "/getAdsFromUser?userid=";
     public static final String BOOKMARK_AD = "/bookmark";

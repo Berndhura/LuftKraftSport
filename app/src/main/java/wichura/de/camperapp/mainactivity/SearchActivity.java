@@ -41,6 +41,8 @@ public class SearchActivity extends AppCompatActivity {
         searchButton.setOnClickListener(view -> {
             final Intent data = new Intent();
             data.putExtra(Constants.KEYWORDS, ((TextView) findViewById(R.id.keywords)).getText().toString());
+            data.putExtra(Constants.PRICE_FROM, ((TextView) findViewById(R.id.price_from)).getText().toString());
+            data.putExtra(Constants.PRICE_TO, ((TextView) findViewById(R.id.price_to)).getText().toString());
             setResult(RESULT_OK, data);
             finish();
         });
