@@ -26,27 +26,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tags: "
-            android:layout_weight="0.2"
-            android:paddingTop="10sp" />
-
-        <EditText
-            android:id="@+id/keywords"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.8"/>
-
-    </LinearLayout>
+    <include layout="@layout/search_fields" />
 
     <Button
         android:id="@+id/search_button"

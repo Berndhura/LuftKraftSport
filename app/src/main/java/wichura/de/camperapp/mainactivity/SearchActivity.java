@@ -1,11 +1,9 @@
 package wichura.de.camperapp.mainactivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -13,10 +11,10 @@ import wichura.de.camperapp.R;
 
 /**
  * Created by Bernd Wichura on 05.04.2016.
- *
+ * CamperApp
  */
 
-public class SearchActivity  extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
 
     Button searchButton;
 
@@ -29,8 +27,10 @@ public class SearchActivity  extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+            }
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
         searchButton();
@@ -41,7 +41,6 @@ public class SearchActivity  extends AppCompatActivity {
         searchButton.setOnClickListener(view -> {
             final Intent data = new Intent();
             data.putExtra(Constants.KEYWORDS, ((TextView) findViewById(R.id.keywords)).getText().toString());
-            //data.putExtra("DATE", ((TextView) findViewById(R.id.date)).getText().toString());
             setResult(RESULT_OK, data);
             finish();
         });
