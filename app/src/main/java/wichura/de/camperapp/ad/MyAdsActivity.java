@@ -92,7 +92,7 @@ public class MyAdsActivity extends AppCompatActivity {
 
                 final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
                 final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-                intent.putExtra(Constants.URI, rowItem.getUrl());
+                intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL + "getBild?id=" + rowItem.getUrl());
                 intent.putExtra(Constants.AD_ID, rowItem.getAdId());
                 intent.putExtra(Constants.TITLE, rowItem.getTitle());
                 intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());

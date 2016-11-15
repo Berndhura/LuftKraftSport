@@ -88,7 +88,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         final RowItem rowItem = getItem(position);
 
         Picasso.with(context)
-                .load(rowItem.getUrl())
+                .load(Urls.MAIN_SERVER_URL + "getBild?id=" + rowItem.getUrl())
                 .resize(100, 100)
                 .centerCrop()
                 .into(thumbNail);

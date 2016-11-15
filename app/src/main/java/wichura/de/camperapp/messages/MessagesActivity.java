@@ -23,6 +23,7 @@ import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.OpenAdActivity;
+import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.RowItem;
 
@@ -242,7 +243,7 @@ public class MessagesActivity extends AppCompatActivity {
 
     public void openAdActivityFor(RowItem rowItem) {
         final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-        intent.putExtra(Constants.URI, rowItem.getUrl());
+        intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL + "getBild?id=" + rowItem.getUrl());
         intent.putExtra(Constants.AD_ID, rowItem.getAdId());
         intent.putExtra(Constants.TITLE, rowItem.getTitle());
         intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());

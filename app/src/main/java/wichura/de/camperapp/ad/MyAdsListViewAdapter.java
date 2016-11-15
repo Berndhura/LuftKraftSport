@@ -79,10 +79,10 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
         // getting ad data for the row
         final RowItem rowItem = getItem(position);
 
-        Log.d("CONAN, get pict URLs: ", rowItem.getUrl());
+        Log.d("CONAN, get pict URLs: ", Urls.MAIN_SERVER_URL + "getBild?id=" + rowItem.getUrl());
 
         Picasso.with(context)
-                .load(rowItem.getUrl())
+                .load(Urls.MAIN_SERVER_URL + "getBild?id=" + rowItem.getUrl())
                 .resize(100, 100)
                 .centerCrop()
                 .into(thumbNail);
