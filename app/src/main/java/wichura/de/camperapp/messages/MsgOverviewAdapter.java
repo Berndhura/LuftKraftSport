@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.util.List;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 
 /**
@@ -58,7 +59,7 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
         final GroupedMsgItem rowItem = getItem(position);
 
         ImageView thumbNail = (ImageView) convertView.findViewById(R.id.ad_image);
-        Picasso.with(context).load(rowItem.getUrl()).into(thumbNail);
+        Picasso.with(context).load(Urls.MAIN_SERVER_URL + "getBild?id=" + rowItem.getUrl()).into(thumbNail);
 
         holder.title.setText(rowItem.getMessage());
         holder.name.setText(rowItem.getName());

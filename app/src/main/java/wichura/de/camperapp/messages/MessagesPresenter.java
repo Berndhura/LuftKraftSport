@@ -103,7 +103,7 @@ public class MessagesPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d("CONAN", e.getMessage() + "\n" + e.getCause());
                     }
 
                     @Override
