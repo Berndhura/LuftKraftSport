@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,8 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         TextView txtPrice;
         TextView txtDate;
         ImageView bookmarkStar;
+        LinearLayout myAdsView;
+        LinearLayout mainLl;
     }
 
     @Override
@@ -77,6 +80,8 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
             holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
             holder.txtDate = (TextView) convertView.findViewById(R.id.creation_date);
             holder.bookmarkStar = (ImageView) convertView.findViewById(R.id.bookmark_star);
+            holder.myAdsView = (LinearLayout) convertView.findViewById(R.id.my_ads_view);
+            holder.mainLl = (LinearLayout) convertView.findViewById(R.id.main_linear_layout);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -111,6 +116,10 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
             }
         }
+
+        //remove linearlayout for delete. view count...
+        holder.mainLl.removeView(holder.myAdsView);
+
 
         //click to bookmark/debookmark an ad
         holder.bookmarkStar.setOnClickListener(new View.OnClickListener() {

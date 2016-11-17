@@ -42,12 +42,7 @@ public class MyAdsActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+            toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
         String userId = getIntent().getStringExtra(Constants.USER_ID);
@@ -57,12 +52,9 @@ public class MyAdsActivity extends AppCompatActivity {
 
         ImageView newButton = (ImageView) findViewById(R.id.new_button);
         if (newButton != null) {
-            newButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            newButton.setOnClickListener((view) -> {
                     final Intent intent = new Intent(getApplicationContext(), NewAdActivity.class);
                     startActivityForResult(intent, REQUEST_ID_FOR_NEW_AD);
-                }
             });
         }
     }

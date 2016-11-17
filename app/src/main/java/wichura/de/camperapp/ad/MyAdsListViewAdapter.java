@@ -112,7 +112,7 @@ public class MyAdsListViewAdapter extends ArrayAdapter<RowItem> {
                 //set message, title, and icon
                 .setTitle("Delete")
                 .setMessage("Do you want to Delete")
-                .setIcon(R.drawable.delete)
+                .setIcon(R.drawable.ic_delete_blue_grey_600_24dp)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //your deleting code
