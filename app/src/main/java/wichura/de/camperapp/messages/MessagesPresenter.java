@@ -10,7 +10,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.http.Service;
-import wichura.de.camperapp.models.RowItem;
+import wichura.de.camperapp.models.AdDetails;
 
 /**
  * Created by ich on 01.11.2016.
@@ -92,10 +92,10 @@ public class MessagesPresenter {
     }
 
     public void getAd(String adId) {
-        service.getAdObserv(adId)
+        service.getAdDetailsObserv(adId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<RowItem>() {
+                .subscribe(new Subscriber<AdDetails>() {
                     @Override
                     public void onCompleted() {
 
@@ -107,8 +107,8 @@ public class MessagesPresenter {
                     }
 
                     @Override
-                    public void onNext(RowItem ad) {
-                        view.openAdActivityFor(ad);
+                    public void onNext(AdDetails adDetails) {
+                        view.openAdActivityFor(adDetails.getAd());
                     }
                 });
     }

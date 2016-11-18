@@ -15,10 +15,11 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.messages.MsgRowItem;
+import wichura.de.camperapp.models.AdDetails;
 import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.models.RowItem;
 
-import static wichura.de.camperapp.http.Urls.GET_AD;
+import static wichura.de.camperapp.http.Urls.GET_AD_DETAILS;
 import static wichura.de.camperapp.http.Urls.GET_ALL_ADS_URL;
 import static wichura.de.camperapp.http.Urls.GET_ALL_MESSAGES_FOR_AD;
 import static wichura.de.camperapp.http.Urls.GET_BOOKMARKS_FOR_USER;
@@ -68,7 +69,7 @@ public class Service {
         Observable<List<RowItem>> getExample(@Path("lastPart") String lastPart);
 
         @GET(GET_ALL_MESSAGES_FOR_AD)
-        Observable<List<MsgRowItem>>getAllMessagesForAd(
+        Observable<List<MsgRowItem>> getAllMessagesForAd(
                 @Query("userId") String userId,
                 @Query("sender") String sender,
                 @Query("adId") String adId);
@@ -80,12 +81,12 @@ public class Service {
                 @Query("idFrom") String idFrom,
                 @Query("idTo") String idTo);
 
-        @GET(GET_AD)
-        Observable<RowItem> getAd(@Query("adId") String adId);
+        @GET(GET_AD_DETAILS)
+        Observable<AdDetails> getAdDetails(@Query("adId") String adId);
     }
 
-    public Observable<RowItem> getAdObserv(String adId) {
-        return mWebService.getAd(adId);
+    public Observable<AdDetails> getAdDetailsObserv(String adId) {
+        return mWebService.getAdDetails(adId);
     }
 
     public Observable<String> sendMessagesObserv(String message, String adId, String idFrom, String idTo) {
