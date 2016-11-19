@@ -2,7 +2,6 @@ package wichura.de.camperapp.messages;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -55,12 +54,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+            toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
         mMessagesProgressBar = (ProgressBar) findViewById(R.id.msg_overview_ProgressBar);
@@ -113,7 +107,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
                         intent.putExtra(Constants.ID_FROM, rowItem.getIdFrom());
                         intent.putExtra(Constants.ID_TO, rowItem.getIdTo());
                         intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
-                        intent.putExtra(Constants.AD_URL, Urls.MAIN_SERVER_URL + "getBild?id=" + rowItem.getUrl());
+                        intent.putExtra(Constants.AD_URL, Urls.MAIN_SERVER_URL + Urls.GET_PICTURE_THUMB + rowItem.getUrl());
                         startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);
                     }
                 });
@@ -130,9 +124,9 @@ public class MessagesOverviewActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode==Constants.REQUEST_ID_FOR_MESSAGES) {
-                getMessagesForUser(getUserId(), mMessagesProgressBar);
-            }
+        if (requestCode == Constants.REQUEST_ID_FOR_MESSAGES) {
+            getMessagesForUser(getUserId(), mMessagesProgressBar);
+        }
     }
 
     private String getUserId() {
