@@ -45,7 +45,6 @@ import java.util.List;
 
 import rx.Subscription;
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.ad.MyAdsActivity;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.gcm.QuickstartPreferences;
@@ -58,6 +57,8 @@ import wichura.de.camperapp.messages.MessagesOverviewActivity;
 import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.presentation.PresenterLayer;
+
+import static wichura.de.camperapp.mainactivity.Constants.SHOW_MY_ADS;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -216,6 +217,8 @@ public class MainActivity extends AppCompatActivity implements
 
         registerLoginReceiver();
 
+        //TODO: setMyAdsFlag(true) when GET_ADS_FOR_USER, refactor
+        setMyAdsFlag(false);
         getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
     }
 
@@ -234,10 +237,12 @@ public class MainActivity extends AppCompatActivity implements
         registerLoginReceiver();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.registerOnSharedPreferenceChangeListener(this);
+        setMyAdsFlag(false);
     }
 
     @Override
     protected void onPause() {
+        super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mGcmRegistrationBroadcastReceiver);
         isGcmReceiverRegistered = false;
 
@@ -247,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.unregisterOnSharedPreferenceChangeListener(this);
 
-        super.onPause();
+        setMyAdsFlag(false);
     }
 
     private void registerLoginReceiver() {
@@ -311,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements
                         setProfilePicture(uri);
                     }
                     setUserPreferences(userName, userId);
+                    setMyAdsFlag(false);
                     getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 }
             } catch (JSONException e) {
@@ -359,6 +365,7 @@ public class MainActivity extends AppCompatActivity implements
 
         listView = (ListView) findViewById(R.id.main_list);
         adapter = new CustomListViewAdapter(
+                this,
                 getApplicationContext(),
                 R.layout.list_item, rowItems,
                 elements.getBookmarks());
@@ -408,6 +415,7 @@ public class MainActivity extends AppCompatActivity implements
 
         switch (requestCode) {
             case Constants.REQUEST_ID_FOR_NEW_AD: {
+                setMyAdsFlag(false);
                 getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 break;
             }
@@ -458,6 +466,7 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             }
             case Constants.REQUEST_ID_FOR_OPEN_AD: {
+                setMyAdsFlag(false);
                 getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 break;
             }
@@ -466,6 +475,7 @@ public class MainActivity extends AppCompatActivity implements
                     String keyword = data.getStringExtra(Constants.KEYWORDS);
                     String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
                     String priceTo = data.getStringExtra(Constants.PRICE_TO);
+                    setMyAdsFlag(false);
                     getAds(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + keyword
                             + "&priceFrom=" + priceFrom + "&priceTo=" + priceTo);
                     drawer.closeDrawer(GravityCompat.START);
@@ -537,9 +547,12 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 } else {
-                    Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
-                    intent.putExtra(Constants.USER_ID, userId);
-                    startActivityForResult(intent, Constants.REQUEST_ID_FOR_MY_ADS);
+                   // Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
+                   // intent.putExtra(Constants.USER_ID, userId);
+                    //startActivityForResult(intent, Constants.REQUEST_ID_FOR_MY_ADS);
+                    setMyAdsFlag(true);
+                    getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
+                    if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
                 }
             }
@@ -564,6 +577,7 @@ public class MainActivity extends AppCompatActivity implements
                 return true;
             }
             case R.id.refresh: {
+                setMyAdsFlag(false);
                 getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                 return true;
@@ -573,6 +587,7 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 } else {
+                    setMyAdsFlag(false);
                     getAds(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + userId);
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
@@ -593,6 +608,13 @@ public class MainActivity extends AppCompatActivity implements
 
         if (drawer != null) drawer.closeDrawer(GravityCompat.START);
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setMyAdsFlag(boolean isMyAds) {
+        SharedPreferences settings = getSharedPreferences(SHOW_MY_ADS, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(Constants.IS_MY_ADS, isMyAds);
+        editor.apply();
     }
 
     private void startLoginActivity() {

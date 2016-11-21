@@ -45,6 +45,7 @@ public class Constants {
 
     //Broadcast messages
     public static final String LOGIN_COMPLETE = "loginComplete";
+    public static final String IS_MY_ADS ="isMyAds";
     public static final String SENDER_ID = "sender";
     public static final String SENDER_NAME = "senderName";
     public static final String ID_FROM = "idFrom";
@@ -53,4 +54,5 @@ public class Constants {
 
     //Shared Preferences
     public static final String MESSAGE_ACTIVITY = "messageActivity";
+    public static final String SHOW_MY_ADS = "showMyAds";
 }

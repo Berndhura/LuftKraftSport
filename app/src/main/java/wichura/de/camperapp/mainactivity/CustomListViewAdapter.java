@@ -1,7 +1,9 @@
 package wichura.de.camperapp.mainactivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.IntDef;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,17 +31,23 @@ import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
+import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.models.RowItem;
+
+import static wichura.de.camperapp.mainactivity.Constants.IS_MY_ADS;
+import static wichura.de.camperapp.mainactivity.Constants.SHOW_MY_ADS;
 
 public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
 
     private Context context;
     private ViewHolder holder;
     private String[] bookmarks;
+    private Activity activity;
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID,  LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
-    public @interface LocationStatus {}
+    @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID, LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
+    public @interface LocationStatus {
+    }
 
     public static final int LOCATION_STATUS_OK = 0;
     public static final int LOCATION_STATUS_SERVER_DOWN = 1;
@@ -47,10 +55,11 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
     public static final int LOCATION_STATUS_UNKNOWN = 3;
     public static final int LOCATION_STATUS_INVALID = 4;
 
-    public CustomListViewAdapter(final Context context, final int resourceId, final List<RowItem> items, final String bookmarks) {
+    public CustomListViewAdapter(final Activity activity, final Context context, final int resourceId, final List<RowItem> items, final String bookmarks) {
         super(context, resourceId, items);
         this.context = context;
-        if (bookmarks!=null) {
+        this.activity = activity;
+        if (bookmarks != null) {
             this.bookmarks = bookmarks.split(",");
         } else {
             this.bookmarks = null;
@@ -65,6 +74,8 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         ImageView bookmarkStar;
         LinearLayout myAdsView;
         LinearLayout mainLl;
+        ImageView deleteButton;
+        TextView txtViews;
     }
 
     @Override
@@ -82,6 +93,8 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
             holder.bookmarkStar = (ImageView) convertView.findViewById(R.id.bookmark_star);
             holder.myAdsView = (LinearLayout) convertView.findViewById(R.id.my_ads_view);
             holder.mainLl = (LinearLayout) convertView.findViewById(R.id.main_linear_layout);
+            holder.deleteButton = (ImageView) convertView.findViewById(R.id.NEW_my_ad_delete);
+            holder.txtViews = (TextView) convertView.findViewById(R.id.NEW_my_views);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -118,14 +131,27 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         }
 
         //remove linearlayout for delete. view count...
-        holder.mainLl.removeView(holder.myAdsView);
+        if (!isMyAdsRequest()) {
+            holder.mainLl.removeView(holder.myAdsView);
+        } else {
 
+            //Delete Button
+            holder.deleteButton.setOnClickListener((view) -> {
+                //get ad id and send delete request
+                String adId = rowItem.getAdId();
+                deleteAdRequest(adId, view);
+            });
+            holder.deleteButton.setTag(position);
+
+            //Views
+            holder.txtViews.setText(rowItem.getViews());
+        }
 
         //click to bookmark/debookmark an ad
         holder.bookmarkStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bookmarks!=null && Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
+                if (bookmarks != null && Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
                     deleteBookmark(rowItem.getAdId(), getUserId());
                     holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
                     notifyDataSetChanged();
@@ -181,6 +207,53 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+    private void deleteAdRequest(final String adId, final View view) {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(activity)
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_delete_blue_grey_600_24dp)
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
+
+                        Response.Listener<String> listener = new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                String pos = view.getTag().toString();
+                                int position = Integer.parseInt(pos);
+                                remove(getItem(position));
+                                notifyDataSetChanged();
+                                //TODO: wenn leer, finish()
+                            }
+                        };
+
+                        Response.ErrorListener errorListener = new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(activity, "Something went wrong...", Toast.LENGTH_LONG).show();
+                            }
+                        };
+                        VolleyService volleyService = new VolleyService(context);
+                        volleyService.sendStringGetRequest(url, listener, errorListener);
+                        dialog.dismiss();
+                    }
+                })
+
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        myQuittingDialogBox.show();
+    }
+
+    private boolean isMyAdsRequest() {
+        return context.getSharedPreferences(SHOW_MY_ADS, 0).getBoolean(IS_MY_ADS, false);
     }
 
     private String getUserId() {

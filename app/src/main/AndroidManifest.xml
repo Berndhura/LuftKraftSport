@@ -79,10 +79,6 @@
             android:label="@string/title_open_ad_page" />
 
         <activity
-            android:name="wichura.de.camperapp.ad.MyAdsActivity"
-            android:label="@string/title_open_my_ads_page" />
-
-        <activity
             android:name="wichura.de.camperapp.mainactivity.SearchActivity"
             android:label="@string/title_search_page" />
 

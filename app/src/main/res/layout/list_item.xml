@@ -3,8 +3,8 @@
     android:id="@+id/main_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -96,30 +96,60 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:id="@+id/my_ads_view"
         android:layout_width="match_parent"
-        android:layout_height="37dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="0dp">
+        android:padding="0dp"
+        android:weightSum="1">
 
-        <ImageButton
+        <ImageView
+            android:id="@+id/NEW_my_ad_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:padding="5sp"
             android:src="@drawable/ic_delete_blue_grey_600_24dp" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete_blue_grey_600_24dp" />
+        <View
+            android:layout_toRightOf="@+id/NEW_my_ad_delete"
+            android:layout_width="0.5dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/darker_gray"/>
 
-        <ImageButton
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete_blue_grey_600_24dp" />
+            android:layout_weight="0.1"
+            android:padding="5sp"
+            android:src="@drawable/ic_remove_red_eye_blue_grey_600_24dp" />
+
+        <TextView
+            android:id="@+id/NEW_my_views"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:textColor="#000000"
+            android:padding="5sp" />
+
+        <View
+            android:layout_toRightOf="@+id/NEW_my_ad_delete"
+            android:layout_width="0.5dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/darker_gray"/>
+
+        <ImageView
+            android:id="@+id/NEW_my_ad_bookmarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:padding="5sp"
+            android:src="@drawable/ic_bookmark_border_blue_grey_600_24dp" />
+
 
     </LinearLayout>
 
