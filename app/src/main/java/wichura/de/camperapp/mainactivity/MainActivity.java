@@ -547,9 +547,6 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 } else {
-                   // Intent intent = new Intent(getApplicationContext(), MyAdsActivity.class);
-                   // intent.putExtra(Constants.USER_ID, userId);
-                    //startActivityForResult(intent, Constants.REQUEST_ID_FOR_MY_ADS);
                     setMyAdsFlag(true);
                     getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
