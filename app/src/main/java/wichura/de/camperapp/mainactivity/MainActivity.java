@@ -316,8 +316,10 @@ public class MainActivity extends AppCompatActivity implements
                         setProfilePicture(uri);
                     }
                     setUserPreferences(userName, userId);
-                    setMyAdsFlag(false);
-                    getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+
+                    //TODO: richtig hier??
+                   // setMyAdsFlag(false);
+                    // getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

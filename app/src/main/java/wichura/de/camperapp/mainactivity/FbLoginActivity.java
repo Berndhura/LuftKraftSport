@@ -229,7 +229,7 @@ public class FbLoginActivity extends AppCompatActivity {
             String name = acct.getDisplayName();
             //Log.d("CONAN", result.getSignInAccount().getPhotoUrl().toString());
             String userId = acct.getId();
-           // Uri userPicture = acct.getPhotoUrl();
+            Uri userPicture = acct.getPhotoUrl();
 
             setUserPreferences(name, userId, Constants.GOOGLE_USER);
             //mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
