@@ -196,7 +196,7 @@ public class FbLoginActivity extends AppCompatActivity {
                 profile = Profile.getCurrentProfile();
                 if (profile != null) {
                     Uri uri = profile.getProfilePictureUri(250, 250);
-                    setUserPreferences(profile.getName(), profile.getId(), Constants.FACEBOOK_USER);
+                    setUserPreferences(profile.getName(), profile.getId(), uri, Constants.FACEBOOK_USER);
                     Intent loginComplete = new Intent(Constants.LOGIN_COMPLETE);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
                 }
@@ -226,14 +226,13 @@ public class FbLoginActivity extends AppCompatActivity {
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            String name = acct.getDisplayName();
-            //Log.d("CONAN", result.getSignInAccount().getPhotoUrl().toString());
-            String userId = acct.getId();
-            Uri userPicture = acct.getPhotoUrl();
-
-            setUserPreferences(name, userId, Constants.GOOGLE_USER);
-            //mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-            //updateUI(true);
+            if (acct != null) {
+                String name = acct.getDisplayName();
+                String userId = acct.getId();
+                Uri userPicture = acct.getPhotoUrl();
+                Log.d("CONAN", userPicture.toString());
+                setUserPreferences(name, userId, userPicture, Constants.GOOGLE_USER);
+            }
             finish();
         } else {
             // Signed out, show unauthenticated UI.
@@ -241,11 +240,12 @@ public class FbLoginActivity extends AppCompatActivity {
         }
     }
 
-    private void setUserPreferences(String name, String userId, String userType) {
+    private void setUserPreferences(String name, String userId, Uri userPic, String userType) {
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Constants.USER_NAME, name);
         editor.putString(Constants.USER_ID, userId);
+        editor.putString(Constants.USER_PICTURE, userPic.toString());
         editor.putString(Constants.USER_TYPE, userType);
         editor.apply();
     }
@@ -290,7 +290,7 @@ public class FbLoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "User in", Toast.LENGTH_SHORT).show();
                             //TODO get userid back to mainActiv
                             String[] userInfos = response.split(",");
-                            setUserPreferences(userInfos[1], userInfos[0], Constants.EMAIL_USER);
+                            setUserPreferences(userInfos[1], userInfos[0], null, Constants.EMAIL_USER);
                             finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "Wrong user or password. Try again!", Toast.LENGTH_SHORT).show();

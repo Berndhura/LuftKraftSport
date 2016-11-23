@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 
 import rx.Subscription;
 import wichura.de.camperapp.R;
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements
     private PresenterLayer presenterLayer;
     private Service service;
     private CustomListViewAdapter adapter;
+    boolean userScrolled = false;
 
     public MainActivity() {
         volleyService = new VolleyService(MainActivity.this);
@@ -390,6 +393,27 @@ public class MainActivity extends AppCompatActivity implements
             intent.putExtra(Constants.USER_ID, getUserId());
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
         });
+
+        listView.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                loadNextDataFromApi(page);
+                // or loadNextDataFromApi(totalItemsCount);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
+            }
+        });
+    }
+
+    // Append the next page of data into the adapter
+    // This method probably sends out a network request and appends new data items to your adapter.
+    public void loadNextDataFromApi(int offset) {
+        // Send an API request to retrieve appropriate paginated data
+        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
+        //  --> Deserialize and construct new model objects from the API response
+        //  --> Append the new data objects to the existing set of items inside the array of items
+        //  --> Notify the adapter of the new items made with `notifyDataSetChanged()`
     }
 
     private void getAds(String url) {
@@ -463,7 +487,11 @@ public class MainActivity extends AppCompatActivity implements
                 if (!isUserLoggedIn()) {
                     setProfileName("Please login...");
                 }
-                setProfilePicture(null);
+                if (!"".equals(getUserProfilePic())) {
+                    setProfilePicture(Uri.parse(getUserProfilePic()));
+                } else {
+                    setProfilePicture(null);
+                }
                 Log.d("CONAN: ", "Return from login, userid: " + getUserId());
                 break;
             }
@@ -495,6 +523,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
     }
+
 
     private void updateUserInDb(String name, String userId) {
         String url = Urls.MAIN_SERVER_URL + Urls.CREATE_USER + "?name=" + name.replaceAll(" ", "%20") + "&id=" + userId;
@@ -651,6 +680,10 @@ public class MainActivity extends AppCompatActivity implements
 
     private String getUserId() {
         return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+    }
+
+    private String getUserProfilePic() {
+        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_PICTURE, "");
     }
 
     private Boolean isUserLoggedIn() {

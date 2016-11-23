@@ -20,6 +20,7 @@ public class Constants {
 
     public static final String USER_ID = "user_id";
     public static final String USER_NAME = "user_name";
+    public static final String USER_PICTURE = "user_picture";
     public static final String USER_TYPE = "user_type";
 
     public static final String GOOGLE_USER = "google_user";
@@ -54,4 +55,5 @@ public class Constants {
     //Shared Preferences
     public static final String MESSAGE_ACTIVITY = "messageActivity";
     public static final String SHOW_MY_ADS = "showMyAds";
+
 }
