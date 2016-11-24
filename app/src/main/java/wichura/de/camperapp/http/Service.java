@@ -16,6 +16,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.messages.MsgRowItem;
 import wichura.de.camperapp.models.AdDetails;
+import wichura.de.camperapp.models.AdsAsPage;
 import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.models.RowItem;
 
@@ -23,6 +24,7 @@ import static wichura.de.camperapp.http.Urls.GET_AD_DETAILS;
 import static wichura.de.camperapp.http.Urls.GET_ALL_ADS_URL;
 import static wichura.de.camperapp.http.Urls.GET_ALL_MESSAGES_FOR_AD;
 import static wichura.de.camperapp.http.Urls.GET_BOOKMARKS_FOR_USER;
+import static wichura.de.camperapp.http.Urls.GET_FIND_ADS;
 import static wichura.de.camperapp.http.Urls.SEND_MESSAGE;
 
 /**
@@ -83,6 +85,13 @@ public class Service {
 
         @GET(GET_AD_DETAILS)
         Observable<AdDetails> getAdDetails(@Query("adId") String adId);
+
+        @GET(GET_FIND_ADS)
+        Observable<AdsAsPage> getFindAds(@Query("page") int page, @Query("size") int size);
+    }
+
+    public Observable<AdsAsPage> getFindAdsObserv(int page, int size) {
+        return mWebService.getFindAds(page, size);
     }
 
     public Observable<AdDetails> getAdDetailsObserv(String adId) {

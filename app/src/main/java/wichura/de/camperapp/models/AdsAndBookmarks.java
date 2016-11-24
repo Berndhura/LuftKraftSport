@@ -1,7 +1,5 @@
 package wichura.de.camperapp.models;
 
-import java.util.List;
-
 /**
  * Created by ich on 19.10.2016.
  * CamperAdd
@@ -10,7 +8,7 @@ import java.util.List;
 public class AdsAndBookmarks {
 
     private String bookmarks;
-    private List<RowItem> ads;
+    private AdsAsPage ads;
 
     public String getBookmarks() {
         return bookmarks;
@@ -20,11 +18,9 @@ public class AdsAndBookmarks {
         this.bookmarks = bookmarks;
     }
 
-    public List<RowItem> getAds() {
-        return ads;
-    }
+    public AdsAsPage getAds() {return ads;}
 
-    public void setAds(List<RowItem> ads) {
+    public void setAds(AdsAsPage ads) {
         this.ads = ads;
     }
 }

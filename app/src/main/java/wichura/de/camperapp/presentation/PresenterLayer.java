@@ -10,10 +10,13 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.mainactivity.MainActivity;
 import wichura.de.camperapp.models.AdsAndBookmarks;
+import wichura.de.camperapp.models.AdsAsPage;
 import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.models.RowItem;
 
@@ -50,7 +53,7 @@ public class PresenterLayer {
                 {
 
                     AdsAndBookmarks elements = new AdsAndBookmarks();
-                    elements.setAds(ads);
+                   // elements.setAds(ads);
                     elements.setBookmarks(bookmarks.getBookmarks());
                     return elements;
                 });
@@ -75,6 +78,60 @@ public class PresenterLayer {
             }
         });
     }
+
+
+    public void loadAdDataPage(int page, int size) {
+        if (page == 0) {
+            if (view.listView != null) {
+                view.listView.setVisibility(View.INVISIBLE);
+            }
+        }
+        view.progressBar.setVisibility(ProgressBar.VISIBLE);
+        //Log.d("CONAN", url);
+
+        Observable<Bookmarks> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId());
+        Observable<AdsAsPage> getAllAdsForUserObserv = service.getFindAdsObserv(page, size);
+
+        Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
+                Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
+                {
+
+                    AdsAndBookmarks elements = new AdsAndBookmarks();
+                    elements.setAds(ads);
+                    elements.setBookmarks(bookmarks.getBookmarks());
+                    return elements;
+                });
+
+        subscription = zippedReqForBookmarksAndAds
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AdsAndBookmarks>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d("CONAN", "Error in Observer: " + e.toString());
+                view.showEmptyView();
+            }
+
+            @Override
+            public void onNext(AdsAndBookmarks element) {
+                view.progressBar.setVisibility(ProgressBar.GONE);
+                if (page == 0) {
+                    if (view.listView != null) {
+                        view.listView.setVisibility(View.VISIBLE);
+                    }
+                    view.hideEmptyView();
+                    view.updateAds(element);
+                } else {
+                    view.addMoreAdsToList(element);
+                }
+            }
+        });
+    }
+
 
     public void rxUnSubscribe() {
         if (subscription != null && !subscription.isUnsubscribed())

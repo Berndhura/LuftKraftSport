@@ -58,7 +58,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile "com.google.android.gms:play-services-gcm:8.4.0"
     compile 'com.flurry.android:analytics:6.3.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta3'
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.5'
 
     //Gson
     compile 'com.google.code.gson:gson:2.4'

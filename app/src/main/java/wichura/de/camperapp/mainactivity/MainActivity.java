@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -43,7 +42,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
 
 import rx.Subscription;
 import wichura.de.camperapp.R;
@@ -67,6 +65,10 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     public ListView listView;
+    private int page;
+    private int size;
+    private int pages;
+    private int total;
 
     private static final String TAG = "CONAN";
     private ImageView loginBtn;
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements
     private PresenterLayer presenterLayer;
     private Service service;
     private CustomListViewAdapter adapter;
-    boolean userScrolled = false;
+    private List<RowItem> rowItems;
 
     public MainActivity() {
         volleyService = new VolleyService(MainActivity.this);
@@ -105,6 +107,11 @@ public class MainActivity extends AppCompatActivity implements
 
         // Initialize Volley
         MyVolley.init(this);
+
+        page = 0;
+        size = 10;
+        pages = 0;
+        total = 0;
 
         service = new Service();
         presenterLayer = new PresenterLayer(this, service, getApplicationContext());
@@ -321,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements
                     setUserPreferences(userName, userId);
 
                     //TODO: richtig hier??
-                   // setMyAdsFlag(false);
+                    // setMyAdsFlag(false);
                     // getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 }
             } catch (JSONException e) {
@@ -361,12 +368,17 @@ public class MainActivity extends AppCompatActivity implements
 
     public void updateAds(AdsAndBookmarks elements) {
 
-        List<RowItem> rowItems = new ArrayList<>();
-        for (RowItem e : elements.getAds()) {
+        rowItems = new ArrayList<>();
+        for (RowItem e : elements.getAds().getAds()) {
             rowItems.add(e);
         }
 
-        showNumberOfAds(elements.getAds().size());
+        page = elements.getAds().getPage();
+        size = elements.getAds().getSize();
+        pages = elements.getAds().getPages();
+        total = elements.getAds().getTotal();
+
+        showNumberOfAds(total);
 
         listView = (ListView) findViewById(R.id.main_list);
         adapter = new CustomListViewAdapter(
@@ -414,18 +426,27 @@ public class MainActivity extends AppCompatActivity implements
         //  --> Deserialize and construct new model objects from the API response
         //  --> Append the new data objects to the existing set of items inside the array of items
         //  --> Notify the adapter of the new items made with `notifyDataSetChanged()`
+        Log.d("CONAN", "OFFSET: "+offset);
+        if (offset<=pages) {
+            page = page + 1;
+            presenterLayer.loadAdDataPage(page, size);
+        }
+    }
+
+    public void addMoreAdsToList(AdsAndBookmarks elements) {
+
+        for (RowItem e : elements.getAds().getAds()) {
+            rowItems.add(e);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void getAds(String url) {
-        presenterLayer.loadAdData(url);
+        presenterLayer.loadAdDataPage(page, size);
     }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        //final int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 
@@ -697,8 +718,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d("CONAN", "KEY:"+key);
-        if ( key.equals("UserInfo"))  {
+        Log.d("CONAN", "KEY:" + key);
+        if (key.equals("UserInfo")) {
             Log.d("CONAN", "jooooooooooo");
         }
     }
