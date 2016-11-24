@@ -442,6 +442,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void getAds(String url) {
+        page=0;
+        adapter.clear();
         presenterLayer.loadAdDataPage(page, size);
     }
 

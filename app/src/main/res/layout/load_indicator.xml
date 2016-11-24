@@ -11,10 +11,10 @@
         android:layout_height="wrap_content"
         app:indicator="BallClipRotate"
         app:indicator_color="@color/colorAccent"
+        app:layout_anchorGravity="fill"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_anchorGravity="fill" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

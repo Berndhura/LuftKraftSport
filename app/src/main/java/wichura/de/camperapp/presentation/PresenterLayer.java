@@ -38,48 +38,6 @@ public class PresenterLayer {
         this.context = context;
     }
 
-    public void loadAdData(String url) {
-        if (view.listView!=null) {
-            view.listView.setVisibility(View.INVISIBLE);
-        }
-        view.progressBar.setVisibility(ProgressBar.VISIBLE);
-        Log.d("CONAN", url);
-
-        Observable<Bookmarks> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId());
-        Observable<List<RowItem>> getAllAdsForUserObserv = service.getAllUrlObserv(url);
-
-        Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
-                Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
-                {
-
-                    AdsAndBookmarks elements = new AdsAndBookmarks();
-                   // elements.setAds(ads);
-                    elements.setBookmarks(bookmarks.getBookmarks());
-                    return elements;
-                });
-
-        subscription = zippedReqForBookmarksAndAds.subscribe(new Observer<AdsAndBookmarks>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d("CONAN", "Error in Observer: " + e.toString());
-                view.showEmptyView();
-            }
-
-            @Override
-            public void onNext(AdsAndBookmarks element) {
-                view.progressBar.setVisibility(ProgressBar.GONE);
-                if (view.listView!=null) {view.listView.setVisibility(View.VISIBLE);}
-                view.hideEmptyView();
-                view.updateAds(element);
-            }
-        });
-    }
-
-
     public void loadAdDataPage(int page, int size) {
         if (page == 0) {
             if (view.listView != null) {
