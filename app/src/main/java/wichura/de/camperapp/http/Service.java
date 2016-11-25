@@ -20,6 +20,7 @@ import wichura.de.camperapp.models.AdsAsPage;
 import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.models.RowItem;
 
+import static wichura.de.camperapp.http.Urls.GET_ADS_MY;
 import static wichura.de.camperapp.http.Urls.GET_AD_DETAILS;
 import static wichura.de.camperapp.http.Urls.GET_ALL_ADS_URL;
 import static wichura.de.camperapp.http.Urls.GET_ALL_MESSAGES_FOR_AD;
@@ -85,6 +86,16 @@ public class Service {
 
         @GET(GET_FIND_ADS)
         Observable<AdsAsPage> getFindAds(@Query("page") int page, @Query("size") int size);
+
+        @GET(GET_ADS_MY)
+        Observable<AdsAsPage> getAdsMy(
+                @Query("page") int page,
+                @Query("size") int size,
+                @Query("token") String token);
+    }
+
+    public Observable<AdsAsPage> getAdsMyObserv(int page, int size, String token) {
+        return mWebService.getAdsMy(page, size, token);
     }
 
     public Observable<AdsAsPage> getFindAdsObserv(int page, int size) {

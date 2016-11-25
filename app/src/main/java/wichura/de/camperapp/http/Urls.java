@@ -7,6 +7,7 @@ package wichura.de.camperapp.http;
 public class Urls {
 
     public static final String MAIN_SERVER_URL = "http://raent.de:9876/api/";
+    public static final String MAIN_SERVER_URL_V2 = "http://raent.de:9876/api/V2/";
     //public static String MAIN_SERVER_URL = "http://10.0.2.2:8080/2ndHandOz/";
     //public static final String MAIN_SERVER_URL = "http://ec2-52-32-84-19.us-west-2.compute.amazonaws.com:8080/2ndHandOz/";
     public static final String UPLOAD_NEW_AD_URL = "/saveNewAd/";
@@ -28,5 +29,6 @@ public class Urls {
     public static final String GET_BOOKMARKS_FOR_USER = "getMyBookmarks";
     public static final String GET_PICTURE_THUMB = "getBildThumb?id=";
     public static final String GET_FIND_ADS = "findAds";
+    public static final String GET_ADS_MY = "ads/my";
 }
 

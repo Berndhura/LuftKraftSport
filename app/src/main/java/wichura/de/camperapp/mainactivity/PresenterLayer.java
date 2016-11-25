@@ -134,11 +134,16 @@ public class PresenterLayer {
                 });
     }
 
-    public void getAdsForUser() {
+    public void getAdsForUser(String token) {
 
+        if (token.equals("")) {
+            //user nicht eingeloggt... nix zeigen
+        }
+        int page=0;
+        int size = 10;
         //use user Token here
-        /*Observable<Bookmarks> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId());
-        Observable<AdsAsPage> getAllAdsForUserObserv = service.getFindAdsObserv(page, size);
+        Observable<Bookmarks> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId());
+        Observable<AdsAsPage> getAllAdsForUserObserv = service.getAdsMyObserv(page, size, token);
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                 Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
@@ -177,7 +182,7 @@ public class PresenterLayer {
                             view.addMoreAdsToList(element);
                         }
                     }
-                });*/
+                });
 
     }
 
