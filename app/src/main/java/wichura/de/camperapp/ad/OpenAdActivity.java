@@ -31,6 +31,8 @@ import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.login.LoginActivity;
 import wichura.de.camperapp.models.Bookmarks;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
 public class OpenAdActivity extends AppCompatActivity {
 
     // private static double longitute;
@@ -304,7 +306,7 @@ public class OpenAdActivity extends AppCompatActivity {
     }
 
     private String getUserId() {
-        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 
     private boolean isOwnAd() {

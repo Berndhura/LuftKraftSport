@@ -53,6 +53,7 @@ import wichura.de.camperapp.messages.MessagesOverviewActivity;
 import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.RowItem;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static wichura.de.camperapp.mainactivity.Constants.SHOW_MY_ADS;
 
 public class MainActivity extends AppCompatActivity implements
@@ -642,7 +643,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void setUserPreferences(String name, String userId) {
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Constants.USER_NAME, name);
         editor.putString(Constants.USER_ID, userId);
@@ -655,15 +656,15 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private String getUserName() {
-        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_NAME, "");
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_NAME, "");
     }
 
     private String getUserId() {
-        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 
     private String getUserProfilePic() {
-        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_PICTURE, "");
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_PICTURE, "");
     }
 
     private Boolean isUserLoggedIn() {
@@ -671,14 +672,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private String getUserType() {
-        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_TYPE, "");
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TYPE, "");
     }
 
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Log.d("CONAN", "KEY:" + key);
-        if (key.equals("UserInfo")) {
+        if (key.equals(SHARED_PREFS_USER_INFO)) {
             Log.d("CONAN", "jooooooooooo");
         }
     }

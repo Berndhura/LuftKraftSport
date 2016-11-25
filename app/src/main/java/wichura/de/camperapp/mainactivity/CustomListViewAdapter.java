@@ -35,6 +35,7 @@ import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.models.RowItem;
 
 import static wichura.de.camperapp.mainactivity.Constants.IS_MY_ADS;
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static wichura.de.camperapp.mainactivity.Constants.SHOW_MY_ADS;
 
 public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
@@ -257,6 +258,6 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
     }
 
     private String getUserId() {
-        return context.getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+        return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 }

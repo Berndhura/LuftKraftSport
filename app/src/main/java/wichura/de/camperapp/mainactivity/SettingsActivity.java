@@ -14,6 +14,8 @@ import com.facebook.login.LoginManager;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.login.LoginActivity;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
 /**
  * Created by ich on 03.06.2016.
  * CamperApp
@@ -84,7 +86,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void updateUserInfo() {
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Constants.USER_NAME, "");
         editor.putString(Constants.USER_ID, "");
@@ -93,12 +95,12 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private String getUserName() {
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         return settings.getString(Constants.USER_NAME, "");
     }
 
     private Boolean isUserLoggedIn() {
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         return (settings.getString(Constants.USER_ID, "").equals("") ? false : true);
     }
 }

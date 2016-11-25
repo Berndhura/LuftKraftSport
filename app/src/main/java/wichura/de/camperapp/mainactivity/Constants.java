@@ -57,5 +57,6 @@ public class Constants {
     //Shared Preferences
     public static final String MESSAGE_ACTIVITY = "messageActivity";
     public static final String SHOW_MY_ADS = "showMyAds";
+    public static final String SHARED_PREFS_USER_INFO = "UserInfo";
 
 }

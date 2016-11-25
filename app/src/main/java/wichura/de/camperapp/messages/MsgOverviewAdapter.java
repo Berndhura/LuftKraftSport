@@ -66,8 +66,4 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
         holder.date.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
         return convertView;
     }
-
-    private String getUserId() {
-        return context.getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
-    }
 }

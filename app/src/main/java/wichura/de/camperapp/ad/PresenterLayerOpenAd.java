@@ -10,6 +10,8 @@ import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.Bookmarks;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
 /**
  * Created by ich on 13.11.2016.
  */
@@ -50,6 +52,6 @@ public class PresenterLayerOpenAd {
     }
 
     private String getUserId() {
-        return context.getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+        return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 }

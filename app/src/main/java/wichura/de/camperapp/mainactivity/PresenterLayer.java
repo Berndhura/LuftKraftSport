@@ -28,6 +28,8 @@ import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.AdsAsPage;
 import wichura.de.camperapp.models.Bookmarks;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
 /**
  * Created by ich on 20.10.2016.
  * CamperApp
@@ -139,7 +141,7 @@ public class PresenterLayer {
     }
 
     private void setUserPreferences(String name, String userId, String userToken) {
-        SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
+        SharedPreferences settings = context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Constants.USER_NAME, name);
         editor.putString(Constants.USER_ID, userId);
@@ -148,6 +150,6 @@ public class PresenterLayer {
     }
 
     private String getUserId() {
-        return context.getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+        return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 }

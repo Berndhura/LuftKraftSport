@@ -15,6 +15,8 @@ import java.util.List;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.mainactivity.Constants;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
 /**
  * Created by ich on 31.05.2016.
  * Camper App
@@ -76,6 +78,6 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
     }
 
     private String getUserId() {
-        return context.getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+        return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 }

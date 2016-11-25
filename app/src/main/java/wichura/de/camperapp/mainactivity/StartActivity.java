@@ -21,6 +21,8 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.ad.NewAdActivity;
 import wichura.de.camperapp.login.LoginActivity;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
 
 /**
  * Created by Bernd Wichura on 31.03.2016.
@@ -163,6 +165,6 @@ public class StartActivity extends Activity {
     }
 
     private String getUserId() {
-        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 }

@@ -119,7 +119,7 @@ public class FileUploadService {
     }
 
     private String getUserId() {
-        SharedPreferences settings = context.getSharedPreferences("UserInfo", 0);
+        SharedPreferences settings = context.getSharedPreferences(Constants.SHARED_PREFS_USER_INFO, 0);
         return settings.getString(Constants.USER_ID, "");
     }
 }

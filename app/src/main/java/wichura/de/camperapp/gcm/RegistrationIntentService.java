@@ -18,6 +18,8 @@ import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
 /**
  * Created by Bernd Wichura on 14.05.2016.
  * Camper App
@@ -79,7 +81,7 @@ public class RegistrationIntentService extends IntentService {
      * @param token The new token.
      */
     public void sendRegistrationToServer(String token) {
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         String userId = settings.getString(Constants.USER_ID, "");
 
         if (!userId.equals("")) {

@@ -18,6 +18,8 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.messages.MessagesActivity;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
 /**
  * Created by Bernd Wichura on 14.05.2016.
  * Camper App
@@ -116,7 +118,7 @@ public class MyGcmListenerService  extends GcmListenerService {
     }
 
     private String getUserId() {
-        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 
     private String getAdIdFromSharedPref() {

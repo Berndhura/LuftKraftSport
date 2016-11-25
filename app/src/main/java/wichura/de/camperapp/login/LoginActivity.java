@@ -52,6 +52,7 @@ import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 
 import static wichura.de.camperapp.mainactivity.Constants.RC_SIGN_IN;
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by Bernd Wichura on 28.07.2015.
@@ -237,7 +238,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setUserPreferences(String name, String userId, Uri userPic, String userType) {
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Constants.USER_NAME, name);
         editor.putString(Constants.USER_ID, userId);

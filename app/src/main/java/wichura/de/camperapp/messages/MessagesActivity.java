@@ -27,6 +27,8 @@ import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.RowItem;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
 /**
  * Created by ich on 22.05.2016.
  * Camper App
@@ -229,7 +231,7 @@ public class MessagesActivity extends AppCompatActivity {
     // }
 
     private String getUserId() {
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         return settings.getString(Constants.USER_ID, "");
     }
 

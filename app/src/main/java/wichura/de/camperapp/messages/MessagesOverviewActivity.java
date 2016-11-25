@@ -30,6 +30,8 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
 /**
  * Created by ich on 20.06.2016.
  * Camper App
@@ -130,10 +132,10 @@ public class MessagesOverviewActivity extends AppCompatActivity {
     }
 
     private String getUserId() {
-        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_ID, "");
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 
     private String getUserName() {
-        return getSharedPreferences("UserInfo", 0).getString(Constants.USER_NAME, "");
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_NAME, "");
     }
 }
