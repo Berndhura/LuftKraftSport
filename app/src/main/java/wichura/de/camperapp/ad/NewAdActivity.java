@@ -13,7 +13,7 @@ import android.widget.ProgressBar;
 import com.squareup.picasso.Picasso;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.models.MyAdsRowItem;
+import wichura.de.camperapp.mainactivity.Constants;
 
 
 public class NewAdActivity extends AppCompatActivity {
@@ -67,17 +67,15 @@ public class NewAdActivity extends AppCompatActivity {
             final long date = System.currentTimeMillis();
 
             final Intent data = new Intent();
-            MyAdsRowItem.packageIntent(
-                    data,
-                    titleString,
-                    "apid",
-                    descString,
-                    keyWordsString,
-                    mImage,
-                    "TODO",
-                    "PHONE",
-                    price,
-                    date);
+            data.putExtra(Constants.TITLE, titleString);
+            data.putExtra(Constants.AD_ID, "apid");
+            data.putExtra(Constants.DESCRIPTION, descString);
+            data.putExtra(Constants.KEYWORDS, keyWordsString);
+            data.putExtra(Constants.FILENAME, mImage);
+            data.putExtra(Constants.LOCATION, "TODO");
+            data.putExtra(Constants.PHONE, "PHONE");
+            data.putExtra(Constants.PRICE, price);
+            data.putExtra(Constants.DATE, date);
 
             fileUploadService.multiPost(data);
             setResult(RESULT_OK, data);

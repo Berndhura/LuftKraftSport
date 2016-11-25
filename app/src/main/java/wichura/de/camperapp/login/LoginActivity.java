@@ -17,7 +17,6 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -111,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                 .enableAutoManage(this /* FragmentActivity */, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Log.d("CONAN", "google: "+connectionResult.getErrorMessage());
+                        Log.d("CONAN", "google: " + connectionResult.getErrorMessage());
                     }
                 } /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -138,33 +137,25 @@ public class LoginActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+            toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
         ImageView okButton = (ImageView) findViewById(R.id.ok_button);
         if (okButton != null) {
-            okButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!validate()) {
-                        onLoginFailed();
-                        return;
-                    }
-                    final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                            R.style.AppTheme);
-                    progressDialog.setIndeterminate(true);
-                    progressDialog.setMessage("Authenticating...");
-                    progressDialog.show();
-
-                    String email = _emailText.getText().toString();
-                    String password = _passwordText.getText().toString();
-                    sendLoginRequest(email, password, progressDialog);
+            okButton.setOnClickListener((view) -> {
+                if (!validate()) {
+                    onLoginFailed();
+                    return;
                 }
+                final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+                        R.style.AppTheme);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Authenticating...");
+                progressDialog.show();
+
+                String email = _emailText.getText().toString();
+                String password = _passwordText.getText().toString();
+                sendLoginRequest(email, password, progressDialog);
             });
         }
 
@@ -172,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         _passwordText = (EditText) findViewById(R.id.password);
 
         TextView tv = (TextView) findViewById(R.id.register);
-        tv.setText(Html.fromHtml("<a href=\"http://ec2-52-32-84-19.us-west-2.compute.amazonaws.com:8080/2ndHandOz\">Register</a>"));
+        tv.setText(Html.fromHtml("<a href=\"http://raent.de:9876/\">Register</a>"));
         tv.setClickable(true);
         tv.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -202,10 +193,14 @@ public class LoginActivity extends AppCompatActivity {
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
                 }
             }
+
             @Override
-            public void onCancel() {}
+            public void onCancel() {
+            }
+
             @Override
-            public void onError(FacebookException error) {}
+            public void onError(FacebookException error) {
+            }
         };
     }
 

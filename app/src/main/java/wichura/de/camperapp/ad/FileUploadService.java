@@ -20,7 +20,6 @@ import cz.msebera.android.httpclient.Header;
 import wichura.de.camperapp.bitmap.BitmapHelper;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.models.MyAdsRowItem;
 
 /**
  * Created by ich on 25.10.2016.
@@ -42,12 +41,12 @@ public class FileUploadService {
 
         view.showProgress();
 
-        String title = data.getStringExtra(MyAdsRowItem.TITLE);
-        String description = data.getStringExtra(MyAdsRowItem.DESC);
-        String keywords = data.getStringExtra(MyAdsRowItem.KEYWORDS);
-        String picture = data.getStringExtra(MyAdsRowItem.FILENAME);
-        String price = data.getStringExtra(MyAdsRowItem.PRICE);
-        long date = data.getLongExtra(MyAdsRowItem.DATE, 0);
+        String title = data.getStringExtra(Constants.TITLE);
+        String description = data.getStringExtra(Constants.DESCRIPTION);
+        String keywords = data.getStringExtra(Constants.KEYWORDS);
+        String picture = data.getStringExtra(Constants.FILENAME);
+        String price = data.getStringExtra(Constants.PRICE);
+        long date = data.getLongExtra(Constants.DATE, 0);
 
         Uri fileUri = Uri.parse(picture.toString());
         Log.i("CONAN", "fileURI: " + fileUri);
