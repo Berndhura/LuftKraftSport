@@ -134,6 +134,53 @@ public class PresenterLayer {
                 });
     }
 
+    public void getAdsForUser() {
+
+        //use user Token here
+        /*Observable<Bookmarks> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId());
+        Observable<AdsAsPage> getAllAdsForUserObserv = service.getFindAdsObserv(page, size);
+
+        Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
+                Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
+                {
+
+                    AdsAndBookmarks elements = new AdsAndBookmarks();
+                    elements.setAds(ads);
+                    elements.setBookmarks(bookmarks.getBookmarks());
+                    return elements;
+                });
+
+        subscription = zippedReqForBookmarksAndAds
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AdsAndBookmarks>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "Error in Observer: " + e.toString());
+                        view.showEmptyView();
+                    }
+
+                    @Override
+                    public void onNext(AdsAndBookmarks element) {
+                        view.progressBar.setVisibility(ProgressBar.GONE);
+                        if (page == 0) {
+                            if (view.listView != null) {
+                                view.listView.setVisibility(View.VISIBLE);
+                            }
+                            view.hideEmptyView();
+                            view.updateAds(element);
+                        } else {
+                            view.addMoreAdsToList(element);
+                        }
+                    }
+                });*/
+
+    }
+
 
     public void rxUnSubscribe() {
         if (subscription != null && !subscription.isUnsubscribed())
@@ -152,4 +199,6 @@ public class PresenterLayer {
     private String getUserId() {
         return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
+
+
 }

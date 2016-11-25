@@ -560,7 +560,12 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
                 } else {
                     setMyAdsFlag(true);
-                    getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
+
+                    /*
+                    http://raent.de:9876/api/V2/ads/my?token=EAAHnEGldaZCgBAGiqRhQ6Bx1Eoyt3IvnIOFjUxPLfVsYdKqUKmUCVIYkVoGf0SZBdqEmDC09lalsopHWQ6aooD50d2YTh3fe1efLTmP2XK5FiAWb4QeDcJbcJbitCByKenukwkz63BVb9QnK1TobqrCQPgupAZD&page=0&size=10
+                     */
+                    //getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
+                    presenterLayer.getAdsForUser();
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
                 }
