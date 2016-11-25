@@ -134,13 +134,14 @@ public class PresenterLayer {
                 });
     }
 
-    public void getAdsForUser(String token) {
-
-        if (token.equals("")) {
-            //user nicht eingeloggt... nix zeigen
+    public void getAdsForUser(int page, int size, String token) {
+        if (page == 0) {
+            if (view.listView != null) {
+                view.listView.setVisibility(View.INVISIBLE);
+            }
         }
-        int page=0;
-        int size = 10;
+        view.progressBar.setVisibility(ProgressBar.VISIBLE);
+
         //use user Token here
         Observable<Bookmarks> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId());
         Observable<AdsAsPage> getAllAdsForUserObserv = service.getAdsMyObserv(page, size, token);
@@ -183,9 +184,7 @@ public class PresenterLayer {
                         }
                     }
                 });
-
     }
-
 
     public void rxUnSubscribe() {
         if (subscription != null && !subscription.isUnsubscribed())
@@ -204,6 +203,4 @@ public class PresenterLayer {
     private String getUserId() {
         return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
-
-
 }

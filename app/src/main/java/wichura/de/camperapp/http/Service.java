@@ -36,8 +36,10 @@ import static wichura.de.camperapp.http.Urls.SEND_MESSAGE;
 public class Service {
 
     private static final String WEB_SERVICE_BASE_URL = Urls.MAIN_SERVER_URL;
+    private static final String WEB_SERVICE_BASE_URL_V2 = Urls.MAIN_SERVER_URL_V2;
 
     private final WebService mWebService;
+    private final WebService mWebServiceV2;
 
     public Service() {
 
@@ -56,6 +58,20 @@ public class Service {
                 .build();
 
         mWebService = restAdapter.create(WebService.class);
+
+        //api/V2
+        OkHttpClient.Builder httpClientV2 = new OkHttpClient.Builder();
+
+        httpClient.addInterceptor(logging);
+
+        Retrofit restAdapterV2 = new Retrofit.Builder()
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(WEB_SERVICE_BASE_URL_V2)
+                .client(httpClientV2.build())
+                .build();
+
+        mWebServiceV2 = restAdapterV2.create(WebService.class);
     }
 
     private interface WebService {
@@ -95,7 +111,7 @@ public class Service {
     }
 
     public Observable<AdsAsPage> getAdsMyObserv(int page, int size, String token) {
-        return mWebService.getAdsMy(page, size, token);
+        return mWebServiceV2.getAdsMy(page, size, token);
     }
 
     public Observable<AdsAsPage> getFindAdsObserv(int page, int size) {

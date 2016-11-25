@@ -53,6 +53,7 @@ import wichura.de.camperapp.messages.MessagesOverviewActivity;
 import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.RowItem;
 
+import static wichura.de.camperapp.mainactivity.Constants.IS_MY_ADS;
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static wichura.de.camperapp.mainactivity.Constants.SHOW_MY_ADS;
 
@@ -385,7 +386,11 @@ public class MainActivity extends AppCompatActivity implements
         Log.d("CONAN", "OFFSET: "+offset);
         if (offset<=pages) {
             page = page + 1;
-            presenterLayer.loadAdDataPage(page, size);
+            if (isMyAdsRequest()) {
+                presenterLayer.getAdsForUser(page, size, getUserToken());
+            } else {
+                presenterLayer.loadAdDataPage(page, size);
+            }
         }
     }
 
@@ -559,13 +564,15 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 } else {
-                    setMyAdsFlag(true);
+                    page = 0;
+                    size = 10;
 
                     /*
                     http://raent.de:9876/api/V2/ads/my?token=EAAHnEGldaZCgBAGiqRhQ6Bx1Eoyt3IvnIOFjUxPLfVsYdKqUKmUCVIYkVoGf0SZBdqEmDC09lalsopHWQ6aooD50d2YTh3fe1efLTmP2XK5FiAWb4QeDcJbcJbitCByKenukwkz63BVb9QnK1TobqrCQPgupAZD&page=0&size=10
                      */
                     //getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
-                    presenterLayer.getAdsForUser(getUserToken());
+                    setMyAdsFlag(true);
+                    presenterLayer.getAdsForUser(page, size, getUserToken());
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
                 }
@@ -678,6 +685,10 @@ public class MainActivity extends AppCompatActivity implements
 
     private Boolean isUserLoggedIn() {
         return !getUserId().equals("");
+    }
+
+    private boolean isMyAdsRequest() {
+        return getSharedPreferences(SHOW_MY_ADS, 0).getBoolean(IS_MY_ADS, false);
     }
 
     private String getUserType() {
