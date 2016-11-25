@@ -26,9 +26,7 @@ import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
-import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.flurry.android.FlurryAgent;
@@ -36,9 +34,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,10 +48,10 @@ import wichura.de.camperapp.http.MyVolley;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
+import wichura.de.camperapp.login.LoginActivity;
 import wichura.de.camperapp.messages.MessagesOverviewActivity;
 import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.RowItem;
-import wichura.de.camperapp.presentation.PresenterLayer;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHOW_MY_ADS;
 
@@ -72,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final String TAG = "CONAN";
     private ImageView loginBtn;
-
-    CallbackManager callbackManager;
     private DrawerLayout drawer;
 
     //Google Cloud Messages
@@ -305,44 +298,6 @@ public class MainActivity extends AppCompatActivity implements
         FlurryAgent.logEvent("mainactivity started");
     }
 
-    private void getFacebookUserInfo() {
-
-        callbackManager = CallbackManager.Factory.create();
-        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
-
-            JSONObject json = response.getJSONObject();
-            try {
-                if (json != null) {
-                    //user id
-                    Log.d("CONAN: ", "user id facebook: " + json.getString("id"));
-                    String userId = json.getString("id");
-                    String userName = json.getString("name");
-                    Log.d("CONAN: ", "user name facebook: " + json.getString("name"));
-                    setProfileName(userName);
-                    //user profile picture
-                    Profile profile = Profile.getCurrentProfile();
-                    if (profile != null) {
-                        Uri uri = profile.getProfilePictureUri(200, 200);
-                        setProfilePicture(uri);
-                    }
-                    setUserPreferences(userName, userId);
-
-                    //TODO: richtig hier??
-                    // setMyAdsFlag(false);
-                    // getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.d("CONAN: ", "Do the login ");
-            }
-        });
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,link,picture");
-        request.setParameters(parameters);
-        request.executeAsync();
-    }
-
     /*
         Updates the empty list view with contextually relevant information that the user can
         use to determine why they aren't seeing ads.
@@ -443,7 +398,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private void getAds(String url) {
         page=0;
-        adapter.clear();
+        if (adapter != null) {
+            adapter.clear();
+        }
         presenterLayer.loadAdDataPage(page, size);
     }
 
@@ -580,12 +537,12 @@ public class MainActivity extends AppCompatActivity implements
             loginBtn.setEnabled(true);
             loginBtn.setVisibility(View.VISIBLE);
             loginBtn.setOnClickListener((view) -> startLoginActivity());
-            getFacebookUserInfo();  //TODO richtig hier?
+            presenterLayer.getFacebookUserInfo();  //TODO richtig hier?
         } else {
             Log.d("CONAN: ", "disable login button");
             loginBtn.setEnabled(false);
             loginBtn.setVisibility(View.GONE);
-            getFacebookUserInfo();  //TODO richtig hier?
+            presenterLayer.getFacebookUserInfo();  //TODO richtig hier?
         }
     }
 
@@ -669,11 +626,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void startLoginActivity() {
-        final Intent facebookIntent = new Intent(this, FbLoginActivity.class);
+        final Intent facebookIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
     }
 
-    private void setProfilePicture(Uri uri) {
+    public void setProfilePicture(Uri uri) {
         ImageView proPic = (ImageView) findViewById(R.id.profile_image);
         if (uri != null) {
             Picasso.with(getApplicationContext()).load(uri.toString()).into(proPic);
@@ -692,7 +649,7 @@ public class MainActivity extends AppCompatActivity implements
         editor.apply();
     }
 
-    private void setProfileName(String name) {
+    public void setProfileName(String name) {
         TextView nav_user = (TextView) findViewById(R.id.username);
         if (nav_user != null) nav_user.setText(name);
     }

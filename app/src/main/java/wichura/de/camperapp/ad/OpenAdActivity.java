@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,7 +28,7 @@ import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.mainactivity.FbLoginActivity;
+import wichura.de.camperapp.login.LoginActivity;
 import wichura.de.camperapp.models.Bookmarks;
 
 public class OpenAdActivity extends AppCompatActivity {
@@ -134,7 +133,7 @@ public class OpenAdActivity extends AppCompatActivity {
                     String sender = getUserId();
                     sendMessage(adId, ownerId, sender);
                 } else {
-                    final Intent facebookIntent = new Intent(getApplicationContext(), FbLoginActivity.class);
+                    final Intent facebookIntent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
                 }
             });

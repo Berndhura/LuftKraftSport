@@ -22,6 +22,7 @@ public class Constants {
     public static final String USER_NAME = "user_name";
     public static final String USER_PICTURE = "user_picture";
     public static final String USER_TYPE = "user_type";
+    public static final String USER_TOKEN = "user_token";
 
     public static final String GOOGLE_USER = "google_user";
     public static final String EMAIL_USER = "email_user";

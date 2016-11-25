@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.facebook.login.LoginManager;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.login.LoginActivity;
 
 /**
  * Created by ich on 03.06.2016.
@@ -65,7 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
                     finish();
                 } else {
                     final Intent intent = new Intent(getApplicationContext(),
-                            FbLoginActivity.class);
+                            LoginActivity.class);
                     startActivityForResult(intent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
                 }
             }
