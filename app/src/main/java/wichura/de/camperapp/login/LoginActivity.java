@@ -226,9 +226,10 @@ public class LoginActivity extends AppCompatActivity {
             if (acct != null) {
                 String name = acct.getDisplayName();
                 String userId = acct.getId();
-                Uri userPicture = acct.getPhotoUrl();
-                Log.d("CONAN", userPicture.toString());
-                setUserPreferences(name, userId, userPicture, Constants.GOOGLE_USER);
+               // Uri userPicture = acct.getPhotoUrl();
+                //Log.d("CONAN", userPicture.toString());
+                //setUserPreferences(name, userId, userPicture, Constants.GOOGLE_USER);
+                setUserPreferences(name, userId, null, Constants.GOOGLE_USER);
             }
             finish();
         } else {
@@ -242,7 +243,11 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Constants.USER_NAME, name);
         editor.putString(Constants.USER_ID, userId);
-        editor.putString(Constants.USER_PICTURE, userPic.toString());
+        if (userPic != null) {
+            editor.putString(Constants.USER_PICTURE, userPic.toString());
+        } else {
+            editor.putString(Constants.USER_PICTURE, "");
+        }
         editor.putString(Constants.USER_TYPE, userType);
         editor.apply();
     }
