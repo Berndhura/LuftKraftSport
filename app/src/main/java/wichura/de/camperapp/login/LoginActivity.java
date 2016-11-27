@@ -103,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .requestId()
                 .requestProfile()
+                .requestIdToken(Constants.WEB_CLIENT_ID)
                 .build();
 
         // Build a GoogleApiClient with access to the Google Sign-In API and the
@@ -189,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                 profile = Profile.getCurrentProfile();
                 if (profile != null) {
                     Uri uri = profile.getProfilePictureUri(250, 250);
-                    setUserPreferences(profile.getName(), profile.getId(), uri, Constants.FACEBOOK_USER);
+                    setUserPreferences(profile.getName(), profile.getId(), uri, Constants.FACEBOOK_USER, token.getToken());
                     Intent loginComplete = new Intent(Constants.LOGIN_COMPLETE);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
                 }
@@ -226,10 +227,13 @@ public class LoginActivity extends AppCompatActivity {
             if (acct != null) {
                 String name = acct.getDisplayName();
                 String userId = acct.getId();
+                String token = acct.getIdToken();
+                Log.d("CONAN", "Google Token: "+token);
+
                // Uri userPicture = acct.getPhotoUrl();
                 //Log.d("CONAN", userPicture.toString());
                 //setUserPreferences(name, userId, userPicture, Constants.GOOGLE_USER);
-                setUserPreferences(name, userId, null, Constants.GOOGLE_USER);
+                setUserPreferences(name, userId, null, Constants.GOOGLE_USER, token);
             }
             finish();
         } else {
@@ -238,17 +242,24 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void setUserPreferences(String name, String userId, Uri userPic, String userType) {
+    private void setUserPreferences(String name, String userId, Uri userPic, String userType, String userToken) {
         SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Constants.USER_NAME, name);
         editor.putString(Constants.USER_ID, userId);
+
         if (userPic != null) {
             editor.putString(Constants.USER_PICTURE, userPic.toString());
         } else {
             editor.putString(Constants.USER_PICTURE, "");
         }
         editor.putString(Constants.USER_TYPE, userType);
+
+        if (userToken != null) {
+            editor.putString(Constants.USER_TOKEN, userToken);
+        } else {
+            editor.putString(Constants.USER_TOKEN, "");
+        }
         editor.apply();
     }
 
@@ -292,7 +303,8 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "User in", Toast.LENGTH_SHORT).show();
                             //TODO get userid back to mainActiv
                             String[] userInfos = response.split(",");
-                            setUserPreferences(userInfos[1], userInfos[0], null, Constants.EMAIL_USER);
+                            //userToken is open -> null
+                            setUserPreferences(userInfos[1], userInfos[0], null, Constants.EMAIL_USER, null);
                             finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "Wrong user or password. Try again!", Toast.LENGTH_SHORT).show();

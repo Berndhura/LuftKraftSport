@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -35,45 +34,36 @@ public class SettingsActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+            toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
         loginInfo = (TextView) findViewById(R.id.login_info_text);
         loginInfo.setText("Logged in as " + getUserName());
 
 
-        Button logoutButton = initLogoutButton();
+        initLogoutButton();
     }
 
-    private Button initLogoutButton() {
+    private void initLogoutButton() {
         Button logoutBtn = (Button) findViewById(R.id.logout_button);
         if (isUserLoggedIn()) {
             logoutBtn.setText("LOGOUT");
         } else {
             logoutBtn.setText("LOGIN");
         }
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isUserLoggedIn()) {
-                    //logout from Facebook
-                    LoginManager.getInstance().logOut();
-                    //in case email login just delete sharedPrefs
-                    updateUserInfo();
-                    finish();
-                } else {
-                    final Intent intent = new Intent(getApplicationContext(),
-                            LoginActivity.class);
-                    startActivityForResult(intent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
-                }
+        logoutBtn.setOnClickListener((view) -> {
+            if (isUserLoggedIn()) {
+                //logout from Facebook
+                LoginManager.getInstance().logOut();
+                //in case email login just delete sharedPrefs
+                updateUserInfo();
+                finish();
+            } else {
+                final Intent intent = new Intent(getApplicationContext(),
+                        LoginActivity.class);
+                startActivityForResult(intent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
             }
         });
-        return logoutBtn;
     }
 
     @Override
@@ -91,6 +81,8 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putString(Constants.USER_NAME, "");
         editor.putString(Constants.USER_ID, "");
         editor.putString(Constants.USER_TYPE, "");
+        editor.putString(Constants.USER_TOKEN, "");
+        editor.putString(Constants.USER_PICTURE, "");
         editor.apply();
     }
 
