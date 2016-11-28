@@ -62,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 final Intent intent = new Intent(getApplicationContext(),
                         LoginActivity.class);
-                startActivityForResult(intent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
+                startActivityForResult(intent, Constants.REQUEST_ID_FOR_LOGIN);
             }
         });
     }
@@ -70,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN) {
+        if (requestCode == Constants.REQUEST_ID_FOR_LOGIN) {
             initLogoutButton();
             loginInfo.setText("Logged in as " + getUserName());
         }

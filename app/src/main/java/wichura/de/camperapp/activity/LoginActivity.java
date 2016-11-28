@@ -228,12 +228,11 @@ public class LoginActivity extends AppCompatActivity {
                 String name = acct.getDisplayName();
                 String userId = acct.getId();
                 String token = acct.getIdToken();
-                Log.d("CONAN", "Google Token: "+token);
+                Log.d("CONAN", "Google Token: " + token);
 
-               // Uri userPicture = acct.getPhotoUrl();
-                //Log.d("CONAN", userPicture.toString());
-                //setUserPreferences(name, userId, userPicture, Constants.GOOGLE_USER);
-                setUserPreferences(name, userId, null, Constants.GOOGLE_USER, token);
+                Uri userPicture = acct.getPhotoUrl();
+                Log.d("CONAN", userPicture.toString());
+                setUserPreferences(name, userId, userPicture, Constants.GOOGLE_USER, token);
             }
             finish();
         } else {

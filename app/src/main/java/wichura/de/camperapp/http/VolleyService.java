@@ -41,7 +41,7 @@ public class VolleyService {
             @Override
             public void onResponse(String response) {
                 if (!response.equals("wrong")) {
-                    Toast.makeText(context, "new user created", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "new user created", Toast.LENGTH_SHORT).show();
 
                 } else {
                     Toast.makeText(context, "Wrong irgendwas!", Toast.LENGTH_SHORT).show();

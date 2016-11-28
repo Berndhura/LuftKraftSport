@@ -136,7 +136,7 @@ public class OpenAdActivity extends AppCompatActivity {
                     sendMessage(adId, ownerId, sender);
                 } else {
                     final Intent facebookIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
+                    startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
                 }
             });
         }

@@ -7,7 +7,7 @@ package wichura.de.camperapp.mainactivity;
 public class Constants {
 
     public static final int REQUEST_ID_FOR_NEW_AD = 1;
-    public static final int REQUEST_ID_FOR_FACEBOOK_LOGIN = 2;
+    public static final int REQUEST_ID_FOR_LOGIN = 2;
     public static final int REQUEST_ID_FOR_OPEN_AD = 3;
     public static final int REQUEST_ID_FOR_SEARCH = 5;
     public static final int REQUEST_ID_FOR_MESSAGES = 6;

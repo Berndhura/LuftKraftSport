@@ -233,6 +233,8 @@ public class MainActivity extends AppCompatActivity implements
         //TODO: setMyAdsFlag(true) when GET_ADS_FOR_USER, refactor
         setMyAdsFlag(false);
         getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+
+        Toast.makeText(this, "ONCREATE!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -241,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
+        Toast.makeText(this, "ONDestroy!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -251,6 +254,7 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.registerOnSharedPreferenceChangeListener(this);
         setMyAdsFlag(false);
+        Toast.makeText(this, "ONresume!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -266,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements
         sp.unregisterOnSharedPreferenceChangeListener(this);
 
         setMyAdsFlag(false);
+        Toast.makeText(this, "ONpause!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     private void registerLoginReceiver() {
@@ -439,7 +444,7 @@ public class MainActivity extends AppCompatActivity implements
                 getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
                 break;
             }
-            case Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN: {
+            case Constants.REQUEST_ID_FOR_LOGIN: {
 
                 if (getUserType().equals(Constants.FACEBOOK_USER)) {
                     //create new user in DB in case of first login
@@ -652,7 +657,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void startLoginActivity() {
         final Intent facebookIntent = new Intent(this, LoginActivity.class);
-        startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_FACEBOOK_LOGIN);
+        startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
     }
 
     public void setProfilePicture(Uri uri) {
