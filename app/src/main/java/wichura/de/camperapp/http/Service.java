@@ -77,9 +77,6 @@ public class Service {
         @GET(GET_BOOKMARKS_FOR_USER)
         Observable<Bookmarks> getBookmarksForUser(@Query("userId") String userId);
 
-        @GET(GET_ALL_ADS_URL)
-        Observable<List<RowItem>> getAllAdsForUser();
-
         @GET("anfang/{lastPart}")
         Observable<List<RowItem>> getExample(@Path("lastPart") String lastPart);
 
@@ -136,14 +133,6 @@ public class Service {
 
     public Observable<List<MsgRowItem>> getAllMessagesForAdObserv(String userId, String sender, String adId) {
         return mWebService.getAllMessagesForAd(userId, sender, adId)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-
-    public Observable<List<RowItem>> getAllAdsForUserObserv() {
-
-        return mWebService.getAllAdsForUser()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
