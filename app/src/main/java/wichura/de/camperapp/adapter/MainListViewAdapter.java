@@ -39,7 +39,7 @@ import static wichura.de.camperapp.mainactivity.Constants.IS_MY_ADS;
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static wichura.de.camperapp.mainactivity.Constants.SHOW_MY_ADS;
 
-public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
+public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
     private Context context;
     private ViewHolder holder;
@@ -57,7 +57,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
     public static final int LOCATION_STATUS_UNKNOWN = 3;
     public static final int LOCATION_STATUS_INVALID = 4;
 
-    public CustomListViewAdapter(final Activity activity, final Context context, final int resourceId, final List<RowItem> items, final String bookmarks) {
+    public MainListViewAdapter(final Activity activity, final Context context, final int resourceId, final List<RowItem> items, final String bookmarks) {
         super(context, resourceId, items);
         this.context = context;
         this.activity = activity;
@@ -78,6 +78,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
         LinearLayout mainLl;
         ImageView deleteButton;
         TextView txtViews;
+        ImageView thumbNail;
     }
 
     @Override
@@ -97,12 +98,11 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
             holder.mainLl = (LinearLayout) convertView.findViewById(R.id.main_linear_layout);
             holder.deleteButton = (ImageView) convertView.findViewById(R.id.NEW_my_ad_delete);
             holder.txtViews = (TextView) convertView.findViewById(R.id.NEW_my_views);
+            holder.thumbNail = (ImageView) convertView.findViewById(R.id.icon);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        ImageView thumbNail = (ImageView) convertView.findViewById(R.id.icon);
 
         // getting ad data for the row
         final RowItem rowItem = getItem(position);
@@ -111,7 +111,7 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
                 .load(Urls.MAIN_SERVER_URL + Urls.GET_PICTURE_THUMB + rowItem.getUrl())
                 .resize(100, 100)
                 .centerCrop()
-                .into(thumbNail);
+                .into(holder.thumbNail);
 
         // Log.d("CONAN, get pic URLs: ", rowItem.getUrl());
         holder.txtTitle.setText(rowItem.getTitle());

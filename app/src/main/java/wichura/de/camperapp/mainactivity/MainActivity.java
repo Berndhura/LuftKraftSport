@@ -44,7 +44,7 @@ import wichura.de.camperapp.activity.NewAdActivity;
 import wichura.de.camperapp.activity.OpenAdActivity;
 import wichura.de.camperapp.activity.SearchActivity;
 import wichura.de.camperapp.activity.SettingsActivity;
-import wichura.de.camperapp.adapter.CustomListViewAdapter;
+import wichura.de.camperapp.adapter.MainListViewAdapter;
 import wichura.de.camperapp.gcm.QuickstartPreferences;
 import wichura.de.camperapp.gcm.RegistrationIntentService;
 import wichura.de.camperapp.http.MyVolley;
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private MainPresenter presenterLayer;
     private Service service;
-    private CustomListViewAdapter adapter;
+    private MainListViewAdapter adapter;
     private List<RowItem> rowItems;
 
     public MainActivity() {
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements
         showNumberOfAds(total);
 
         listView = (ListView) findViewById(R.id.main_list);
-        adapter = new CustomListViewAdapter(
+        adapter = new MainListViewAdapter(
                 this,
                 getApplicationContext(),
                 R.layout.list_item, rowItems,
