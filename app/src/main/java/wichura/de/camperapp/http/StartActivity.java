@@ -1,4 +1,4 @@
-package wichura.de.camperapp.mainactivity;
+package wichura.de.camperapp.http;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,8 +18,10 @@ import android.widget.LinearLayout;
 import java.util.NoSuchElementException;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.ad.NewAdActivity;
-import wichura.de.camperapp.login.LoginActivity;
+import wichura.de.camperapp.activity.LoginActivity;
+import wichura.de.camperapp.activity.NewAdActivity;
+import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.mainactivity.MainActivity;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 

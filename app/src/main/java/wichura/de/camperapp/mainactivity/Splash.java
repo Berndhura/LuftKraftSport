@@ -8,6 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.StartActivity;
 
 /**
  * Created by Bernd Wichura on 10.05.2016.

@@ -1,4 +1,4 @@
-package wichura.de.camperapp.bitmap;
+package wichura.de.camperapp.util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

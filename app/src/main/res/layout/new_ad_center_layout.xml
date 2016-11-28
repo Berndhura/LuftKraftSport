@@ -116,7 +116,7 @@
         android:background="@android:color/transparent"
         android:ems="10"
         android:hint="@string/preis"
-        android:inputType="textPersonName"
+        android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/uploadButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

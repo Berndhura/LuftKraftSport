@@ -1,4 +1,4 @@
-package wichura.de.camperapp.messages;
+package wichura.de.camperapp.presentation;
 
 import android.util.Log;
 
@@ -9,8 +9,10 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import wichura.de.camperapp.activity.MessagesActivity;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.models.AdDetails;
+import wichura.de.camperapp.models.MsgRowItem;
 
 /**
  * Created by ich on 01.11.2016.
@@ -85,7 +87,7 @@ public class MessagesPresenter {
                 });
     }
 
-    protected void disableSubscription() {
+    public void disableSubscription() {
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }

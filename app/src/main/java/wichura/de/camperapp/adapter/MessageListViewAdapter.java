@@ -1,8 +1,7 @@
-package wichura.de.camperapp.messages;
+package wichura.de.camperapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.models.MsgRowItem;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 

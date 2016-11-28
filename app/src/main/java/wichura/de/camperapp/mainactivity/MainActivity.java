@@ -40,18 +40,22 @@ import java.util.List;
 
 import rx.Subscription;
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.ad.NewAdActivity;
-import wichura.de.camperapp.ad.OpenAdActivity;
+import wichura.de.camperapp.activity.NewAdActivity;
+import wichura.de.camperapp.activity.OpenAdActivity;
+import wichura.de.camperapp.activity.SearchActivity;
+import wichura.de.camperapp.activity.SettingsActivity;
+import wichura.de.camperapp.adapter.CustomListViewAdapter;
 import wichura.de.camperapp.gcm.QuickstartPreferences;
 import wichura.de.camperapp.gcm.RegistrationIntentService;
 import wichura.de.camperapp.http.MyVolley;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
-import wichura.de.camperapp.login.LoginActivity;
-import wichura.de.camperapp.messages.MessagesOverviewActivity;
+import wichura.de.camperapp.activity.LoginActivity;
+import wichura.de.camperapp.activity.MessagesOverviewActivity;
 import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.RowItem;
+import wichura.de.camperapp.presentation.MainPresenter;
 
 import static wichura.de.camperapp.mainactivity.Constants.IS_MY_ADS;
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private Subscription subscription;
 
-    private PresenterLayer presenterLayer;
+    private MainPresenter presenterLayer;
     private Service service;
     private CustomListViewAdapter adapter;
     private List<RowItem> rowItems;
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements
         total = 0;
 
         service = new Service();
-        presenterLayer = new PresenterLayer(this, service, getApplicationContext());
+        presenterLayer = new MainPresenter(this, service, getApplicationContext());
 
         //TODO: set active false in messageActivity in onDestroy, onStop, on???  BUT NOT HERE
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
@@ -221,6 +225,10 @@ public class MainActivity extends AppCompatActivity implements
         };
 
         registerLoginReceiver();
+
+        //BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation_view);
+
+       //getApplicationContext());
 
         //TODO: setMyAdsFlag(true) when GET_ADS_FOR_USER, refactor
         setMyAdsFlag(false);

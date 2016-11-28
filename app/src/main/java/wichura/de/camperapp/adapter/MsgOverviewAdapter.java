@@ -1,4 +1,4 @@
-package wichura.de.camperapp.messages;
+package wichura.de.camperapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
-import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.models.GroupedMsgItem;
 
 /**
  * Created by ich on 20.06.2016.

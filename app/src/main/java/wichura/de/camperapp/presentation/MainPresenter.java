@@ -1,4 +1,4 @@
-package wichura.de.camperapp.mainactivity;
+package wichura.de.camperapp.presentation;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -35,14 +35,14 @@ import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO
  * CamperApp
  */
 
-public class PresenterLayer {
+public class MainPresenter {
 
     private MainActivity view;
     private Service service;
     private Subscription subscription;
     private Context context;
 
-    public PresenterLayer(MainActivity view, Service service, Context context) {
+    public MainPresenter(MainActivity view, Service service, Context context) {
         this.view = view;
         this.service = service;
         this.context = context;

@@ -1,4 +1,4 @@
-package wichura.de.camperapp.login;
+package wichura.de.camperapp.activity;
 
 
 import android.app.ProgressDialog;

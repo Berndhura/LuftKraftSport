@@ -16,7 +16,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.messages.MessagesActivity;
+import wichura.de.camperapp.activity.MessagesActivity;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 

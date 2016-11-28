@@ -1,4 +1,4 @@
-package wichura.de.camperapp.messages;
+package wichura.de.camperapp.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.ad.OpenAdActivity;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.adapter.MessageListViewAdapter;
+import wichura.de.camperapp.presentation.MessagesPresenter;
+import wichura.de.camperapp.models.MsgRowItem;
 import wichura.de.camperapp.models.RowItem;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;

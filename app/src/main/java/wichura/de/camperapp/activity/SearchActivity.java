@@ -1,4 +1,4 @@
-package wichura.de.camperapp.mainactivity;
+package wichura.de.camperapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.mainactivity.Constants;
 
 /**
  * Created by Bernd Wichura on 05.04.2016.

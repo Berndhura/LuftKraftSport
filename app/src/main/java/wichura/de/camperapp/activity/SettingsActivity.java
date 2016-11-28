@@ -1,4 +1,4 @@
-package wichura.de.camperapp.mainactivity;
+package wichura.de.camperapp.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +11,8 @@ import android.widget.TextView;
 import com.facebook.login.LoginManager;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.login.LoginActivity;
+import wichura.de.camperapp.activity.LoginActivity;
+import wichura.de.camperapp.mainactivity.Constants;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 

@@ -1,4 +1,4 @@
-package wichura.de.camperapp.ad;
+package wichura.de.camperapp.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import com.squareup.picasso.Picasso;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.FileUploadService;
 import wichura.de.camperapp.mainactivity.Constants;
 
 

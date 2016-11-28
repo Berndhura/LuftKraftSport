@@ -1,4 +1,4 @@
-package wichura.de.camperapp.ad;
+package wichura.de.camperapp.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,11 +24,11 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.presentation.OpenAdPresenter;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.login.LoginActivity;
 import wichura.de.camperapp.models.Bookmarks;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -47,7 +47,7 @@ public class OpenAdActivity extends AppCompatActivity {
     private ProgressBar mOpenAdProgressBar;
     private VolleyService volleyService;
 
-    private PresenterLayerOpenAd presenter;
+    private OpenAdPresenter presenter;
 
     public OpenAdActivity() {
         volleyService = new VolleyService(OpenAdActivity.this);
@@ -60,7 +60,7 @@ public class OpenAdActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.open_ad_activity);
 
-        presenter = new PresenterLayerOpenAd(this, new Service(), getApplicationContext());
+        presenter = new OpenAdPresenter(this, new Service(), getApplicationContext());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.open_ad_toolbar);
         if (toolbar != null) {

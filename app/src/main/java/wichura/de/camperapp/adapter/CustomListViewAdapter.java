@@ -1,4 +1,4 @@
-package wichura.de.camperapp.mainactivity;
+package wichura.de.camperapp.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -32,6 +32,7 @@ import java.util.List;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
+import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.RowItem;
 
 import static wichura.de.camperapp.mainactivity.Constants.IS_MY_ADS;

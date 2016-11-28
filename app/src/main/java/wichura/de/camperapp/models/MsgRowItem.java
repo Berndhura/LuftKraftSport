@@ -1,10 +1,10 @@
-package wichura.de.camperapp.messages;
+package wichura.de.camperapp.models;
 
 import com.google.gson.annotations.Expose;
 
 /**
  * Created by ich on 29.05.2016.
- *
+ * Camper App
  */
 public class MsgRowItem {
 
@@ -32,7 +32,9 @@ public class MsgRowItem {
         return idFrom;
     }
 
-    public void setSender(String idFrom) { this.idFrom = idFrom;}
+    public void setSender(String idFrom) {
+        this.idFrom = idFrom;
+    }
 
     public long getDate() {
         return date;

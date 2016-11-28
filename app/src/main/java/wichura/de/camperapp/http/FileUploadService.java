@@ -1,4 +1,4 @@
-package wichura.de.camperapp.ad;
+package wichura.de.camperapp.http;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +17,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import cz.msebera.android.httpclient.Header;
-import wichura.de.camperapp.bitmap.BitmapHelper;
+import wichura.de.camperapp.activity.NewAdActivity;
+import wichura.de.camperapp.util.BitmapHelper;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 
@@ -31,7 +32,7 @@ public class FileUploadService {
     private Context context;
     private NewAdActivity view;
 
-    FileUploadService(Context context, NewAdActivity view) {
+    public FileUploadService(Context context, NewAdActivity view) {
         this.context = context;
         this.view = view;
 
