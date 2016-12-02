@@ -123,8 +123,45 @@ public class OpenAdPresenter {
                 });
     }
 
+    public void sendNewMessage(String message, String adId, String idTo, String userToken) {
+        service.sendNewMessageObserv(message, adId, idTo, userToken)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Toast.makeText(view.getContext(), "send message to user...", Toast.LENGTH_SHORT).show();
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in sending message: " + e.getMessage());
+                    }
 
+                    @Override
+                    public void onNext(String result) {/*nothing to update*/}
+                });
+    }
+
+    public void deleteAd(String adId) {
+        service.deleteAdObserv(adId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Toast.makeText(view.getApplicationContext(), "Ad deleted!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in deleting ad: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String result) {/*nothing to update*/}
+                });
+    }
 
     private String getUserId() {
         return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");

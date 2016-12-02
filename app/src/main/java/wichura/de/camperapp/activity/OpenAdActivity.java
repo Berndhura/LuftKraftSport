@@ -1,7 +1,7 @@
 package wichura.de.camperapp.activity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -16,8 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -25,8 +23,6 @@ import java.text.DateFormat;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Service;
-import wichura.de.camperapp.http.Urls;
-import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.presentation.OpenAdPresenter;
@@ -45,14 +41,8 @@ public class OpenAdActivity extends AppCompatActivity {
     public boolean isBookmarked;
 
     private ProgressBar mOpenAdProgressBar;
-    private VolleyService volleyService;
 
     private OpenAdPresenter presenter;
-
-    public OpenAdActivity() {
-        volleyService = new VolleyService(OpenAdActivity.this);
-    }
-
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -173,75 +163,30 @@ public class OpenAdActivity extends AppCompatActivity {
         }
     }
 
-    private void sendMessage(final String adId, final String ownerId, final String sender) {
-        //send a message
+    private void sendMessage(final String adId, final String receiverId, final String sender) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(OpenAdActivity.this);
         alert.setTitle("Send a message");
         alert.setView(edittext);
-        alert.setPositiveButton("Send", (dicalog, whichButton) -> {
+        alert.setPositiveButton("Send", (dialog, whichButton) -> {
             String message = edittext.getText().toString();
-            sendMessageRequest(message, adId, ownerId, sender);
+            presenter.sendNewMessage(message, adId, receiverId, getUserToken());
         });
-        alert.setNegativeButton("not yet", (dismissDialog, whichButton) -> {
-            //just go awa}
-        });
+        alert.setNegativeButton("not yet", (dismissDialog, whichButton) -> {/*just go away*/});
         alert.show();
-    }
-
-    private void sendMessageRequest(String message, String adId, String ownerId, String sender) {
-        String url = Urls.MAIN_SERVER_URL + Urls.SEND_MESSAGE +
-                "?message=" + message.replaceAll(" ", "%20")
-                + "&adId=" + adId
-                + "&idFrom=" + sender + "&idTo=" + ownerId;
-
-        Response.Listener<String> listener = (response) -> {
-            //save message done
-            if (response.equals("ok"))
-                Toast.makeText(getApplicationContext(), "Message sent...", Toast.LENGTH_LONG).show();
-        };
-
-        Response.ErrorListener errorListener = (error) -> {
-            //
-            Log.d("CONAN", error.networkResponse.toString());
-        };
-
-        volleyService.sendStringGetRequest(url, listener, errorListener);
     }
 
 
     private void deleteAdRequest(final String adId) {
-        final String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
-
-        final Response.Listener<String> listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                finish();
-            }
-        };
-
-        final Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
-            }
-        };
-
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 .setTitle("Delete Ad")
                 .setMessage("Do you want to delete this ad?")
                 .setIcon(R.drawable.delete)
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        volleyService.sendStringGetRequest(url, listener, errorListener);
-                        dialog.dismiss();
-                    }
+                .setPositiveButton("Delete", (dialog, whichButton) -> {
+                    presenter.deleteAd(adId);
+                    dialog.dismiss();
                 })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setNegativeButton("cancel", (dialog, whichButton) -> dialog.dismiss())
                 .create();
         myQuittingDialogBox.show();
     }
@@ -268,6 +213,10 @@ public class OpenAdActivity extends AppCompatActivity {
 
         displayWidth = size.x;
         displayHeight = size.y;
+    }
+
+    public Context getContext() {
+        return getApplicationContext();
     }
 
 
