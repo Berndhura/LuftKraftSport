@@ -74,7 +74,7 @@
             android:id="@+id/edit_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType= "textAutoComplete|textMultiLine"
+            android:inputType= "textAutoComplete|textMultiLine|textAutoCorrect"
             android:layout_weight="0.9"
             android:hint="new message..." />
 

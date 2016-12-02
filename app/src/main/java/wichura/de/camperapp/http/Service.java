@@ -8,20 +8,19 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import wichura.de.camperapp.models.MsgRowItem;
 import wichura.de.camperapp.models.AdDetails;
 import wichura.de.camperapp.models.AdsAsPage;
 import wichura.de.camperapp.models.Bookmarks;
-import wichura.de.camperapp.models.RowItem;
+import wichura.de.camperapp.models.MsgRowItem;
 
 import static wichura.de.camperapp.http.Urls.GET_ADS_MY;
 import static wichura.de.camperapp.http.Urls.GET_AD_DETAILS;
-import static wichura.de.camperapp.http.Urls.GET_ALL_ADS_URL;
 import static wichura.de.camperapp.http.Urls.GET_ALL_MESSAGES_FOR_AD;
 import static wichura.de.camperapp.http.Urls.GET_BOOKMARKS_FOR_USER;
 import static wichura.de.camperapp.http.Urls.GET_FIND_ADS;
@@ -77,9 +76,6 @@ public class Service {
         @GET(GET_BOOKMARKS_FOR_USER)
         Observable<Bookmarks> getBookmarksForUser(@Query("userId") String userId);
 
-        @GET("anfang/{lastPart}")
-        Observable<List<RowItem>> getExample(@Path("lastPart") String lastPart);
-
         @GET(GET_ALL_MESSAGES_FOR_AD)
         Observable<List<MsgRowItem>> getAllMessagesForAd(
                 @Query("userId") String userId,
@@ -104,6 +100,18 @@ public class Service {
                 @Query("page") int page,
                 @Query("size") int size,
                 @Query("token") String token);
+
+
+        /**
+         URL "/ads/{adId}/increaseViewCount", method = RequestMethod.POST)
+         public String increaseViewCount(@PathVariable("adId") Integer adId)
+         * */
+        @POST("ads/{adId}/increaseViewCount")
+        Observable<String> increaseViewCount(@Path("adId") String adId);
+    }
+
+    public Observable<String> increaseViewCount(String adId) {
+        return mWebServiceV2.increaseViewCount(adId);
     }
 
     public Observable<AdsAsPage> getAdsMyObserv(int page, int size, String token) {

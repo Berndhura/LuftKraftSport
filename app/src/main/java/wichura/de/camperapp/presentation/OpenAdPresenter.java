@@ -1,6 +1,7 @@
 package wichura.de.camperapp.presentation;
 
 import android.content.Context;
+import android.util.Log;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -43,7 +44,7 @@ public class OpenAdPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d("CONAN", "error loading bookmarks: " + e.getMessage());
                     }
 
                     @Override
@@ -52,6 +53,27 @@ public class OpenAdPresenter {
                     }
                 });
     }
+
+    public void increaseViewCount(String adId) {
+        service.increaseViewCount(adId).subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in increase view count: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String result) {//nothing to update
+                    }
+                });
+    }
+
 
     private String getUserId() {
         return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");

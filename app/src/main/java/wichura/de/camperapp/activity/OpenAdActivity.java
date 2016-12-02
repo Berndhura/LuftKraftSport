@@ -24,12 +24,12 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.presentation.OpenAdPresenter;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.Bookmarks;
+import wichura.de.camperapp.presentation.OpenAdPresenter;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -94,7 +94,7 @@ public class OpenAdActivity extends AppCompatActivity {
         //loadBookmarks for user
         presenter.loadBookmarksForUser();
 
-        sendRequestForViewCount(mAdId);
+        presenter.increaseViewCount(mAdId);
 
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
 
@@ -211,19 +211,6 @@ public class OpenAdActivity extends AppCompatActivity {
         volleyService.sendStringGetRequest(url, listener, errorListener);
     }
 
-    private void sendRequestForViewCount(String mAdId) {
-        String url = Urls.MAIN_SERVER_URL + Urls.COUNT_VIEW + "?adId=" + mAdId;
-
-        Response.Listener<String> listener = (response) -> {
-            //increase view count
-        };
-
-        Response.ErrorListener errorListener = (error) -> {
-            //error
-        };
-
-        volleyService.sendStringGetRequest(url, listener, errorListener);
-    }
 
     private void bookmarkAd(String adId, String userId) {
         String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_AD + "?adId=" + adId + "&userId=" + userId;
