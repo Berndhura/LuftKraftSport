@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -46,6 +47,27 @@ public class MainPresenter {
         this.view = view;
         this.service = service;
         this.context = context;
+    }
+
+    public void createUser(String name, String userToken) {
+        service.createUserObserv(name, userToken)
+                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("CONAN", "created new user");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in creating user: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String result) {/*nothing to update*/}
+                });
     }
 
     public void getFacebookUserInfo() {

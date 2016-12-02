@@ -40,6 +40,8 @@ import java.util.List;
 
 import rx.Subscription;
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.activity.LoginActivity;
+import wichura.de.camperapp.activity.MessagesOverviewActivity;
 import wichura.de.camperapp.activity.NewAdActivity;
 import wichura.de.camperapp.activity.OpenAdActivity;
 import wichura.de.camperapp.activity.SearchActivity;
@@ -51,8 +53,6 @@ import wichura.de.camperapp.http.MyVolley;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.http.VolleyService;
-import wichura.de.camperapp.activity.LoginActivity;
-import wichura.de.camperapp.activity.MessagesOverviewActivity;
 import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.presentation.MainPresenter;
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements
 
                     //not logged in as FB user: create db entry, GCM token, update login button
                     if (oldProfile == null && checkPlayServices() && isUserLoggedIn()) {
-                        updateUserInDb(getUserName(), getUserId());
+                        presenterLayer.createUser(getUserName().replaceAll(" ", "%20"), getUserToken());
                         if (checkPlayServices() && isUserLoggedIn()) {
                             // Start IntentService to register this application with GCM.
                             Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements
 
         //BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation_view);
 
-       //getApplicationContext());
+        //getApplicationContext());
 
         //TODO: setMyAdsFlag(true) when GET_ADS_FOR_USER, refactor
         setMyAdsFlag(false);
@@ -396,8 +396,8 @@ public class MainActivity extends AppCompatActivity implements
         //  --> Deserialize and construct new model objects from the API response
         //  --> Append the new data objects to the existing set of items inside the array of items
         //  --> Notify the adapter of the new items made with `notifyDataSetChanged()`
-        Log.d("CONAN", "OFFSET: "+offset);
-        if (offset<=pages) {
+        Log.d("CONAN", "OFFSET: " + offset);
+        if (offset <= pages) {
             page = page + 1;
             if (isMyAdsRequest()) {
                 presenterLayer.getAdsForUser(page, size, getUserToken());
@@ -416,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void getAds(String url) {
-        page=0;
+        page = 0;
         if (adapter != null) {
             adapter.clear();
         }
@@ -448,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 if (getUserType().equals(Constants.FACEBOOK_USER)) {
                     //create new user in DB in case of first login
-                    updateUserInDb(getUserName(), getUserId());
+                    presenterLayer.createUser(getUserName().replaceAll(" ", "%20"), getUserToken());
 
                     if (checkPlayServices() && isUserLoggedIn()) {
                         // Start IntentService to register this application with GCM.
@@ -459,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 if (getUserType().equals(Constants.EMAIL_USER) && isUserLoggedIn()) {
                     //create new user in DB in case of first login
-                    updateUserInDb(getUserName(), getUserId());
+                    presenterLayer.createUser(getUserName().replaceAll(" ", "%20"), getUserToken());
 
                     //request Token from GCM and update in DB
                     if (checkPlayServices() && isUserLoggedIn()) {
@@ -471,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 if (getUserType().equals(Constants.GOOGLE_USER) && isUserLoggedIn()) {
                     //create new user in DB in case of first login
-                    updateUserInDb(getUserName(), getUserId());
+                    presenterLayer.createUser(getUserName().replaceAll(" ", "%20"), getUserToken());
 
                     //request Token from GCM and update in DB
                     if (checkPlayServices() && isUserLoggedIn()) {
@@ -521,12 +521,6 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             }
         }
-    }
-
-
-    private void updateUserInDb(String name, String userId) {
-        String url = Urls.MAIN_SERVER_URL + Urls.CREATE_USER + "?name=" + name.replaceAll(" ", "%20") + "&id=" + userId;
-        volleyService.sendStringGetRequest(url);
     }
 
     @Override

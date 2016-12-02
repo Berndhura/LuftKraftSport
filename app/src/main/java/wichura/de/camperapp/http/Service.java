@@ -102,51 +102,38 @@ public class Service {
                 @Query("size") int size,
                 @Query("token") String token);
 
-
-        /**
-         * URL "/ads/{adId}/increaseViewCount", method = RequestMethod.POST)
-         * public String increaseViewCount(@PathVariable("adId") Integer adId)
-         */
         @POST("ads/{adId}/increaseViewCount")
         Observable<String> increaseViewCount(@Path("adId") String adId);
 
-        /**
-         * URL "/ads/{adId}/bookmark", method = RequestMethod.POST)
-         * public String bookmark(@PathVariable(value = "adId") String adId,
-         *
-         * @RequestParam(value = "token") String token)
-         **/
         @POST("ads/{adId}/bookmark")
         Observable<String> bookmarkAd(@Path("adId") String adId, @Query("token") String token);
 
-        /**
-         * URL "/bookmarks/{adId}", method = RequestMethod.DELETE)
-         * public String deleteBookmark(@PathVariable(value = "adId") String adId,
-         *
-         * @RequestParam(value = "token") String token)
-         */
         @DELETE("bookmarks/{adId}")
         Observable<String> delBookmarkAd(@Path("adId") String adId, @Query("token") String token);
 
-        /**
-         * URL "/messages", method = RequestMethod.POST)
-         * public String saveNewMessage(final @RequestParam(value = "message") String message,
-         * final @RequestParam(value = "adId") String adId,
-         * final @RequestParam(value = "idTo") String idTo,
-         *
-         * @RequestParam("token") String token)
-         */
         @POST("messages")
         Observable<String> sendNewMessage(@Query("message") String message,
                                           @Query("adId") String adId,
                                           @Query("idTo") String idTo,
                                           @Query("token") String token);
-        /**
-         URL "/ads/{adId}", method = RequestMethod.DELETE)
-         public String deleteAd(@PathVariable(value = "adid") String adId)
-         */
+
         @DELETE("ads/{adId}")
         Observable<String> deleteAd(@Path("adId") String adId);
+
+        @POST("users")
+        Observable<String> createUser(@Query("name") String name, @Query("token") String token);
+
+        @POST("/users/sendToken")
+        Observable<String> sendDeviceToken(@Query("token") String token,
+                                           @Query("deviceToken") String deviceToken);
+    }
+
+    public Observable<String> sendDeviceTokenObserv(String userToken, String deviceToken) {
+        return mWebServiceV2.sendDeviceToken(userToken, deviceToken);
+    }
+
+    public Observable<String> createUserObserv(String name, String userToken) {
+        return mWebServiceV2.createUser(name, userToken);
     }
 
     public Observable<String> deleteAdObserv(String adId) {

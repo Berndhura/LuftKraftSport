@@ -13,9 +13,11 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
 
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.http.Urls;
-import wichura.de.camperapp.http.VolleyService;
+import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -44,7 +46,7 @@ public class RegistrationIntentService extends IntentService {
             // See https://developers.google.com/cloud-messaging/android/start for details on this file.
             // [START get_token]
             InstanceID instanceID = InstanceID.getInstance(this);
-            Log.d("CONAN", "BLASI:" +getString(R.string.gcm_defaultSenderId));
+            Log.d("CONAN", "BLASI:" + getString(R.string.gcm_defaultSenderId));
             String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             // [END get_token]
@@ -78,16 +80,33 @@ public class RegistrationIntentService extends IntentService {
      * Modify this method to associate the user's GCM registration token with any server-side account
      * maintained by your application.
      *
-     * @param token The new token.
+     * @param deviceToken The new token.
      */
-    public void sendRegistrationToServer(String token) {
+    public void sendRegistrationToServer(String deviceToken) {
+        Service service = new Service();
+
         SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         String userId = settings.getString(Constants.USER_ID, "");
+        String userToken = settings.getString(Constants.USER_TOKEN, "");
 
         if (!userId.equals("")) {
-            VolleyService volleyService = new VolleyService(getApplicationContext());
-            String url = Urls.MAIN_SERVER_URL + Urls.SEND_TOKEN_FOR_GCM + "?token=" + token + "&userId=" + userId;
-            volleyService.sendStringGetRequest(url);
+            service.sendDeviceTokenObserv(userToken, deviceToken)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+                            Log.d("CONAN", "send device token to server");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("CONAN", "error in sending device token: " + e.getMessage());
+                        }
+
+                        @Override
+                        public void onNext(String result) {/*nothing to update*/}
+                    });
         }
     }
 
