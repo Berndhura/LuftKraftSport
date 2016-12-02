@@ -37,12 +37,12 @@ public class OpenAdActivity extends AppCompatActivity {
 
     // private static double longitute;
     //private static double latitude;
-    private Button mBookmarkButton;
+    public Button mBookmarkButton;
     private String mAdId;
 
     private int displayHeight;
     private int displayWidth;
-    private boolean isBookmarked;
+    public boolean isBookmarked;
 
     private ProgressBar mOpenAdProgressBar;
     private VolleyService volleyService;
@@ -142,13 +142,11 @@ public class OpenAdActivity extends AppCompatActivity {
         }
 
         mBookmarkButton.setOnClickListener((view) -> {
-
             String adId = getIntent().getStringExtra(Constants.AD_ID);
-            String userId = getIntent().getStringExtra(Constants.USER_ID);
             if (isBookmarked) {
-                delBookmark(adId, userId);
+                presenter.deleteBookmark(adId, getUserToken());
             } else {
-                bookmarkAd(adId, userId);
+                presenter.bookmarkAd(adId, getUserToken());
             }
         });
 
@@ -212,50 +210,6 @@ public class OpenAdActivity extends AppCompatActivity {
     }
 
 
-    private void bookmarkAd(String adId, String userId) {
-        String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_AD + "?adId=" + adId + "&userId=" + userId;
-
-        Response.Listener<String> listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
-                mBookmarkButton.setText("Remove Bookmark");
-                isBookmarked = true;
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
-            }
-        };
-
-        volleyService.sendStringGetRequest(url, listener, errorListener);
-    }
-
-    private void delBookmark(String adId, String userId) {
-        String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_DELETE + "?adId=" + adId + "&userId=" + userId;
-
-        Response.Listener<String> listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), "Bookmark deleted!", Toast.LENGTH_SHORT).show();
-                mBookmarkButton.setText("Bookmark");
-                isBookmarked = false;
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(OpenAdActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
-            }
-        };
-
-        volleyService.sendStringGetRequest(url, listener, errorListener);
-    }
-
     private void deleteAdRequest(final String adId) {
         final String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
 
@@ -294,6 +248,10 @@ public class OpenAdActivity extends AppCompatActivity {
 
     private String getUserId() {
         return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
+    }
+
+    private String getUserToken() {
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
     }
 
     private boolean isOwnAd() {

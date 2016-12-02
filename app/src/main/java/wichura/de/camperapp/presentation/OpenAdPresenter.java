@@ -2,6 +2,7 @@ package wichura.de.camperapp.presentation;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -33,7 +34,8 @@ public class OpenAdPresenter {
     }
 
     public void loadBookmarksForUser() {
-        service.getBookmarksForUserObserv(getUserId()).subscribeOn(Schedulers.newThread())
+        service.getBookmarksForUserObserv(getUserId())
+                .subscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Bookmarks>() {
@@ -55,7 +57,8 @@ public class OpenAdPresenter {
     }
 
     public void increaseViewCount(String adId) {
-        service.increaseViewCount(adId).subscribeOn(Schedulers.newThread())
+        service.increaseViewCount(adId)
+                .subscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -73,6 +76,54 @@ public class OpenAdPresenter {
                     }
                 });
     }
+
+    public void bookmarkAd(String adId, String userToken) {
+        service.bookmarkAdObserv(adId, userToken)
+                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Toast.makeText(view.getApplicationContext(), "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
+                        view.mBookmarkButton.setText("Remove Bookmark");
+                        view.isBookmarked = true;
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in bookmark ad: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String result) {/*nothing to update*/}
+                });
+    }
+
+    public void deleteBookmark(String adId, String userToken) {
+        service.delBookmarkAdObserv(adId, userToken)
+                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Toast.makeText(view.getApplicationContext(), "Bookmark deleted!", Toast.LENGTH_SHORT).show();
+                        view.mBookmarkButton.setText("Bookmark");
+                        view.isBookmarked = false;
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in bookmark ad: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String result) {/*nothing to update*/}
+                });
+    }
+
+
 
 
     private String getUserId() {

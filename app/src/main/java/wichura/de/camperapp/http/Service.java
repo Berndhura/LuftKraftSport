@@ -7,6 +7,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -108,6 +109,31 @@ public class Service {
          * */
         @POST("ads/{adId}/increaseViewCount")
         Observable<String> increaseViewCount(@Path("adId") String adId);
+
+        /**
+        URL "/ads/{adId}/bookmark", method = RequestMethod.POST)
+        public String bookmark(@PathVariable(value = "adId") String adId,
+                               @RequestParam(value = "token") String token)
+         **/
+        @POST("ads/{adId}/bookmark")
+        Observable<String> bookmarkAd(@Path("adId") String adId, @Query("token") String token);
+
+        /**
+         URL "/bookmarks/{adId}", method = RequestMethod.DELETE)
+         public String deleteBookmark(@PathVariable(value = "adId") String adId,
+         @RequestParam(value = "token") String token)
+         */
+        @DELETE("bookmarks/{adId}")
+        Observable<String> delBookmarkAd(@Path("adId") String adId, @Query("token") String token);
+
+    }
+
+    public Observable<String> delBookmarkAdObserv(String adId, String userToken) {
+        return mWebServiceV2.delBookmarkAd(adId, userToken);
+    }
+
+    public Observable<String> bookmarkAdObserv(String adId, String userToken) {
+        return mWebServiceV2.bookmarkAd(adId, userToken);
     }
 
     public Observable<String> increaseViewCount(String adId) {
