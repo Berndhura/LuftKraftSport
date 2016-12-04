@@ -24,7 +24,6 @@ import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.models.MsgRowItem;
 
 import static wichura.de.camperapp.http.Urls.GET_ADS_MY;
-import static wichura.de.camperapp.http.Urls.GET_ALL_MESSAGES_FOR_AD;
 import static wichura.de.camperapp.http.Urls.GET_BOOKMARKS_FOR_USER;
 import static wichura.de.camperapp.http.Urls.GET_FIND_ADS;
 
@@ -82,10 +81,10 @@ public class Service {
         @GET(GET_BOOKMARKS_FOR_USER)
         Observable<Bookmarks> getBookmarksForUser(@Query("userId") String userId);
 
-        @GET(GET_ALL_MESSAGES_FOR_AD)
+        @GET("messages/forAd")
         Observable<List<MsgRowItem>> getAllMessagesForAd(
-                @Query("userId") String userId,
-                @Query("sender") String sender,
+                @Query("token") String userToken,
+                @Query("sender") String chatPartner,
                 @Query("adId") String adId);
 
         @GET("ads/{adId}")
@@ -135,6 +134,7 @@ public class Service {
     }
 
     public Observable<String> deleteAdObserv(String adId) {
+
         return mWebServiceV2.deleteAd(adId);
     }
 
@@ -173,8 +173,8 @@ public class Service {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<List<MsgRowItem>> getAllMessagesForAdObserv(String userId, String sender, String adId) {
-        return mWebService.getAllMessagesForAd(userId, sender, adId)
+    public Observable<List<MsgRowItem>> getAllMessagesForAdObserv(String userToken, String sender, String adId) {
+        return mWebServiceV2.getAllMessagesForAd(userToken, sender, adId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }

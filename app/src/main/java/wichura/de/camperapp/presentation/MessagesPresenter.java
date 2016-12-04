@@ -30,14 +30,14 @@ public class MessagesPresenter {
         this.service = new Service();
     }
 
-    public void loadMessages(String userId, String sender, String adId) {
+    public void loadMessages(String userToken, String sender, String adId) {
 
         /*if (view.listView!=null) {
             view.listView.setVisibility(View.INVISIBLE);
         }
         view.enableProgress();
 */
-        Observable<List<MsgRowItem>> getMessagesForAdObserv = service.getAllMessagesForAdObserv(userId, sender, adId);
+        Observable<List<MsgRowItem>> getMessagesForAdObserv = service.getAllMessagesForAdObserv(userToken, sender, adId);
 
         subscription = getMessagesForAdObserv
                 .subscribeOn(Schedulers.io())
@@ -49,7 +49,7 @@ public class MessagesPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", e.toString());
+                        Log.d("CONAN", "error in getting messages for an ad: " + e.toString());
                     }
 
                     @Override

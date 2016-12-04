@@ -118,7 +118,7 @@ public class MessagesActivity extends AppCompatActivity {
             }*/
         }
 
-        presenter.loadMessages(idTo, idFrom, adId);
+        presenter.loadMessages(getUserToken(), idFrom, adId);
 
         ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
         if (newMsgBtn != null) {
