@@ -89,13 +89,6 @@ public class Service {
                 @Query("sender") String sender,
                 @Query("adId") String adId);
 
-        @GET(SEND_MESSAGE)
-        Observable<String> sendMessage(
-                @Query("message") String message,
-                @Query("adId") String adId,
-                @Query("idFrom") String idFrom,
-                @Query("idTo") String idTo);
-
         @GET("/ads/{adId}")
         Observable<AdDetails> getAdDetails(@Query("adId") Integer adId);
 
@@ -172,12 +165,6 @@ public class Service {
 
     public Observable<AdDetails> getAdDetailsObserv(Integer adId) {
         return mWebServiceV2.getAdDetails(adId);
-    }
-
-    public Observable<String> sendMessagesObserv(String message, String adId, String idFrom, String idTo) {
-        return mWebService.sendMessage(message, adId, idFrom, idTo)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<Bookmarks> getBookmarksForUserObserv(String userId) {

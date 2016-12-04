@@ -135,7 +135,7 @@ public class MessagesActivity extends AppCompatActivity {
                     } else {
                         localSender = idFrom;
                     }
-                    sendMessage(adId, userId, localSender, text.getText().toString());
+                    sendMessage(text.getText().toString(), adId, localSender);
                     //add new message to list
                     MsgRowItem it = new MsgRowItem(text.getText().toString());
                     rowItems.add(it);
@@ -199,14 +199,11 @@ public class MessagesActivity extends AppCompatActivity {
         ed.apply();
     }
 
-    private void sendMessage(final String adId, final String ownerId, final String sender, final String message) {
-        //send a message  adId, userId, sender
-        Log.d("CONAN", "send message: " + "adId: " + adId + "ownerId: " + ownerId + "sender: " + sender);
-
+    private void sendMessage(final String message, final String adId, final String idTo) {
         if (message.length() == 0)
             return;
 
-        presenter.sendMessage(message, adId, ownerId, sender);
+        presenter.sendMessage(message, adId, idTo, getUserToken());
     }
 
     public void showMessages(List<MsgRowItem> msgRowItems) {
@@ -235,6 +232,11 @@ public class MessagesActivity extends AppCompatActivity {
     private String getUserId() {
         SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         return settings.getString(Constants.USER_ID, "");
+    }
+
+    private String getUserToken() {
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
+        return settings.getString(Constants.USER_TOKEN, "");
     }
 
     public void showLinkToAdButton() {

@@ -64,9 +64,9 @@ public class MessagesPresenter {
                 });
     }
 
-    public void sendMessage(String message, String adId, String idFrom, String idTo) {
+    public void sendMessage(String message, String adId, String idTo, String userToken) {
 
-        service.sendMessagesObserv(message, adId, idFrom, idTo)
+        service.sendNewMessageObserv(message, adId, idTo, userToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
