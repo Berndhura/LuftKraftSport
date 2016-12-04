@@ -27,7 +27,6 @@ import static wichura.de.camperapp.http.Urls.GET_ADS_MY;
 import static wichura.de.camperapp.http.Urls.GET_ALL_MESSAGES_FOR_AD;
 import static wichura.de.camperapp.http.Urls.GET_BOOKMARKS_FOR_USER;
 import static wichura.de.camperapp.http.Urls.GET_FIND_ADS;
-import static wichura.de.camperapp.http.Urls.SEND_MESSAGE;
 
 /**
  * Created by ich on 16.10.2016.
@@ -89,8 +88,8 @@ public class Service {
                 @Query("sender") String sender,
                 @Query("adId") String adId);
 
-        @GET("/ads/{adId}")
-        Observable<AdDetails> getAdDetails(@Query("adId") Integer adId);
+        @GET("ads/{adId}")
+        Observable<AdDetails> getAdDetails(@Path("adId") Integer adId);
 
         @GET(GET_FIND_ADS)
         Observable<AdsAsPage> getFindAds(@Query("page") int page, @Query("size") int size);

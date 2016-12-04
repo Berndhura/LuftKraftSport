@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.adapter.MessageListViewAdapter;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.adapter.MessageListViewAdapter;
-import wichura.de.camperapp.presentation.MessagesPresenter;
 import wichura.de.camperapp.models.MsgRowItem;
 import wichura.de.camperapp.models.RowItem;
+import wichura.de.camperapp.presentation.MessagesPresenter;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -83,9 +83,6 @@ public class MessagesActivity extends AppCompatActivity {
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
         final String idFrom = getIntent().getStringExtra(Constants.ID_FROM);
         final String idTo = getIntent().getStringExtra(Constants.ID_TO);
-        final String adPicUrl = getIntent().getStringExtra(Constants.AD_URL);
-
-        Log.d("CONAN", "enter message: " + "adId: " + adId + "sender: " + sender + "idFrom: " + idFrom + "idTo: " + idTo);
 
         final String userId = getUserId();
 

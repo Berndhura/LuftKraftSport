@@ -105,7 +105,7 @@ public class MessagesPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", e.getMessage() + "\n" + e.getCause());
+                        Log.d("CONAN", "error in getting ad details: " + e.getMessage());
                     }
 
                     @Override
