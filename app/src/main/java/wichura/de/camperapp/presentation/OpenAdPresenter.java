@@ -72,7 +72,9 @@ public class OpenAdPresenter {
                     }
 
                     @Override
-                    public void onNext(String result) {//nothing to update
+                    public void onNext(String result) {
+                        //nothing to update
+                        Log.d("CONAN", result);
                     }
                 });
     }

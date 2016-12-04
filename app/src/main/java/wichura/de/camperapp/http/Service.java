@@ -1,5 +1,8 @@
 package wichura.de.camperapp.http;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -63,9 +66,13 @@ public class Service {
 
         httpClient.addInterceptor(logging);
 
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
         Retrofit restAdapterV2 = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(WEB_SERVICE_BASE_URL_V2)
                 .client(httpClientV2.build())
                 .build();

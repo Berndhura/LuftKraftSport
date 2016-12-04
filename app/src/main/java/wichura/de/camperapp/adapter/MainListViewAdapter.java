@@ -29,9 +29,12 @@ import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.List;
 
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
-import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.RowItem;
 
@@ -219,29 +222,30 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 .setIcon(R.drawable.ic_delete_blue_grey_600_24dp)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        //your deleting code
-                        String url = Urls.MAIN_SERVER_URL + Urls.DELETE_AD_WITH_APID + "?adid=" + adId;
 
-                        Response.Listener<String> listener = new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                String pos = view.getTag().toString();
-                                int position = Integer.parseInt(pos);
-                                remove(getItem(position));
-                                notifyDataSetChanged();
-                                //TODO: wenn leer, finish()
-                            }
-                        };
+                        Service service = new Service();
+                        service.deleteAdObserv(adId)
+                                .subscribeOn(Schedulers.newThread())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Subscriber<String>() {
+                                    @Override
+                                    public void onCompleted() {
+                                        Log.d("CONAN", "Ad deleted");
+                                        String pos = view.getTag().toString();
+                                        int position = Integer.parseInt(pos);
+                                        remove(getItem(position));
+                                        notifyDataSetChanged();
+                                        dialog.dismiss();
+                                    }
 
-                        Response.ErrorListener errorListener = new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(activity, "Something went wrong...", Toast.LENGTH_LONG).show();
-                            }
-                        };
-                        VolleyService volleyService = new VolleyService(context);
-                        volleyService.sendStringGetRequest(url, listener, errorListener);
-                        dialog.dismiss();
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        Log.d("CONAN", "error in deleting ad: " + e.getMessage());
+                                    }
+
+                                    @Override
+                                    public void onNext(String result) {/*nothing to update*/}
+                                });
                     }
                 })
 

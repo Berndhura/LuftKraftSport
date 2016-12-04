@@ -52,7 +52,6 @@ import wichura.de.camperapp.gcm.RegistrationIntentService;
 import wichura.de.camperapp.http.MyVolley;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
-import wichura.de.camperapp.http.VolleyService;
 import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.presentation.MainPresenter;
@@ -85,20 +84,12 @@ public class MainActivity extends AppCompatActivity implements
     private BroadcastReceiver mLoginBroadcastReceiver;
     private boolean isLoginReceiverRegistered;
 
-    //Volley Http service
-    private VolleyService volleyService;
-
     private Subscription subscription;
 
     private MainPresenter presenterLayer;
     private Service service;
     private MainListViewAdapter adapter;
     private List<RowItem> rowItems;
-
-    public MainActivity() {
-        volleyService = new VolleyService(MainActivity.this);
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
