@@ -77,12 +77,12 @@ public class MessagesPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d("CONAN", "error in sending message: "+e.getMessage());
                     }
 
                     @Override
                     public void onNext(String s) {
-
+                        Log.d("CONAN", "message send: "+s);
                     }
                 });
     }

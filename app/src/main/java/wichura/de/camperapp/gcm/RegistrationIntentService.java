@@ -105,7 +105,9 @@ public class RegistrationIntentService extends IntentService {
                         }
 
                         @Override
-                        public void onNext(String result) {/*nothing to update*/}
+                        public void onNext(String result) {
+                            Log.d("CONAN", "send device token to server: "+result);
+                        }
                     });
         }
     }

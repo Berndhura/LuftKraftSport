@@ -244,7 +244,9 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                                     }
 
                                     @Override
-                                    public void onNext(String result) {/*nothing to update*/}
+                                    public void onNext(String result) {
+                                        Log.d("CONAN", "delete ad: "+result);
+                                    }
                                 });
                     }
                 })

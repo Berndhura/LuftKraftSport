@@ -66,7 +66,7 @@ public class MainPresenter {
                     }
 
                     @Override
-                    public void onNext(String result) {/*nothing to update*/}
+                    public void onNext(String result) {Log.d("CONAN", "create user: "+result);}
                 });
     }
 

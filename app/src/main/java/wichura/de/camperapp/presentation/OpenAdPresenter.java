@@ -73,8 +73,7 @@ public class OpenAdPresenter {
 
                     @Override
                     public void onNext(String result) {
-                        //nothing to update
-                        Log.d("CONAN", result);
+                        Log.d("CONAN", "increase view count: "+result);
                     }
                 });
     }
@@ -98,7 +97,9 @@ public class OpenAdPresenter {
                     }
 
                     @Override
-                    public void onNext(String result) {/*nothing to update*/}
+                    public void onNext(String result) {
+                        Log.d("CONAN", "bookmark ad: "+result);
+                    }
                 });
     }
 
@@ -121,7 +122,9 @@ public class OpenAdPresenter {
                     }
 
                     @Override
-                    public void onNext(String result) {/*nothing to update*/}
+                    public void onNext(String result) {
+                        Log.d("CONAN", "bookmark deleted: "+result);
+                    }
                 });
     }
 
@@ -141,7 +144,9 @@ public class OpenAdPresenter {
                     }
 
                     @Override
-                    public void onNext(String result) {/*nothing to update*/}
+                    public void onNext(String result) {
+                        Log.d("CONAN", "send message to user: "+result);
+                    }
                 });
     }
 
@@ -161,7 +166,9 @@ public class OpenAdPresenter {
                     }
 
                     @Override
-                    public void onNext(String result) {/*nothing to update*/}
+                    public void onNext(String result) {
+                        Log.d("CONAN", "delete ad: "+result);
+                    }
                 });
     }
 
