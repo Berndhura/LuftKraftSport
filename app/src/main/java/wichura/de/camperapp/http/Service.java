@@ -24,7 +24,6 @@ import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.models.MsgRowItem;
 
 import static wichura.de.camperapp.http.Urls.GET_ADS_MY;
-import static wichura.de.camperapp.http.Urls.GET_AD_DETAILS;
 import static wichura.de.camperapp.http.Urls.GET_ALL_MESSAGES_FOR_AD;
 import static wichura.de.camperapp.http.Urls.GET_BOOKMARKS_FOR_USER;
 import static wichura.de.camperapp.http.Urls.GET_FIND_ADS;
@@ -97,8 +96,8 @@ public class Service {
                 @Query("idFrom") String idFrom,
                 @Query("idTo") String idTo);
 
-        @GET(GET_AD_DETAILS)
-        Observable<AdDetails> getAdDetails(@Query("adId") String adId);
+        @GET("/ads/{adId}")
+        Observable<AdDetails> getAdDetails(@Query("adId") Integer adId);
 
         @GET(GET_FIND_ADS)
         Observable<AdsAsPage> getFindAds(@Query("page") int page, @Query("size") int size);
@@ -171,8 +170,8 @@ public class Service {
         return mWebService.getFindAds(page, size);
     }
 
-    public Observable<AdDetails> getAdDetailsObserv(String adId) {
-        return mWebService.getAdDetails(adId);
+    public Observable<AdDetails> getAdDetailsObserv(Integer adId) {
+        return mWebServiceV2.getAdDetails(adId);
     }
 
     public Observable<String> sendMessagesObserv(String message, String adId, String idFrom, String idTo) {

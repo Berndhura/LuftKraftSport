@@ -94,7 +94,7 @@ public class MessagesPresenter {
     }
 
     public void getAd(String adId) {
-        service.getAdDetailsObserv(adId)
+        service.getAdDetailsObserv(Integer.parseInt(adId))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<AdDetails>() {
