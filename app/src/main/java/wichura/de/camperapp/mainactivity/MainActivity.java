@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements
         tv.setVisibility(View.VISIBLE);
 
         // if cursor is empty, why? do we have an invalid location
-        Log.d("CONAN", "nix");
+        //Log.d("CONAN", "nix");
     }
 
     public void hideEmptyView() {
@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements
         tv.setVisibility(View.GONE);
 
         // if cursor is empty, why? do we have an invalid location
-        Log.d("CONAN", "nix");
+        //Log.d("CONAN", "nix");
     }
 
 

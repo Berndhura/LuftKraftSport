@@ -122,9 +122,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtPrice.setText(rowItem.getPrice());
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
 
-        if (bookmarks != null) {
-            Log.d("CONAN", "bookmarks: " + Arrays.asList(bookmarks));
-        }
         //bookmark star full for bookmarked ad
         if (bookmarks == null) {
             holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
@@ -155,22 +152,15 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         }
 
         //click to bookmark/debookmark an ad
-        holder.bookmarkStar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bookmarks != null && Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
-                    deleteBookmark(rowItem.getAdId());
-                    holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
-                    notifyDataSetChanged();
-                    Log.d("CONAN  ", position + "");
-                    Log.d("CONAN", "bookmark weg");
-                } else {
-                    bookmarkAd(rowItem.getAdId());
-                    holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
-                    notifyDataSetChanged();
-                    Log.d("CONAN", "bookmark dazu");
-                    Log.d("CONAN  ", position + "");
-                }
+        holder.bookmarkStar.setOnClickListener((view) -> {
+            if (bookmarks != null && bookmarks.contains(rowItem.getAdId())) {
+                deleteBookmark(rowItem.getAdId());
+                holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+                notifyDataSetChanged();
+            } else {
+                bookmarkAd(rowItem.getAdId());
+                holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
+                notifyDataSetChanged();
             }
         });
 

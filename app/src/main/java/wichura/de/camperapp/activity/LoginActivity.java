@@ -22,12 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -49,7 +43,6 @@ import java.security.NoSuchAlgorithmException;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Service;
-import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.presentation.LoginPresenter;
 
