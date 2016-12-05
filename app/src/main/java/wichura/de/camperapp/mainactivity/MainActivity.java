@@ -49,7 +49,6 @@ import wichura.de.camperapp.activity.SettingsActivity;
 import wichura.de.camperapp.adapter.MainListViewAdapter;
 import wichura.de.camperapp.gcm.QuickstartPreferences;
 import wichura.de.camperapp.gcm.RegistrationIntentService;
-import wichura.de.camperapp.http.MyVolley;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.models.AdsAndBookmarks;
@@ -94,9 +93,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize Volley
-        MyVolley.init(this);
 
         page = 0;
         size = 10;
@@ -234,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
-       // Toast.makeText(this, "ONDestroy!!!!!!!!!!", Toast.LENGTH_LONG).show();
+        // Toast.makeText(this, "ONDestroy!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -245,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.registerOnSharedPreferenceChangeListener(this);
         setMyAdsFlag(false);
-       // Toast.makeText(this, "ONresume!!!!!!!!!!", Toast.LENGTH_LONG).show();
+        // Toast.makeText(this, "ONresume!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -261,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements
         sp.unregisterOnSharedPreferenceChangeListener(this);
 
         setMyAdsFlag(false);
-      //  Toast.makeText(this, "ONpause!!!!!!!!!!", Toast.LENGTH_LONG).show();
+        //  Toast.makeText(this, "ONpause!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     private void registerLoginReceiver() {
