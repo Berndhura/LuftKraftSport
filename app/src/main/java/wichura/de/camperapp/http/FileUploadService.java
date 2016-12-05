@@ -20,6 +20,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
 import rx.Subscriber;
@@ -41,6 +42,7 @@ public class FileUploadService {
 
     private Context context;
     private NewAdActivity view;
+    private String adId;
 
     public FileUploadService(Context context, NewAdActivity view) {
         this.context = context;
@@ -53,6 +55,8 @@ public class FileUploadService {
 
         Service service = new Service();
 
+        String picture = data.getStringExtra(Constants.FILENAME);
+
         RowItem item = new RowItem();
         item.setTitle(data.getStringExtra(Constants.TITLE));
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
@@ -61,11 +65,52 @@ public class FileUploadService {
         item.setPrice(data.getStringExtra(Constants.PRICE));
         item.setDate(data.getLongExtra(Constants.DATE, 0));
 
-
         service.saveNewAdObserv(getUserToken(), item)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<RowItem>() {
+                    @Override
+                    public void onCompleted() {
+                        if (adId !=null) {
+                            uploadFile(adId, picture);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in upload Ad " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(RowItem rowItem) {
+                        adId = rowItem.getAdId();
+                    }
+                });
+
+
+    }
+
+    public void uploadFile(String adId, String picture) {
+        Uri fileUri = Uri.parse(picture);
+        String fileString = getRealPathFromUri(context, fileUri);
+        File file = new File(fileString);
+        Log.i("CONAN", "file: " + file);
+        BitmapHelper bitmapHelper = new BitmapHelper(context);
+        final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
+        Log.i("CONAN", "newFile: " + reducedPicture);
+
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), reducedPicture);
+
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("file", "wanke", requestFile);
+
+        Service service = new Service();
+
+        service.uploadPictureObserv(Integer.parseInt(adId), getUserToken(), body)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
 
@@ -77,11 +122,11 @@ public class FileUploadService {
                     }
 
                     @Override
-                    public void onNext(RowItem rowItem) {
-                        String adId = rowItem.getAdId();
+                    public void onNext(String result) {
+                        //result;
+                        view.finish();
                     }
                 });
-
 
     }
 

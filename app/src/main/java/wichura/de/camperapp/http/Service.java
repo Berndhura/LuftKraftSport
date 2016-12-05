@@ -150,6 +150,10 @@ public class Service {
 
     }
 
+    public Observable<String> uploadPictureObserv(Integer adId, String userToken, MultipartBody.Part file) {
+        return mWebServiceV2.uploadPicture(adId, userToken, file);
+    }
+
     public Observable<RowItem> saveNewAdObserv(String userToken, RowItem item) {
         return mWebServiceV2.saveNewAd(userToken, item);
     }
