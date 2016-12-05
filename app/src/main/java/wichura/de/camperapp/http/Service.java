@@ -119,6 +119,14 @@ public class Service {
         @POST("users/sendToken")
         Observable<String> sendDeviceToken(@Query("token") String token,
                                            @Query("deviceToken") String deviceToken);
+
+        @POST("users/login")
+        Observable<String> loginUser(@Query("email") String email,
+                                     @Query("password") String password);
+    }
+
+    public Observable<String>loginUserObserv(String email, String password) {
+        return mWebServiceV2.loginUser(email, password);
     }
 
     public Observable<String> sendDeviceTokenObserv(String userToken, String deviceToken) {

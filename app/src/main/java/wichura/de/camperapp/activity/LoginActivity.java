@@ -48,8 +48,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.presentation.LoginPresenter;
 
 import static wichura.de.camperapp.mainactivity.Constants.RC_SIGN_IN;
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -70,9 +72,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private GoogleApiClient mGoogleApiClient;
 
+    private LoginPresenter presenter;
+    private Service service;
+    private ProgressDialog progressDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        service = new Service();
+        presenter = new LoginPresenter(this, service, getApplicationContext());
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         FacebookCallback<LoginResult> mCallback = initFacebookCallback();
@@ -149,15 +158,11 @@ public class LoginActivity extends AppCompatActivity {
                     onLoginFailed();
                     return;
                 }
-                final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                        R.style.AppTheme);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setMessage("Authenticating...");
-                progressDialog.show();
 
+                showProgressDialog();
                 String email = _emailText.getText().toString();
                 String password = _passwordText.getText().toString();
-                sendLoginRequest(email, password, progressDialog);
+                presenter.sendLoginReq(email, password);
             });
         }
 
@@ -241,7 +246,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void setUserPreferences(String name, String userId, Uri userPic, String userType, String userToken) {
+    public void setUserPreferences(String name, String userId, Uri userPic, String userType, String userToken) {
         SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Constants.USER_NAME, name);
@@ -289,33 +294,15 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 
-    private void sendLoginRequest(String email, String password, final ProgressDialog progressDialog) {
+    public void showProgressDialog() {
+        progressDialog = new ProgressDialog(LoginActivity.this,
+                R.style.AppTheme);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
+    }
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        String url = Urls.MAIN_SERVER_URL + Urls.LOGIN_USER + "?email=" + email + "&password=" + password;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        progressDialog.dismiss();
-                        if (!response.equals("wrong")) {
-                            Toast.makeText(getApplicationContext(), "User in", Toast.LENGTH_SHORT).show();
-                            //TODO get userid back to mainActiv
-                            String[] userInfos = response.split(",");
-                            //userToken is open -> null
-                            setUserPreferences(userInfos[1], userInfos[0], null, Constants.EMAIL_USER, null);
-                            finish();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Wrong user or password. Try again!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, "Network problems...Try again!", Toast.LENGTH_LONG).show();
-            }
-        });
-        requestQueue.add(stringRequest);
+    public void hideProgressdialog() {
+        progressDialog.hide();
     }
 }
