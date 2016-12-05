@@ -18,6 +18,7 @@ import retrofit2.http.Query;
 import rx.Observable;
 import wichura.de.camperapp.models.AdDetails;
 import wichura.de.camperapp.models.AdsAsPage;
+import wichura.de.camperapp.models.GroupedMsgItem;
 import wichura.de.camperapp.models.MsgRowItem;
 
 import static wichura.de.camperapp.http.Urls.GET_ADS_MY;
@@ -123,6 +124,13 @@ public class Service {
         @POST("users/login")
         Observable<String> loginUser(@Query("email") String email,
                                      @Query("password") String password);
+
+        @GET("messages/forUser")
+        Observable<List<GroupedMsgItem>> getAllMessagesFromUser(@Query("token") String userToken);
+    }
+
+    public Observable<List<GroupedMsgItem>> getAllMessagesFromUserObserv(String userToken) {
+        return mWebServiceV2.getAllMessagesFromUser(userToken);
     }
 
     public Observable<String>loginUserObserv(String email, String password) {
@@ -171,7 +179,6 @@ public class Service {
     }
 
     public Observable<String[]> getBookmarksForUserObserv(String userToken) {
-
         return mWebServiceV2.getBookmarksForUser(userToken);
     }
 
