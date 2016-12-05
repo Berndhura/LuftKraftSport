@@ -16,6 +16,9 @@ import com.facebook.Profile;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -27,7 +30,6 @@ import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.mainactivity.MainActivity;
 import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.AdsAsPage;
-import wichura.de.camperapp.models.Bookmarks;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -113,16 +115,16 @@ public class MainPresenter {
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
         //Log.d("CONAN", url);
 
-        Observable<Bookmarks> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId());
+        Observable<String[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
         Observable<AdsAsPage> getAllAdsForUserObserv = service.getFindAdsObserv(page, size);
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                 Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
                 {
-
+                    ArrayList<String> bm = new ArrayList<>(Arrays.asList(bookmarks));
                     AdsAndBookmarks elements = new AdsAndBookmarks();
                     elements.setAds(ads);
-                    elements.setBookmarks(bookmarks.getBookmarks());
+                    elements.setBookmarks(bm);
                     return elements;
                 });
 
@@ -165,16 +167,16 @@ public class MainPresenter {
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
 
         //use user Token here
-        Observable<Bookmarks> getBookmarksObserv = service.getBookmarksForUserObserv(getUserId());
+        Observable<String[]> getBookmarksObserv = service.getBookmarksForUserObserv(token);
         Observable<AdsAsPage> getAllAdsForUserObserv = service.getAdsMyObserv(page, size, token);
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                 Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
                 {
-
+                    ArrayList<String> bm = new ArrayList<>(Arrays.asList(bookmarks));
                     AdsAndBookmarks elements = new AdsAndBookmarks();
                     elements.setAds(ads);
-                    elements.setBookmarks(bookmarks.getBookmarks());
+                    elements.setBookmarks(bm);
                     return elements;
                 });
 
@@ -222,7 +224,7 @@ public class MainPresenter {
         editor.apply();
     }
 
-    private String getUserId() {
-        return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
+    private String getUserToken() {
+        return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
     }
 }

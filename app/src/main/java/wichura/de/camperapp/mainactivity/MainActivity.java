@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements
         setMyAdsFlag(false);
         getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
 
-        Toast.makeText(this, "ONCREATE!!!!!!!!!!", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "ONCREATE!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
-        Toast.makeText(this, "ONDestroy!!!!!!!!!!", Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, "ONDestroy!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.registerOnSharedPreferenceChangeListener(this);
         setMyAdsFlag(false);
-        Toast.makeText(this, "ONresume!!!!!!!!!!", Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, "ONresume!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements
         sp.unregisterOnSharedPreferenceChangeListener(this);
 
         setMyAdsFlag(false);
-        Toast.makeText(this, "ONpause!!!!!!!!!!", Toast.LENGTH_LONG).show();
+      //  Toast.makeText(this, "ONpause!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     private void registerLoginReceiver() {

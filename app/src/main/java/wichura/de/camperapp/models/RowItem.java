@@ -26,6 +26,10 @@ public class RowItem {
     private String userId;
     @Expose
     private String views;
+    @Expose
+    private String numberOfBookmarks;
+
+
 
     public RowItem(final int imageId,
                    final String title,
@@ -38,7 +42,8 @@ public class RowItem {
                    final String price,
                    final String location,
                    final String userid,
-                   final String views) {
+                   final String views,
+                   final String numberOfBookmarks) {
         this.imageId = imageId;
         this.title = title;
         this.id = id;
@@ -51,6 +56,11 @@ public class RowItem {
         this.location = location;
         this.userId = userid;
         this.views = views;
+        this.numberOfBookmarks = numberOfBookmarks;
+    }
+
+    public String getNumberOfBookmarks() {
+        return numberOfBookmarks;
     }
 
     public String getViews() {

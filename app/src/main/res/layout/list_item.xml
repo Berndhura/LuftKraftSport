@@ -161,10 +161,17 @@
             android:id="@+id/NEW_my_ad_bookmarks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="0.3"
             android:padding="5sp"
             android:src="@drawable/ic_bookmark_border_blue_grey_600_24dp" />
 
+        <TextView
+            android:id="@+id/number_of_bookmarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="#000000"
+            android:padding="5sp" />
 
     </LinearLayout>
 

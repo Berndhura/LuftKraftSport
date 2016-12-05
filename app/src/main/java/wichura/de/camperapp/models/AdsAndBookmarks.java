@@ -1,5 +1,7 @@
 package wichura.de.camperapp.models;
 
+import java.util.ArrayList;
+
 /**
  * Created by ich on 19.10.2016.
  * CamperAdd
@@ -7,14 +9,14 @@ package wichura.de.camperapp.models;
 
 public class AdsAndBookmarks {
 
-    private String bookmarks;
+    private ArrayList<String> bookmarks;
     private AdsAsPage ads;
 
-    public String getBookmarks() {
+    public ArrayList<String> getBookmarks() {
         return bookmarks;
     }
 
-    public void setBookmarks(String bookmarks) {
+    public void setBookmarks(ArrayList<String> bookmarks) {
         this.bookmarks = bookmarks;
     }
 

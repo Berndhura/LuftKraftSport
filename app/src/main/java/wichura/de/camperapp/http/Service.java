@@ -16,15 +16,11 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import wichura.de.camperapp.models.AdDetails;
 import wichura.de.camperapp.models.AdsAsPage;
-import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.models.MsgRowItem;
 
 import static wichura.de.camperapp.http.Urls.GET_ADS_MY;
-import static wichura.de.camperapp.http.Urls.GET_BOOKMARKS_FOR_USER;
 import static wichura.de.camperapp.http.Urls.GET_FIND_ADS;
 
 /**
@@ -78,8 +74,8 @@ public class Service {
     }
 
     private interface WebService {
-        @GET(GET_BOOKMARKS_FOR_USER)
-        Observable<Bookmarks> getBookmarksForUser(@Query("userId") String userId);
+        @GET("bookmarkIds")
+        Observable<String[]> getBookmarksForUser(@Query("token") String userToken);
 
         @GET("messages/forAd")
         Observable<List<MsgRowItem>> getAllMessagesForAd(
@@ -120,7 +116,7 @@ public class Service {
         @POST("users")
         Observable<String> createUser(@Query("name") String name, @Query("token") String token);
 
-        @POST("/users/sendToken")
+        @POST("users/sendToken")
         Observable<String> sendDeviceToken(@Query("token") String token,
                                            @Query("deviceToken") String deviceToken);
     }
@@ -166,16 +162,12 @@ public class Service {
         return mWebServiceV2.getAdDetails(adId);
     }
 
-    public Observable<Bookmarks> getBookmarksForUserObserv(String userId) {
+    public Observable<String[]> getBookmarksForUserObserv(String userToken) {
 
-        return mWebService.getBookmarksForUser(userId)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread());
+        return mWebServiceV2.getBookmarksForUser(userToken);
     }
 
     public Observable<List<MsgRowItem>> getAllMessagesForAdObserv(String userToken, String sender, String adId) {
-        return mWebServiceV2.getAllMessagesForAd(userToken, sender, adId)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread());
+        return mWebServiceV2.getAllMessagesForAd(userToken, sender, adId);
     }
 }

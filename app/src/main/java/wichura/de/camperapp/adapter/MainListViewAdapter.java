@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
     private Context context;
     private ViewHolder holder;
-    private String[] bookmarks;
+    private ArrayList<String> bookmarks;
     private Activity activity;
 
     @Retention(RetentionPolicy.SOURCE)
@@ -60,12 +61,13 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     public static final int LOCATION_STATUS_UNKNOWN = 3;
     public static final int LOCATION_STATUS_INVALID = 4;
 
-    public MainListViewAdapter(final Activity activity, final Context context, final int resourceId, final List<RowItem> items, final String bookmarks) {
+    public MainListViewAdapter(final Activity activity, final Context context, final int resourceId,
+                               final List<RowItem> items, final ArrayList<String> bookmarks) {
         super(context, resourceId, items);
         this.context = context;
         this.activity = activity;
         if (bookmarks != null) {
-            this.bookmarks = bookmarks.split(",");
+            this.bookmarks = bookmarks;
         } else {
             this.bookmarks = null;
         }
@@ -82,6 +84,8 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         ImageView deleteButton;
         TextView txtViews;
         ImageView thumbNail;
+        TextView txtNumberOfBookmarks;
+
     }
 
     @Override
@@ -101,6 +105,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             holder.mainLl = (LinearLayout) convertView.findViewById(R.id.main_linear_layout);
             holder.deleteButton = (ImageView) convertView.findViewById(R.id.NEW_my_ad_delete);
             holder.txtViews = (TextView) convertView.findViewById(R.id.NEW_my_views);
+            holder.txtNumberOfBookmarks = (TextView) convertView.findViewById(R.id.number_of_bookmarks);
             holder.thumbNail = (ImageView) convertView.findViewById(R.id.icon);
             convertView.setTag(holder);
         } else {
@@ -128,7 +133,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         if (bookmarks == null) {
             holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
         } else {
-            if (Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
+            if (bookmarks.contains(rowItem.getAdId())) {
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
             } else {
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
@@ -150,6 +155,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
             //Views
             holder.txtViews.setText(rowItem.getViews());
+            holder.txtNumberOfBookmarks.setText(rowItem.getNumberOfBookmarks());
         }
 
         //click to bookmark/debookmark an ad
@@ -245,7 +251,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
                                     @Override
                                     public void onNext(String result) {
-                                        Log.d("CONAN", "delete ad: "+result);
+                                        Log.d("CONAN", "delete ad: " + result);
                                     }
                                 });
                     }

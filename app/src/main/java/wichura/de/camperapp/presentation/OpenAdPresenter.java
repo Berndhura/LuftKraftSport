@@ -34,11 +34,10 @@ public class OpenAdPresenter {
     }
 
     public void loadBookmarksForUser() {
-        service.getBookmarksForUserObserv(getUserId())
+        service.getBookmarksForUserObserv(getUserToken())
                 .subscribeOn(Schedulers.newThread())
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Bookmarks>() {
+                .subscribe(new Subscriber<String[]>() {
                     @Override
                     public void onCompleted() {
 
@@ -50,7 +49,7 @@ public class OpenAdPresenter {
                     }
 
                     @Override
-                    public void onNext(Bookmarks bookmarks) {
+                    public void onNext(String[] bookmarks) {
                         view.updateBookmarkButton(bookmarks);
                     }
                 });
@@ -172,7 +171,7 @@ public class OpenAdPresenter {
                 });
     }
 
-    private String getUserId() {
-        return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
+    private String getUserToken() {
+        return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
     }
 }

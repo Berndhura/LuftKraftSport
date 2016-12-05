@@ -20,11 +20,12 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.models.Bookmarks;
 import wichura.de.camperapp.presentation.OpenAdPresenter;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -151,9 +152,10 @@ public class OpenAdActivity extends AppCompatActivity {
 
     }
 
-    public void updateBookmarkButton(Bookmarks bm) {
+    public void updateBookmarkButton(String[] bookmark) {
         isBookmarked = false;
-        if (bm.getBookmarks().contains(mAdId)) {
+        ArrayList<String> bookmarkList = new ArrayList<>(Arrays.asList(bookmark));
+        if (bookmarkList.contains(mAdId)) {
             mBookmarkButton.setText("Remove bookmark!");
             mBookmarkButton.setClickable(true);
             isBookmarked = true;
