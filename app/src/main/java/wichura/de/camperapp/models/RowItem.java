@@ -29,7 +29,7 @@ public class RowItem {
     @Expose
     private String numberOfBookmarks;
 
-
+    public RowItem () {}
 
     public RowItem(final int imageId,
                    final String title,
@@ -80,6 +80,8 @@ public class RowItem {
     }
 
     public long getDate() {return date;}
+
+    public void setDate(long date) {this.date = date;}
 
     public String getPrice() {
         return price;

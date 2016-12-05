@@ -15,9 +15,19 @@ import com.loopj.android.http.RequestParams;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okio.BufferedSink;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import wichura.de.camperapp.activity.NewAdActivity;
+import wichura.de.camperapp.models.GroupedMsgItem;
+import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.util.BitmapHelper;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
@@ -38,7 +48,44 @@ public class FileUploadService {
 
     }
 
+
     public void multiPost(Intent data) {
+
+        Service service = new Service();
+
+        RowItem item = new RowItem();
+        item.setTitle(data.getStringExtra(Constants.TITLE));
+        item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
+        //item.setdata.getStringExtra(Constants.KEYWORDS);
+        //String picture = data.getStringExtra(Constants.FILENAME);
+        item.setPrice(data.getStringExtra(Constants.PRICE));
+        item.setDate(data.getLongExtra(Constants.DATE, 0));
+
+
+        service.saveNewAdObserv(getUserToken(), item)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<RowItem>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in upload Ad " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(RowItem rowItem) {
+                        String adId = rowItem.getAdId();
+                    }
+                });
+
+
+    }
+
+    public void multiPost_old(Intent data) {
 
         view.showProgress();
 
@@ -122,5 +169,10 @@ public class FileUploadService {
     private String getUserId() {
         SharedPreferences settings = context.getSharedPreferences(Constants.SHARED_PREFS_USER_INFO, 0);
         return settings.getString(Constants.USER_ID, "");
+    }
+
+    private String getUserToken() {
+        SharedPreferences settings = context.getSharedPreferences(Constants.SHARED_PREFS_USER_INFO, 0);
+        return settings.getString(Constants.USER_TOKEN, "");
     }
 }

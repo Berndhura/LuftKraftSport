@@ -5,14 +5,19 @@ import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -20,6 +25,7 @@ import wichura.de.camperapp.models.AdDetails;
 import wichura.de.camperapp.models.AdsAsPage;
 import wichura.de.camperapp.models.GroupedMsgItem;
 import wichura.de.camperapp.models.MsgRowItem;
+import wichura.de.camperapp.models.RowItem;
 
 import static wichura.de.camperapp.http.Urls.GET_ADS_MY;
 import static wichura.de.camperapp.http.Urls.GET_FIND_ADS;
@@ -127,13 +133,32 @@ public class Service {
 
         @GET("messages/forUser")
         Observable<List<GroupedMsgItem>> getAllMessagesFromUser(@Query("token") String userToken);
+
+        @Multipart
+        @POST("ads/{adId}/addPicture")
+        Observable<String> uploadPicture(@Query("adId") Integer adId,
+                                         @Query("token") String userToken,
+                                         @Part("file") MultipartBody.Part file);
+
+        /*
+        URL "/ads", method = RequestMethod.POST)
+        public Ad saveNewAd(@RequestBody Ad ad, @RequestParam("token") String token)
+         */
+        @POST("ads")
+        Observable<RowItem> saveNewAd(@Query("token") String userToken,
+                                      @Body RowItem item);
+
+    }
+
+    public Observable<RowItem> saveNewAdObserv(String userToken, RowItem item) {
+        return mWebServiceV2.saveNewAd(userToken, item);
     }
 
     public Observable<List<GroupedMsgItem>> getAllMessagesFromUserObserv(String userToken) {
         return mWebServiceV2.getAllMessagesFromUser(userToken);
     }
 
-    public Observable<String>loginUserObserv(String email, String password) {
+    public Observable<String> loginUserObserv(String email, String password) {
         return mWebServiceV2.loginUser(email, password);
     }
 
