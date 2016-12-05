@@ -42,6 +42,7 @@ public class LoginPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "error sending login email user " + e.getMessage());
+                        view.finish();
                     }
 
                     @Override

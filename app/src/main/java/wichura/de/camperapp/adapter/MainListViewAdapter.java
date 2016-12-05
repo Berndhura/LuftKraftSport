@@ -15,12 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
 import java.lang.annotation.Retention;
@@ -49,6 +43,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     private ViewHolder holder;
     private ArrayList<String> bookmarks;
     private Activity activity;
+    private Service service;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID, LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
@@ -71,6 +66,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         } else {
             this.bookmarks = null;
         }
+        service = new Service();
     }
 
     /* private view holder class */
@@ -163,13 +159,13 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             @Override
             public void onClick(View v) {
                 if (bookmarks != null && Arrays.asList(bookmarks).contains(rowItem.getAdId())) {
-                    deleteBookmark(rowItem.getAdId(), getUserId());
+                    deleteBookmark(rowItem.getAdId());
                     holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
                     notifyDataSetChanged();
                     Log.d("CONAN  ", position + "");
                     Log.d("CONAN", "bookmark weg");
                 } else {
-                    bookmarkAd(rowItem.getAdId(), getUserId());
+                    bookmarkAd(rowItem.getAdId());
                     holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
                     notifyDataSetChanged();
                     Log.d("CONAN", "bookmark dazu");
@@ -182,42 +178,49 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     }
 
 
-    private void deleteBookmark(String adId, String userId) {
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_DELETE + "?adId=" + adId + "&userId=" + userId;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+    private void deleteBookmark(String adId) {
+        service.delBookmarkAdObserv(adId, getUserToken())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onCompleted() {
                         Toast.makeText(context, "Bookmark deleted!", Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Something went wrong...", Toast.LENGTH_LONG).show();
-            }
-        });
-        requestQueue.add(stringRequest);
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in bookmark ad: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String result) {
+                        Log.d("CONAN", "bookmark deleted: " + result);
+                    }
+                });
 
     }
 
-    private void bookmarkAd(String adId, String userId) {
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        String url = Urls.MAIN_SERVER_URL + Urls.BOOKMARK_AD + "?adId=" + adId + "&userId=" + userId;
-        Log.d("CONAN", url);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+    private void bookmarkAd(String adId) {
+        service.bookmarkAdObserv(adId, getUserToken())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
                     @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(context, "Bookmarked!", Toast.LENGTH_SHORT).show();
+                    public void onCompleted() {
+                        Toast.makeText(context, "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Something went wrong...\n" + error.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
-        requestQueue.add(stringRequest);
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in bookmark ad: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String result) {
+                        Log.d("CONAN", "bookmark ad: " + result);
+                    }
+                });
     }
 
     private void deleteAdRequest(final String adId, final View view) {
@@ -268,6 +271,10 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
     private boolean isMyAdsRequest() {
         return context.getSharedPreferences(SHOW_MY_ADS, 0).getBoolean(IS_MY_ADS, false);
+    }
+
+    private String getUserToken() {
+        return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
     }
 
     private String getUserId() {
