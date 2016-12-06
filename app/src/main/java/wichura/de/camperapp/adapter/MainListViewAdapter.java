@@ -111,7 +111,9 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         final RowItem rowItem = getItem(position);
 
         Picasso.with(context)
-                .load(Urls.MAIN_SERVER_URL + Urls.GET_PICTURE_THUMB + rowItem.getUrl())
+                //.load(Urls.MAIN_SERVER_URL_V2 + Urls.GET_PICTURE_THUMB + rowItem.getUrl())
+                //pictures/{pictureId}/thumbnail
+                .load(Urls.MAIN_SERVER_URL_V2 + "pictures/" + rowItem.getUrl() + "/thumbnail")
                 .resize(100, 100)
                 .centerCrop()
                 .into(holder.thumbNail);

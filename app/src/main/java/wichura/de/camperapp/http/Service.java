@@ -142,10 +142,10 @@ public class Service {
         Observable<RowItem> saveNewAd(@Query("token") String userToken,
                                       @Body RowItem item);
 
-        @GET("/pictures/{pictureId}/thumbnail")
+        @GET("pictures/{pictureId}/thumbnail")
         Observable<byte[]> getPictureThumbnail(@Path("pictureId") Integer pictureId);
 
-        @GET("/pictures/{pictureId}")
+        @GET("pictures/{pictureId}")
         Observable<byte[]> getPicture(@Path("pictureId") Integer pictureId);
     }
 
