@@ -21,7 +21,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import rx.Subscriber;
@@ -148,7 +147,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
             //Views
             holder.txtViews.setText(rowItem.getViews());
-            holder.txtNumberOfBookmarks.setText(rowItem.getNumberOfBookmarks());
+            holder.txtNumberOfBookmarks.setText(rowItem.getBookmarks());
         }
 
         //click to bookmark/debookmark an ad
