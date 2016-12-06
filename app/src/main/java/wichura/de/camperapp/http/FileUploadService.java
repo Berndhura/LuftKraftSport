@@ -72,7 +72,7 @@ public class FileUploadService {
                     @Override
                     public void onCompleted() {
                         if (adId !=null) {
-                            uploadFile(adId, picture);
+                            multiPost_old(adId, picture);
                         }
                     }
 
@@ -130,16 +130,8 @@ public class FileUploadService {
 
     }
 
-    public void multiPost_old(Intent data) {
+    public void multiPost_old(String adId, String picture) {
 
-        view.showProgress();
-
-        String title = data.getStringExtra(Constants.TITLE);
-        String description = data.getStringExtra(Constants.DESCRIPTION);
-        String keywords = data.getStringExtra(Constants.KEYWORDS);
-        String picture = data.getStringExtra(Constants.FILENAME);
-        String price = data.getStringExtra(Constants.PRICE);
-        long date = data.getLongExtra(Constants.DATE, 0);
 
         Uri fileUri = Uri.parse(picture.toString());
         Log.i("CONAN", "fileURI: " + fileUri);
@@ -152,33 +144,32 @@ public class FileUploadService {
 
 
         File file = new File(fileString.toString());
-        Log.i("CONAN", "file: " + file);
+        Log.d("CONAN", "file: " + file);
         BitmapHelper bitmapHelper = new BitmapHelper(context);
         final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
-        Log.i("CONAN", "newFile: " + reducedPicture);
+        Log.d("CONAN", "newFile: " + reducedPicture);
+        Log.d("CONAN", "adId: " + adId);
 
 
         //todo: add more pics here??
         RequestParams params = new RequestParams();
         try {
-            params.put(Constants.IMAGE, reducedPicture);
+            params.put("file", reducedPicture);
         } catch (FileNotFoundException e) {
         }
 
-        params.put(Constants.TITLE, title);
-        params.put(Constants.DESCRIPTION, description);
-        params.put(Constants.KEYWORDS, keywords);
-        params.put("userid", getUserId());  //TODO: userid vs user_id in server!! server anpassen? -> jo eine stelle dort in saveNewAd
-        params.put(Constants.PRICE, price);
-        params.put(Constants.DATE, date);
+
+        params.put("adId", adId);
+        params.put("token", getUserToken());
         Log.d("CONAN", "userid bei upload: " + getUserId());
+        Log.d("CONAN", "url for upload: " + Urls.MAIN_SERVER_URL_V2 + "ads/" + adId + "\u002F" + "addPicture");
 
         AsyncHttpClient client = new AsyncHttpClient();
-        client.post(Urls.MAIN_SERVER_URL + Urls.UPLOAD_NEW_AD_URL, params, new FileAsyncHttpResponseHandler(reducedPicture) {
+        client.post(Urls.MAIN_SERVER_URL_V2 + "ads/" + adId + "\u002F" + "addPicture", params, new FileAsyncHttpResponseHandler(reducedPicture) {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-                Log.e("Volley Request Error", "no");
-                Toast.makeText(context, "Upload did not work!\n", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Upload did not work!", Toast.LENGTH_SHORT).show();
+                Log.d("CONAN", "error in upload file to server: "+throwable.getMessage());
                 view.hideProgress();
             }
 
