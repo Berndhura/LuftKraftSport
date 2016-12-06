@@ -138,14 +138,15 @@ public class Service {
                                          @Query("token") String userToken,
                                          @Part("file") MultipartBody.Part file);
 
-        /*
-        URL "/ads", method = RequestMethod.POST)
-        public Ad saveNewAd(@RequestBody Ad ad, @RequestParam("token") String token)
-         */
         @POST("ads")
         Observable<RowItem> saveNewAd(@Query("token") String userToken,
                                       @Body RowItem item);
 
+        @GET("/pictures/{pictureId}/thumbnail")
+        Observable<byte[]> getPictureThumbnail(@Path("pictureId") Integer pictureId);
+
+        @GET("/pictures/{pictureId}")
+        Observable<byte[]> getPicture(@Path("pictureId") Integer pictureId);
     }
 
     public Observable<String> uploadPictureObserv(Integer adId, String userToken, MultipartBody.Part file) {
