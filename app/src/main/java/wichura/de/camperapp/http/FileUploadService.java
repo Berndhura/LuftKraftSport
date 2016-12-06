@@ -53,6 +53,8 @@ public class FileUploadService {
 
     public void multiPost(Intent data) {
 
+        view.showProgress();
+
         Service service = new Service();
 
         String picture = data.getStringExtra(Constants.FILENAME);
@@ -187,7 +189,7 @@ public class FileUploadService {
         });
     }
 
-    public static String getRealPathFromUri(Context context, Uri contentUri) {
+    private static String getRealPathFromUri(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
             String[] proj = {MediaStore.Images.Media.DATA};
