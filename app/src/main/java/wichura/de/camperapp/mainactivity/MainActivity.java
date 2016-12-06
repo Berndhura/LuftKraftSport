@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements
 
         //TODO: setMyAdsFlag(true) when GET_ADS_FOR_USER, refactor
         setMyAdsFlag(false);
-        getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+        getAds(Constants.TYPE_ALL);
 
         //Toast.makeText(this, "ONCREATE!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    public void updateAds(AdsAndBookmarks elements) {
+    public void updateAds(AdsAndBookmarks elements, String type) {
 
         rowItems = new ArrayList<>();
         for (RowItem e : elements.getAds().getAds()) {
@@ -368,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements
             public boolean onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
-                loadNextDataFromApi(page);
+                loadNextDataFromApi(page, type);
                 // or loadNextDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
@@ -377,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
-    public void loadNextDataFromApi(int offset) {
+    public void loadNextDataFromApi(int offset, String type) {
         // Send an API request to retrieve appropriate paginated data
         //  --> Send the request including an offset value (i.e `page`) as a query parameter.
         //  --> Deserialize and construct new model objects from the API response
@@ -386,11 +386,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.d("CONAN", "OFFSET: " + offset);
         if (offset <= pages) {
             page = page + 1;
-            if (isMyAdsRequest()) {
-                presenterLayer.getAdsForUser(page, size, getUserToken());
-            } else {
-                presenterLayer.loadAdDataPage(page, size);
-            }
+            presenterLayer.loadAdDataPage(page, size, type);
         }
     }
 
@@ -402,12 +398,12 @@ public class MainActivity extends AppCompatActivity implements
         adapter.notifyDataSetChanged();
     }
 
-    private void getAds(String url) {
+    private void getAds(String type) {
         page = 0;
         if (adapter != null) {
             adapter.clear();
         }
-        presenterLayer.loadAdDataPage(page, size);
+        presenterLayer.loadAdDataPage(page, size, type);
     }
 
     @Override
@@ -428,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements
         switch (requestCode) {
             case Constants.REQUEST_ID_FOR_NEW_AD: {
                 setMyAdsFlag(false);
-                getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                getAds(Constants.TYPE_ALL);
                 break;
             }
             case Constants.REQUEST_ID_FOR_LOGIN: {
@@ -483,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements
             }
             case Constants.REQUEST_ID_FOR_OPEN_AD: {
                 setMyAdsFlag(false);
-                getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                getAds(Constants.TYPE_ALL);
                 break;
             }
             case Constants.REQUEST_ID_FOR_SEARCH: {
@@ -560,13 +556,8 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     page = 0;
                     size = 10;
-
-                    /*
-                    http://raent.de:9876/api/V2/ads/my?token=EAAHnEGldaZCgBAGiqRhQ6Bx1Eoyt3IvnIOFjUxPLfVsYdKqUKmUCVIYkVoGf0SZBdqEmDC09lalsopHWQ6aooD50d2YTh3fe1efLTmP2XK5FiAWb4QeDcJbcJbitCByKenukwkz63BVb9QnK1TobqrCQPgupAZD&page=0&size=10
-                     */
-                    //getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_FROM_USER + userId);
                     setMyAdsFlag(true);
-                    presenterLayer.getAdsForUser(page, size, getUserToken());
+                    getAds(Constants.TYPE_USER);
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
                 }
@@ -593,7 +584,7 @@ public class MainActivity extends AppCompatActivity implements
             }
             case R.id.refresh: {
                 setMyAdsFlag(false);
-                getAds(Urls.MAIN_SERVER_URL + Urls.GET_ALL_ADS_URL);
+                getAds(Constants.TYPE_ALL);
                 if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
@@ -603,7 +594,7 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
                 } else {
                     setMyAdsFlag(false);
-                    getAds(Urls.MAIN_SERVER_URL + Urls.GET_BOOKMARKED_ADS_URL + userId);
+                    getAds(Constants.TYPE_BOOKMARK);
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
                 }
@@ -679,10 +670,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private Boolean isUserLoggedIn() {
         return !getUserId().equals("");
-    }
-
-    private boolean isMyAdsRequest() {
-        return getSharedPreferences(SHOW_MY_ADS, 0).getBoolean(IS_MY_ADS, false);
     }
 
     private String getUserType() {

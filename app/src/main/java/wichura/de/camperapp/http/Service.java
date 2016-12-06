@@ -7,7 +7,6 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -27,7 +26,6 @@ import wichura.de.camperapp.models.GroupedMsgItem;
 import wichura.de.camperapp.models.MsgRowItem;
 import wichura.de.camperapp.models.RowItem;
 
-import static wichura.de.camperapp.http.Urls.GET_ADS_MY;
 import static wichura.de.camperapp.http.Urls.GET_FIND_ADS;
 
 /**
@@ -96,11 +94,11 @@ public class Service {
         @GET(GET_FIND_ADS)
         Observable<AdsAsPage> getFindAds(@Query("page") int page, @Query("size") int size);
 
-        @GET(GET_ADS_MY)
-        Observable<AdsAsPage> getAdsMy(
-                @Query("page") int page,
-                @Query("size") int size,
-                @Query("token") String token);
+        @GET("ads/my")
+        Observable<AdsAsPage> getAdsMy(@Query("page") int page, @Query("size") int size, @Query("token") String token);
+
+        @GET("bookmarks")
+        Observable<AdsAsPage> getMyBookmarkedAds(@Query("page") int page, @Query("size") int size, @Query("token") String token);
 
         @POST("ads/{adId}/increaseViewCount")
         Observable<String> increaseViewCount(@Path("adId") String adId);
@@ -197,6 +195,10 @@ public class Service {
 
     public Observable<AdsAsPage> getAdsMyObserv(int page, int size, String token) {
         return mWebServiceV2.getAdsMy(page, size, token);
+    }
+
+    public Observable<AdsAsPage> getMyBookmarkedAdsObserv(int page, int size, String token) {
+        return mWebServiceV2.getMyBookmarkedAds(page, size, token);
     }
 
     public Observable<AdsAsPage> getFindAdsObserv(int page, int size) {

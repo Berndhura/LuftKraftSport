@@ -25,6 +25,6 @@ public class Urls {
     public static final String GET_BOOKMARKS_FOR_USER = "getMyBookmarks";
     public static final String GET_PICTURE_THUMB = "getBildThumb?id=";
     public static final String GET_FIND_ADS = "findAds";
-    public static final String GET_ADS_MY = "ads/my";
+
 }
 

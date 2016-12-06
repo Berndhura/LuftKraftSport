@@ -68,7 +68,9 @@ public class MainPresenter {
                     }
 
                     @Override
-                    public void onNext(String result) {Log.d("CONAN", "create user: "+result);}
+                    public void onNext(String result) {
+                        Log.d("CONAN", "create user: " + result);
+                    }
                 });
     }
 
@@ -106,7 +108,69 @@ public class MainPresenter {
         request.executeAsync();
     }
 
-    public void loadAdDataPage(int page, int size) {
+    public void loadAdDataPage(int page, int size, String type) {
+        if (Constants.TYPE_BOOKMARK.equals(type)) {
+            loadBookmarkedAds(page, size, type);
+        } else if (Constants.TYPE_ALL.equals(type)) {
+            loadAllAd(page, size, type);
+        } else if (Constants.TYPE_USER.equals(type)) {
+            getAdsForUser(page, size, type, getUserToken());
+        }
+    }
+
+    private void loadBookmarkedAds(int page, int size, String type) {
+        if (page == 0) {
+            if (view.listView != null) {
+                view.listView.setVisibility(View.INVISIBLE);
+            }
+        }
+        view.progressBar.setVisibility(ProgressBar.VISIBLE);
+        //Log.d("CONAN", url);
+
+        Observable<String[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
+        Observable<AdsAsPage> getBookmarkedAdsObserv = service.getMyBookmarkedAdsObserv(page, size, getUserToken());
+
+        Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
+                Observable.zip(getBookmarksObserv, getBookmarkedAdsObserv, (bookmarks, ads) ->
+                {
+                    ArrayList<String> bm = new ArrayList<>(Arrays.asList(bookmarks));
+                    AdsAndBookmarks elements = new AdsAndBookmarks();
+                    elements.setAds(ads);
+                    elements.setBookmarks(bm);
+                    return elements;
+                });
+
+        subscription = zippedReqForBookmarksAndAds
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AdsAndBookmarks>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "Error in getting bookmarked ads: " + e.toString());
+                        view.showEmptyView();
+                    }
+
+                    @Override
+                    public void onNext(AdsAndBookmarks element) {
+                        view.progressBar.setVisibility(ProgressBar.GONE);
+                        if (page == 0) {
+                            if (view.listView != null) {
+                                view.listView.setVisibility(View.VISIBLE);
+                            }
+                            view.hideEmptyView();
+                            view.updateAds(element, type);
+                        } else {
+                            view.addMoreAdsToList(element);
+                        }
+                    }
+                });
+    }
+
+    private void loadAllAd(int page, int size, String type) {
         if (page == 0) {
             if (view.listView != null) {
                 view.listView.setVisibility(View.INVISIBLE);
@@ -138,7 +202,7 @@ public class MainPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "Error in Observer: " + e.toString());
+                        Log.d("CONAN", "Error in getting all ads: " + e.toString());
                         view.showEmptyView();
                     }
 
@@ -150,7 +214,7 @@ public class MainPresenter {
                                 view.listView.setVisibility(View.VISIBLE);
                             }
                             view.hideEmptyView();
-                            view.updateAds(element);
+                            view.updateAds(element, type);
                         } else {
                             view.addMoreAdsToList(element);
                         }
@@ -158,7 +222,7 @@ public class MainPresenter {
                 });
     }
 
-    public void getAdsForUser(int page, int size, String token) {
+    private void getAdsForUser(int page, int size, String type, String token) {
         if (page == 0) {
             if (view.listView != null) {
                 view.listView.setVisibility(View.INVISIBLE);
@@ -190,7 +254,7 @@ public class MainPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "Error in Observer: " + e.toString());
+                        Log.d("CONAN", "Error in getting user's ads: " + e.toString());
                         view.showEmptyView();
                     }
 
@@ -202,7 +266,7 @@ public class MainPresenter {
                                 view.listView.setVisibility(View.VISIBLE);
                             }
                             view.hideEmptyView();
-                            view.updateAds(element);
+                            view.updateAds(element, type);
                         } else {
                             view.addMoreAdsToList(element);
                         }
