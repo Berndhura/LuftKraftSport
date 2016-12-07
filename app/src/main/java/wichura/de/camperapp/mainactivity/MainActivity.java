@@ -55,7 +55,6 @@ import wichura.de.camperapp.models.AdsAndBookmarks;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.presentation.MainPresenter;
 
-import static wichura.de.camperapp.mainactivity.Constants.IS_MY_ADS;
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static wichura.de.camperapp.mainactivity.Constants.SHOW_MY_ADS;
 
@@ -349,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements
         listView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
             final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
             final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-            intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V2 +  "pictures/" + rowItem.getUrl());
+            intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V2 + "pictures/" + rowItem.getUrl());
             intent.putExtra(Constants.AD_ID, rowItem.getAdId());
             intent.putExtra(Constants.TITLE, rowItem.getTitle());
             intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
@@ -488,6 +487,7 @@ public class MainActivity extends AppCompatActivity implements
                     String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
                     String priceTo = data.getStringExtra(Constants.PRICE_TO);
                     setMyAdsFlag(false);
+                    //TODO -> umstellen auf paging!!!!!!!!!!!!!!!!!!!!!!!
                     getAds(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + keyword
                             + "&priceFrom=" + priceFrom + "&priceTo=" + priceTo);
                     drawer.closeDrawer(GravityCompat.START);

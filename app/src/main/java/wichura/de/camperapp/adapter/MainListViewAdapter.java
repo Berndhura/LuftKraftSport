@@ -21,6 +21,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import rx.Subscriber;
@@ -80,6 +81,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         TextView txtViews;
         ImageView thumbNail;
         TextView txtNumberOfBookmarks;
+        ImageView new_ad_marker;
 
     }
 
@@ -102,6 +104,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             holder.txtViews = (TextView) convertView.findViewById(R.id.NEW_my_views);
             holder.txtNumberOfBookmarks = (TextView) convertView.findViewById(R.id.number_of_bookmarks);
             holder.thumbNail = (ImageView) convertView.findViewById(R.id.icon);
+            holder.new_ad_marker = (ImageView) convertView.findViewById(R.id.new_ad_marker);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -132,6 +135,15 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             } else {
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
             }
+        }
+
+        Calendar c = Calendar.getInstance();
+        long seconds = c.get(Calendar.MILLISECOND);
+
+        if ((seconds - rowItem.getDate()) < 172800000 ) {
+            holder.new_ad_marker.setImageResource(R.drawable.ic_fiber_new_red_600_24dp);
+        } else {
+            holder.new_ad_marker.setImageResource(R.drawable.abc_ic_search);
         }
 
         //remove linearlayout for delete. view count...
