@@ -179,6 +179,7 @@ public class MainPresenter {
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
         //Log.d("CONAN", url);
 
+        //TODO:erstes noch uneingeloged -> 500 weil kein userToken bei getBookmarks!!
         Observable<String[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
         Observable<AdsAsPage> getAllAdsForUserObserv = service.getFindAdsObserv(page, size);
 
