@@ -181,7 +181,7 @@ public class MainPresenter {
 
         //TODO:erstes noch uneingeloged -> 500 weil kein userToken bei getBookmarks!!
         Observable<String[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
-        Observable<AdsAsPage> getAllAdsForUserObserv = service.getFindAdsObserv(page, size);
+        Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(page, size);
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                 Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->

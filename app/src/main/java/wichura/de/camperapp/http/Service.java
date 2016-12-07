@@ -26,8 +26,6 @@ import wichura.de.camperapp.models.GroupedMsgItem;
 import wichura.de.camperapp.models.MsgRowItem;
 import wichura.de.camperapp.models.RowItem;
 
-import static wichura.de.camperapp.http.Urls.GET_FIND_ADS;
-
 /**
  * Created by ich on 16.10.2016.
  * CamperApp
@@ -35,10 +33,8 @@ import static wichura.de.camperapp.http.Urls.GET_FIND_ADS;
 
 public class Service {
 
-    private static final String WEB_SERVICE_BASE_URL = Urls.MAIN_SERVER_URL;
     private static final String WEB_SERVICE_BASE_URL_V2 = Urls.MAIN_SERVER_URL_V2;
 
-    private final WebService mWebService;
     private final WebService mWebServiceV2;
 
     public Service() {
@@ -46,23 +42,10 @@ public class Service {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-
-        httpClient.addInterceptor(logging);
-
-        Retrofit restAdapter = new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(WEB_SERVICE_BASE_URL)
-                .client(httpClient.build())
-                .build();
-
-        mWebService = restAdapter.create(WebService.class);
-
         //api/V2
         OkHttpClient.Builder httpClientV2 = new OkHttpClient.Builder();
 
-        httpClient.addInterceptor(logging);
+        httpClientV2.addInterceptor(logging);
 
         Gson gson = new GsonBuilder()
                 .setLenient()
@@ -91,8 +74,16 @@ public class Service {
         @GET("ads/{adId}")
         Observable<AdDetails> getAdDetails(@Path("adId") Integer adId);
 
-        @GET(GET_FIND_ADS)
-        Observable<AdsAsPage> getFindAds(@Query("page") int page, @Query("size") int size);
+        @GET("ads")
+        Observable<AdsAsPage> findAds(@Query("description") String description,
+                                      @Query("priceFrom") int priceFrom,
+                                      @Query("priceTo") int priceTo,
+                                      @Query("page") int page,
+                                      @Query("size") int size);
+
+        @GET("ads")
+        Observable<AdsAsPage> getAllAds(@Query("page") int page,
+                                        @Query("size") int size);
 
         @GET("ads/my")
         Observable<AdsAsPage> getAdsMy(@Query("page") int page, @Query("size") int size, @Query("token") String token);
@@ -202,8 +193,12 @@ public class Service {
         return mWebServiceV2.getMyBookmarkedAds(page, size, token);
     }
 
-    public Observable<AdsAsPage> getFindAdsObserv(int page, int size) {
-        return mWebService.getFindAds(page, size);
+    public Observable<AdsAsPage> findAdsObserv(String description, int priceFrom, int priceTo, int page, int size) {
+        return mWebServiceV2.findAds(description, priceFrom, priceTo, page, size);
+    }
+
+    public Observable<AdsAsPage> getAllAdsObserv(int page, int size) {
+        return mWebServiceV2.getAllAds(page, size);
     }
 
     public Observable<AdDetails> getAdDetailsObserv(Integer adId) {
