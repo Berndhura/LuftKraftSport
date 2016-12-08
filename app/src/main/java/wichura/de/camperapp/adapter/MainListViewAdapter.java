@@ -137,13 +137,13 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             }
         }
 
-        Calendar c = Calendar.getInstance();
-        long seconds = c.get(Calendar.MILLISECOND);
+        final long date = System.currentTimeMillis();
+        final long oneWeek = 7*24*60*60*1000;
 
-        if ((seconds - rowItem.getDate()) < 172800000 ) {
+        if ((date - rowItem.getDate()) < oneWeek ) {
             holder.new_ad_marker.setImageResource(R.drawable.ic_fiber_new_red_600_24dp);
         } else {
-            holder.new_ad_marker.setImageResource(R.drawable.abc_ic_search);
+            holder.new_ad_marker.setVisibility(View.GONE);
         }
 
         //remove linearlayout for delete. view count...
