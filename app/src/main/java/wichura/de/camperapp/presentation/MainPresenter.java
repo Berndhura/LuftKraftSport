@@ -22,6 +22,7 @@ import java.util.Arrays;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.http.Service;
@@ -42,6 +43,7 @@ public class MainPresenter {
     private MainActivity view;
     private Service service;
     private Context context;
+    public Subscription subscription;
 
     public MainPresenter(MainActivity view, Service service, Context context) {
         this.view = view;
@@ -189,7 +191,7 @@ public class MainPresenter {
                         return elements;
                     });
 
-            zippedReqForBookmarksAndAds
+            subscription = zippedReqForBookmarksAndAds
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<AdsAndBookmarks>() {
@@ -220,7 +222,7 @@ public class MainPresenter {
         } else {
             Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(page, size);
 
-            getAllAdsForUserObserv
+            subscription = getAllAdsForUserObserv
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<AdsAsPage>() {
@@ -277,7 +279,7 @@ public class MainPresenter {
                     return elements;
                 });
 
-        zippedReqForBookmarksAndAds
+        subscription = zippedReqForBookmarksAndAds
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<AdsAndBookmarks>() {

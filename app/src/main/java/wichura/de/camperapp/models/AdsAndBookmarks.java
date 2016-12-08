@@ -20,7 +20,7 @@ public class AdsAndBookmarks {
         this.bookmarks = bookmarks;
     }
 
-    public AdsAsPage getAds() {return ads;}
+    public AdsAsPage getAdsPage() {return ads;}
 
     public void setAds(AdsAsPage ads) {
         this.ads = ads;

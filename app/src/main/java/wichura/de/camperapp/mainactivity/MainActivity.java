@@ -38,7 +38,6 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscription;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.activity.LoginActivity;
 import wichura.de.camperapp.activity.MessagesOverviewActivity;
@@ -82,10 +81,7 @@ public class MainActivity extends AppCompatActivity implements
     private BroadcastReceiver mLoginBroadcastReceiver;
     private boolean isLoginReceiverRegistered;
 
-    private Subscription subscription;
-
     private MainPresenter presenterLayer;
-    private Service service;
     private MainListViewAdapter adapter;
     private List<RowItem> rowItems;
 
@@ -98,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements
         pages = 0;
         total = 0;
 
-        service = new Service();
+        Service service = new Service();
         presenterLayer = new MainPresenter(this, service, getApplicationContext());
 
         //TODO: set active false in messageActivity in onDestroy, onStop, on???  BUT NOT HERE
@@ -143,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
                 if (newAccessToken != null) {
-                    String userToken= newAccessToken.getToken();
+                    String userToken = newAccessToken.getToken();
                     setUserPreferences(null, null, userToken);
                 }
                 if (newAccessToken == null) {
@@ -216,24 +212,16 @@ public class MainActivity extends AppCompatActivity implements
 
         registerLoginReceiver();
 
-        //BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation_view);
-
-        //getApplicationContext());
-
-        //TODO: setMyAdsFlag(true) when GET_ADS_FOR_USER, refactor
         setMyAdsFlag(false);
         getAds(Constants.TYPE_ALL);
-
-        //Toast.makeText(this, "ONCREATE!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscription != null && !subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
+        if (presenterLayer.subscription != null && !presenterLayer.subscription.isUnsubscribed()) {
+            presenterLayer.subscription.unsubscribe();
         }
-        // Toast.makeText(this, "ONDestroy!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -244,7 +232,6 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.registerOnSharedPreferenceChangeListener(this);
         setMyAdsFlag(false);
-        // Toast.makeText(this, "ONresume!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -260,7 +247,6 @@ public class MainActivity extends AppCompatActivity implements
         sp.unregisterOnSharedPreferenceChangeListener(this);
 
         setMyAdsFlag(false);
-        //  Toast.makeText(this, "ONpause!!!!!!!!!!", Toast.LENGTH_LONG).show();
     }
 
     private void registerLoginReceiver() {
@@ -310,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements
     public void showEmptyView() {
         //if ( adapter.getCount() == 0 ) {
         TextView tv = (TextView) findViewById(R.id.recyclerview_ads_list_empty);
-        tv.setVisibility(View.VISIBLE);
+        if (tv != null) tv.setVisibility(View.VISIBLE);
 
         // if cursor is empty, why? do we have an invalid location
         //Log.d("CONAN", "nix");
@@ -319,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements
     public void hideEmptyView() {
         //if ( adapter.getCount() == 0 ) {
         TextView tv = (TextView) findViewById(R.id.recyclerview_ads_list_empty);
-        tv.setVisibility(View.GONE);
+        if (tv != null) tv.setVisibility(View.GONE);
 
         // if cursor is empty, why? do we have an invalid location
         //Log.d("CONAN", "nix");
@@ -329,14 +315,14 @@ public class MainActivity extends AppCompatActivity implements
     public void updateAds(AdsAndBookmarks elements, String type) {
 
         rowItems = new ArrayList<>();
-        for (RowItem e : elements.getAds().getAds()) {
+        for (RowItem e : elements.getAdsPage().getAds()) {
             rowItems.add(e);
         }
 
-        page = elements.getAds().getPage();
-        size = elements.getAds().getSize();
-        pages = elements.getAds().getPages();
-        total = elements.getAds().getTotal();
+        page = elements.getAdsPage().getPage();
+        size = elements.getAdsPage().getSize();
+        pages = elements.getAdsPage().getPages();
+        total = elements.getAdsPage().getTotal();
 
         showNumberOfAds(total);
 
@@ -395,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void addMoreAdsToList(AdsAndBookmarks elements) {
 
-        for (RowItem e : elements.getAds().getAds()) {
+        for (RowItem e : elements.getAdsPage().getAds()) {
             rowItems.add(e);
         }
         adapter.notifyDataSetChanged();
@@ -650,9 +636,9 @@ public class MainActivity extends AppCompatActivity implements
     private void setUserPreferences(String name, String userId, String userToken) {
         SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         SharedPreferences.Editor editor = settings.edit();
-        if (name != null)  editor.putString(Constants.USER_NAME, name);
-        if (userId != null)  editor.putString(Constants.USER_ID, userId);
-        if (userToken != null)  editor.putString(Constants.USER_TOKEN, userToken);
+        if (name != null) editor.putString(Constants.USER_NAME, name);
+        if (userId != null) editor.putString(Constants.USER_ID, userId);
+        if (userToken != null) editor.putString(Constants.USER_TOKEN, userToken);
         editor.apply();
     }
 
