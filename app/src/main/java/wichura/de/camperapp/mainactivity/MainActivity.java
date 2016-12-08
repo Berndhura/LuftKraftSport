@@ -473,7 +473,7 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     setProfilePicture(null);
                 }
-                Log.d("CONAN: ", "Return from login, userid: " + getUserId());
+                Log.d("CONAN", "Return from login, userid: " + getUserId());
                 break;
             }
             case Constants.REQUEST_ID_FOR_OPEN_AD: {
@@ -529,13 +529,13 @@ public class MainActivity extends AppCompatActivity implements
 
     private void updateLoginButton() {
         if (getUserId().equals("")) {
-            Log.d("CONAN: ", "enable login button");
+            Log.d("CONAN", "enable login button");
             loginBtn.setEnabled(true);
             loginBtn.setVisibility(View.VISIBLE);
             loginBtn.setOnClickListener((view) -> startLoginActivity());
             presenterLayer.getFacebookUserInfo();  //TODO richtig hier?
         } else {
-            Log.d("CONAN: ", "disable login button");
+            Log.d("CONAN", "disable login button");
             loginBtn.setEnabled(false);
             loginBtn.setVisibility(View.GONE);
             presenterLayer.getFacebookUserInfo();  //TODO richtig hier?

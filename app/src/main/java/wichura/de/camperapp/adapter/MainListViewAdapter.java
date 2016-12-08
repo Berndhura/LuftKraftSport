@@ -21,7 +21,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import rx.Subscriber;
@@ -138,9 +137,9 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         }
 
         long date = System.currentTimeMillis();
-        final long oneWeek = 7*24*60*60*1000;
+        final long oneWeek = 7 * 24 * 60 * 60 * 1000;
 
-        if ((date - rowItem.getDate()) < oneWeek ) {
+        if ((date - rowItem.getDate()) < oneWeek) {
             holder.new_ad_marker.setVisibility(View.VISIBLE);
             holder.new_ad_marker.setImageResource(R.drawable.ic_fiber_new_red_600_24dp);
         } else {

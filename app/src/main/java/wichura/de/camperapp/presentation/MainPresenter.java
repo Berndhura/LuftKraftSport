@@ -22,7 +22,6 @@ import java.util.Arrays;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.http.Service;
@@ -42,7 +41,6 @@ public class MainPresenter {
 
     private MainActivity view;
     private Service service;
-    private Subscription subscription;
     private Context context;
 
     public MainPresenter(MainActivity view, Service service, Context context) {
@@ -52,9 +50,8 @@ public class MainPresenter {
     }
 
     public void createUser(String name, String userToken) {
-        service.createUserObserv(name, userToken)
+        service.createUserObserv(name, getUserToken())
                 .subscribeOn(Schedulers.newThread())
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -140,7 +137,7 @@ public class MainPresenter {
                     return elements;
                 });
 
-        subscription = zippedReqForBookmarksAndAds
+        zippedReqForBookmarksAndAds
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<AdsAndBookmarks>() {
@@ -177,50 +174,85 @@ public class MainPresenter {
             }
         }
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
-        //Log.d("CONAN", url);
 
-        //TODO:erstes noch uneingeloged -> 500 weil kein userToken bei getBookmarks!!
-        Observable<String[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
-        Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(page, size);
+        if (!getUserToken().equals("")) {
+            Observable<String[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
+            Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(page, size);
 
-        Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
-                Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
-                {
-                    ArrayList<String> bm = new ArrayList<>(Arrays.asList(bookmarks));
-                    AdsAndBookmarks elements = new AdsAndBookmarks();
-                    elements.setAds(ads);
-                    elements.setBookmarks(bm);
-                    return elements;
-                });
+            Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
+                    Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
+                    {
+                        ArrayList<String> bm = new ArrayList<>(Arrays.asList(bookmarks));
+                        AdsAndBookmarks elements = new AdsAndBookmarks();
+                        elements.setAds(ads);
+                        elements.setBookmarks(bm);
+                        return elements;
+                    });
 
-        subscription = zippedReqForBookmarksAndAds
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<AdsAndBookmarks>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("CONAN", "Error in getting all ads: " + e.toString());
-                        view.showEmptyView();
-                    }
-
-                    @Override
-                    public void onNext(AdsAndBookmarks element) {
-                        view.progressBar.setVisibility(ProgressBar.GONE);
-                        if (page == 0) {
-                            if (view.listView != null) {
-                                view.listView.setVisibility(View.VISIBLE);
-                            }
-                            view.hideEmptyView();
-                            view.updateAds(element, type);
-                        } else {
-                            view.addMoreAdsToList(element);
+            zippedReqForBookmarksAndAds
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<AdsAndBookmarks>() {
+                        @Override
+                        public void onCompleted() {
                         }
-                    }
-                });
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("CONAN", "Error in getting all ads: " + e.toString());
+                            view.showEmptyView();
+                        }
+
+                        @Override
+                        public void onNext(AdsAndBookmarks element) {
+                            view.progressBar.setVisibility(ProgressBar.GONE);
+                            if (page == 0) {
+                                if (view.listView != null) {
+                                    view.listView.setVisibility(View.VISIBLE);
+                                }
+                                view.hideEmptyView();
+                                view.updateAds(element, type);
+                            } else {
+                                view.addMoreAdsToList(element);
+                            }
+                        }
+                    });
+        } else {
+            Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(page, size);
+
+            getAllAdsForUserObserv
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<AdsAsPage>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("CONAN", "error in getting messages for an ad: " + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(AdsAsPage adsAsPage) {
+                            view.progressBar.setVisibility(ProgressBar.GONE);
+                            AdsAndBookmarks adsAndBookmarks = new AdsAndBookmarks();
+                            adsAndBookmarks.setAds(adsAsPage);
+                            //no user -> empty bookmarklist
+                            adsAndBookmarks.setBookmarks(new ArrayList<>());
+                            if (page == 0) {
+                                if (view.listView != null) {
+                                    view.listView.setVisibility(View.VISIBLE);
+                                }
+                                view.hideEmptyView();
+                                view.updateAds(adsAndBookmarks, type);
+                            } else {
+                                view.addMoreAdsToList(adsAndBookmarks);
+                            }
+                        }
+                    });
+        }
     }
 
     private void getAdsForUser(int page, int size, String type, String token) {
@@ -245,7 +277,7 @@ public class MainPresenter {
                     return elements;
                 });
 
-        subscription = zippedReqForBookmarksAndAds
+        zippedReqForBookmarksAndAds
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<AdsAndBookmarks>() {
@@ -273,11 +305,6 @@ public class MainPresenter {
                         }
                     }
                 });
-    }
-
-    public void rxUnSubscribe() {
-        if (subscription != null && !subscription.isUnsubscribed())
-            subscription.unsubscribe();
     }
 
     private void setUserPreferences(String name, String userId, String userToken) {
