@@ -142,9 +142,13 @@ public class MainActivity extends AppCompatActivity implements
         AccessTokenTracker tracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
+                if (newAccessToken != null) {
+                    String userToken= newAccessToken.getToken();
+                    setUserPreferences(null, null, userToken);
+                }
                 if (newAccessToken == null) {
                     //Facebook user logged out: name="" and userId=""
-                    setUserPreferences("", "");
+                    setUserPreferences("", "", "");
                     setProfileName("");
                     setProfilePicture(null);
                     updateLoginButton();
@@ -159,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements
                     String userId = newProfile.getId();
                     String name = newProfile.getName();
 
-                    setUserPreferences(name, userId);
+                    setUserPreferences(name, userId, null);
 
                     //not logged in as FB user: create db entry, GCM token, update login button
                     if (oldProfile == null && checkPlayServices() && isUserLoggedIn()) {
@@ -643,11 +647,12 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void setUserPreferences(String name, String userId) {
+    private void setUserPreferences(String name, String userId, String userToken) {
         SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString(Constants.USER_NAME, name);
-        editor.putString(Constants.USER_ID, userId);
+        if (name != null)  editor.putString(Constants.USER_NAME, name);
+        if (userId != null)  editor.putString(Constants.USER_ID, userId);
+        if (userToken != null)  editor.putString(Constants.USER_TOKEN, userToken);
         editor.apply();
     }
 
