@@ -80,7 +80,6 @@ public class OpenAdPresenter {
     public void bookmarkAd(String adId, String userToken) {
         service.bookmarkAdObserv(adId, userToken)
                 .subscribeOn(Schedulers.newThread())
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -105,7 +104,6 @@ public class OpenAdPresenter {
     public void deleteBookmark(String adId, String userToken) {
         service.delBookmarkAdObserv(adId, userToken)
                 .subscribeOn(Schedulers.newThread())
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -117,7 +115,7 @@ public class OpenAdPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error in bookmark ad: " + e.getMessage());
+                        Log.d("CONAN", "error in remove bookmark: " + e.getMessage());
                     }
 
                     @Override

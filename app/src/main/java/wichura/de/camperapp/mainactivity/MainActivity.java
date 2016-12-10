@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
@@ -85,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements
     private MainListViewAdapter adapter;
     private List<RowItem> rowItems;
 
+    private static final String LIST_STATE = "listState";
+    private Parcelable mListState = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements
 
         //load main layout
         setContentView(R.layout.activity_main);
+        listView = (ListView) findViewById(R.id.main_list);
 
         //ProgressBar
         progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
@@ -232,6 +237,23 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.registerOnSharedPreferenceChangeListener(this);
         setMyAdsFlag(false);
+
+        if (mListState != null)
+            listView.onRestoreInstanceState(mListState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        mListState = listView.onSaveInstanceState();
+        state.putParcelable(LIST_STATE, mListState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        mListState = state.getParcelable(LIST_STATE);
+
     }
 
     @Override
@@ -247,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements
         sp.unregisterOnSharedPreferenceChangeListener(this);
 
         setMyAdsFlag(false);
+        super.onPause();
     }
 
     private void registerLoginReceiver() {
@@ -325,8 +348,6 @@ public class MainActivity extends AppCompatActivity implements
         total = elements.getAdsPage().getTotal();
 
         showNumberOfAds(total);
-
-        listView = (ListView) findViewById(R.id.main_list);
         adapter = new MainListViewAdapter(
                 this,
                 getApplicationContext(),
@@ -467,8 +488,8 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             }
             case Constants.REQUEST_ID_FOR_OPEN_AD: {
-                setMyAdsFlag(false);
-                getAds(Constants.TYPE_ALL);
+                //setMyAdsFlag(false);
+                //getAds(Constants.TYPE_ALL);
                 break;
             }
             case Constants.REQUEST_ID_FOR_SEARCH: {
