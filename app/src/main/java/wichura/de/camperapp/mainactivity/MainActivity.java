@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.multidex.MultiDex;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -257,6 +258,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(newBase);
+        MultiDex.install(this);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mGcmRegistrationBroadcastReceiver);
@@ -268,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.unregisterOnSharedPreferenceChangeListener(this);
 
-        setMyAdsFlag(false);
+        //setMyAdsFlag(false);
         super.onPause();
     }
 
@@ -488,7 +495,7 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             }
             case Constants.REQUEST_ID_FOR_OPEN_AD: {
-                //setMyAdsFlag(false);
+                //setMyAdsFlag(true);
                 //getAds(Constants.TYPE_ALL);
                 break;
             }
