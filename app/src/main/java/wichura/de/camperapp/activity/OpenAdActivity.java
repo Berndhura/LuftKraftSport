@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,13 +21,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -42,7 +50,9 @@ import wichura.de.camperapp.presentation.OpenAdPresenter;
 import static wichura.de.camperapp.R.id.map;
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
-public class OpenAdActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener, OnMapReadyCallback {
 
     // private static double longitute;
     //private static double latitude;
@@ -57,8 +67,16 @@ public class OpenAdActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private OpenAdPresenter presenter;
 
-    MapView mapView;
-    GoogleMap googleMap;
+    private MapView mapView;
+    private GoogleMap googleMap;
+
+    private LocationRequest mLocationRequest;
+    private GoogleApiClient mGoogleApiClient;
+
+    private LatLng latLng;
+    private SupportMapFragment mFragment;
+    private Marker mCurrLocation;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -176,38 +194,46 @@ public class OpenAdActivity extends AppCompatActivity implements OnMapReadyCallb
         //getLocationInfo()
         //now get Lat and Lng  from  getLatLong()
         // this:  http://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
+        buildGoogleApiClient();
+        mGoogleApiClient.connect();
 
     }
+
+    protected synchronized void buildGoogleApiClient() {
+        Toast.makeText(this,"buildGoogleApiClient",Toast.LENGTH_SHORT).show();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
 
     @Override
     public void onMapReady(GoogleMap map) {
-        googleMap=map;
-        setUpMap();
+        googleMap = map;
+       // setUpMap();
 
     }
 
-    public void setUpMap(){
+    public void setUpMap() {
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.setMyLocationEnabled(true);
         getCurrentLocation();
     }
 
-    void getCurrentLocation()
-    {
-        Location myLocation  = googleMap.getMyLocation();
-        if(myLocation!=null)
-        {
+    void getCurrentLocation() {
+        Location myLocation = googleMap.getMyLocation();
+        if (myLocation != null) {
             double dLatitude = myLocation.getLatitude();
             double dLongitude = myLocation.getLongitude();
             googleMap.addMarker(new MarkerOptions().position(new LatLng(dLatitude, dLongitude))
                     .title("My Location").icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(dLatitude, dLongitude), 8));
+                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(dLatitude, dLongitude), 0));
 
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, "Unable to fetch the current location", Toast.LENGTH_SHORT).show();
         }
     }
@@ -238,7 +264,6 @@ public class OpenAdActivity extends AppCompatActivity implements OnMapReadyCallb
         alert.setNegativeButton("not yet", (dismissDialog, whichButton) -> {/*just go away*/});
         alert.show();
     }
-
 
     private void deleteAdRequest(final String adId) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
@@ -280,6 +305,46 @@ public class OpenAdActivity extends AppCompatActivity implements OnMapReadyCallb
 
     public Context getContext() {
         return getApplicationContext();
+    }
+
+    @Override
+        public void onConnected(@Nullable Bundle bundle) {
+        Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            //place marker at current position
+            googleMap.clear();
+            latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title("Current Position");
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+            mCurrLocation = googleMap.addMarker(markerOptions);
+        }
+
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(5000); //5 seconds
+        mLocationRequest.setFastestInterval(3000); //3 seconds
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Toast.makeText(this,"onConnectionSuspended",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(this,"onConnectionFailed",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
     }
 
 
