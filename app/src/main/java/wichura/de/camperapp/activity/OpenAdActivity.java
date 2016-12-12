@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -28,9 +39,10 @@ import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.presentation.OpenAdPresenter;
 
+import static wichura.de.camperapp.R.id.map;
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
-public class OpenAdActivity extends AppCompatActivity {
+public class OpenAdActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     // private static double longitute;
     //private static double latitude;
@@ -45,9 +57,8 @@ public class OpenAdActivity extends AppCompatActivity {
 
     private OpenAdPresenter presenter;
 
-    // static final LatLng HAMBURG = new LatLng(53.558, 9.927);
-    //static final LatLng KIEL = new LatLng(53.551, 9.993);
-    //private GoogleMap map;
+    MapView mapView;
+    GoogleMap googleMap;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -55,18 +66,16 @@ public class OpenAdActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.open_ad_activity);
 
-        //  map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        MapsInitializer.initialize(this);
 
-        /*if (map!=null){
-            Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG)
-                    .title("Hamburg"));
-            Marker kiel = map.addMarker(new MarkerOptions()
-                    .position(KIEL)
-                    .title("Kiel")
-                    .snippet("Kiel is cool")
-                    .icon(BitmapDescriptorFactory
-                            .fromResource(R.drawable.arrow_right)));
-        }*/
+        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+            case ConnectionResult.SUCCESS:
+                Toast.makeText(this, "SUCCESS", Toast.LENGTH_SHORT).show();
+                mapView = (MapView) findViewById(map);
+                mapView.onCreate(savedInstanceState);
+                mapView.onResume();
+                mapView.getMapAsync(this);
+        }
 
 
         presenter = new OpenAdPresenter(this, new Service(), getApplicationContext());
@@ -170,6 +179,40 @@ public class OpenAdActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onMapReady(GoogleMap map) {
+        googleMap=map;
+        setUpMap();
+
+    }
+
+    public void setUpMap(){
+
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        googleMap.setMyLocationEnabled(true);
+        getCurrentLocation();
+    }
+
+    void getCurrentLocation()
+    {
+        Location myLocation  = googleMap.getMyLocation();
+        if(myLocation!=null)
+        {
+            double dLatitude = myLocation.getLatitude();
+            double dLongitude = myLocation.getLongitude();
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(dLatitude, dLongitude))
+                    .title("My Location").icon(BitmapDescriptorFactory
+                            .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(dLatitude, dLongitude), 8));
+
+        }
+        else
+        {
+            Toast.makeText(this, "Unable to fetch the current location", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     public void updateBookmarkButton(String[] bookmark) {
         isBookmarked = false;
         ArrayList<String> bookmarkList = new ArrayList<>(Arrays.asList(bookmark));
@@ -238,6 +281,8 @@ public class OpenAdActivity extends AppCompatActivity {
     public Context getContext() {
         return getApplicationContext();
     }
+
+
 
 
      /* public static boolean getLatLong(JSONObject jsonObject) {
