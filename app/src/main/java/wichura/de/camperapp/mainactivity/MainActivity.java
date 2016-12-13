@@ -492,6 +492,8 @@ public class MainActivity extends AppCompatActivity implements
                     setProfilePicture(null);
                 }
                 Log.d("CONAN", "Return from login, userid: " + getUserId());
+                setMyAdsFlag(false);
+                getAds(Constants.TYPE_ALL);
                 break;
             }
             case Constants.REQUEST_ID_FOR_OPEN_AD: {

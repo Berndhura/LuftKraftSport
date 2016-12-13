@@ -34,6 +34,8 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -325,6 +327,18 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
             mCurrLocation = googleMap.addMarker(markerOptions);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 15));
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+            CircleOptions circleOptions = new CircleOptions()
+                    .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
+                    .radius(1000); // In meters
+
+// Get back the mutable Circle
+            Circle circle = googleMap.addCircle(circleOptions);
+            circle.setVisible(true);
         }
 
         mLocationRequest = new LocationRequest();
