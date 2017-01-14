@@ -161,13 +161,13 @@ public class FileUploadService {
         }
 
 
-        params.put("adId", adId);
+        params.put("articleId", adId);
         params.put("token", getUserToken());
         Log.d("CONAN", "userid bei upload: " + getUserId());
         Log.d("CONAN", "url for upload: " + Urls.MAIN_SERVER_URL_V2 + "ads/" + adId + "\u002F" + "addPicture");
 
         AsyncHttpClient client = new AsyncHttpClient();
-        client.post(Urls.MAIN_SERVER_URL_V2 + "ads/" + adId + "\u002F" + "addPicture", params, new FileAsyncHttpResponseHandler(reducedPicture) {
+        client.post(Urls.MAIN_SERVER_URL_V2 + "articles/" + adId + "\u002F" + "addPicture", params, new FileAsyncHttpResponseHandler(reducedPicture) {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
                 Toast.makeText(context, "Upload did not work!", Toast.LENGTH_SHORT).show();

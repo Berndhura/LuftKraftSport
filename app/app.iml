@@ -88,22 +88,22 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support.constraint/constraint-layout/1.0.0-beta4/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/design/25.0.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/design/25.1.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/24.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/multidex-instrumentation/1.0.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/multidex/1.0.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/palette-v7/24.0.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/25.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.0.1/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/transition/25.0.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-compat/25.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/transition/25.1.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.volley/volley/1.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.8.2/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads-lite/10.0.1/jars" />
@@ -160,12 +160,19 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/de.hdodenhof/circleimageview/2.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/io.reactivex/rxandroid/1.2.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-runtime-classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-safeguard" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-verifier" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-resources" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-support" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/multi-dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/pre-dexed" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/reload-dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/restart-dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shaders" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
@@ -179,18 +186,16 @@
     <orderEntry type="library" exported="" name="play-services-cast-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="okio-1.8.0" level="project" />
     <orderEntry type="library" exported="" name="constraint-layout-1.0.0-beta4" level="project" />
-    <orderEntry type="library" exported="" name="design-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-nearby-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-config-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-tagmanager-v4-impl-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-base-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-gass-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-fitness-10.0.1" level="project" />
-    <orderEntry type="library" exported="" name="support-fragment-25.0.1" level="project" />
+    <orderEntry type="library" exported="" name="transition-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="palette-v7-24.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wearable-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-cast-framework-10.0.1" level="project" />
-    <orderEntry type="library" exported="" name="support-core-ui-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-places-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-wallet-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-maps-10.0.1" level="project" />
@@ -198,45 +203,48 @@
     <orderEntry type="library" exported="" name="play-services-location-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.2.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-crash-10.0.1" level="project" />
-    <orderEntry type="library" exported="" name="support-core-utils-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-appinvite-10.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="multidex-instrumentation-1.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="analytics-6.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-plus-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="adapter-rxjava-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-common-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-impl-10.0.1" level="project" />
-    <orderEntry type="library" exported="" name="animated-vector-drawable-25.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-compat-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-10.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-database-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="okhttp-3.3.1" level="project" />
     <orderEntry type="library" exported="" name="logging-interceptor-3.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-media-compat-25.1.0" level="project" />
+    <orderEntry type="library" exported="" name="support-vector-drawable-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-flexibledivider-1.2.5" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-25.0.1" level="project" />
-    <orderEntry type="library" exported="" name="recyclerview-v7-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-gcm-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-games-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-analytics-10.0.1" level="project" />
+    <orderEntry type="library" exported="" name="design-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
     <orderEntry type="library" exported="" name="firebase-auth-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-tasks-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-identity-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="constraint-layout-solver-1.0.0-beta4" level="project" />
-    <orderEntry type="library" exported="" name="transition-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-base-10.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-fragment-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-appindexing-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-awareness-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-clearcut-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-database-connection-10.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-core-ui-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-storage-common-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-ads-lite-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-vision-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-iid-10.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-core-utils-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-storage-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="library-1.0.0" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-tagmanager-api-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="rxjava-1.1.6" level="project" />
     <orderEntry type="library" exported="" name="play-services-iid-10.0.1" level="project" />
@@ -250,8 +258,7 @@
     <orderEntry type="library" exported="" name="circleimageview-2.0.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-messaging-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-instantapps-10.0.1" level="project" />
-    <orderEntry type="library" exported="" name="support-compat-25.0.1" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-25.0.1" level="project" />
+    <orderEntry type="library" exported="" name="animated-vector-drawable-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-panorama-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="multidex-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="volley-1.0.0" level="project" />
@@ -259,9 +266,9 @@
     <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-safetynet-10.0.1" level="project" />
-    <orderEntry type="library" exported="" name="support-media-compat-25.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
-    <orderEntry type="library" exported="" name="support-vector-drawable-25.0.1" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-25.1.0" level="project" />
+    <orderEntry type="library" exported="" name="recyclerview-v7-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="mediarouter-v7-24.0.0" level="project" />
     <orderEntry type="library" exported="" name="android-async-http-1.4.9" level="project" />
     <orderEntry type="library" exported="" name="facebook-android-sdk-4.8.2" level="project" />

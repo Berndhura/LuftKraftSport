@@ -78,7 +78,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private GoogleApiClient mGoogleApiClient;
 
     private LatLng latLng;
-    private SupportMapFragment mFragment;
     private Marker mCurrLocation;
 
 
@@ -216,32 +215,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
-       // setUpMap();
-
     }
-
-    public void setUpMap() {
-
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.setMyLocationEnabled(true);
-        getCurrentLocation();
-    }
-
-    void getCurrentLocation() {
-        Location myLocation = googleMap.getMyLocation();
-        if (myLocation != null) {
-            double dLatitude = myLocation.getLatitude();
-            double dLongitude = myLocation.getLongitude();
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(dLatitude, dLongitude))
-                    .title("My Location").icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(dLatitude, dLongitude), 0));
-
-        } else {
-            Toast.makeText(this, "Unable to fetch the current location", Toast.LENGTH_SHORT).show();
-        }
-    }
-
 
     public void updateBookmarkButton(String[] bookmark) {
         isBookmarked = false;
@@ -336,7 +310,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
                     .radius(1000); // In meters
 
-// Get back the mutable Circle
+            // Get back the mutable Circle
             Circle circle = googleMap.addCircle(circleOptions);
             circle.setVisible(true);
         }

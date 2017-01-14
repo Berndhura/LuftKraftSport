@@ -65,49 +65,49 @@ public class Service {
         @GET("bookmarkIds")
         Observable<String[]> getBookmarksForUser(@Query("token") String userToken);
 
-        @GET("messages/forAd")
+        @GET("messages/forArticle")
         Observable<List<MsgRowItem>> getAllMessagesForAd(
                 @Query("token") String userToken,
                 @Query("sender") String chatPartner,
-                @Query("adId") String adId);
+                @Query("articleId") String articleId);
 
-        @GET("ads/{adId}")
-        Observable<AdDetails> getAdDetails(@Path("adId") Integer adId);
+        @GET("articles/{articleId}")
+        Observable<AdDetails> getAdDetails(@Path("articleId") Integer articleId);
 
-        @GET("ads")
+        @GET("articles")
         Observable<AdsAsPage> findAds(@Query("description") String description,
                                       @Query("priceFrom") int priceFrom,
                                       @Query("priceTo") int priceTo,
                                       @Query("page") int page,
                                       @Query("size") int size);
 
-        @GET("ads")
+        @GET("articles")
         Observable<AdsAsPage> getAllAds(@Query("page") int page,
                                         @Query("size") int size);
 
-        @GET("ads/my")
+        @GET("articles/my")
         Observable<AdsAsPage> getAdsMy(@Query("page") int page, @Query("size") int size, @Query("token") String token);
 
         @GET("bookmarks")
         Observable<AdsAsPage> getMyBookmarkedAds(@Query("page") int page, @Query("size") int size, @Query("token") String token);
 
-        @POST("ads/{adId}/increaseViewCount")
-        Observable<String> increaseViewCount(@Path("adId") String adId);
+        @POST("articles/{articleId}/increaseViewCount")
+        Observable<String> increaseViewCount(@Path("articleId") String articleId);
 
-        @POST("ads/{adId}/bookmark")
-        Observable<String> bookmarkAd(@Path("adId") String adId, @Query("token") String token);
+        @POST("articles/{articleId}/bookmark")
+        Observable<String> bookmarkAd(@Path("articleId") String articleId, @Query("token") String token);
 
-        @DELETE("bookmarks/{adId}")
-        Observable<String> delBookmarkAd(@Path("adId") String adId, @Query("token") String token);
+        @DELETE("bookmarks/{articleId}")
+        Observable<String> delBookmarkAd(@Path("articleId") String articleId, @Query("token") String token);
 
         @POST("messages")
         Observable<String> sendNewMessage(@Query("message") String message,
-                                          @Query("adId") String adId,
+                                          @Query("articleId") String articleId,
                                           @Query("idTo") String idTo,
                                           @Query("token") String token);
 
-        @DELETE("ads/{adId}")
-        Observable<String> deleteAd(@Path("adId") String adId);
+        @DELETE("articles/{articleId}")
+        Observable<String> deleteAd(@Path("articleId") String articleId);
 
         @POST("users")
         Observable<String> createUser(@Query("name") String name, @Query("token") String token);
@@ -124,12 +124,12 @@ public class Service {
         Observable<List<GroupedMsgItem>> getAllMessagesFromUser(@Query("token") String userToken);
 
         @Multipart
-        @POST("ads/{adId}/addPicture")
-        Observable<String> uploadPicture(@Query("adId") Integer adId,
+        @POST("articles/{articleId}/addPicture")
+        Observable<String> uploadPicture(@Query("articleId") Integer articleId,
                                          @Query("token") String userToken,
                                          @Part("file") MultipartBody.Part file);
 
-        @POST("ads")
+        @POST("articles")
         Observable<RowItem> saveNewAd(@Query("token") String userToken,
                                       @Body RowItem item);
 
