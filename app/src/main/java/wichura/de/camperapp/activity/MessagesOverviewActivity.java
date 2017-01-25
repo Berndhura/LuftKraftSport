@@ -81,6 +81,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             intent.putExtra(Constants.AD_ID, rowItem.getAdId());
             intent.putExtra(Constants.SENDER_ID, rowItem.getIdTo());
             intent.putExtra(Constants.ID_FROM, rowItem.getIdFrom());
+            intent.putExtra(Constants.CHAT_PARTNER, rowItem.getChatPartner());
             intent.putExtra(Constants.ID_TO, rowItem.getIdTo());
             intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
             intent.putExtra(Constants.AD_URL, Urls.MAIN_SERVER_URL_V2 + "pictures/" + rowItem.getUrl() + "/thumbnail");

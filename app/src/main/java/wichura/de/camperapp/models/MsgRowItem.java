@@ -19,6 +19,8 @@ public class MsgRowItem {
     private long date;
     @Expose
     private String idFrom;
+    @Expose
+    private String chatPartner;
 
     public String getMessage() {
         return message;
@@ -44,4 +46,7 @@ public class MsgRowItem {
         this.date = date;
     }
 
+    public String getChatPartner() {return chatPartner;}
+
+    public void setChatPartner(String chatPartner) {this.chatPartner = chatPartner;}
 }

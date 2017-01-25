@@ -30,14 +30,16 @@ public class MessagesPresenter {
         this.service = new Service();
     }
 
-    public void loadMessages(String userToken, String sender, String adId) {
+    public void loadMessages(String userToken, String chatPartner, String adId) {
 
         /*if (view.listView!=null) {
             view.listView.setVisibility(View.INVISIBLE);
         }
         view.enableProgress();
 */
-        Observable<List<MsgRowItem>> getMessagesForAdObserv = service.getAllMessagesForAdObserv(userToken, sender, adId);
+        Observable<List<MsgRowItem>> getMessagesForAdObserv = service.getAllMessagesForAdObserv(userToken, chatPartner, adId);
+
+        Log.d("CONAN", "message: sender, adId: " + chatPartner + ", " + adId);
 
         subscription = getMessagesForAdObserv
                 .subscribeOn(Schedulers.io())

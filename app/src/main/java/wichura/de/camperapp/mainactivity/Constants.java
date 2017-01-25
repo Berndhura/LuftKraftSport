@@ -51,6 +51,7 @@ public class Constants {
     public static final String SENDER_ID = "sender";
     public static final String SENDER_NAME = "senderName";
     public static final String ID_FROM = "idFrom";
+    public static final String CHAT_PARTNER = "chatPartner";
     public static final String ID_TO = "idTo";
     public static final String MESSAGE = "message";
 

@@ -22,6 +22,12 @@ public class GroupedMsgItem {
     private String idTo;
     @Expose
     private String adId;
+    @Expose
+    private String chatPartner;
+
+    public String getChatPartner() {return chatPartner;}
+
+    public void setChatPartner(String chatPartner) {this.chatPartner = chatPartner;}
 
     public String getIdFrom() {
         return idFrom;

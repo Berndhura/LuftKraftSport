@@ -79,9 +79,8 @@ public class MessagesActivity extends AppCompatActivity {
         text = (EditText) findViewById(R.id.edit_message);
 
         final String adId = getIntent().getStringExtra(Constants.AD_ID);
-        final String sender = getIntent().getStringExtra(Constants.SENDER_ID);
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
-        final String idFrom = getIntent().getStringExtra(Constants.ID_FROM);
+        final String chatPartner = getIntent().getStringExtra(Constants.CHAT_PARTNER);
         final String idTo = getIntent().getStringExtra(Constants.ID_TO);
 
         final String userId = getUserId();
@@ -118,7 +117,7 @@ public class MessagesActivity extends AppCompatActivity {
             }*/
         }
 
-        presenter.loadMessages(getUserToken(), idFrom, adId);
+        presenter.loadMessages(getUserToken(), chatPartner, adId);
 
         ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
         if (newMsgBtn != null) {
@@ -127,10 +126,10 @@ public class MessagesActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     //always send an answer to chat partner (the other), not yourself
                     String localSender;
-                    if (userId.equals(idFrom)) {
+                    if (userId.equals(chatPartner)) {
                         localSender = idTo;
                     } else {
-                        localSender = idFrom;
+                        localSender = chatPartner;
                     }
                     sendMessage(text.getText().toString(), adId, localSender);
                     //add new message to list
