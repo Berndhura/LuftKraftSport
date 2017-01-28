@@ -21,7 +21,7 @@ public class RowItem {
     @Expose
     private String id;
     @Expose
-    private String location;
+    private Location location;
     @Expose
     private String userId;
     @Expose
@@ -40,7 +40,7 @@ public class RowItem {
                    final String phone,
                    final long date,
                    final String price,
-                   final String location,
+                   final Location location,
                    final String userid,
                    final String views,
                    final String bookmarks) {
@@ -75,7 +75,7 @@ public class RowItem {
 
     public void setId(String id) {this.id = id;}
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 

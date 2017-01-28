@@ -29,7 +29,7 @@ public class Constants {
 
     //Intent
     public static final String URI = "uri";
-    public static final String AD_ID = "ad_id";
+    public static final String AD_ID = "article_id";
     public static final String TITLE = "title";
     public static final String IMAGE = "image";
     public static final String DESCRIPTION = "description";

@@ -233,7 +233,7 @@ public class MainPresenter {
 
                         @Override
                         public void onError(Throwable e) {
-                            Log.d("CONAN", "error in getting messages for an ad: " + e.toString());
+                            Log.d("CONAN", "Error in getting all ads: " + e.toString());
                         }
 
                         @Override

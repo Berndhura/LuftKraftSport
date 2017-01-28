@@ -21,7 +21,7 @@ public class GroupedMsgItem {
     @Expose
     private String idTo;
     @Expose
-    private String adId;
+    private String articleId;
     @Expose
     private String chatPartner;
 
@@ -62,5 +62,5 @@ public class GroupedMsgItem {
         return this.date;
     }
 
-    public String getAdId() { return this.adId; }
+    public String getArticleId() { return this.articleId; }
 }

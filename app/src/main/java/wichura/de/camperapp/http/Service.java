@@ -33,9 +33,9 @@ import wichura.de.camperapp.models.RowItem;
 
 public class Service {
 
-    private static final String WEB_SERVICE_BASE_URL_V2 = Urls.MAIN_SERVER_URL_V2;
+    private static final String WEB_SERVICE_BASE_URL_V3 = Urls.MAIN_SERVER_URL_V3;
 
-    private final WebService mWebServiceV2;
+    private final WebService mWebServiceV3;
 
     public Service() {
 
@@ -54,11 +54,11 @@ public class Service {
         Retrofit restAdapterV2 = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .baseUrl(WEB_SERVICE_BASE_URL_V2)
+                .baseUrl(WEB_SERVICE_BASE_URL_V3)
                 .client(httpClientV2.build())
                 .build();
 
-        mWebServiceV2 = restAdapterV2.create(WebService.class);
+        mWebServiceV3 = restAdapterV2.create(WebService.class);
     }
 
     private interface WebService {
@@ -141,75 +141,75 @@ public class Service {
     }
 
     public Observable<String> uploadPictureObserv(Integer adId, String userToken, MultipartBody.Part file) {
-        return mWebServiceV2.uploadPicture(adId, userToken, file);
+        return mWebServiceV3.uploadPicture(adId, userToken, file);
     }
 
     public Observable<RowItem> saveNewAdObserv(String userToken, RowItem item) {
-        return mWebServiceV2.saveNewAd(userToken, item);
+        return mWebServiceV3.saveNewAd(userToken, item);
     }
 
     public Observable<List<GroupedMsgItem>> getAllMessagesFromUserObserv(String userToken) {
-        return mWebServiceV2.getAllMessagesFromUser(userToken);
+        return mWebServiceV3.getAllMessagesFromUser(userToken);
     }
 
     public Observable<String> loginUserObserv(String email, String password) {
-        return mWebServiceV2.loginUser(email, password);
+        return mWebServiceV3.loginUser(email, password);
     }
 
     public Observable<String> sendDeviceTokenObserv(String userToken, String deviceToken) {
-        return mWebServiceV2.sendDeviceToken(userToken, deviceToken);
+        return mWebServiceV3.sendDeviceToken(userToken, deviceToken);
     }
 
     public Observable<String> createUserObserv(String name, String userToken) {
-        return mWebServiceV2.createUser(name, userToken);
+        return mWebServiceV3.createUser(name, userToken);
     }
 
     public Observable<String> deleteAdObserv(String adId) {
 
-        return mWebServiceV2.deleteAd(adId);
+        return mWebServiceV3.deleteAd(adId);
     }
 
     public Observable<String> sendNewMessageObserv(String message, String adId, String idTo, String userToken) {
-        return mWebServiceV2.sendNewMessage(message, adId, idTo, userToken);
+        return mWebServiceV3.sendNewMessage(message, adId, idTo, userToken);
     }
 
     public Observable<String> delBookmarkAdObserv(String adId, String userToken) {
-        return mWebServiceV2.delBookmarkAd(adId, userToken);
+        return mWebServiceV3.delBookmarkAd(adId, userToken);
     }
 
     public Observable<String> bookmarkAdObserv(String adId, String userToken) {
-        return mWebServiceV2.bookmarkAd(adId, userToken);
+        return mWebServiceV3.bookmarkAd(adId, userToken);
     }
 
     public Observable<String> increaseViewCount(String adId) {
-        return mWebServiceV2.increaseViewCount(adId);
+        return mWebServiceV3.increaseViewCount(adId);
     }
 
     public Observable<AdsAsPage> getAdsMyObserv(int page, int size, String token) {
-        return mWebServiceV2.getAdsMy(page, size, token);
+        return mWebServiceV3.getAdsMy(page, size, token);
     }
 
     public Observable<AdsAsPage> getMyBookmarkedAdsObserv(int page, int size, String token) {
-        return mWebServiceV2.getMyBookmarkedAds(page, size, token);
+        return mWebServiceV3.getMyBookmarkedAds(page, size, token);
     }
 
     public Observable<AdsAsPage> findAdsObserv(String description, int priceFrom, int priceTo, int page, int size) {
-        return mWebServiceV2.findAds(description, priceFrom, priceTo, page, size);
+        return mWebServiceV3.findAds(description, priceFrom, priceTo, page, size);
     }
 
     public Observable<AdsAsPage> getAllAdsObserv(int page, int size) {
-        return mWebServiceV2.getAllAds(page, size);
+        return mWebServiceV3.getAllAds(page, size);
     }
 
     public Observable<AdDetails> getAdDetailsObserv(Integer adId) {
-        return mWebServiceV2.getAdDetails(adId);
+        return mWebServiceV3.getAdDetails(adId);
     }
 
     public Observable<String[]> getBookmarksForUserObserv(String userToken) {
-        return mWebServiceV2.getBookmarksForUser(userToken);
+        return mWebServiceV3.getBookmarksForUser(userToken);
     }
 
     public Observable<List<MsgRowItem>> getAllMessagesForAdObserv(String userToken, String sender, String adId) {
-        return mWebServiceV2.getAllMessagesForAd(userToken, sender, adId);
+        return mWebServiceV3.getAllMessagesForAd(userToken, sender, adId);
     }
 }

@@ -59,7 +59,7 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
         final GroupedMsgItem rowItem = getItem(position);
 
         ImageView thumbNail = (ImageView) convertView.findViewById(R.id.ad_image);
-        Picasso.with(context).load(Urls.MAIN_SERVER_URL_V2 + "pictures/" + rowItem.getUrl() + "/thumbnail").into(thumbNail);
+        Picasso.with(context).load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl() + "/thumbnail").into(thumbNail);
 
         holder.title.setText(rowItem.getMessage());
         holder.name.setText(rowItem.getName());
