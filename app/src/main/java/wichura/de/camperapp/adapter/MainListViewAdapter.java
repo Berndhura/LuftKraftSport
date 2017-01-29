@@ -129,7 +129,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         if (bookmarks == null) {
             holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
         } else {
-            if (bookmarks.contains(rowItem.getArticleId())) {
+            if (bookmarks.contains(rowItem.getId())) {
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
             } else {
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
@@ -154,7 +154,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             //Delete Button
             holder.deleteButton.setOnClickListener((view) -> {
                 //get ad id and send delete request
-                String adId = rowItem.getArticleId();
+                String adId = rowItem.getId();
                 deleteAdRequest(adId, view);
             });
             holder.deleteButton.setTag(position);
@@ -166,12 +166,12 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
         //click to bookmark/debookmark an ad
         holder.bookmarkStar.setOnClickListener((view) -> {
-            if (bookmarks != null && bookmarks.contains(rowItem.getArticleId())) {
-                deleteBookmark(rowItem.getArticleId());
+            if (bookmarks != null && bookmarks.contains(rowItem.getId())) {
+                deleteBookmark(rowItem.getId());
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
                 notifyDataSetChanged();
             } else {
-                bookmarkAd(rowItem.getArticleId());
+                bookmarkAd(rowItem.getId());
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
                 notifyDataSetChanged();
             }

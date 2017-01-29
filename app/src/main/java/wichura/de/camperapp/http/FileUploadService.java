@@ -15,22 +15,17 @@ import com.loopj.android.http.RequestParams;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okio.BufferedSink;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.activity.NewAdActivity;
-import wichura.de.camperapp.models.GroupedMsgItem;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.util.BitmapHelper;
-import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 
 /**
@@ -85,7 +80,7 @@ public class FileUploadService {
 
                     @Override
                     public void onNext(RowItem rowItem) {
-                        adId = rowItem.getArticleId();
+                        adId = rowItem.getId();
                     }
                 });
 

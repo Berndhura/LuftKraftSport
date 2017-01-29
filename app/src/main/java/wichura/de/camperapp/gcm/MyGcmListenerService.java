@@ -48,6 +48,14 @@ public class MyGcmListenerService  extends GcmListenerService {
         Log.d(TAG, "Received: articleId: " + articleId);
         Log.d(TAG, "Received: name: " + name);
 
+       /* jData.put("message", message);
+        jData.put("sender", idFrom);
+        jData.put("articleId", articleId);
+        jData.put("name", name);
+        jData.put("adUrl", adUrl);
+        jGcmData.put("to", token);
+        */
+
         if (from.startsWith("/topics/")) {
             // message received from some topic.
         } else {

@@ -246,7 +246,7 @@ public class MessagesActivity extends AppCompatActivity {
     public void openAdActivityFor(RowItem rowItem) {
         final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
         intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V3 +  "pictures/" + rowItem.getUrl());
-        intent.putExtra(Constants.ARTICLE_ID, rowItem.getArticleId());
+        intent.putExtra(Constants.ARTICLE_ID, rowItem.getId());
         intent.putExtra(Constants.TITLE, rowItem.getTitle());
         intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
         //intent.putExtra(Constants.LOCATION, rowItem.getLocation());
