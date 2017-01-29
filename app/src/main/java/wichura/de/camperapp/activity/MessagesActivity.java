@@ -78,7 +78,7 @@ public class MessagesActivity extends AppCompatActivity {
         //progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
         text = (EditText) findViewById(R.id.edit_message);
 
-        final String adId = getIntent().getStringExtra(Constants.AD_ID);
+        final String articleId = getIntent().getStringExtra(Constants.ARTICLE_ID);
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
         final String chatPartner = getIntent().getStringExtra(Constants.CHAT_PARTNER);
         final String idTo = getIntent().getStringExtra(Constants.ID_TO);
@@ -117,7 +117,7 @@ public class MessagesActivity extends AppCompatActivity {
             }*/
         }
 
-        presenter.loadMessages(getUserToken(), chatPartner, adId);
+        presenter.loadMessages(getUserToken(), chatPartner, articleId);
 
         ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
         if (newMsgBtn != null) {
@@ -131,7 +131,7 @@ public class MessagesActivity extends AppCompatActivity {
                     } else {
                         localSender = chatPartner;
                     }
-                    sendMessage(text.getText().toString(), adId, localSender);
+                    sendMessage(text.getText().toString(), articleId, localSender);
                     //add new message to list
                     MsgRowItem it = new MsgRowItem(text.getText().toString());
                     rowItems.add(it);
@@ -182,7 +182,7 @@ public class MessagesActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", false);
-        ed.putString("adId", "");
+        ed.putString(Constants.ARTICLE_ID, "");
         ed.commit();
     }
 
@@ -190,16 +190,16 @@ public class MessagesActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", true);
-        ed.putString("adId", getIntent().getStringExtra(Constants.AD_ID));
-        Log.d("adId: ", getIntent().getStringExtra(Constants.AD_ID));
+        ed.putString(Constants.ARTICLE_ID, getIntent().getStringExtra(Constants.ARTICLE_ID));
+        Log.d("articleId: ", getIntent().getStringExtra(Constants.ARTICLE_ID));
         ed.apply();
     }
 
-    private void sendMessage(final String message, final String adId, final String idTo) {
+    private void sendMessage(final String message, final String articleId, final String idTo) {
         if (message.length() == 0)
             return;
 
-        presenter.sendMessage(message, adId, idTo, getUserToken());
+        presenter.sendMessage(message, articleId, idTo, getUserToken());
     }
 
     public void showMessages(List<MsgRowItem> msgRowItems) {
@@ -238,15 +238,15 @@ public class MessagesActivity extends AppCompatActivity {
     public void showLinkToAdButton() {
         Button link = (Button) findViewById(R.id.link_to_ad_button);
         link.setOnClickListener((view) -> {
-            String adId = getIntent().getStringExtra(Constants.AD_ID);
-            presenter.getAd(adId);
+            String articleId = getIntent().getStringExtra(Constants.ARTICLE_ID);
+            presenter.getAd(articleId);
         });
     }
 
     public void openAdActivityFor(RowItem rowItem) {
         final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
         intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V3 +  "pictures/" + rowItem.getUrl());
-        intent.putExtra(Constants.AD_ID, rowItem.getAdId());
+        intent.putExtra(Constants.ARTICLE_ID, rowItem.getArticleId());
         intent.putExtra(Constants.TITLE, rowItem.getTitle());
         intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
         //intent.putExtra(Constants.LOCATION, rowItem.getLocation());

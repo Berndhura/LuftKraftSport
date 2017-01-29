@@ -5,10 +5,10 @@ package wichura.de.camperapp.models;
  * CamperApp
  */
 
-public class AdDetails {
+public class ArticleDetails {
 
     private String numberOfBookmarks;
-    private RowItem ad;
+    private RowItem article;
 
     public String getNumberOfBookmarks() {
         return numberOfBookmarks;
@@ -18,12 +18,12 @@ public class AdDetails {
         this.numberOfBookmarks = numberOfBookmarks;
     }
 
-    public RowItem getAd() {
-        return ad;
+    public RowItem getArticle() {
+        return article;
     }
 
-    public void setAd(RowItem ad) {
-        this.ad = ad;
+    public void setAd(RowItem article) {
+        this.article = article;
     }
 
 

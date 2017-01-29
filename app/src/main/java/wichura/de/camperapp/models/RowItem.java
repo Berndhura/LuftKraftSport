@@ -19,7 +19,7 @@ public class RowItem {
     @Expose
     private String price;
     @Expose
-    private String id;
+    private String articleId;
     @Expose
     private Location location;
     @Expose
@@ -33,7 +33,7 @@ public class RowItem {
 
     public RowItem(final int imageId,
                    final String title,
-                   final String id,
+                   final String articleId,
                    final String keywords,
                    final String url,
                    final String des,
@@ -46,7 +46,7 @@ public class RowItem {
                    final String bookmarks) {
         this.imageId = imageId;
         this.title = title;
-        this.id = id;
+        this.articleId = articleId;
         this.keywords = keywords;
         this.urls = url;
         this.description = des;
@@ -71,9 +71,9 @@ public class RowItem {
         return userId;
     }
 
-    public String getAdId() {return id; }
+    public String getArticleId() {return articleId; }
 
-    public void setId(String id) {this.id = id;}
+    public void setArticleId(String articleId) {this.articleId = articleId;}
 
     public Location getLocation() {
         return location;

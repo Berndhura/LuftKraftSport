@@ -11,7 +11,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.activity.MessagesActivity;
 import wichura.de.camperapp.http.Service;
-import wichura.de.camperapp.models.AdDetails;
+import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.models.MsgRowItem;
 
 /**
@@ -95,11 +95,11 @@ public class MessagesPresenter {
         }
     }
 
-    public void getAd(String adId) {
-        service.getAdDetailsObserv(Integer.parseInt(adId))
+    public void getAd(String articleId) {
+        service.getAdDetailsObserv(Integer.parseInt(articleId))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<AdDetails>() {
+                .subscribe(new Subscriber<ArticleDetails>() {
                     @Override
                     public void onCompleted() {
 
@@ -107,12 +107,12 @@ public class MessagesPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error in getting ad details: " + e.getMessage());
+                        Log.d("CONAN", "error in getting article details: " + e.getMessage());
                     }
 
                     @Override
-                    public void onNext(AdDetails adDetails) {
-                        view.openAdActivityFor(adDetails.getAd());
+                    public void onNext(ArticleDetails articleDetails) {
+                        view.openAdActivityFor(articleDetails.getArticle());
                     }
                 });
     }

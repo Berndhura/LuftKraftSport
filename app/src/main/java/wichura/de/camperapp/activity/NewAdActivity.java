@@ -91,7 +91,7 @@ public class NewAdActivity extends AppCompatActivity {
 
             final Intent data = new Intent();
             data.putExtra(Constants.TITLE, titleString);
-            data.putExtra(Constants.AD_ID, "apid");
+            data.putExtra(Constants.ARTICLE_ID, "arcticleId");
             data.putExtra(Constants.DESCRIPTION, descString);
             data.putExtra(Constants.KEYWORDS, keyWordsString);
             data.putExtra(Constants.FILENAME, mImage);

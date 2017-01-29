@@ -78,7 +78,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             final GroupedMsgItem rowItem = (GroupedMsgItem) listView.getItemAtPosition(position);
             //open message threat
             final Intent intent = new Intent(getApplicationContext(), MessagesActivity.class);
-            intent.putExtra(Constants.AD_ID, rowItem.getArticleId());
+            intent.putExtra(Constants.ARTICLE_ID, rowItem.getArticleId());
             intent.putExtra(Constants.SENDER_ID, rowItem.getIdTo());
             intent.putExtra(Constants.ID_FROM, rowItem.getIdFrom());
             intent.putExtra(Constants.CHAT_PARTNER, rowItem.getChatPartner());

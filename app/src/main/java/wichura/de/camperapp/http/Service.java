@@ -20,7 +20,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
-import wichura.de.camperapp.models.AdDetails;
+import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.models.AdsAsPage;
 import wichura.de.camperapp.models.GroupedMsgItem;
 import wichura.de.camperapp.models.MsgRowItem;
@@ -72,7 +72,7 @@ public class Service {
                 @Query("articleId") String articleId);
 
         @GET("articles/{articleId}")
-        Observable<AdDetails> getAdDetails(@Path("articleId") Integer articleId);
+        Observable<ArticleDetails> getAdDetails(@Path("articleId") Integer articleId);
 
         @GET("articles")
         Observable<AdsAsPage> findAds(@Query("description") String description,
@@ -201,7 +201,7 @@ public class Service {
         return mWebServiceV3.getAllAds(page, size);
     }
 
-    public Observable<AdDetails> getAdDetailsObserv(Integer adId) {
+    public Observable<ArticleDetails> getAdDetailsObserv(Integer adId) {
         return mWebServiceV3.getAdDetails(adId);
     }
 

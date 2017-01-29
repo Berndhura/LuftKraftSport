@@ -85,7 +85,7 @@ public class FileUploadService {
 
                     @Override
                     public void onNext(RowItem rowItem) {
-                        adId = rowItem.getAdId();
+                        adId = rowItem.getArticleId();
                     }
                 });
 

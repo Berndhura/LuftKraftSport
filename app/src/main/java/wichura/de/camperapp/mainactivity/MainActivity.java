@@ -367,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements
             final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
             final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
             intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl());
-            intent.putExtra(Constants.AD_ID, rowItem.getAdId());
+            intent.putExtra(Constants.ARTICLE_ID, rowItem.getArticleId());
             intent.putExtra(Constants.TITLE, rowItem.getTitle());
             intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
             //intent.putExtra(Constants.LOCATION, rowItem.getLocation());

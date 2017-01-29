@@ -29,7 +29,6 @@ public class Constants {
 
     //Intent
     public static final String URI = "uri";
-    public static final String AD_ID = "article_id";
     public static final String TITLE = "title";
     public static final String IMAGE = "image";
     public static final String DESCRIPTION = "description";
@@ -53,6 +52,7 @@ public class Constants {
     public static final String ID_FROM = "idFrom";
     public static final String CHAT_PARTNER = "chatPartner";
     public static final String ID_TO = "idTo";
+    public static final String ARTICLE_ID = "articleId";
     public static final String MESSAGE = "message";
 
     //Shared Preferences

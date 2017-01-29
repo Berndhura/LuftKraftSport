@@ -27,7 +27,7 @@ import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO
 public class MyGcmListenerService  extends GcmListenerService {
 
     private static final String TAG = "CONAN";
-    private String adId;
+    private String articleId;
 
     /**
      * Called when message is received.
@@ -41,11 +41,11 @@ public class MyGcmListenerService  extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
         String sender = data.getString("sender");
-        adId = data.getString("adId");
+        articleId = data.getString("articleId");
         String name = data.getString("name");
         Log.d(TAG, "Received: sender: " + sender);
         Log.d(TAG, "Received: Message: " + message);
-        Log.d(TAG, "Received: ADID: " + adId);
+        Log.d(TAG, "Received: articleId: " + articleId);
         Log.d(TAG, "Received: name: " + name);
 
         if (from.startsWith("/topics/")) {
@@ -68,10 +68,10 @@ public class MyGcmListenerService  extends GcmListenerService {
          *
          * if MessageActivity IS open, only update chat
          */
-        if (isMessageActivityActive() && getAdIdFromSharedPref().equals(adId)) {
+        if (isMessageActivityActive() && getAdIdFromSharedPref().equals(articleId)) {
             updateChat(message, sender);
         } else {
-            sendNotification(message, sender, adId, name);
+            sendNotification(message, sender, articleId, name);
         }
         // [END_EXCLUDE]
     }
@@ -89,13 +89,13 @@ public class MyGcmListenerService  extends GcmListenerService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message, String sender, String adId, String name) {
+    private void sendNotification(String message, String sender, String articleId, String name) {
         Intent intent = new Intent(this, MessagesActivity.class);
         intent.putExtra(Constants.SENDER_ID, sender);
         intent.putExtra(Constants.SENDER_NAME, name);
         intent.putExtra(Constants.ID_FROM, sender);
         intent.putExtra(Constants.ID_TO, getUserId());
-        intent.putExtra(Constants.AD_ID, adId);
+        intent.putExtra(Constants.ARTICLE_ID, articleId);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -122,7 +122,7 @@ public class MyGcmListenerService  extends GcmListenerService {
     }
 
     private String getAdIdFromSharedPref() {
-        return getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE).getString("adId", "");
+        return getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE).getString(Constants.ARTICLE_ID, "");
     }
 
     private Boolean isMessageActivityActive() {

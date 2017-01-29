@@ -126,7 +126,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
         mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
         mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
-        mAdId = getIntent().getStringExtra(Constants.AD_ID);
+        mAdId = getIntent().getStringExtra(Constants.ARTICLE_ID);
 
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         mBookmarkButton.setClickable(false);
@@ -159,7 +159,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         if (isOwnAd() && mDelAndMsgButton != null) {
             mDelAndMsgButton.setOnClickListener((view) -> {
                 //get ad id and send delete request
-                String adId = getIntent().getStringExtra(Constants.AD_ID);
+                String adId = getIntent().getStringExtra(Constants.ARTICLE_ID);
                 Log.i("CONAN", "AdId: " + mAdId);
                 deleteAdRequest(adId);
             });
@@ -169,7 +169,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
                 if (!getUserId().equals("")) {
                     //send a message to ad owner
-                    String adId = getIntent().getStringExtra(Constants.AD_ID);
+                    String adId = getIntent().getStringExtra(Constants.ARTICLE_ID);
                     String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
                     String sender = getUserId();
                     sendMessage(adId, ownerId, sender);
@@ -181,7 +181,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         }
 
         mBookmarkButton.setOnClickListener((view) -> {
-            String adId = getIntent().getStringExtra(Constants.AD_ID);
+            String adId = getIntent().getStringExtra(Constants.ARTICLE_ID);
             if (isBookmarked) {
                 presenter.deleteBookmark(adId, getUserToken());
             } else {
