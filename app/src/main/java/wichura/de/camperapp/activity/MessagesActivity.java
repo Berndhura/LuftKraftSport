@@ -125,13 +125,13 @@ public class MessagesActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //always send an answer to chat partner (the other), not yourself
-                    String localSender;
+                  /*  String localSender;
                     if (userId.equals(chatPartner)) {
                         localSender = idTo;
                     } else {
                         localSender = chatPartner;
-                    }
-                    sendMessage(text.getText().toString(), articleId, localSender);
+                    }*/
+                    sendMessage(text.getText().toString(), articleId, chatPartner);
                     //add new message to list
                     MsgRowItem it = new MsgRowItem(text.getText().toString());
                     rowItems.add(it);
