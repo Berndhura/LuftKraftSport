@@ -59,9 +59,9 @@ public class MessagesActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 Bundle b = intent.getExtras();
                 if (b != null) {
-                    final String idFrom = getIntent().getStringExtra(Constants.ID_FROM);
+                    final String chatPartner = getIntent().getStringExtra(Constants.CHAT_PARTNER);
                     MsgRowItem it = new MsgRowItem(b.getString(Constants.MESSAGE));
-                    it.setSender(idFrom);
+                    it.setSender(chatPartner);
                     rowItems.add(it);
                     adapter.notifyDataSetChanged();
                     listView.setSelection(listView.getCount() - 1);
@@ -81,9 +81,6 @@ public class MessagesActivity extends AppCompatActivity {
         final String articleId = getIntent().getStringExtra(Constants.ARTICLE_ID);
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
         final String chatPartner = getIntent().getStringExtra(Constants.CHAT_PARTNER);
-        final String idTo = getIntent().getStringExtra(Constants.ID_TO);
-
-        final String userId = getUserId();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
         if (toolbar != null) {

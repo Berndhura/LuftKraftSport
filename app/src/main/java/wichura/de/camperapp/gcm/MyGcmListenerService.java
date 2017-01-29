@@ -88,7 +88,7 @@ public class MyGcmListenerService  extends GcmListenerService {
     private void updateChat(String message, String sender) {
         Intent updateChat = new Intent("appendChatScreenMsg");
         updateChat.putExtra(Constants.MESSAGE, message);
-        updateChat.putExtra(Constants.ID_FROM, sender);
+        updateChat.putExtra(Constants.CHAT_PARTNER, sender);
         LocalBroadcastManager.getInstance(this).sendBroadcast(updateChat);
     }
 
@@ -101,7 +101,7 @@ public class MyGcmListenerService  extends GcmListenerService {
         Intent intent = new Intent(this, MessagesActivity.class);
         intent.putExtra(Constants.SENDER_ID, sender);
         intent.putExtra(Constants.SENDER_NAME, name);
-        intent.putExtra(Constants.ID_FROM, sender);
+        intent.putExtra(Constants.CHAT_PARTNER, sender);
         intent.putExtra(Constants.ID_TO, getUserId());
         intent.putExtra(Constants.ARTICLE_ID, articleId);
 
