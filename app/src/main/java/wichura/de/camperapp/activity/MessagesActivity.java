@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -118,27 +117,16 @@ public class MessagesActivity extends AppCompatActivity {
 
         ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
         if (newMsgBtn != null) {
-            newMsgBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //always send an answer to chat partner (the other), not yourself
-                  /*  String localSender;
-                    if (userId.equals(chatPartner)) {
-                        localSender = idTo;
-                    } else {
-                        localSender = chatPartner;
-                    }*/
-                    sendMessage(text.getText().toString(), articleId, chatPartner);
-                    //add new message to list
-                    MsgRowItem it = new MsgRowItem(text.getText().toString());
-                    rowItems.add(it);
-                    adapter.notifyDataSetChanged();
-                    text.setText(null);
-                    //TODO add message to list
-                    listView.setSelection(listView.getCount() - 1);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                }
+            newMsgBtn.setOnClickListener((v) -> {
+                sendMessage(text.getText().toString(), articleId, chatPartner);
+                //add new message to list
+                MsgRowItem it = new MsgRowItem(text.getText().toString());
+                rowItems.add(it);
+                adapter.notifyDataSetChanged();
+                text.setText(null);
+                listView.setSelection(listView.getCount() - 1);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
             });
         }
     }
@@ -180,7 +168,7 @@ public class MessagesActivity extends AppCompatActivity {
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", false);
         ed.putString(Constants.ARTICLE_ID, "");
-        ed.commit();
+        ed.apply();
     }
 
     private void setActive() {
@@ -242,7 +230,7 @@ public class MessagesActivity extends AppCompatActivity {
 
     public void openAdActivityFor(RowItem rowItem) {
         final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-        intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V3 +  "pictures/" + rowItem.getUrl());
+        intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl());
         intent.putExtra(Constants.ARTICLE_ID, rowItem.getId());
         intent.putExtra(Constants.TITLE, rowItem.getTitle());
         intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
