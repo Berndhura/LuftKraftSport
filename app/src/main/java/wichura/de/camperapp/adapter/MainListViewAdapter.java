@@ -236,7 +236,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         Service service = new Service();
-                        service.deleteAdObserv(adId)
+                        service.deleteAdObserv(adId, getUserToken())
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new Subscriber<String>() {

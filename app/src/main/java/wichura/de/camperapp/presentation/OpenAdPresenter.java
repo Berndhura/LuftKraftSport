@@ -148,7 +148,7 @@ public class OpenAdPresenter {
     }
 
     public void deleteAd(String adId) {
-        service.deleteAdObserv(adId)
+        service.deleteAdObserv(adId, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
