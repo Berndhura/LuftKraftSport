@@ -109,9 +109,6 @@ public class Service {
         @DELETE("articles/{articleId}")
         Observable<String> deleteAd(@Path("articleId") String articleId, @Query("token") String token);
 
-        @POST("users")
-        Observable<String> createUser(@Query("name") String name, @Query("token") String token);
-
         @POST("users/sendToken")
         Observable<String> sendDeviceToken(@Query("token") String token,
                                            @Query("deviceToken") String deviceToken);
@@ -158,10 +155,6 @@ public class Service {
 
     public Observable<String> sendDeviceTokenObserv(String userToken, String deviceToken) {
         return mWebServiceV3.sendDeviceToken(userToken, deviceToken);
-    }
-
-    public Observable<String> createUserObserv(String name, String userToken) {
-        return mWebServiceV3.createUser(name, userToken);
     }
 
     public Observable<String> deleteAdObserv(String adId, String userToken) {

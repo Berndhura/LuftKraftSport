@@ -169,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements
 
                     //not logged in as FB user: create db entry, GCM token, update login button
                     if (oldProfile == null && checkPlayServices() && isUserLoggedIn()) {
-                        presenterLayer.createUser(getUserName().replaceAll(" ", "%20"), getUserToken());
                         if (checkPlayServices() && isUserLoggedIn()) {
                             // Start IntentService to register this application with GCM.
                             Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
@@ -177,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements
                         }
                         updateLoginButton();
                     }
-
                     Intent loginComplete = new Intent(Constants.LOGIN_COMPLETE);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
                 }
@@ -217,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements
         };
 
         registerLoginReceiver();
-
         setMyAdsFlag(false);
         getAds(Constants.TYPE_ALL);
     }
@@ -447,9 +444,6 @@ public class MainActivity extends AppCompatActivity implements
             case Constants.REQUEST_ID_FOR_LOGIN: {
 
                 if (getUserType().equals(Constants.FACEBOOK_USER)) {
-                    //create new user in DB in case of first login
-                    presenterLayer.createUser(getUserName().replaceAll(" ", "%20"), getUserToken());
-
                     if (checkPlayServices() && isUserLoggedIn()) {
                         // Start IntentService to register this application with GCM.
                         Intent intent = new Intent(this, RegistrationIntentService.class);
@@ -458,9 +452,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 if (getUserType().equals(Constants.EMAIL_USER) && isUserLoggedIn()) {
-                    //create new user in DB in case of first login
-                    presenterLayer.createUser(getUserName().replaceAll(" ", "%20"), getUserToken());
-
                     //request Token from GCM and update in DB
                     if (checkPlayServices() && isUserLoggedIn()) {
                         // Start IntentService to register this application with GCM.
@@ -470,9 +461,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 if (getUserType().equals(Constants.GOOGLE_USER) && isUserLoggedIn()) {
-                    //create new user in DB in case of first login
-                    presenterLayer.createUser(getUserName().replaceAll(" ", "%20"), getUserToken());
-
                     //request Token from GCM and update in DB
                     if (checkPlayServices() && isUserLoggedIn()) {
                         // Start IntentService to register this application with GCM.

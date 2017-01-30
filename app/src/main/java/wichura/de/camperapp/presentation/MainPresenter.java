@@ -51,28 +51,6 @@ public class MainPresenter {
         this.context = context;
     }
 
-    public void createUser(String name, String userToken) {
-        service.createUserObserv(name, getUserToken())
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d("CONAN", "created new user");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("CONAN", "error in creating user: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(String result) {
-                        Log.d("CONAN", "create user: " + result);
-                    }
-                });
-    }
-
     public void getFacebookUserInfo() {
         CallbackManager.Factory.create();
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
