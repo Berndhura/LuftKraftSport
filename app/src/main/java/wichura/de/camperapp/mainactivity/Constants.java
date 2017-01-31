@@ -33,6 +33,8 @@ public class Constants {
     public static final String IMAGE = "image";
     public static final String DESCRIPTION = "description";
     public static final String LOCATION = "location";
+    public static final String LAT = "lat";
+    public static final String LNG = "lng";
     public static final String PHONE = "phone";
     public static final String PRICE = "price";
     public static final String DATE = "date";

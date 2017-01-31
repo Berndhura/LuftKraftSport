@@ -32,7 +32,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -80,6 +79,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private LatLng latLng;
     private Marker mCurrLocation;
 
+    private double lat;
+    private double lng;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -126,7 +128,11 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
         mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
         mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
-        mAdId = getIntent().getIntExtra(Constants.ID,0);
+        mAdId = getIntent().getIntExtra(Constants.ID, 0);
+
+        lat = getIntent().getDoubleExtra(Constants.LAT, 0);
+        lng = getIntent().getDoubleExtra(Constants.LNG, 0);
+
 
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         mBookmarkButton.setClickable(false);
@@ -203,7 +209,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     protected synchronized void buildGoogleApiClient() {
-        Toast.makeText(this,"buildGoogleApiClient",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -286,34 +292,34 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     @Override
-        public void onConnected(@Nullable Bundle bundle) {
+    public void onConnected(@Nullable Bundle bundle) {
         Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mLastLocation != null) {
+        //Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+               // mGoogleApiClient);
+        //if (mLastLocation != null) {
             //place marker at current position
             googleMap.clear();
-            latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            latLng = new LatLng(lat, lng);
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
             markerOptions.title("Current Position");
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
             mCurrLocation = googleMap.addMarker(markerOptions);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 15));
+           // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, mLastLocation.getLongitude()), 15));
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.getUiSettings().setScrollGesturesEnabled(true);
             googleMap.getUiSettings().setCompassEnabled(true);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-            CircleOptions circleOptions = new CircleOptions()
+           /* CircleOptions circleOptions = new CircleOptions()
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
                     .radius(1000); // In meters
 
             // Get back the mutable Circle
             Circle circle = googleMap.addCircle(circleOptions);
-            circle.setVisible(true);
-        }
+            circle.setVisible(true);*/
+       // }
 
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000); //5 seconds
@@ -326,12 +332,12 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnectionSuspended(int i) {
-        Toast.makeText(this,"onConnectionSuspended",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onConnectionSuspended", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(this,"onConnectionFailed",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "onConnectionFailed", Toast.LENGTH_SHORT).show();
     }
 
     @Override

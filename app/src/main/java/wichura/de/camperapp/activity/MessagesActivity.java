@@ -230,13 +230,17 @@ public class MessagesActivity extends AppCompatActivity {
     }
 
     public void openAdActivityFor(ArticleDetails rowItem) {
+        double lat = rowItem.getLocation().getCoordinates()[0];
+        double lng = rowItem.getLocation().getCoordinates()[1];
+
         final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
         intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrls());
         intent.putExtra(Constants.ARTICLE_ID, rowItem.getId());
         intent.putExtra(Constants.ID, rowItem.getId());
         intent.putExtra(Constants.TITLE, rowItem.getTitle());
         intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
-        //intent.putExtra(Constants.LOCATION, rowItem.getLocation());
+        intent.putExtra(Constants.LAT, lat);
+        intent.putExtra(Constants.LNG, lng);
         intent.putExtra(Constants.PRICE, rowItem.getPrice());
         intent.putExtra(Constants.DATE, rowItem.getDate());
         intent.putExtra(Constants.VIEWS, rowItem.getViews());
