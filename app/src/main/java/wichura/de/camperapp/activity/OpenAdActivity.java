@@ -295,8 +295,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     public void onConnected(@Nullable Bundle bundle) {
         Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
-        //Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-               // mGoogleApiClient);
+       // Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+        //       mGoogleApiClient);
         //if (mLastLocation != null) {
             //place marker at current position
             googleMap.clear();
@@ -306,7 +306,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             markerOptions.title("Current Position");
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
             mCurrLocation = googleMap.addMarker(markerOptions);
-           // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, mLastLocation.getLongitude()), 15));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 11));
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.getUiSettings().setScrollGesturesEnabled(true);
             googleMap.getUiSettings().setCompassEnabled(true);
