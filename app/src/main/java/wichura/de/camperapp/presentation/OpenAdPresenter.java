@@ -55,7 +55,7 @@ public class OpenAdPresenter {
                 });
     }
 
-    public void increaseViewCount(String adId) {
+    public void increaseViewCount(int adId) {
         service.increaseViewCount(adId)
                 .subscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())

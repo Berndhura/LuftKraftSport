@@ -24,6 +24,7 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.adapter.MessageListViewAdapter;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.models.MsgRowItem;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.presentation.MessagesPresenter;
@@ -228,14 +229,14 @@ public class MessagesActivity extends AppCompatActivity {
         });
     }
 
-    public void openAdActivityFor(RowItem rowItem) {
+    public void openAdActivityFor(ArticleDetails rowItem) {
         final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-        intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl());
+        intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrls());
         intent.putExtra(Constants.ARTICLE_ID, rowItem.getId());
+        intent.putExtra(Constants.ID, rowItem.getId());
         intent.putExtra(Constants.TITLE, rowItem.getTitle());
         intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
         //intent.putExtra(Constants.LOCATION, rowItem.getLocation());
-        intent.putExtra(Constants.PHONE, rowItem.getPhone());
         intent.putExtra(Constants.PRICE, rowItem.getPrice());
         intent.putExtra(Constants.DATE, rowItem.getDate());
         intent.putExtra(Constants.VIEWS, rowItem.getViews());

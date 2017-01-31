@@ -112,7 +112,7 @@ public class MessagesPresenter {
 
                     @Override
                     public void onNext(ArticleDetails articleDetails) {
-                        view.openAdActivityFor(articleDetails.getArticle());
+                        view.openAdActivityFor(articleDetails);
                     }
                 });
     }

@@ -61,7 +61,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     // private static double longitute;
     //private static double latitude;
     public Button mBookmarkButton;
-    private String mAdId;
+    private int mAdId;
 
     private int displayHeight;
     private int displayWidth;
@@ -126,7 +126,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
         mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
         mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
-        mAdId = getIntent().getStringExtra(Constants.ARTICLE_ID);
+        mAdId = getIntent().getIntExtra(Constants.ID,0);
 
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         mBookmarkButton.setClickable(false);

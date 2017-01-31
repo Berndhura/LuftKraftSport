@@ -92,7 +92,7 @@ public class Service {
         Observable<AdsAsPage> getMyBookmarkedAds(@Query("page") int page, @Query("size") int size, @Query("token") String token);
 
         @POST("articles/{articleId}/increaseViewCount")
-        Observable<String> increaseViewCount(@Path("articleId") String articleId);
+        Observable<String> increaseViewCount(@Path("articleId") int articleId);
 
         @POST("articles/{articleId}/bookmark")
         Observable<String> bookmarkAd(@Path("articleId") String articleId, @Query("token") String token);
@@ -174,7 +174,7 @@ public class Service {
         return mWebServiceV3.bookmarkAd(adId, userToken);
     }
 
-    public Observable<String> increaseViewCount(String adId) {
+    public Observable<String> increaseViewCount(int adId) {
         return mWebServiceV3.increaseViewCount(adId);
     }
 

@@ -43,6 +43,7 @@ public class Constants {
     public static final String PRICE_FROM = "price_from";
     public static final String PRICE_TO = "price_to";
     public static final String FILENAME = "filename";
+    public static final String ID = "id";
 
     //Broadcast messages
     public static final String LOGIN_COMPLETE = "loginComplete";
