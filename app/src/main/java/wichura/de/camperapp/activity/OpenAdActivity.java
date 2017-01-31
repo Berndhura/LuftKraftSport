@@ -303,7 +303,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             latLng = new LatLng(lat, lng);
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
-            markerOptions.title("Current Position");
+            markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
             mCurrLocation = googleMap.addMarker(markerOptions);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 11));
