@@ -45,6 +45,7 @@ import java.util.Arrays;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Service;
+import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.presentation.OpenAdPresenter;
@@ -156,7 +157,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     public void prepareDataFromArticle(ArticleDetails articleDetails) {
         Log.e("CONAN", "prepare");
-        String pictureUri = articleDetails.getUrls();
+        String pictureUri = Urls.MAIN_SERVER_URL_V3 + "pictures/" + articleDetails.getUrls();
         mTitleText.setText(articleDetails.getTitle());
         mPrice.setText(articleDetails.getPrice());
         mDescText.setText(articleDetails.getDescription());

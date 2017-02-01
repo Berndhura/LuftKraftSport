@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -76,7 +77,7 @@ public class MyGcmListenerService extends GcmListenerService {
         } else if ("article".contains(data.getString("type"))) {
             String message = data.getString("message");
             String sender = data.getString("sender");
-            String articleId = data.getString("articleId");
+            Integer articleId = data.getInt("articleId");
             String name = data.getString("name");
             openArticle(message, articleId, name);
         }
@@ -91,7 +92,7 @@ public class MyGcmListenerService extends GcmListenerService {
         LocalBroadcastManager.getInstance(this).sendBroadcast(updateChat);
     }
 
-    private void openArticle(String message, String articleId, String name) {
+    private void openArticle(String message, Integer articleId, String name) {
         Intent intent = new Intent(this, OpenAdActivity.class);
         intent.putExtra(Constants.ID, articleId);
         Log.d("CONAN", "gcm listener article details: " +articleId);
