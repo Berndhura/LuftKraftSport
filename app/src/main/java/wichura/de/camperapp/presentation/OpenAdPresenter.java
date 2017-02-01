@@ -77,7 +77,7 @@ public class OpenAdPresenter {
                 });
     }
 
-    public void bookmarkAd(String adId, String userToken) {
+    public void bookmarkAd(int adId, String userToken) {
         service.bookmarkAdObserv(adId, userToken)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -101,7 +101,7 @@ public class OpenAdPresenter {
                 });
     }
 
-    public void deleteBookmark(String adId, String userToken) {
+    public void deleteBookmark(int adId, String userToken) {
         service.delBookmarkAdObserv(adId, userToken)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -125,7 +125,7 @@ public class OpenAdPresenter {
                 });
     }
 
-    public void sendNewMessage(String message, String adId, String idTo, String userToken) {
+    public void sendNewMessage(String message, int adId, String idTo, String userToken) {
         service.sendNewMessageObserv(message, adId, idTo, userToken)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -147,7 +147,7 @@ public class OpenAdPresenter {
                 });
     }
 
-    public void deleteAd(String adId) {
+    public void deleteAd(int adId) {
         service.deleteAdObserv(adId, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

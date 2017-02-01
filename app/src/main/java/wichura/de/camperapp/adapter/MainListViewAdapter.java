@@ -154,7 +154,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             //Delete Button
             holder.deleteButton.setOnClickListener((view) -> {
                 //get ad id and send delete request
-                String adId = rowItem.getId();
+                int adId = rowItem.getId();
                 deleteAdRequest(adId, view);
             });
             holder.deleteButton.setTag(position);
@@ -181,7 +181,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     }
 
 
-    private void deleteBookmark(String adId) {
+    private void deleteBookmark(int adId) {
         service.delBookmarkAdObserv(adId, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -204,7 +204,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
     }
 
-    private void bookmarkAd(String adId) {
+    private void bookmarkAd(int adId) {
         service.bookmarkAdObserv(adId, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -226,7 +226,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 });
     }
 
-    private void deleteAdRequest(final String adId, final View view) {
+    private void deleteAdRequest(final int adId, final View view) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(activity)
                 //set message, title, and icon
                 .setTitle("Delete")

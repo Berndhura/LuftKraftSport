@@ -139,7 +139,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         //loadBookmarks for user
         presenter.loadBookmarksForUser();
 
+        Log.e("CONAN", "id oder whatever: " + mAdId);
         presenter.increaseViewCount(mAdId);
+
 
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
 
@@ -165,7 +167,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         if (isOwnAd() && mDelAndMsgButton != null) {
             mDelAndMsgButton.setOnClickListener((view) -> {
                 //get ad id and send delete request
-                String adId = getIntent().getStringExtra(Constants.ARTICLE_ID);
+                int adId = getIntent().getIntExtra(Constants.ID, 0);
                 Log.i("CONAN", "AdId: " + mAdId);
                 deleteAdRequest(adId);
             });
@@ -175,7 +177,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
                 if (!getUserId().equals("")) {
                     //send a message to ad owner
-                    String adId = getIntent().getStringExtra(Constants.ARTICLE_ID);
+                    int adId = getIntent().getIntExtra(Constants.ID, 0);
                     String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
                     String sender = getUserId();
                     sendMessage(adId, ownerId, sender);
@@ -187,7 +189,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         }
 
         mBookmarkButton.setOnClickListener((view) -> {
-            String adId = getIntent().getStringExtra(Constants.ARTICLE_ID);
+            int adId = getIntent().getIntExtra(Constants.ID, 0);
             if (isBookmarked) {
                 presenter.deleteBookmark(adId, getUserToken());
             } else {
@@ -236,7 +238,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    private void sendMessage(final String adId, final String receiverId, final String sender) {
+    private void sendMessage(final int adId, final String receiverId, final String sender) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(OpenAdActivity.this);
         alert.setTitle("Send a message");
@@ -249,7 +251,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         alert.show();
     }
 
-    private void deleteAdRequest(final String adId) {
+    private void deleteAdRequest(final int adId) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 .setTitle("Delete Ad")
                 .setMessage("Do you want to delete this ad?")

@@ -37,7 +37,7 @@ public class FileUploadService {
 
     private Context context;
     private NewAdActivity view;
-    private String adId;
+    private int adId;
 
     public FileUploadService(Context context, NewAdActivity view) {
         this.context = context;
@@ -68,7 +68,7 @@ public class FileUploadService {
                 .subscribe(new Subscriber<RowItem>() {
                     @Override
                     public void onCompleted() {
-                        if (adId !=null) {
+                        if (adId != 0) {
                             multiPost_old(adId, picture);
                         }
                     }
@@ -127,7 +127,7 @@ public class FileUploadService {
 
     }
 
-    public void multiPost_old(String adId, String picture) {
+    public void multiPost_old(int adId, String picture) {
 
 
         Uri fileUri = Uri.parse(picture.toString());

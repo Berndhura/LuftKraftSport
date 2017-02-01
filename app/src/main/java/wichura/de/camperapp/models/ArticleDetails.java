@@ -15,7 +15,7 @@ public class ArticleDetails {
     private Object phone;
     private String urls;
     private String userId;
-    private Double price;
+    private String price;
     private Long date;
     private Integer views;
     private Location location;
@@ -78,11 +78,11 @@ public class ArticleDetails {
         this.userId = userId;
     }
 
-    public Double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 

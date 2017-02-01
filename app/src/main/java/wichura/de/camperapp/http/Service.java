@@ -69,7 +69,7 @@ public class Service {
         Observable<List<MsgRowItem>> getAllMessagesForAd(
                 @Query("token") String userToken,
                 @Query("sender") String chatPartner,
-                @Query("articleId") String articleId);
+                @Query("articleId") int articleId);
 
         @GET("articles/{articleId}")
         Observable<ArticleDetails> getAdDetails(@Path("articleId") Integer articleId);
@@ -95,19 +95,19 @@ public class Service {
         Observable<String> increaseViewCount(@Path("articleId") int articleId);
 
         @POST("articles/{articleId}/bookmark")
-        Observable<String> bookmarkAd(@Path("articleId") String articleId, @Query("token") String token);
+        Observable<String> bookmarkAd(@Path("articleId") int articleId, @Query("token") String token);
 
         @DELETE("bookmarks/{articleId}")
-        Observable<String> delBookmarkAd(@Path("articleId") String articleId, @Query("token") String token);
+        Observable<String> delBookmarkAd(@Path("articleId") int articleId, @Query("token") String token);
 
         @POST("messages")
         Observable<String> sendNewMessage(@Query("message") String message,
-                                          @Query("articleId") String articleId,
+                                          @Query("articleId") int articleId,
                                           @Query("idTo") String idTo,
                                           @Query("token") String token);
 
         @DELETE("articles/{articleId}")
-        Observable<String> deleteAd(@Path("articleId") String articleId, @Query("token") String token);
+        Observable<String> deleteAd(@Path("articleId") int articleId, @Query("token") String token);
 
         @POST("users/sendToken")
         Observable<String> sendDeviceToken(@Query("token") String token,
@@ -157,20 +157,20 @@ public class Service {
         return mWebServiceV3.sendDeviceToken(userToken, deviceToken);
     }
 
-    public Observable<String> deleteAdObserv(String adId, String userToken) {
+    public Observable<String> deleteAdObserv(int adId, String userToken) {
 
         return mWebServiceV3.deleteAd(adId, userToken);
     }
 
-    public Observable<String> sendNewMessageObserv(String message, String adId, String idTo, String userToken) {
+    public Observable<String> sendNewMessageObserv(String message, int adId, String idTo, String userToken) {
         return mWebServiceV3.sendNewMessage(message, adId, idTo, userToken);
     }
 
-    public Observable<String> delBookmarkAdObserv(String adId, String userToken) {
+    public Observable<String> delBookmarkAdObserv(int adId, String userToken) {
         return mWebServiceV3.delBookmarkAd(adId, userToken);
     }
 
-    public Observable<String> bookmarkAdObserv(String adId, String userToken) {
+    public Observable<String> bookmarkAdObserv(int adId, String userToken) {
         return mWebServiceV3.bookmarkAd(adId, userToken);
     }
 
@@ -202,7 +202,7 @@ public class Service {
         return mWebServiceV3.getBookmarksForUser(userToken);
     }
 
-    public Observable<List<MsgRowItem>> getAllMessagesForAdObserv(String userToken, String sender, String adId) {
+    public Observable<List<MsgRowItem>> getAllMessagesForAdObserv(String userToken, String sender, int adId) {
         return mWebServiceV3.getAllMessagesForAd(userToken, sender, adId);
     }
 }
