@@ -11,6 +11,7 @@ import rx.schedulers.Schedulers;
 import wichura.de.camperapp.activity.OpenAdActivity;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.models.Bookmarks;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -165,6 +166,31 @@ public class OpenAdPresenter {
                     @Override
                     public void onNext(String result) {
                         Log.d("CONAN", "delete ad: "+result);
+                    }
+                });
+    }
+
+    public void getAd(Integer articleId) {
+        Log.d("CONAN", "error ARTICLE ID " + articleId);
+        service.getAdDetailsObserv(articleId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ArticleDetails>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in getting article details: " + e.getMessage());
+                        Log.e("CONAN", "presenter ERROR"+ e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(ArticleDetails articleDetails) {
+                        view.prepareDataFromArticle(articleDetails);
+                        Log.e("CONAN", "presenter OK");
                     }
                 });
     }

@@ -57,6 +57,7 @@ public class Constants {
     public static final String ID_TO = "idTo";
     public static final String ARTICLE_ID = "articleId";
     public static final String MESSAGE = "message";
+    public static final String NOTIFICATION_TYPE = "notification_type";
 
     //Shared Preferences
     public static final String MESSAGE_ACTIVITY = "messageActivity";

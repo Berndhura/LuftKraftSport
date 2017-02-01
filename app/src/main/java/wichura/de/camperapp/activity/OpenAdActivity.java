@@ -33,8 +33,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -48,6 +46,7 @@ import java.util.Arrays;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.presentation.OpenAdPresenter;
 
 import static wichura.de.camperapp.R.id.map;
@@ -57,10 +56,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, OnMapReadyCallback {
 
-    // private static double longitute;
-    //private static double latitude;
     public Button mBookmarkButton;
-    private int mAdId;
+    private Integer mAdId;
 
     private int displayHeight;
     private int displayWidth;
@@ -81,6 +78,12 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     private double lat;
     private double lng;
+    private ImageView imgView;
+    private Button mDelAndMsgButton;
+    private TextView mTitleText;
+    private TextView mPrice;
+    private TextView mDescText;
+    private TextView mDateText;
 
 
     @Override
@@ -92,14 +95,20 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         MapsInitializer.initialize(this);
 
         switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-            case ConnectionResult.SUCCESS:
-                Toast.makeText(this, "SUCCESS", Toast.LENGTH_SHORT).show();
+            case ConnectionResult.SUCCESS: {
+                //Toast.makeText(this, "SUCCESS", Toast.LENGTH_SHORT).show();
                 mapView = (MapView) findViewById(map);
                 mapView.onCreate(savedInstanceState);
                 mapView.onResume();
                 mapView.getMapAsync(this);
+            }
+            case ConnectionResult.INVALID_ACCOUNT: {
+                Log.d("CONAN", "Google play service: ConnectionResult.INVALID_ACCOUNT");
+            }
+            case ConnectionResult.NETWORK_ERROR: {
+                Log.d("CONAN", "Google play service: ConnectionResult.NETWORK_ERROR");
+            }
         }
-
 
         presenter = new OpenAdPresenter(this, new Service(), getApplicationContext());
 
@@ -115,36 +124,52 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
         getDisplayDimensions();
 
-        TextView mTitleText = (TextView) findViewById(R.id.title);
-        TextView mPrice = (TextView) findViewById(R.id.price);
-        TextView mDescText = (TextView) findViewById(R.id.description);
-        TextView mDateText = (TextView) findViewById(R.id.ad_date);
-        ImageView imgView = (ImageView) findViewById(R.id.imageView);
-        Button mDelAndMsgButton = (Button) findViewById(R.id.delButton);
+        mTitleText = (TextView) findViewById(R.id.title);
+        mPrice = (TextView) findViewById(R.id.price);
+        mDescText = (TextView) findViewById(R.id.description);
+        mDateText = (TextView) findViewById(R.id.ad_date);
+        imgView = (ImageView) findViewById(R.id.imageView);
+        mDelAndMsgButton = (Button) findViewById(R.id.delButton);
 
         //get data from Intent
-        String pictureUri = getIntent().getStringExtra(Constants.URI);
-        mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
-        mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
-        mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
-        mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
-        mAdId = getIntent().getIntExtra(Constants.ID, 0);
+        if (!"article".equals(getIntent().getStringExtra(Constants.NOTIFICATION_TYPE))) {
+            //intent comes from article overview
+            String pictureUri = getIntent().getStringExtra(Constants.URI);
+            mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
+            mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
+            mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
+            mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
+            mAdId = getIntent().getIntExtra(Constants.ID, 0);
+            lat = getIntent().getDoubleExtra(Constants.LAT, 0);
+            lng = getIntent().getDoubleExtra(Constants.LNG, 0);
+            String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
+            setupPanel(pictureUri, ownerId);
+        } else {
+            //intent comes from notification -> get article first
+            presenter.getAd(getIntent().getIntExtra(Constants.ID, 0));
+            Log.e("CONAN", "articlevorschlag");
+        }
 
-        lat = getIntent().getDoubleExtra(Constants.LAT, 0);
-        lng = getIntent().getDoubleExtra(Constants.LNG, 0);
+        buildGoogleApiClient();
+        mGoogleApiClient.connect();
+    }
 
+    public void prepareDataFromArticle(ArticleDetails articleDetails) {
+        Log.e("CONAN", "prepare");
+        String pictureUri = articleDetails.getUrls();
+        mTitleText.setText(articleDetails.getTitle());
+        mPrice.setText(articleDetails.getPrice());
+        mDescText.setText(articleDetails.getDescription());
+        mDateText.setText(DateFormat.getDateInstance().format(articleDetails.getDate()));
+        mAdId = articleDetails.getId();
+        String ownerId = articleDetails.getUserId();
+        lat = articleDetails.getLocation().getCoordinates()[0];
+        lng = articleDetails.getLocation().getCoordinates()[1];
+        setupPanel(pictureUri, ownerId);
+    }
 
-        mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
-        mBookmarkButton.setClickable(false);
-        //loadBookmarks for user
-        presenter.loadBookmarksForUser();
-
-        Log.e("CONAN", "id oder whatever: " + mAdId);
-        presenter.increaseViewCount(mAdId);
-
-
+    private void setupPanel(String pictureUri, String ownerId) {
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
-
         Picasso.with(getApplicationContext())
                 .load(pictureUri)
                 .placeholder(R.drawable.empty_photo)
@@ -167,9 +192,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         if (isOwnAd() && mDelAndMsgButton != null) {
             mDelAndMsgButton.setOnClickListener((view) -> {
                 //get ad id and send delete request
-                Integer adId = getIntent().getIntExtra(Constants.ID, 0);
                 Log.i("CONAN", "AdId: " + mAdId);
-                deleteAdRequest(adId);
+                deleteAdRequest(mAdId);
             });
         } else {
             mDelAndMsgButton.setText("Send message");
@@ -177,41 +201,35 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
                 if (!getUserId().equals("")) {
                     //send a message to ad owner
-                    Integer adId = getIntent().getIntExtra(Constants.ID, 0);
-                    String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
-                    String sender = getUserId();
-                    sendMessage(adId, ownerId, sender);
+                    sendMessage(mAdId, ownerId);
                 } else {
                     final Intent facebookIntent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
                 }
             });
+
+            mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
+            mBookmarkButton.setClickable(false);
+            //loadBookmarks for user
+            presenter.loadBookmarksForUser();
         }
 
         mBookmarkButton.setOnClickListener((view) -> {
-            Integer adId = getIntent().getIntExtra(Constants.ID, 0);
             if (isBookmarked) {
-                presenter.deleteBookmark(adId, getUserToken());
+                presenter.deleteBookmark(mAdId, getUserToken());
             } else {
-                presenter.bookmarkAd(adId, getUserToken());
+                presenter.bookmarkAd(mAdId, getUserToken());
             }
         });
 
+        Log.e("CONAN", "id oder whatever: " + mAdId);
+        presenter.increaseViewCount(mAdId);
+
         Log.d("CONAN", "request Picture: " + pictureUri);
-
-        //map fragment in app : https://developers.google.com/maps/documentation/android-api/start#die_xml-layoutdatei
-        //TODO: show location on map fragment
-        //TODO: get LatLng in JSON from  http://maps.google.com/maps/api/geocode/json?address=%22greifswald%22&sensor=false
-        //getLocationInfo()
-        //now get Lat and Lng  from  getLatLong()
-        // this:  http://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
-        buildGoogleApiClient();
-        mGoogleApiClient.connect();
-
     }
 
     protected synchronized void buildGoogleApiClient() {
-        Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -238,7 +256,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    private void sendMessage(final Integer adId, final String receiverId, final String sender) {
+    private void sendMessage(final Integer adId, final String receiverId) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(OpenAdActivity.this);
         alert.setTitle("Send a message");
@@ -297,22 +315,22 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     public void onConnected(@Nullable Bundle bundle) {
         Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
-       // Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+        // Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
         //       mGoogleApiClient);
         //if (mLastLocation != null) {
-            //place marker at current position
-            googleMap.clear();
-            latLng = new LatLng(lat, lng);
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-            mCurrLocation = googleMap.addMarker(markerOptions);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 11));
-            googleMap.getUiSettings().setZoomControlsEnabled(true);
-            googleMap.getUiSettings().setScrollGesturesEnabled(true);
-            googleMap.getUiSettings().setCompassEnabled(true);
-            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        //place marker at current position
+        googleMap.clear();
+        latLng = new LatLng(lat, lng);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        mCurrLocation = googleMap.addMarker(markerOptions);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 11));
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setScrollGesturesEnabled(true);
+        googleMap.getUiSettings().setCompassEnabled(true);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
            /* CircleOptions circleOptions = new CircleOptions()
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
@@ -321,7 +339,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             // Get back the mutable Circle
             Circle circle = googleMap.addCircle(circleOptions);
             circle.setVisible(true);*/
-       // }
+        // }
 
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000); //5 seconds
@@ -346,57 +364,4 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     public void onLocationChanged(Location location) {
 
     }
-
-
-
-
-     /* public static boolean getLatLong(JSONObject jsonObject) {
-        try {
-            longitute = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lng");
-
-            latitude = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lat");
-        } catch (JSONException e) {
-            return false;
-        }
-        return true;
-    }*/
-
-
-   /* public static JSONObject getLocationInfo(String address) {
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-
-            address = address.replaceAll(" ", "%20");
-
-            HttpPost httppost = new HttpPost("http://maps.google.com/maps/api/geocode/json?address=" + address + "&sensor=false");
-            HttpClient client = new DefaultHttpClient();
-            HttpResponse response;
-            stringBuilder = new StringBuilder();
-
-
-            response = client.execute(httppost);
-            HttpEntity entity = response.getEntity();
-            InputStream stream = entity.getContent();
-            int b;
-            while ((b = stream.read()) != -1) {
-                stringBuilder.append((char) b);
-            }
-        } catch (ClientProtocolException e) {
-        } catch (IOException e) {
-        }
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject = new JSONObject(stringBuilder.toString());
-        } catch (JSONException e) {
-
-            e.printStackTrace();
-        }
-
-        return jsonObject;
-    }*/
 }

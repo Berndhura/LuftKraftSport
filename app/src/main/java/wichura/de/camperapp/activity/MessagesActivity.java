@@ -168,7 +168,7 @@ public class MessagesActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", false);
-        ed.putString(Constants.ARTICLE_ID, "");
+        ed.putInt(Constants.ARTICLE_ID, 0);
         ed.apply();
     }
 
@@ -176,8 +176,8 @@ public class MessagesActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", true);
-        ed.putString(Constants.ARTICLE_ID, getIntent().getStringExtra(Constants.ARTICLE_ID));
-        Log.d("articleId: ", getIntent().getStringExtra(Constants.ARTICLE_ID));
+        ed.putInt(Constants.ARTICLE_ID, getIntent().getIntExtra(Constants.ARTICLE_ID, 0));
+        Log.d("articleId: ", ""+getIntent().getIntExtra(Constants.ARTICLE_ID, 0));
         ed.apply();
     }
 
@@ -224,7 +224,7 @@ public class MessagesActivity extends AppCompatActivity {
     public void showLinkToAdButton() {
         Button link = (Button) findViewById(R.id.link_to_ad_button);
         link.setOnClickListener((view) -> {
-            String articleId = getIntent().getStringExtra(Constants.ARTICLE_ID);
+            Integer articleId = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
             presenter.getAd(articleId);
         });
     }

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -15,9 +14,9 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.activity.MessagesActivity;
 import wichura.de.camperapp.activity.OpenAdActivity;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.activity.MessagesActivity;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -28,6 +27,7 @@ import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO
 public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "CONAN";
+
     /**
      * Called when message is received.
      *
@@ -41,20 +41,12 @@ public class MyGcmListenerService extends GcmListenerService {
         if ("message".contains(data.getString("type"))) {
             String message = data.getString("message");
             String sender = data.getString("sender");
-            String articleId = data.getString("articleId");
+            Integer articleId = data.getInt("articleId");
             String name = data.getString("name");
             Log.d(TAG, "Received: sender: " + sender);
             Log.d(TAG, "Received: Message: " + message);
             Log.d(TAG, "Received: articleId: " + articleId);
             Log.d(TAG, "Received: name: " + name);
-
-       /* jData.put("message", message);
-        jData.put("sender", idFrom);
-        jData.put("articleId", articleId);
-        jData.put("name", name);
-        jData.put("adUrl", adUrl);
-        jGcmData.put("to", token);
-        */
 
             if (from.startsWith("/topics/")) {
                 // message received from some topic.
@@ -86,7 +78,7 @@ public class MyGcmListenerService extends GcmListenerService {
             String sender = data.getString("sender");
             String articleId = data.getString("articleId");
             String name = data.getString("name");
-            openArticle(message, sender, articleId, name);
+            openArticle(message, articleId, name);
         }
         // [END_EXCLUDE]
     }
@@ -99,9 +91,11 @@ public class MyGcmListenerService extends GcmListenerService {
         LocalBroadcastManager.getInstance(this).sendBroadcast(updateChat);
     }
 
-    private void openArticle(String message, String sender, String articleId, String name) {
+    private void openArticle(String message, String articleId, String name) {
         Intent intent = new Intent(this, OpenAdActivity.class);
         intent.putExtra(Constants.ID, articleId);
+        Log.d("CONAN", "gcm listener article details: " +articleId);
+        intent.putExtra(Constants.NOTIFICATION_TYPE, "article");
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -128,7 +122,7 @@ public class MyGcmListenerService extends GcmListenerService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message, String sender, String articleId, String name) {
+    private void sendNotification(String message, String sender, Integer articleId, String name) {
         Intent intent = new Intent(this, MessagesActivity.class);
         intent.putExtra(Constants.SENDER_ID, sender);
         intent.putExtra(Constants.SENDER_NAME, name);
@@ -160,8 +154,8 @@ public class MyGcmListenerService extends GcmListenerService {
         return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 
-    private String getAdIdFromSharedPref() {
-        return getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE).getString(Constants.ARTICLE_ID, "");
+    private Integer getAdIdFromSharedPref() {
+        return getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE).getInt(Constants.ARTICLE_ID, 0);
     }
 
     private Boolean isMessageActivityActive() {
