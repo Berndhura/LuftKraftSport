@@ -157,24 +157,24 @@ public class Service {
         return mWebServiceV3.sendDeviceToken(userToken, deviceToken);
     }
 
-    public Observable<String> deleteAdObserv(int adId, String userToken) {
+    public Observable<String> deleteAdObserv(Integer adId, String userToken) {
 
         return mWebServiceV3.deleteAd(adId, userToken);
     }
 
-    public Observable<String> sendNewMessageObserv(String message, int adId, String idTo, String userToken) {
+    public Observable<String> sendNewMessageObserv(String message, Integer adId, String idTo, String userToken) {
         return mWebServiceV3.sendNewMessage(message, adId, idTo, userToken);
     }
 
-    public Observable<String> delBookmarkAdObserv(int adId, String userToken) {
+    public Observable<String> delBookmarkAdObserv(Integer adId, String userToken) {
         return mWebServiceV3.delBookmarkAd(adId, userToken);
     }
 
-    public Observable<String> bookmarkAdObserv(int adId, String userToken) {
+    public Observable<String> bookmarkAdObserv(Integer adId, String userToken) {
         return mWebServiceV3.bookmarkAd(adId, userToken);
     }
 
-    public Observable<String> increaseViewCount(int adId) {
+    public Observable<String> increaseViewCount(Integer adId) {
         return mWebServiceV3.increaseViewCount(adId);
     }
 
@@ -202,7 +202,7 @@ public class Service {
         return mWebServiceV3.getBookmarksForUser(userToken);
     }
 
-    public Observable<List<MsgRowItem>> getAllMessagesForAdObserv(String userToken, String sender, int adId) {
+    public Observable<List<MsgRowItem>> getAllMessagesForAdObserv(String userToken, String sender, Integer adId) {
         return mWebServiceV3.getAllMessagesForAd(userToken, sender, adId);
     }
 }

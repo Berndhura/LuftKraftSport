@@ -122,7 +122,7 @@ public class FileUploadService {
 
     }
 
-    public void multiPost_old(int adId, String picture) {
+    public void multiPost_old(Integer adId, String picture) {
 
 
         Uri fileUri = Uri.parse(picture.toString());

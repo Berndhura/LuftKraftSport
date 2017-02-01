@@ -30,7 +30,7 @@ public class MessagesPresenter {
         this.service = new Service();
     }
 
-    public void loadMessages(String userToken, String chatPartner, int adId) {
+    public void loadMessages(String userToken, String chatPartner, Integer adId) {
 
         /*if (view.listView!=null) {
             view.listView.setVisibility(View.INVISIBLE);
@@ -66,7 +66,7 @@ public class MessagesPresenter {
                 });
     }
 
-    public void sendMessage(String message, int adId, String idTo, String userToken) {
+    public void sendMessage(String message, Integer adId, String idTo, String userToken) {
 
         service.sendNewMessageObserv(message, adId, idTo, userToken)
                 .subscribeOn(Schedulers.io())

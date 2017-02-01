@@ -78,7 +78,7 @@ public class MessagesActivity extends AppCompatActivity {
         //progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
         text = (EditText) findViewById(R.id.edit_message);
 
-        final int articleId = getIntent().getIntExtra(Constants.ID, 0);
+        final Integer articleId = getIntent().getIntExtra(Constants.ID, 0);
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
         final String chatPartner = getIntent().getStringExtra(Constants.CHAT_PARTNER);
 

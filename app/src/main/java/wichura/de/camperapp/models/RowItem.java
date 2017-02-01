@@ -33,7 +33,7 @@ public class RowItem {
 
     public RowItem(final int imageId,
                    final String title,
-                   final int id,
+                   final Integer id,
                    final String keywords,
                    final String url,
                    final String des,
@@ -71,9 +71,9 @@ public class RowItem {
         return userId;
     }
 
-    public int getId() {return id; }
+    public Integer getId() {return id; }
 
-    public void setId(int id) {this.id = id;}
+    public void setId(Integer id) {this.id = id;}
 
     public Location getLocation() {
         return location;
