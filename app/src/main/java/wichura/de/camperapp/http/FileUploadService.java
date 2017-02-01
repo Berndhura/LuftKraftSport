@@ -37,7 +37,7 @@ public class FileUploadService {
 
     private Context context;
     private NewAdActivity view;
-    private int adId;
+    private Integer adId;
 
     public FileUploadService(Context context, NewAdActivity view) {
         this.context = context;
@@ -57,8 +57,6 @@ public class FileUploadService {
         RowItem item = new RowItem();
         item.setTitle(data.getStringExtra(Constants.TITLE));
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
-        //item.setdata.getStringExtra(Constants.KEYWORDS);
-        //String picture = data.getStringExtra(Constants.FILENAME);
         item.setPrice(data.getStringExtra(Constants.PRICE));
         item.setDate(data.getLongExtra(Constants.DATE, 0));
 
@@ -68,23 +66,20 @@ public class FileUploadService {
                 .subscribe(new Subscriber<RowItem>() {
                     @Override
                     public void onCompleted() {
-                        if (adId != 0) {
-                            multiPost_old(adId, picture);
-                        }
+                        multiPost_old(adId, picture);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error in upload Ad " + e.toString());
+                        Log.d("CONAN", "error in upload Ad1 " + e.toString());
                     }
 
                     @Override
                     public void onNext(RowItem rowItem) {
                         adId = rowItem.getId();
+                        Log.d("CONAN", "neue id " + adId);
                     }
                 });
-
-
     }
 
     public void uploadFile(String adId, String picture) {
@@ -115,7 +110,7 @@ public class FileUploadService {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error in upload Ad " + e.toString());
+                        Log.d("CONAN", "error in upload 2 " + e.toString());
                     }
 
                     @Override

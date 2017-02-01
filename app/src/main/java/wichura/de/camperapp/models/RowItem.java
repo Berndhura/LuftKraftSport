@@ -19,7 +19,7 @@ public class RowItem {
     @Expose
     private String price;
     @Expose
-    private int id;
+    private Integer id;
     @Expose
     private Location location;
     @Expose

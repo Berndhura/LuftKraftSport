@@ -15,6 +15,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.activity.OpenAdActivity;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.activity.MessagesActivity;
 
@@ -24,11 +25,9 @@ import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO
  * Created by Bernd Wichura on 14.05.2016.
  * Camper App
  */
-public class MyGcmListenerService  extends GcmListenerService {
+public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "CONAN";
-    private String articleId;
-
     /**
      * Called when message is received.
      *
@@ -39,14 +38,15 @@ public class MyGcmListenerService  extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
-        String sender = data.getString("sender");
-        articleId = data.getString("articleId");
-        String name = data.getString("name");
-        Log.d(TAG, "Received: sender: " + sender);
-        Log.d(TAG, "Received: Message: " + message);
-        Log.d(TAG, "Received: articleId: " + articleId);
-        Log.d(TAG, "Received: name: " + name);
+        if ("message".contains(data.getString("type"))) {
+            String message = data.getString("message");
+            String sender = data.getString("sender");
+            String articleId = data.getString("articleId");
+            String name = data.getString("name");
+            Log.d(TAG, "Received: sender: " + sender);
+            Log.d(TAG, "Received: Message: " + message);
+            Log.d(TAG, "Received: articleId: " + articleId);
+            Log.d(TAG, "Received: name: " + name);
 
        /* jData.put("message", message);
         jData.put("sender", idFrom);
@@ -56,30 +56,37 @@ public class MyGcmListenerService  extends GcmListenerService {
         jGcmData.put("to", token);
         */
 
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
-        }
+            if (from.startsWith("/topics/")) {
+                // message received from some topic.
+            } else {
+                // normal downstream message.
+            }
 
-        // [START_EXCLUDE]
-        /**
-         * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
+            // [START_EXCLUDE]
+            /**
+             * Production applications would usually process the message here.
+             * Eg: - Syncing with server.
+             *     - Store message in local database.
+             *     - Update UI.
+             */
 
-        /**
-         * show a notification indicating to the user
-         * that a message was received when MessageActivity is NOT open
-         *
-         * if MessageActivity IS open, only update chat
-         */
-        if (isMessageActivityActive() && getAdIdFromSharedPref().equals(articleId)) {
-            updateChat(message, sender);
-        } else {
-            sendNotification(message, sender, articleId, name);
+            /**
+             * show a notification indicating to the user
+             * that a message was received when MessageActivity is NOT open
+             *
+             * if MessageActivity IS open, only update chat
+             */
+            if (isMessageActivityActive() && getAdIdFromSharedPref().equals(articleId)) {
+                updateChat(message, sender);
+            } else {
+                sendNotification(message, sender, articleId, name);
+            }
+        } else if ("article".contains(data.getString("type"))) {
+            String message = data.getString("message");
+            String sender = data.getString("sender");
+            String articleId = data.getString("articleId");
+            String name = data.getString("name");
+            openArticle(message, sender, articleId, name);
         }
         // [END_EXCLUDE]
     }
@@ -90,6 +97,30 @@ public class MyGcmListenerService  extends GcmListenerService {
         updateChat.putExtra(Constants.MESSAGE, message);
         updateChat.putExtra(Constants.CHAT_PARTNER, sender);
         LocalBroadcastManager.getInstance(this).sendBroadcast(updateChat);
+    }
+
+    private void openArticle(String message, String sender, String articleId, String name) {
+        Intent intent = new Intent(this, OpenAdActivity.class);
+        intent.putExtra(Constants.ID, articleId);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.applogo)
+                .setContentTitle(name + ": ")
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
     /**
