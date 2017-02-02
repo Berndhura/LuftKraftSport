@@ -1,6 +1,8 @@
 package wichura.de.camperapp.presentation;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -32,11 +34,11 @@ public class MessagesPresenter {
 
     public void loadMessages(String userToken, String chatPartner, Integer adId) {
 
-        /*if (view.listView!=null) {
+        if (view.listView!=null) {
             view.listView.setVisibility(View.INVISIBLE);
         }
         view.enableProgress();
-*/
+
         Observable<List<MsgRowItem>> getMessagesForAdObserv = service.getAllMessagesForAdObserv(userToken, chatPartner, adId);
 
         Log.d("CONAN", "message: sender, adId: " + chatPartner + ", " + adId);
@@ -45,9 +47,7 @@ public class MessagesPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<MsgRowItem>>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
+                    public void onCompleted() {}
 
                     @Override
                     public void onError(Throwable e) {
@@ -56,10 +56,10 @@ public class MessagesPresenter {
 
                     @Override
                     public void onNext(List<MsgRowItem> msgRowItems) {
-                        /*view.progressBar.setVisibility(ProgressBar.GONE);
+                        view.progressBar.setVisibility(ProgressBar.GONE);
                         if (view.listView!=null) {
                             view.listView.setVisibility(View.VISIBLE);
-                        }*/
+                        }
                         view.showMessages(msgRowItems);
                         view.showLinkToAdButton();
                     }
@@ -73,9 +73,7 @@ public class MessagesPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
+                    public void onCompleted() {}
 
                     @Override
                     public void onError(Throwable e) {
@@ -101,9 +99,7 @@ public class MessagesPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ArticleDetails>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
+                    public void onCompleted() {}
 
                     @Override
                     public void onError(Throwable e) {
