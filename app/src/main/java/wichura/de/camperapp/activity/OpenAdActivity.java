@@ -65,17 +65,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     public boolean isBookmarked;
 
     private ProgressBar mOpenAdProgressBar;
-
     private OpenAdPresenter presenter;
-
-    private MapView mapView;
     private GoogleMap googleMap;
-
-    private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
-
-    private LatLng latLng;
-    private Marker mCurrLocation;
 
     private double lat;
     private double lng;
@@ -98,7 +90,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
             case ConnectionResult.SUCCESS: {
                 //Toast.makeText(this, "SUCCESS", Toast.LENGTH_SHORT).show();
-                mapView = (MapView) findViewById(map);
+                MapView mapView = (MapView) findViewById(map);
                 mapView.onCreate(savedInstanceState);
                 mapView.onResume();
                 mapView.getMapAsync(this);
@@ -321,12 +313,12 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         //if (mLastLocation != null) {
         //place marker at current position
         googleMap.clear();
-        latLng = new LatLng(lat, lng);
+        LatLng latLng = new LatLng(lat, lng);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocation = googleMap.addMarker(markerOptions);
+        Marker mCurrLocation = googleMap.addMarker(markerOptions);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 11));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setScrollGesturesEnabled(true);
@@ -342,7 +334,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             circle.setVisible(true);*/
         // }
 
-        mLocationRequest = new LocationRequest();
+        LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000); //5 seconds
         mLocationRequest.setFastestInterval(3000); //3 seconds
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);

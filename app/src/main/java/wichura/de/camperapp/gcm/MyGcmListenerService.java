@@ -42,12 +42,13 @@ public class MyGcmListenerService extends GcmListenerService {
         if ("message".contains(data.getString("type"))) {
             String message = data.getString("message");
             String sender = data.getString("sender");
-            Integer articleId = data.getInt("articleId");
+            String articleId = data.getString("articleId");
             String name = data.getString("name");
-            Log.d(TAG, "Received: sender: " + sender);
-            Log.d(TAG, "Received: Message: " + message);
-            Log.d(TAG, "Received: articleId: " + articleId);
-            Log.d(TAG, "Received: name: " + name);
+            Log.v(TAG, "Received: sender: " + sender);
+            Log.v(TAG, "Received: Message: " + message);
+            Log.v(TAG, "Received: articleId: " + articleId);
+            Log.v(TAG, "Received: name: " + name);
+            Log.v(TAG, "data: " + data);
 
             if (from.startsWith("/topics/")) {
                 // message received from some topic.
@@ -72,14 +73,14 @@ public class MyGcmListenerService extends GcmListenerService {
             if (isMessageActivityActive() && getAdIdFromSharedPref().equals(articleId)) {
                 updateChat(message, sender);
             } else {
-                sendNotification(message, sender, articleId, name);
+                sendNotification(message, sender, Integer.parseInt(articleId), name);
             }
         } else if ("article".contains(data.getString("type"))) {
             String message = data.getString("message");
             String sender = data.getString("sender");
-            Integer articleId = data.getInt("articleId");
+            String articleId = data.getString("articleId");
             String name = data.getString("name");
-            openArticle(message, articleId, name);
+            openArticle(message, Integer.parseInt(articleId), name);
         }
         // [END_EXCLUDE]
     }

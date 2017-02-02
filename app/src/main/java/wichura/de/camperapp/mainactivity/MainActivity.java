@@ -367,7 +367,8 @@ public class MainActivity extends AppCompatActivity implements
             intent.putExtra(Constants.ID, rowItem.getId());
             intent.putExtra(Constants.TITLE, rowItem.getTitle());
             intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
-            //intent.putExtra(Constants.LOCATION, rowItem.getLocation());
+            intent.putExtra(Constants.LAT, rowItem.getLocation().getCoordinates()[0]);
+            intent.putExtra(Constants.LNG, rowItem.getLocation().getCoordinates()[1]);
             intent.putExtra(Constants.PHONE, rowItem.getPhone());
             intent.putExtra(Constants.PRICE, rowItem.getPrice());
             intent.putExtra(Constants.DATE, rowItem.getDate());
