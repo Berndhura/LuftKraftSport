@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:weightSum="1"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -30,19 +30,19 @@
                 android:id="@+id/message_toolbar"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
+                android:layout_weight="0.7"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                android:layout_weight="0.7" />
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <Button
                 android:id="@+id/link_to_ad_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="0.3"
                 android:background="@drawable/rounded_corners"
                 android:text="GO TO AD"
-                android:textColor="#639bc5"
-                android:layout_weight="0.3"
-                android:layout_margin="8dp" />
+                android:textColor="#639bc5" />
 
         </LinearLayout>
 
@@ -54,12 +54,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.8"
-        android:divider="@null"
-        android:clickable="false"
         android:background="#ced5e0"
+        android:clickable="false"
+        android:divider="@null"
         tools:listitem="@layout/chat_item_rcv" />
-
-    <!--include layout="@layout/load_indicator" /-->
 
 
     <LinearLayout
@@ -67,16 +65,16 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_weight="0.2"
-        android:orientation="horizontal"
-        android:background="#ced5e0">
+        android:background="#ced5e0"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/edit_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType= "textAutoComplete|textMultiLine|textAutoCorrect"
             android:layout_weight="0.9"
-            android:hint="new message..." />
+            android:hint="new message..."
+            android:inputType="textAutoComplete|textMultiLine|textAutoCorrect" />
 
         <ImageView
             android:id="@+id/send_msg_button"
@@ -85,8 +83,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             android:layout_weight="0.1"
-            android:src="@drawable/ic_send_black_36pt"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:src="@drawable/ic_send_black_36pt" />
 
     </LinearLayout>
 

@@ -34,11 +34,6 @@ public class MessagesPresenter {
 
     public void loadMessages(String userToken, String chatPartner, Integer adId) {
 
-        if (view.listView!=null) {
-            view.listView.setVisibility(View.INVISIBLE);
-        }
-        view.enableProgress();
-
         Observable<List<MsgRowItem>> getMessagesForAdObserv = service.getAllMessagesForAdObserv(userToken, chatPartner, adId);
 
         Log.d("CONAN", "message: sender, adId: " + chatPartner + ", " + adId);
@@ -56,10 +51,6 @@ public class MessagesPresenter {
 
                     @Override
                     public void onNext(List<MsgRowItem> msgRowItems) {
-                        view.progressBar.setVisibility(ProgressBar.GONE);
-                        if (view.listView!=null) {
-                            view.listView.setVisibility(View.VISIBLE);
-                        }
                         view.showMessages(msgRowItems);
                         view.showLinkToAdButton();
                     }
@@ -73,16 +64,17 @@ public class MessagesPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onCompleted() {
+                    }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error in sending message: "+e.getMessage());
+                        Log.d("CONAN", "error in sending message: " + e.getMessage());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        Log.d("CONAN", "message send: "+s);
+                        Log.d("CONAN", "message send: " + s);
                     }
                 });
     }
@@ -99,7 +91,8 @@ public class MessagesPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ArticleDetails>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onCompleted() {
+                    }
 
                     @Override
                     public void onError(Throwable e) {

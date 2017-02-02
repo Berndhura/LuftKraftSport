@@ -11,12 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -29,7 +30,6 @@ import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.models.MsgRowItem;
-import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.presentation.MessagesPresenter;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -41,7 +41,6 @@ import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO
 
 public class MessagesActivity extends AppCompatActivity {
 
-    public AVLoadingIndicatorView progressBar;
     private List<MsgRowItem> rowItems;
     public ListView listView;
     private MessageListViewAdapter adapter;
@@ -78,7 +77,6 @@ public class MessagesActivity extends AppCompatActivity {
         setContentView(R.layout.messages_layout);
 
         listView = (ListView) findViewById(R.id.message_list);
-        progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
         text = (EditText) findViewById(R.id.edit_message);
 
         final Integer articleId = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
@@ -206,13 +204,13 @@ public class MessagesActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
     }
 
-    public void enableProgress() {
+    /*public void enableProgress() {
         progressBar.setVisibility(ProgressBar.VISIBLE);
     }
 
     public void disableProgress() {
         progressBar.setVisibility(ProgressBar.GONE);
-    }
+    }*/
 
     private String getUserId() {
         SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);

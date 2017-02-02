@@ -69,7 +69,7 @@ public class MyGcmListenerService extends GcmListenerService {
              *
              * if MessageActivity IS open, only update chat
              */
-            if (isMessageActivityActive() && getAdIdFromSharedPref().equals(articleId)) {
+            if (isMessageActivityActive() && getAdIdFromSharedPref().equals(Integer.parseInt(articleId))) {
                 updateChat(message, sender);
             } else {
                 sendNotification(message, sender, Integer.parseInt(articleId), name);
