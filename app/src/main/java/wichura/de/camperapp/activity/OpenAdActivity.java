@@ -114,15 +114,15 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         }
 
         mOpenAdProgressBar = (ProgressBar) findViewById(R.id.open_Ad_ProgressBar);
-
-        getDisplayDimensions();
-
         mTitleText = (TextView) findViewById(R.id.title);
         mPrice = (TextView) findViewById(R.id.price);
         mDescText = (TextView) findViewById(R.id.description);
         mDateText = (TextView) findViewById(R.id.ad_date);
         imgView = (ImageView) findViewById(R.id.imageView);
         mDelAndMsgButton = (Button) findViewById(R.id.delButton);
+        mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
+
+        getDisplayDimensions();
 
         //get data from Intent
         if (!"article".equals(getIntent().getStringExtra(Constants.NOTIFICATION_TYPE))) {
@@ -201,7 +201,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 }
             });
 
-            mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
             mBookmarkButton.setClickable(false);
             //loadBookmarks for user
             presenter.loadBookmarksForUser();

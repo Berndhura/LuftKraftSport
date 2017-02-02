@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -96,7 +95,7 @@ public class MyGcmListenerService extends GcmListenerService {
     private void openArticle(String message, Integer articleId, String name) {
         Intent intent = new Intent(this, OpenAdActivity.class);
         intent.putExtra(Constants.ID, articleId);
-        Log.d("CONAN", "gcm listener article details: " +articleId);
+        Log.d("CONAN", "gcm listener article details: " + articleId);
         intent.putExtra(Constants.NOTIFICATION_TYPE, "article");
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
