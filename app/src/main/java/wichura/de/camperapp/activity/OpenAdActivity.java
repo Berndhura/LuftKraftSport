@@ -177,7 +177,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                     @Override
                     public void onError() {
                         mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
-                        Toast.makeText(getApplicationContext(), "No network connection!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 });
@@ -305,7 +305,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
         // Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
         //       mGoogleApiClient);
