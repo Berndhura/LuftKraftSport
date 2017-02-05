@@ -110,8 +110,7 @@ public class MainPresenter {
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                 Observable.zip(getBookmarksObserv, getBookmarkedAdsObserv, (bookmarks, ads) ->
                 {
-                    ArrayList<Long> bm = new ArrayList<>();
-                    bm.toArray(bookmarks);
+                    ArrayList<Long> bm = new ArrayList<>(Arrays.asList(bookmarks));
                     AdsAndBookmarks elements = new AdsAndBookmarks();
                     elements.setAds(ads);
                     elements.setBookmarks(bm);
@@ -163,8 +162,7 @@ public class MainPresenter {
             Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                     Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
                     {
-                        ArrayList<Long> bm = new ArrayList<>();
-                        bm.toArray(bookmarks);
+                        ArrayList<Long> bm = new ArrayList<>(Arrays.asList(bookmarks));
                         AdsAndBookmarks elements = new AdsAndBookmarks();
                         elements.setAds(ads);
                         elements.setBookmarks(bm);
@@ -252,8 +250,7 @@ public class MainPresenter {
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                 Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
                 {
-                    ArrayList<Long> bm = new ArrayList<>();
-                    bm.toArray(bookmarks);
+                    ArrayList<Long> bm = new ArrayList<>(Arrays.asList(bookmarks));
                     AdsAndBookmarks elements = new AdsAndBookmarks();
                     elements.setAds(ads);
                     elements.setBookmarks(bm);
