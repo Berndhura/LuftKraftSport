@@ -38,7 +38,7 @@ public class OpenAdPresenter {
         service.getBookmarksForUserObserv(getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String[]>() {
+                .subscribe(new Subscriber<Long[]>() {
                     @Override
                     public void onCompleted() {
 
@@ -50,7 +50,7 @@ public class OpenAdPresenter {
                     }
 
                     @Override
-                    public void onNext(String[] bookmarks) {
+                    public void onNext(Long[] bookmarks) {
                         view.updateBookmarkButton(bookmarks);
                     }
                 });

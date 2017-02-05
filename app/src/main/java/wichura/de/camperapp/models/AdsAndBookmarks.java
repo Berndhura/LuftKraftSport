@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 public class AdsAndBookmarks {
 
-    private ArrayList<String> bookmarks;
+    private ArrayList<Long> bookmarks;
     private AdsAsPage ads;
 
-    public ArrayList<String> getBookmarks() {
+    public ArrayList<Long> getBookmarks() {
         return bookmarks;
     }
 
-    public void setBookmarks(ArrayList<String> bookmarks) {
+    public void setBookmarks(ArrayList<Long> bookmarks) {
         this.bookmarks = bookmarks;
     }
 

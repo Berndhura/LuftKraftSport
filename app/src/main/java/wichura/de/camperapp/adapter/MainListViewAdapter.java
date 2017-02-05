@@ -40,7 +40,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
     private Context context;
     private ViewHolder holder;
-    private ArrayList<String> bookmarks;
+    private ArrayList<Long> bookmarks;
     private Activity activity;
     private Service service;
 
@@ -56,7 +56,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     public static final int LOCATION_STATUS_INVALID = 4;
 
     public MainListViewAdapter(final Activity activity, final Context context, final int resourceId,
-                               final List<RowItem> items, final ArrayList<String> bookmarks) {
+                               final List<RowItem> items, final ArrayList<Long> bookmarks) {
         super(context, resourceId, items);
         this.context = context;
         this.activity = activity;
@@ -129,7 +129,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         if (bookmarks == null) {
             holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
         } else {
-            if (bookmarks.contains(rowItem.getId())) {
+            if (bookmarks.contains(Long.parseLong(rowItem.getId().toString()))) {
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
             } else {
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
@@ -166,7 +166,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
         //click to bookmark/debookmark an ad
         holder.bookmarkStar.setOnClickListener((view) -> {
-            if (bookmarks != null && bookmarks.contains(rowItem.getId())) {
+            if (bookmarks != null && bookmarks.contains(Long.parseLong(rowItem.getId().toString()))) {
                 deleteBookmark(rowItem.getId());
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
                 notifyDataSetChanged();

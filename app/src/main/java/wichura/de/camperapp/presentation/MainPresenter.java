@@ -104,13 +104,14 @@ public class MainPresenter {
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
         //Log.d("CONAN", url);
 
-        Observable<String[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
+        Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
         Observable<AdsAsPage> getBookmarkedAdsObserv = service.getMyBookmarkedAdsObserv(page, size, getUserToken());
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                 Observable.zip(getBookmarksObserv, getBookmarkedAdsObserv, (bookmarks, ads) ->
                 {
-                    ArrayList<String> bm = new ArrayList<>(Arrays.asList(bookmarks));
+                    ArrayList<Long> bm = new ArrayList<>();
+                    bm.toArray(bookmarks);
                     AdsAndBookmarks elements = new AdsAndBookmarks();
                     elements.setAds(ads);
                     elements.setBookmarks(bm);
@@ -156,13 +157,14 @@ public class MainPresenter {
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
 
         if (!getUserToken().equals("")) {
-            Observable<String[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
+            Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
             Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(page, size);
 
             Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                     Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
                     {
-                        ArrayList<String> bm = new ArrayList<>(Arrays.asList(bookmarks));
+                        ArrayList<Long> bm = new ArrayList<>();
+                        bm.toArray(bookmarks);
                         AdsAndBookmarks elements = new AdsAndBookmarks();
                         elements.setAds(ads);
                         elements.setBookmarks(bm);
@@ -244,13 +246,14 @@ public class MainPresenter {
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
 
         //use user Token here
-        Observable<String[]> getBookmarksObserv = service.getBookmarksForUserObserv(token);
+        Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(token);
         Observable<AdsAsPage> getAllAdsForUserObserv = service.getAdsMyObserv(page, size, token);
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                 Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
                 {
-                    ArrayList<String> bm = new ArrayList<>(Arrays.asList(bookmarks));
+                    ArrayList<Long> bm = new ArrayList<>();
+                    bm.toArray(bookmarks);
                     AdsAndBookmarks elements = new AdsAndBookmarks();
                     elements.setAds(ads);
                     elements.setBookmarks(bm);

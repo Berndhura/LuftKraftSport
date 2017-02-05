@@ -63,7 +63,7 @@ public class Service {
 
     private interface WebService {
         @GET("bookmarkIds")
-        Observable<String[]> getBookmarksForUser(@Query("token") String userToken);
+        Observable<Long[]> getBookmarksForUser(@Query("token") String userToken);
 
         @GET("messages/forArticle")
         Observable<List<MsgRowItem>> getAllMessagesForAd(
@@ -198,7 +198,7 @@ public class Service {
         return mWebServiceV3.getAdDetails(adId);
     }
 
-    public Observable<String[]> getBookmarksForUserObserv(String userToken) {
+    public Observable<Long[]> getBookmarksForUserObserv(String userToken) {
         return mWebServiceV3.getBookmarksForUser(userToken);
     }
 

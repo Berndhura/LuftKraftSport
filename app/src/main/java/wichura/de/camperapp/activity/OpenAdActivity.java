@@ -200,11 +200,11 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                     startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
                 }
             });
-
-            mBookmarkButton.setClickable(false);
-            //loadBookmarks for user
-            presenter.loadBookmarksForUser();
         }
+
+        mBookmarkButton.setClickable(false);
+        //loadBookmarks for user
+        presenter.loadBookmarksForUser();
 
         mBookmarkButton.setOnClickListener((view) -> {
             if (isBookmarked) {
@@ -235,10 +235,10 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         googleMap = map;
     }
 
-    public void updateBookmarkButton(String[] bookmark) {
+    public void updateBookmarkButton(Long[] bookmark) {
         isBookmarked = false;
-        ArrayList<String> bookmarkList = new ArrayList<>(Arrays.asList(bookmark));
-        if (bookmarkList.contains(mAdId)) {
+        ArrayList<Long> bookmarkList = new ArrayList<>(Arrays.asList(bookmark));
+        if (bookmarkList.contains(Long.parseLong(mAdId.toString()))) {
             mBookmarkButton.setText("Remove bookmark!");
             mBookmarkButton.setClickable(true);
             isBookmarked = true;
