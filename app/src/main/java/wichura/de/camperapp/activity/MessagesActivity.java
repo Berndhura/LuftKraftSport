@@ -9,17 +9,11 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +35,11 @@ import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO
 
 public class MessagesActivity extends AppCompatActivity {
 
-    private List<MsgRowItem> rowItems;
     public ListView listView;
+
+    private List<MsgRowItem> rowItems;
     private MessageListViewAdapter adapter;
     private EditText text;
-    private BroadcastReceiver appendChatScreenMsgReceiver;
-
     private MessagesPresenter presenter;
 
     @Override
@@ -56,7 +49,7 @@ public class MessagesActivity extends AppCompatActivity {
         presenter = new MessagesPresenter(this);
 
         //in case MessageActivity is open, new message will be added to list
-        appendChatScreenMsgReceiver = new BroadcastReceiver() {
+        BroadcastReceiver appendChatScreenMsgReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Bundle b = intent.getExtras();
@@ -90,29 +83,6 @@ public class MessagesActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             toolbar.setNavigationOnClickListener((view) -> finish());
             getSupportActionBar().setTitle(senderName);
-
-
-            LayoutInflater mInflater = LayoutInflater.from(this);
-
-            // View mCustomView = mInflater.inflate(R.id.message_toolbar, null);
-
-            //  getSupportActionBar().setCustomView(mCustomView);
-            // getSupportActionBar().setDisplayShowCustomEnabled(true);
-
-            /*                      TODO: open openAdActivity, need all information in intent??? like description, title...
-                        TODO: here is the link between message and Ad!!!
-                        final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-                        intent.putExtra(Constants.URI, getIntent().getStringExtra(Constants.AD_URL));
-                        intent.putExtra(Constants.AD_ID, getIntent().getStringExtra(Constants.AD_ID));
-                        intent.putExtra(Constants.USER_ID, getUserId());
-                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);*/
-
-
-           /* if (adPicUrl != null) {
-                ImageView thumbNail = (ImageView) findViewById(R.id.ad_in_toolbar);
-                Picasso.with(getApplicationContext()).load(adPicUrl).into(thumbNail);
-                thumbNail.setOnClickListener(v-> Toast.makeText(getApplicationContext(), "Open Ad for details", Toast.LENGTH_SHORT).show());
-            }*/
         }
 
         presenter.loadMessages(getUserToken(), chatPartner, articleId);
@@ -178,22 +148,18 @@ public class MessagesActivity extends AppCompatActivity {
         SharedPreferences.Editor ed = sp.edit();
         ed.putBoolean("active", true);
         ed.putInt(Constants.ARTICLE_ID, getIntent().getIntExtra(Constants.ARTICLE_ID, 0));
-        Log.d("articleId: ", "" + getIntent().getIntExtra(Constants.ARTICLE_ID, 0));
         ed.apply();
     }
 
     private void sendMessage(final String message, final int articleId, final String idTo) {
         if (message.length() == 0)
             return;
-
         presenter.sendMessage(message, articleId, idTo, getUserToken());
     }
 
     public void showMessages(List<MsgRowItem> msgRowItems) {
         rowItems = new ArrayList<>();
-        for (MsgRowItem e : msgRowItems) {
-            rowItems.add(e);
-        }
+        rowItems.addAll(msgRowItems);
 
         adapter = new MessageListViewAdapter(getApplicationContext(), R.layout.list_item, rowItems);
         listView.setAdapter(adapter);

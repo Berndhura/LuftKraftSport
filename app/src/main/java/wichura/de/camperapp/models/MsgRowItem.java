@@ -10,7 +10,7 @@ public class MsgRowItem {
 
     public MsgRowItem(String msg) {
         this.message = msg;
-        this.date = 123123123;
+        this.date = System.currentTimeMillis();
     }
 
     @Expose

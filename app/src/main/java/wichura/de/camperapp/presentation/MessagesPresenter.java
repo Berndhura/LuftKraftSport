@@ -64,8 +64,7 @@ public class MessagesPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
-                    public void onCompleted() {
-                    }
+                    public void onCompleted() {}
 
                     @Override
                     public void onError(Throwable e) {
