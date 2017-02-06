@@ -73,14 +73,13 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
 
     private LoginPresenter presenter;
-    private Service service;
     private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        service = new Service();
+        Service service = new Service();
         presenter = new LoginPresenter(this, service, getApplicationContext());
 
         FacebookSdk.sdkInitialize(getApplicationContext());

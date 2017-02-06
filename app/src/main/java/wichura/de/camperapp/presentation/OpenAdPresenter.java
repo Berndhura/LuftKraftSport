@@ -12,7 +12,6 @@ import wichura.de.camperapp.activity.OpenAdActivity;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.ArticleDetails;
-import wichura.de.camperapp.models.Bookmarks;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -41,7 +40,6 @@ public class OpenAdPresenter {
                 .subscribe(new Subscriber<Long[]>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
@@ -73,7 +71,7 @@ public class OpenAdPresenter {
 
                     @Override
                     public void onNext(String result) {
-                        Log.d("CONAN", "increase view count: "+result);
+                        Log.d("CONAN", "increase view count: " + result);
                     }
                 });
     }
@@ -97,7 +95,7 @@ public class OpenAdPresenter {
 
                     @Override
                     public void onNext(String result) {
-                        Log.d("CONAN", "bookmark ad: "+result);
+                        Log.d("CONAN", "bookmark ad: " + result);
                     }
                 });
     }
@@ -121,7 +119,7 @@ public class OpenAdPresenter {
 
                     @Override
                     public void onNext(String result) {
-                        Log.d("CONAN", "bookmark deleted: "+result);
+                        Log.d("CONAN", "bookmark deleted: " + result);
                     }
                 });
     }
@@ -143,7 +141,7 @@ public class OpenAdPresenter {
 
                     @Override
                     public void onNext(String result) {
-                        Log.d("CONAN", "send message to user: "+result);
+                        Log.d("CONAN", "send message to user: " + result);
                     }
                 });
     }
@@ -165,13 +163,12 @@ public class OpenAdPresenter {
 
                     @Override
                     public void onNext(String result) {
-                        Log.d("CONAN", "delete ad: "+result);
+                        Log.d("CONAN", "delete ad: " + result);
                     }
                 });
     }
 
     public void getAd(Integer articleId) {
-        Log.d("CONAN", "error ARTICLE ID " + articleId);
         service.getAdDetailsObserv(articleId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -184,13 +181,12 @@ public class OpenAdPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "error in getting article details: " + e.getMessage());
-                        Log.e("CONAN", "presenter ERROR"+ e.getMessage());
+                        Log.e("CONAN", "presenter ERROR" + e.getMessage());
                     }
 
                     @Override
                     public void onNext(ArticleDetails articleDetails) {
                         view.prepareDataFromArticle(articleDetails);
-                        Log.e("CONAN", "presenter OK");
                     }
                 });
     }

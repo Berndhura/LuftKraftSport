@@ -1,8 +1,6 @@
 package wichura.de.camperapp.presentation;
 
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -42,7 +40,8 @@ public class MessagesPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<MsgRowItem>>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onCompleted() {
+                    }
 
                     @Override
                     public void onError(Throwable e) {
@@ -64,7 +63,8 @@ public class MessagesPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onCompleted() {
+                    }
 
                     @Override
                     public void onError(Throwable e) {
