@@ -7,9 +7,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Picture;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -125,11 +128,11 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_WIDE);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setColorScheme(SignInButton.COLOR_DARK);
         signInButton.setHovered(false);
-       // signInButton.setScopes(gso.getScopeArray());
-        setGooglePlusButton(signInButton, "maul login!");
+        // signInButton.setScopes(gso.getScopeArray());
+        setGooglePlusButton(signInButton, "Sign in with Google");
 
 
         findViewById(R.id.sign_in_button).setOnClickListener(v -> {
@@ -173,34 +176,67 @@ public class LoginActivity extends AppCompatActivity {
         tv.setClickable(true);
         tv.setMovementMethod(LinkMovementMethod.getInstance());
 
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        if (loginButton != null) {
-            loginButton.setReadPermissions("user_friends");
-            loginButton.registerCallback(mCallbackMgt, mCallback);
+        LoginButton fbLoginButton = (LoginButton) findViewById(R.id.login_button);
+        if (fbLoginButton != null) {
+            fbLoginButton.setReadPermissions("user_friends");
+            fbLoginButton.registerCallback(mCallbackMgt, mCallback);
         }
+        adaptFacebookButton(fbLoginButton);
+        setFbButton(fbLoginButton, "Sign in with Facebook");
+    }
+
+    private void adaptFacebookButton(LoginButton loginButton) {
+
+        float fbIconScale = 2F;
+        Drawable drawable = getApplication().getResources().getDrawable(
+                com.facebook.R.drawable.com_facebook_button_icon);
+        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * fbIconScale),
+                (int) (drawable.getIntrinsicHeight() * fbIconScale));
+        loginButton.setCompoundDrawables(drawable, null, null, null);
+        loginButton.setCompoundDrawablePadding(getApplication().getResources().
+                getDimensionPixelSize(R.dimen.fb_margin_override_textpadding));
+        loginButton.setPadding(
+                getApplication().getResources().getDimensionPixelSize(
+                        R.dimen.fb_margin_override_lr),
+                getApplication().getResources().getDimensionPixelSize(
+                        R.dimen.fb_margin_override_top),
+                getApplication().getResources().getDimensionPixelSize(
+                        R.dimen.fb_margin_override_lr),
+                getApplication().getResources().getDimensionPixelSize(
+                        R.dimen.fb_margin_override_bottom));
     }
 
     private void setGooglePlusButton(SignInButton signInButton, String buttonText) {
         // ExceptionHelpers.dLog("GOOGLE_PLUS_TAG", "Child Count : "+signInButton.getChildCount());
-        signInButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        //signInButton.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.MarginLayoutParams, ViewGroup.LayoutParams.WRAP_CONTENT));
+        //ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_CONSTRAINT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        //lp.setMargins(0, 0, 0, 0);
+        //signInButton.setLayoutParams(lp);
         for (int i = 0; i < signInButton.getChildCount(); i++) {
             View v = signInButton.getChildAt(i);
-            // ExceptionHelpers.dLog("GOOGLE_PLUS_TAG", "Type Of Child : "+v.getClass().getName());
+            Log.d("GOOGLE_PLUS_TAG", "Type Of Child : " + v.getClass().getName());
             if (v instanceof TextView) {
                 TextView tv = (TextView) v;
                 tv.setText(buttonText);
-                tv.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                //tv.setBackgroundResource(R.drawable.google_background_drawable);
-                //tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.facebook_compound_drawable, 0, 0, 0);
-                int padding = (int) getResources().getDimension(0);
-                int drawablePadding = (int) getResources().getDimension(0);
-                tv.setPadding(padding, padding, padding, padding);
+                //tv.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                //tv.setBackgroundResource(R.drawable.applogo);
+                //tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_icon_dark_normal, 0, 0, 0);
+                // int padding = (int) getResources().getDimension(R.dimen.nav_header_height
+                int drawablePadding = 0;
+                //tv.setPadding(padding, padding, padding, padding);
                 tv.setCompoundDrawablePadding(drawablePadding);
-                tv.setTextColor(getResources().getColor(R.color.cast_expanded_controller_background_color));
-                tv.setTextSize(17);
+                tv.setTextColor(getResources().getColor(R.color.white_smoke));
+                tv.setTextSize(15);
+                tv.setBackgroundColor(getResources().getColor(R.color.googlePlusLoginBtn));
                 return;
             }
         }
+    }
+
+    private void setFbButton(LoginButton signInButton, String buttonText) {
+        signInButton.setBackgroundColor(getResources().getColor(R.color.facebookLoginBtn));
+        signInButton.setText(buttonText);
+
     }
 
     private void signIn() {

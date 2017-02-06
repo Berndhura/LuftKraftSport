@@ -12,4 +12,6 @@
     <color name="white">#ffffff</color>
     <color name="transparent">#00000000</color>
     <color name="colorBackgroundForLists">#D8D8D8</color>
+    <color name="googlePlusLoginBtn">#D34836</color>
+    <color name="facebookLoginBtn">#3B5998</color>
 </resources>
