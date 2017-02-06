@@ -17,8 +17,12 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,10 +125,12 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setSize(SignInButton.SIZE_WIDE);
         signInButton.setColorScheme(SignInButton.COLOR_DARK);
-        signInButton.setHovered(true);
-        signInButton.setScopes(gso.getScopeArray());
+        signInButton.setHovered(false);
+       // signInButton.setScopes(gso.getScopeArray());
+        setGooglePlusButton(signInButton, "maul login!");
+
 
         findViewById(R.id.sign_in_button).setOnClickListener(v -> {
             switch (v.getId()) {
@@ -171,6 +177,29 @@ public class LoginActivity extends AppCompatActivity {
         if (loginButton != null) {
             loginButton.setReadPermissions("user_friends");
             loginButton.registerCallback(mCallbackMgt, mCallback);
+        }
+    }
+
+    private void setGooglePlusButton(SignInButton signInButton, String buttonText) {
+        // ExceptionHelpers.dLog("GOOGLE_PLUS_TAG", "Child Count : "+signInButton.getChildCount());
+        signInButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+            // ExceptionHelpers.dLog("GOOGLE_PLUS_TAG", "Type Of Child : "+v.getClass().getName());
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setText(buttonText);
+                tv.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                //tv.setBackgroundResource(R.drawable.google_background_drawable);
+                //tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.facebook_compound_drawable, 0, 0, 0);
+                int padding = (int) getResources().getDimension(0);
+                int drawablePadding = (int) getResources().getDimension(0);
+                tv.setPadding(padding, padding, padding, padding);
+                tv.setCompoundDrawablePadding(drawablePadding);
+                tv.setTextColor(getResources().getColor(R.color.cast_expanded_controller_background_color));
+                tv.setTextSize(17);
+                return;
+            }
         }
     }
 
