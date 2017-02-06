@@ -208,6 +208,8 @@ public class LoginActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.d("CONAN", "handleSignInResult:" + data);
+
         if (requestCode == Constants.RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
@@ -219,6 +221,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d("CONAN", "handleSignInResult:" + result.isSuccess());
+        Log.d("CONAN", "handleSignInResult status:" + result.getStatus());
+
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
