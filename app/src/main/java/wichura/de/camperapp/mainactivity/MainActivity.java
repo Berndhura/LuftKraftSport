@@ -625,10 +625,6 @@ public class MainActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    private String getUserToken() {
-        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
-    }
-
     private void setMyAdsFlag(boolean isMyAds) {
         SharedPreferences settings = getSharedPreferences(SHOW_MY_ADS, 0);
         SharedPreferences.Editor editor = settings.edit();

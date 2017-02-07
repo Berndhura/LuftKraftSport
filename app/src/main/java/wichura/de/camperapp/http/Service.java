@@ -25,6 +25,7 @@ import wichura.de.camperapp.models.AdsAsPage;
 import wichura.de.camperapp.models.GroupedMsgItem;
 import wichura.de.camperapp.models.MsgRowItem;
 import wichura.de.camperapp.models.RowItem;
+import wichura.de.camperapp.models.SearchItem;
 
 /**
  * Created by ich on 16.10.2016.
@@ -135,6 +136,13 @@ public class Service {
 
         @GET("pictures/{pictureId}")
         Observable<byte[]> getPicture(@Path("pictureId") Integer pictureId);
+
+        @GET("/search")
+        Observable<SearchItem> findSearches(@Query("token") String userToken);
+    }
+
+    public Observable<SearchItem> findSearchesObserv(String userToken) {
+        return mWebServiceV3.findSearches(userToken);
     }
 
     public Observable<String> uploadPictureObserv(Integer adId, String userToken, MultipartBody.Part file) {

@@ -49,6 +49,7 @@ import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.presentation.OpenAdPresenter;
+import wichura.de.camperapp.util.Utility;
 
 import static wichura.de.camperapp.R.id.map;
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -58,11 +59,12 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         LocationListener, OnMapReadyCallback {
 
     public Button mBookmarkButton;
-    private Integer mAdId;
+    public boolean isBookmarked;
+
+    private Utility utils;
 
     private int displayHeight;
     private int displayWidth;
-    public boolean isBookmarked;
 
     private ProgressBar mOpenAdProgressBar;
     private OpenAdPresenter presenter;
@@ -77,13 +79,15 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private TextView mPrice;
     private TextView mDescText;
     private TextView mDateText;
-
+    private Integer mAdId;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.open_ad_activity);
+
+        utils = new Utility(this);
 
         MapsInitializer.initialize(this);
 
@@ -208,9 +212,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
         mBookmarkButton.setOnClickListener((view) -> {
             if (isBookmarked) {
-                presenter.deleteBookmark(mAdId, getUserToken());
+                presenter.deleteBookmark(mAdId, utils.getUserToken());
             } else {
-                presenter.bookmarkAd(mAdId, getUserToken());
+                presenter.bookmarkAd(mAdId, utils.getUserToken());
             }
         });
 
@@ -255,7 +259,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         alert.setView(edittext);
         alert.setPositiveButton("Send", (dialog, whichButton) -> {
             String message = edittext.getText().toString();
-            presenter.sendNewMessage(message, adId, receiverId, getUserToken());
+            presenter.sendNewMessage(message, adId, receiverId, utils.getUserToken());
         });
         alert.setNegativeButton("not yet", (dismissDialog, whichButton) -> {/*just go away*/});
         alert.show();
@@ -277,10 +281,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     private String getUserId() {
         return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
-    }
-
-    private String getUserToken() {
-        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
     }
 
     private boolean isOwnAd() {
