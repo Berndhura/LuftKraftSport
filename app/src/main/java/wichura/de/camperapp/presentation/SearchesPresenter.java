@@ -3,6 +3,8 @@ package wichura.de.camperapp.presentation;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.List;
+
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -36,7 +38,7 @@ public class SearchesPresenter {
         service.findSearchesObserv(utils.getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SearchItem>() {
+                .subscribe(new Subscriber<List<SearchItem>>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -47,7 +49,7 @@ public class SearchesPresenter {
                     }
 
                     @Override
-                    public void onNext(SearchItem searchItem) {
+                    public void onNext(List<SearchItem> searchItem) {
                         view.updateSearches(searchItem);
                     }
                 });

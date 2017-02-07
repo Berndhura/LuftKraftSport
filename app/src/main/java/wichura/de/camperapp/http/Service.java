@@ -43,10 +43,10 @@ public class Service {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        //api/V2
-        OkHttpClient.Builder httpClientV2 = new OkHttpClient.Builder();
+        //api/V3
+        OkHttpClient.Builder httpClientV3 = new OkHttpClient.Builder();
 
-        httpClientV2.addInterceptor(logging);
+        httpClientV3.addInterceptor(logging);
 
         Gson gson = new GsonBuilder()
                 .setLenient()
@@ -56,7 +56,7 @@ public class Service {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(WEB_SERVICE_BASE_URL_V3)
-                .client(httpClientV2.build())
+                .client(httpClientV3.build())
                 .build();
 
         mWebServiceV3 = restAdapterV2.create(WebService.class);
@@ -137,11 +137,11 @@ public class Service {
         @GET("pictures/{pictureId}")
         Observable<byte[]> getPicture(@Path("pictureId") Integer pictureId);
 
-        @GET("/search")
-        Observable<SearchItem> findSearches(@Query("token") String userToken);
+        @GET("search")
+        Observable<List<SearchItem>> findSearches(@Query("token") String userToken);
     }
 
-    public Observable<SearchItem> findSearchesObserv(String userToken) {
+    public Observable<List<SearchItem>> findSearchesObserv(String userToken) {
         return mWebServiceV3.findSearches(userToken);
     }
 
