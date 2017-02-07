@@ -26,7 +26,7 @@
 
     <string name="hello_world" tools:ignore="MissingTranslation,MissingTranslation">Tag</string>
 
-    <string name="title_new_add_page" tools:ignore="MissingTranslation">Create new ad</string>
+    <string name="title_new_add_page" tools:ignore="MissingTranslation">Erstelle</string>
     <string name="uploadAd">Upload ad</string>
     <string name="preis">Preis...</string>
     <string name="description">Beschreibe es...</string>
