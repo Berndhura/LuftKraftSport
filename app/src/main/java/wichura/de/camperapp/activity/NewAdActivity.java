@@ -71,6 +71,12 @@ public class NewAdActivity extends AppCompatActivity {
         progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
         hideProgress();
 
+        View showSearchBtn =  findViewById(R.id.savedSearchButton);
+        showSearchBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SearchesActivity.class);
+            startActivityForResult(intent, Constants.REQUEST_ID_FOR_SEARCHES);
+        });
+
         mDescText = (EditText) findViewById(R.id.description);
         mKeywords = (EditText) findViewById(R.id.keywords);
         mImgOne = (ImageView) findViewById(R.id.imageButton);

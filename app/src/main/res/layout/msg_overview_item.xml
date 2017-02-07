@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
         android:paddingLeft="20sp"
-        android:paddingBottom="10sp">
+        android:paddingTop="10sp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/ad_image"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:civ_border_width="0dp"
-            app:paddingStart="5sp"/>
+            app:paddingStart="5sp" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -33,19 +33,19 @@
                     android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000"
-                    android:paddingLeft="15dp"
                     android:paddingBottom="8sp"
+                    android:paddingLeft="15dp"
+                    android:textColor="#000000"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/msg_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:textColor="#444444"
                     android:paddingRight="10dp"
+                    android:textColor="#444444"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -54,13 +54,12 @@
                 android:id="@+id/ad_title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
                 android:maxLines="2"
+                android:paddingLeft="15dp"
                 android:textColor="#0f0e0e" />
 
         </LinearLayout>
 
     </LinearLayout>
-
 
 </LinearLayout>
