@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class SearchesActivity extends AppCompatActivity {
 
     private SearchesPresenter presenter;
     private ListView listView;
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,9 +40,18 @@ public class SearchesActivity extends AppCompatActivity {
 
         setContentView(R.layout.searches_overview_layout);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.searches_overview_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener((view) -> finish());
+        }
+
         presenter = new SearchesPresenter(this, new Service(), getApplicationContext());
 
         listView = (ListView) findViewById(R.id.searches_overview_list);
+        progressBar = (ProgressBar) findViewById(R.id.searches_overview_ProgressBar);
 
         presenter.loadSearchesForUser();
     }
@@ -48,6 +60,9 @@ public class SearchesActivity extends AppCompatActivity {
     public void updateSearches(List<SearchItem> searchItem) {
         List<SearchItem> rowItems = new ArrayList<>();
         rowItems.addAll(searchItem);
+
+        getSupportActionBar().setTitle("Searches: " + rowItems.size());
+        //getSupportActionBar().setSubtitle(getUserName());
 
         SearchesListAdapter adapter = new SearchesListAdapter(
                 getApplicationContext(), R.layout.searches_overview_item, rowItems);
@@ -68,5 +83,13 @@ public class SearchesActivity extends AppCompatActivity {
             intent.putExtra(Constants.AD_URL, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl() + "/thumbnail");
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);
         });*/
+    }
+
+    public void enableProgress() {
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+    }
+
+    public void disableProgress() {
+        progressBar.setVisibility(ProgressBar.GONE);
     }
 }

@@ -35,12 +35,14 @@ public class SearchesPresenter {
     }
 
     public void loadSearchesForUser() {
+        view.enableProgress();
         service.findSearchesObserv(utils.getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<SearchItem>>() {
                     @Override
                     public void onCompleted() {
+                        view.disableProgress();
                     }
 
                     @Override

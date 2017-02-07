@@ -37,6 +37,7 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         TextView title;
         TextView name;
         TextView date;
+        ImageView deleteSearch;
     }
 
 
@@ -54,6 +55,7 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
             holder.title = (TextView) convertView.findViewById(R.id.search_title);
             holder.name = (TextView) convertView.findViewById(R.id.search_distance);
             holder.date = (TextView) convertView.findViewById(R.id.search_price);
+            holder.deleteSearch = (ImageView) convertView.findViewById(R.id.delete_search);
             convertView.setTag(holder);
         } else
             holder = (SearchesListAdapter.ViewHolder) convertView.getTag();
@@ -62,7 +64,7 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         final SearchItem searchItem = getItem(position);
 
         holder.title.setText(searchItem.getDescription());
-       // holder.name.setText(searchItem.getDistance());
+        holder.name.setText(searchItem.getPriceTo().toString());
        // holder.date.setText(DateFormat.getDateInstance().format(searchItem.getDate()));
         return convertView;
     }
