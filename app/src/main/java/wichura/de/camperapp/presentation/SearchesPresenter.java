@@ -16,6 +16,7 @@ import wichura.de.camperapp.util.Utility;
 
 /**
  * Created by bwichura on 07.02.2017.
+ *
  */
 
 public class SearchesPresenter {
@@ -34,14 +35,14 @@ public class SearchesPresenter {
     }
 
     public void loadSearchesForUser() {
-        view.enableProgress();
+        //view.enableProgress();
         service.findSearchesObserv(utils.getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<SearchItem>>() {
                     @Override
                     public void onCompleted() {
-                        view.disableProgress();
+                       // view.disableProgress();
                     }
 
                     @Override

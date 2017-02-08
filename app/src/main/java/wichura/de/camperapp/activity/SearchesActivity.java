@@ -25,7 +25,6 @@ public class SearchesActivity extends AppCompatActivity {
 
     private SearchesPresenter presenter;
     private ListView listView;
-    private ProgressBar progressBar;
     private SearchesListAdapter adapter;
 
     @Override
@@ -45,7 +44,6 @@ public class SearchesActivity extends AppCompatActivity {
         presenter = new SearchesPresenter(this, new Service(), getApplicationContext());
 
         listView = (ListView) findViewById(R.id.searches_overview_list);
-        progressBar = (ProgressBar) findViewById(R.id.searches_overview_ProgressBar);
 
         presenter.loadSearchesForUser();
     }
@@ -79,13 +77,6 @@ public class SearchesActivity extends AppCompatActivity {
         });*/
     }
 
-    public void enableProgress() {
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-    }
-
-    public void disableProgress() {
-        progressBar.setVisibility(ProgressBar.GONE);
-    }
 
     public void dataChanged() {
         adapter.notifyDataSetChanged();
