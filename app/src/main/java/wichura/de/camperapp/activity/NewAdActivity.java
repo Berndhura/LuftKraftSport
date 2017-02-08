@@ -1,7 +1,6 @@
 package wichura.de.camperapp.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,27 +25,13 @@ import wichura.de.camperapp.mainactivity.Constants;
 
 public class NewAdActivity extends AppCompatActivity {
 
-    private EditText mDescText;
-    private EditText mKeywords;
-    private EditText mPrice;
 
-    private static final int SELECT_PHOTO = 100;
-    private String mImage;
-    private int pictureCount = 1;
-
-    private ImageView mImgOne;
-    private ImageView mImgTwo;
-
-    private ProgressBar progress;
-
-    private FileUploadService fileUploadService;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.new_ad_acivity);
-        fileUploadService = new FileUploadService(getApplicationContext(), this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.new_ad_toolbar);
         if (toolbar != null) {
@@ -65,95 +48,12 @@ public class NewAdActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
-        hideProgress();
 
-        View showSearchBtn =  findViewById(R.id.savedSearchButton);
-        showSearchBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SearchesActivity.class);
-            startActivityForResult(intent, Constants.REQUEST_ID_FOR_SEARCHES);
-        });
-
-        mDescText = (EditText) findViewById(R.id.description);
-        mKeywords = (EditText) findViewById(R.id.keywords);
-        mImgOne = (ImageView) findViewById(R.id.imageButton);
-        mPrice = (EditText) findViewById(R.id.preis);
-
-        final Button submitButton = (Button) findViewById(R.id.uploadButton);
-        submitButton.setOnClickListener((v) -> {
-
-            final String titleString = mKeywords.getText().toString();
-            final String descString = mDescText.getText().toString();
-            final String price = mPrice.getText().toString();
-            final String keyWordsString = "zelt";
-            final long date = System.currentTimeMillis();
-
-            final Intent data = new Intent();
-            data.putExtra(Constants.TITLE, titleString);
-            data.putExtra(Constants.ARTICLE_ID, "arcticleId");
-            data.putExtra(Constants.DESCRIPTION, descString);
-            data.putExtra(Constants.KEYWORDS, keyWordsString);
-            data.putExtra(Constants.FILENAME, mImage);
-            data.putExtra(Constants.LOCATION, "TODO");
-            data.putExtra(Constants.PHONE, "PHONE");
-            data.putExtra(Constants.PRICE, price);
-            data.putExtra(Constants.DATE, date);
-
-            fileUploadService.multiPost(data);
-            setResult(RESULT_OK, data);
-        });
-
-        final ImageView getPictureButton = (ImageView) findViewById(R.id.imageButton);
-
-        getPictureButton.setOnClickListener((v) -> {
-            final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-        });
-    }
-
-
-    @Override
-    protected void onActivityResult(final int requestCode,
-                                    final int resultCode, final Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
-        switch (requestCode) {
-            case SELECT_PHOTO:
-                if (resultCode == RESULT_OK && pictureCount < 4) {
-                    final Uri selectedImage = imageReturnedIntent.getData();
-                    //todo :works for one pic, need to work for more: array or comma separeted?
-                    mImage = selectedImage.toString();
-
-                    switch (pictureCount) {
-                        case 1: {
-                            mImgOne = (ImageView) findViewById(R.id.imageButton);
-                            Picasso
-                                    .with(getApplicationContext())
-                                    .load(selectedImage)
-                                    .fit()
-                                    .into(mImgOne);
-                            pictureCount++;
-                            break;
-                        }
-                        case 2: {
-                            mImgTwo = (ImageView) findViewById(R.id.imageButton);
-                            Picasso
-                                    .with(getApplicationContext())
-                                    .load(selectedImage)
-                                    .fit()
-                                    .into(mImgTwo);
-                            pictureCount++;
-                            break;
-                        }
-                    }
-                }
-        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new OneFragment(), "Artikel");
+        adapter.addFragment(new CreateArticleFragment(), "Artikel");
         adapter.addFragment(new CreateSearchFragment(), "Suche folgen");
         viewPager.setAdapter(adapter);
     }
@@ -163,7 +63,7 @@ public class NewAdActivity extends AppCompatActivity {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
+        private ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
@@ -177,7 +77,7 @@ public class NewAdActivity extends AppCompatActivity {
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        private void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
@@ -186,15 +86,6 @@ public class NewAdActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-
-    public void showProgress() {
-        progress.setVisibility(ProgressBar.VISIBLE);
-    }
-
-    public void hideProgress() {
-        progress.setVisibility(ProgressBar.GONE);
     }
 }
 

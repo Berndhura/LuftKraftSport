@@ -1,5 +1,6 @@
 package wichura.de.camperapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -49,6 +50,12 @@ public class CreateSearchFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        View showSearchBtn =  getActivity().findViewById(R.id.savedSearchButton);
+        showSearchBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), SearchesActivity.class);
+            startActivityForResult(intent, Constants.REQUEST_ID_FOR_SEARCHES);
+        });
 
         Button saveButton = (Button)getView().findViewById(R.id.save_new_search_button);
         description = (EditText) getView().findViewById(R.id.search_description_et);

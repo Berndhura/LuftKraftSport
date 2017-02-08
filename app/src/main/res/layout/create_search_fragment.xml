@@ -7,6 +7,8 @@
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="25dp">
 
+
+
     <EditText
         android:id="@+id/search_description_et"
         android:layout_width="0dp"

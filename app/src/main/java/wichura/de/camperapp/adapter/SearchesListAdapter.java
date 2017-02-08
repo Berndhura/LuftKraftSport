@@ -24,7 +24,7 @@ import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO
 
 /**
  * Created by ich on 07.02.2017.
- *
+ * desurf
  */
 
 public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
@@ -93,14 +93,14 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error deleting searches: "+"id: "+ id + e.getMessage());
+                        Log.d("CONAN", "error deleting searches: " + "id: " + id + e.getMessage());
                     }
 
                     @Override
                     public void onNext(String result) {
                         //disableProgress();
                         //view.dataChanged();
-                        Log.d("CONAN", "deleting searches: "+"id: "+ id);
+                        Log.d("CONAN", "deleting searches: " + "id: " + id);
                     }
                 });
     }

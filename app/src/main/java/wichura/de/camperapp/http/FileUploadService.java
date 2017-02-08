@@ -23,6 +23,7 @@ import okhttp3.RequestBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import wichura.de.camperapp.activity.CreateArticleFragment;
 import wichura.de.camperapp.activity.NewAdActivity;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.util.BitmapHelper;
@@ -48,7 +49,7 @@ public class FileUploadService {
 
     public void multiPost(Intent data) {
 
-        view.showProgress();
+       // view.showProgress();
 
         Service service = new Service();
 
@@ -162,7 +163,7 @@ public class FileUploadService {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
                 Toast.makeText(context, "Upload did not work!", Toast.LENGTH_SHORT).show();
                 Log.d("CONAN", "error in upload file to server: "+throwable.getMessage());
-                view.hideProgress();
+                //view.hideProgress();
             }
 
             @Override
@@ -173,7 +174,7 @@ public class FileUploadService {
                 Boolean deletetd = reducedPicture.delete();
                 if (!deletetd)
                     Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
-                view.hideProgress();
+               // view.hideProgress();
                 view.finish();
             }
         });

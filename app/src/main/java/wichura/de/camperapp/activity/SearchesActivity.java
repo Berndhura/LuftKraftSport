@@ -1,12 +1,9 @@
 package wichura.de.camperapp.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -14,18 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.adapter.MsgOverviewAdapter;
 import wichura.de.camperapp.adapter.SearchesListAdapter;
 import wichura.de.camperapp.http.Service;
-import wichura.de.camperapp.http.Urls;
-import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.models.GroupedMsgItem;
 import wichura.de.camperapp.models.SearchItem;
 import wichura.de.camperapp.presentation.SearchesPresenter;
 
 /**
  * Created by bwichura on 07.02.2017.
- *
+ * desurf
  */
 
 public class SearchesActivity extends AppCompatActivity {
