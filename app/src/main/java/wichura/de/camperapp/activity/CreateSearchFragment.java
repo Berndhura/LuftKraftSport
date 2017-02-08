@@ -9,10 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.List;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -20,13 +17,11 @@ import rx.schedulers.Schedulers;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.models.SearchItem;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by ich on 11.12.2016.
- *
  */
 
 public class CreateSearchFragment extends Fragment {
@@ -38,6 +33,7 @@ public class CreateSearchFragment extends Fragment {
     public CreateSearchFragment() {
         service = new Service();
     }
+
     private Service service;
 
     @Override
@@ -51,19 +47,19 @@ public class CreateSearchFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        View showSearchBtn =  getActivity().findViewById(R.id.savedSearchButton);
+        View showSearchBtn = getActivity().findViewById(R.id.savedSearchButton);
         showSearchBtn.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SearchesActivity.class);
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_SEARCHES);
         });
 
-        Button saveButton = (Button)getView().findViewById(R.id.save_new_search_button);
+        Button saveButton = (Button) getView().findViewById(R.id.save_new_search_button);
         description = (EditText) getView().findViewById(R.id.search_description_et);
         priceFrom = (EditText) getView().findViewById(R.id.price_from_et);
         priceTo = (EditText) getView().findViewById(R.id.price_to_et);
 
 
-        saveButton.setOnClickListener((v)-> {
+        saveButton.setOnClickListener((v) -> {
             if ("".equals(description.getText().toString()) || "".equals(priceTo.getText().toString()) || "".equals(priceTo.getText().toString())) {
                 return;
             }

@@ -118,7 +118,7 @@ public class CreateArticleFragment extends Fragment {
 
     @Override
     public void onActivityResult(final int requestCode,
-                                    final int resultCode, final Intent imageReturnedIntent) {
+                                 final int resultCode, final Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
         switch (requestCode) {

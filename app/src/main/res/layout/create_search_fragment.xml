@@ -8,7 +8,6 @@
     tools:layout_editor_absoluteY="25dp">
 
 
-
     <EditText
         android:id="@+id/search_description_et"
         android:layout_width="0dp"
@@ -40,14 +39,14 @@
         android:id="@+id/price_to_et"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="Preis bis"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/save_new_search_button"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/save_new_search_button" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
         android:id="@+id/save_new_search_button"

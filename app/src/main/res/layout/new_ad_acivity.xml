@@ -33,10 +33,9 @@
                 android:id="@+id/savedSearchButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_save_white_24dp"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
-
+                app:srcCompat="@drawable/ic_save_white_24dp" />
 
         </RelativeLayout>
 
@@ -55,7 +54,5 @@
 
 
     <!-- set a scroll view around for landscape mode here -->
-
-    <include layout="@layout/new_ad_center_layout" />
 
 </LinearLayout>

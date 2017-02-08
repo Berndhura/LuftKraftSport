@@ -16,7 +16,6 @@ import wichura.de.camperapp.util.Utility;
 
 /**
  * Created by bwichura on 07.02.2017.
- *
  */
 
 public class SearchesPresenter {
