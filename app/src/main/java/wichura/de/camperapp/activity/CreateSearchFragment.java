@@ -10,12 +10,13 @@ import wichura.de.camperapp.R;
 
 /**
  * Created by ich on 11.12.2016.
+ *
  */
 
-public class TwoFragment extends Fragment {
+public class CreateSearchFragment extends Fragment {
 
-    public TwoFragment() {
-        // Required empty public constructor
+    public CreateSearchFragment() {
+
     }
 
     @Override
@@ -26,8 +27,6 @@ public class TwoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_two, container, false);
+        return inflater.inflate(R.layout.create_search_fragment, container, false);
     }
-
 }
