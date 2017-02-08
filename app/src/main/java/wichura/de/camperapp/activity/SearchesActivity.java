@@ -33,6 +33,7 @@ public class SearchesActivity extends AppCompatActivity {
     private SearchesPresenter presenter;
     private ListView listView;
     private ProgressBar progressBar;
+    private SearchesListAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,13 +65,13 @@ public class SearchesActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Searches: " + rowItems.size());
         //getSupportActionBar().setSubtitle(getUserName());
 
-        SearchesListAdapter adapter = new SearchesListAdapter(
+        adapter = new SearchesListAdapter(
                 getApplicationContext(), R.layout.searches_overview_item, rowItems);
         listView.setAdapter(adapter);
         //listView.setSelection(listView.getCount() - 1);
         adapter.notifyDataSetChanged();
         //listView.setSelectionAfterHeaderView();
-       /* listView.setOnItemClickListener((adapterView, view, position, l) -> {
+        /*listView.setOnItemClickListener((adapterView, view, position, l) -> {
             final GroupedMsgItem rowItem = (GroupedMsgItem) listView.getItemAtPosition(position);
             //open message threat
             final Intent intent = new Intent(getApplicationContext(), MessagesActivity.class);
@@ -91,5 +92,9 @@ public class SearchesActivity extends AppCompatActivity {
 
     public void disableProgress() {
         progressBar.setVisibility(ProgressBar.GONE);
+    }
+
+    public void dataChanged() {
+        adapter.notifyDataSetChanged();
     }
 }

@@ -20,8 +20,8 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
-import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.models.AdsAsPage;
+import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.models.GroupedMsgItem;
 import wichura.de.camperapp.models.MsgRowItem;
 import wichura.de.camperapp.models.RowItem;
@@ -61,6 +61,7 @@ public class Service {
 
         mWebServiceV3 = restAdapterV2.create(WebService.class);
     }
+
 
     private interface WebService {
         @GET("bookmarkIds")
@@ -139,6 +140,26 @@ public class Service {
 
         @GET("search")
         Observable<List<SearchItem>> findSearches(@Query("token") String userToken);
+
+        @DELETE("search/{id}")
+        Observable<String> deleteSearch(@Path("id") Long id, @Query("token") String token);
+
+        /*
+        @RequestMapping(value = "/search/new", method = RequestMethod.POST)
+@ResponseBody
+public String saveSearch(
+@RequestParam(value = "description", required = false) String description,
+@RequestParam(value = "priceFrom", required = false) Integer priceFrom,
+@RequestParam(value = "priceTo", required = false) Integer priceTo,
+@RequestParam(value = "lat", required = false) Float latitude,
+@RequestParam(value = "lng", required = false) Float longitude,
+@RequestParam(value = "distance", required = false) Integer distance,
+@RequestParam("token") String token)
+         */
+    }
+
+    public Observable<String> deleteSearchesObserv(Long id, String userToken) {
+        return mWebServiceV3.deleteSearch(id, userToken);
     }
 
     public Observable<List<SearchItem>> findSearchesObserv(String userToken) {
