@@ -142,20 +142,26 @@ public class Service {
         Observable<List<SearchItem>> findSearches(@Query("token") String userToken);
 
         @DELETE("search/{id}")
-        Observable<String> deleteSearch(@Path("id") Long id, @Query("token") String token);
+        Observable<String> deleteSearch(@Path("id") Long id, @Query("token") String userToken);
 
-        /*
-        @RequestMapping(value = "/search/new", method = RequestMethod.POST)
-@ResponseBody
-public String saveSearch(
-@RequestParam(value = "description", required = false) String description,
-@RequestParam(value = "priceFrom", required = false) Integer priceFrom,
-@RequestParam(value = "priceTo", required = false) Integer priceTo,
-@RequestParam(value = "lat", required = false) Float latitude,
-@RequestParam(value = "lng", required = false) Float longitude,
-@RequestParam(value = "distance", required = false) Integer distance,
-@RequestParam("token") String token)
-         */
+        @POST("search/new")
+        Observable<String> saveSearch(@Query("description") String description,
+                                          @Query("priceFrom") Integer priceFrom,
+                                          @Query("priceTo") Integer priceTo,
+                                          @Query("lat") Float latitude,
+                                          @Query("lng") Float longitude,
+                                          @Query("distance") Integer distance,
+                                          @Query("token") String userToken);
+    }
+
+    public Observable<String> saveSearchObserv(String description,
+                                               Integer priceFrom,
+                                               Integer priceTo,
+                                               Float lat,
+                                               Float lng,
+                                               Integer distance,
+                                               String userToken ) {
+        return mWebServiceV3.saveSearch(description, priceFrom, priceTo, lat, lng, distance, userToken);
     }
 
     public Observable<String> deleteSearchesObserv(Long id, String userToken) {
