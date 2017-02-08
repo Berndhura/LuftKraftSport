@@ -57,12 +57,15 @@ public class CreateSearchFragment extends Fragment {
 
 
         saveButton.setOnClickListener((v)-> {
+            if ("".equals(description.getText().toString()) || "".equals(priceTo.getText().toString()) || "".equals(priceTo.getText().toString())) {
+                return;
+            }
             saveNewSearch(description.getText().toString(), Integer.parseInt(priceFrom.getText().toString()), Integer.parseInt(priceTo.getText().toString()));
         });
     }
 
     private void saveNewSearch(String description, Integer priceFrom, Integer priceTo) {
-        service.saveSearchObserv(description, priceFrom, priceTo, 0.0f, 0.0f, 5000, getUserToken())
+        service.saveSearchObserv(description, priceFrom, priceTo, 0.0f, 0.0f, 10000000, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
