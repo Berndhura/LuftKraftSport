@@ -119,7 +119,7 @@ public class CreateSearchFragment extends Fragment {
 
     private Integer getDistanceFromCombobox() {
         if ("unbegrenzt".contains(String.valueOf(spinnerDistance.getSelectedItem()))) {
-            return 1000000;
+            return 10000000;
         } else {
             String value = String.valueOf(spinnerDistance.getSelectedItem());
             return Integer.parseInt(value.substring(0, value.indexOf(" ")));

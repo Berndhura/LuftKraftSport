@@ -238,6 +238,9 @@ public class MainActivity extends AppCompatActivity implements
 
         if (mListState != null)
             listView.onRestoreInstanceState(mListState);
+
+        //TODO: resource immer null????!!!!
+        //setProfilePicture(Uri.parse(getUserProfilePic()));
     }
 
     @Override
