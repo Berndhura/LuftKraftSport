@@ -7,9 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -22,6 +27,7 @@ import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO
 
 /**
  * Created by ich on 11.12.2016.
+ * deSurf
  */
 
 public class CreateSearchFragment extends Fragment {
@@ -29,6 +35,7 @@ public class CreateSearchFragment extends Fragment {
     private EditText description;
     private EditText priceFrom;
     private EditText priceTo;
+    private Spinner spinnerDistance;
 
     public CreateSearchFragment() {
         service = new Service();
@@ -57,6 +64,8 @@ public class CreateSearchFragment extends Fragment {
         description = (EditText) getView().findViewById(R.id.search_description_et);
         priceFrom = (EditText) getView().findViewById(R.id.price_from_et);
         priceTo = (EditText) getView().findViewById(R.id.price_to_et);
+        spinnerDistance = (Spinner) view.findViewById(R.id.spinner_distance);
+        addItemsOnSpinner();
 
 
         saveButton.setOnClickListener((v) -> {
@@ -67,8 +76,25 @@ public class CreateSearchFragment extends Fragment {
         });
     }
 
+    public void addItemsOnSpinner() {
+
+        List<String> list = new ArrayList<>();
+        list.add("unbegrenzt");
+        list.add("100 km");
+        list.add("200 km");
+        list.add("300 km");
+        list.add("400 km");
+        list.add("500 km");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity().getBaseContext(), android.R.layout.simple_spinner_dropdown_item, list);
+        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDistance.setAdapter(dataAdapter);
+    }
+
     private void saveNewSearch(String description, Integer priceFrom, Integer priceTo) {
-        service.saveSearchObserv(description, priceFrom, priceTo, 0.0f, 0.0f, 10000000, getUserToken())
+
+        Integer distance = getDistanceFromCombobox();
+
+        service.saveSearchObserv(description, priceFrom, priceTo, 0.0f, 0.0f, distance, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -89,6 +115,15 @@ public class CreateSearchFragment extends Fragment {
                     }
                 });
 
+    }
+
+    private Integer getDistanceFromCombobox() {
+        if ("unbegrenzt".contains(String.valueOf(spinnerDistance.getSelectedItem()))) {
+            return 1000000;
+        } else {
+            String value = String.valueOf(spinnerDistance.getSelectedItem());
+            return Integer.parseInt(value.substring(0, value.indexOf(" ")));
+        }
     }
 
     private void cleanText() {

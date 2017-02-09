@@ -7,11 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.FileUploadService;
@@ -36,6 +41,7 @@ public class CreateArticleFragment extends Fragment {
     private EditText mDescText;
     private EditText mKeywords;
     private EditText mPrice;
+
 
     private static final int SELECT_PHOTO = 100;
     private String mImage;
@@ -74,6 +80,7 @@ public class CreateArticleFragment extends Fragment {
         mImgOne = (ImageView) view.findViewById(R.id.imageButton);
         mPrice = (EditText) view.findViewById(R.id.preis);
         mImgOne = (ImageView) view.findViewById(R.id.imageButton);
+
 
         final Button submitButton = (Button) view.findViewById(R.id.uploadButton);
         submitButton.setOnClickListener((v) -> {
