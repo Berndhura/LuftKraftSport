@@ -42,10 +42,10 @@ public class NewAdActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         //progressBar = (ProgressBar) findViewById(R.id.searches_overview_ProgressBar);
-        progressBar = (ProgressBar) findViewById(R.id.upload_ProgressBar);
+       // progressBar = (ProgressBar) findViewById(R.id.upload_ProgressBar);
 
 
-        disableProgress();
+       // disableProgress();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -55,13 +55,13 @@ public class NewAdActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    public void enableProgress() {
+    /*public void enableProgress() {
         progressBar.setVisibility(ProgressBar.VISIBLE);
     }
 
     public void disableProgress() {
         progressBar.setVisibility(ProgressBar.GONE);
-    }
+    }*/
 
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
