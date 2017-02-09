@@ -72,15 +72,15 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         holder.name.setText(searchItem.getPriceTo().toString());
         // holder.date.setText(DateFormat.getDateInstance().format(searchItem.getDate()));
 
-        //click to bookmark/debookmark an ad
         holder.deleteSearch.setOnClickListener((view) -> {
-            deleteSearch(searchItem.getId());
+            deleteSearch(searchItem.getId(), view);
         });
+        holder.deleteSearch.setTag(position);
 
         return convertView;
     }
 
-    private void deleteSearch(Long id) {
+    private void deleteSearch(Long id, View view) {
         //view.enableProgress();
         service.deleteSearchesObserv(id, getUserToken())
                 .subscribeOn(Schedulers.newThread())
@@ -89,6 +89,10 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
                     @Override
                     public void onCompleted() {
                         //view.disableProgress();
+                        String pos = view.getTag().toString();
+                        int position = Integer.parseInt(pos);
+                        remove(getItem(position));
+                        notifyDataSetChanged();
                     }
 
                     @Override
@@ -101,6 +105,7 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
                         //disableProgress();
                         //view.dataChanged();
                         Log.d("CONAN", "deleting searches: " + "id: " + id);
+
                     }
                 });
     }

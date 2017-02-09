@@ -26,12 +26,15 @@ public class SearchesActivity extends AppCompatActivity {
     private SearchesPresenter presenter;
     private ListView listView;
     private SearchesListAdapter adapter;
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.searches_overview_layout);
+
+        progressBar = (ProgressBar) findViewById(R.id.searches_overview_ProgressBar);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.searches_overview_toolbar);
         if (toolbar != null) {
@@ -75,6 +78,11 @@ public class SearchesActivity extends AppCompatActivity {
             intent.putExtra(Constants.AD_URL, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl() + "/thumbnail");
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);
         });*/
+        disableProgressbar();
+    }
+
+    private void disableProgressbar() {
+        progressBar.setVisibility(ProgressBar.GONE);
     }
 
 
