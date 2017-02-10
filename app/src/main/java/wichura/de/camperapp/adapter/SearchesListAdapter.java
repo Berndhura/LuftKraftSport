@@ -40,8 +40,9 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
 
     private class ViewHolder {
         TextView title;
-        TextView name;
-        TextView date;
+        TextView priceFrom;
+        TextView priceTo;
+        TextView distance;
         ImageView deleteSearch;
     }
 
@@ -58,8 +59,9 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
 
             holder = new SearchesListAdapter.ViewHolder();
             holder.title = (TextView) convertView.findViewById(R.id.search_title);
-            holder.name = (TextView) convertView.findViewById(R.id.search_distance);
-            holder.date = (TextView) convertView.findViewById(R.id.search_price);
+            holder.priceFrom = (TextView) convertView.findViewById(R.id.search_price_from);
+            holder.priceTo = (TextView) convertView.findViewById(R.id.search_price_to);
+            holder.distance = (TextView) convertView.findViewById(R.id.search_distance);
             holder.deleteSearch = (ImageView) convertView.findViewById(R.id.delete_search);
             convertView.setTag(holder);
         } else
@@ -69,7 +71,10 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         final SearchItem searchItem = getItem(position);
 
         holder.title.setText(searchItem.getDescription());
-        holder.name.setText(searchItem.getPriceTo().toString());
+        holder.priceFrom.setText(searchItem.getPriceFrom().toString());
+        holder.priceTo.setText(searchItem.getPriceTo().toString());
+        holder.distance.setText(searchItem.getDistance().toString());
+
         // holder.date.setText(DateFormat.getDateInstance().format(searchItem.getDate()));
 
         holder.deleteSearch.setOnClickListener((view) -> {
