@@ -57,36 +57,15 @@ public class SearchesActivity extends AppCompatActivity {
         rowItems.addAll(searchItem);
 
         getSupportActionBar().setTitle("Searches: " + rowItems.size());
-        //getSupportActionBar().setSubtitle(getUserName());
 
         adapter = new SearchesListAdapter(
                 getApplicationContext(), R.layout.searches_overview_item, rowItems);
         listView.setAdapter(adapter);
-        //listView.setSelection(listView.getCount() - 1);
         adapter.notifyDataSetChanged();
-        //listView.setSelectionAfterHeaderView();
-        /*listView.setOnItemClickListener((adapterView, view, position, l) -> {
-            final GroupedMsgItem rowItem = (GroupedMsgItem) listView.getItemAtPosition(position);
-            //open message threat
-            final Intent intent = new Intent(getApplicationContext(), MessagesActivity.class);
-            intent.putExtra(Constants.ARTICLE_ID, rowItem.getArticleId());
-            intent.putExtra(Constants.SENDER_ID, rowItem.getIdTo());
-            intent.putExtra(Constants.ID_FROM, rowItem.getIdFrom());
-            intent.putExtra(Constants.CHAT_PARTNER, rowItem.getChatPartner());
-            intent.putExtra(Constants.ID_TO, rowItem.getIdTo());
-            intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
-            intent.putExtra(Constants.AD_URL, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl() + "/thumbnail");
-            startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);
-        });*/
         disableProgressbar();
     }
 
     private void disableProgressbar() {
         progressBar.setVisibility(ProgressBar.GONE);
-    }
-
-
-    public void dataChanged() {
-        adapter.notifyDataSetChanged();
     }
 }

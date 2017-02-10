@@ -16,7 +16,7 @@ import wichura.de.camperapp.util.Utility;
 
 /**
  * Created by bwichura on 07.02.2017.
- *
+ * deSurf
  */
 
 public class SearchesPresenter {
@@ -42,7 +42,7 @@ public class SearchesPresenter {
                 .subscribe(new Subscriber<List<SearchItem>>() {
                     @Override
                     public void onCompleted() {
-                       // view.disableProgress();
+                        // view.disableProgress();
                     }
 
                     @Override

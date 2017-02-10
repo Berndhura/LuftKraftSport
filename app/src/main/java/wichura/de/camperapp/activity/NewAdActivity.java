@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +16,6 @@ import wichura.de.camperapp.R;
 
 
 public class NewAdActivity extends AppCompatActivity {
-
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -40,12 +37,6 @@ public class NewAdActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        //progressBar = (ProgressBar) findViewById(R.id.searches_overview_ProgressBar);
-       // progressBar = (ProgressBar) findViewById(R.id.upload_ProgressBar);
-
-
-       // disableProgress();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -54,15 +45,6 @@ public class NewAdActivity extends AppCompatActivity {
         adapter.addFragment(new CreateSearchFragment(), "Suche folgen");
         viewPager.setAdapter(adapter);
     }
-
-    /*public void enableProgress() {
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-    }
-
-    public void disableProgress() {
-        progressBar.setVisibility(ProgressBar.GONE);
-    }*/
-
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();

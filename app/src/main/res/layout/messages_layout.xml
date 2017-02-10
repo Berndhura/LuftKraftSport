@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.8"
-        android:background="#ced5e0"
+        android:background="@drawable/chat_background"
         android:clickable="false"
         android:divider="@null"
         tools:listitem="@layout/chat_item_rcv" />
@@ -65,8 +65,9 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_weight="0.2"
-        android:background="#ced5e0"
-        android:orientation="horizontal">
+        android:background="#00222222"
+        android:orientation="horizontal"
+        android:visibility="visible">
 
         <EditText
             android:id="@+id/edit_message"
