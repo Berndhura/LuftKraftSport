@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_linear_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="1dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Greifswald"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:layout_weight="0.33"/>
+
+                <ImageView
+                    android:id="@+id/new_ad_marker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.33"
+                    android:padding="5sp"
+                    android:src="@drawable/ic_fiber_new_red_600_24dp" />
+
+                <TextView
+                    android:id="@+id/creation_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:layout_weight="0.33"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:paddingLeft="8dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
+                android:maxLines="1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"/>
+
+                <ImageView
+                    android:id="@+id/bookmark_star"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="end"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:id="@+id/my_ads_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="0dp"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/NEW_my_ad_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:padding="5sp"
+            android:src="@drawable/ic_delete_blue_grey_600_24dp" />
+
+        <View
+            android:layout_toRightOf="@+id/NEW_my_ad_delete"
+            android:layout_width="0.5dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/darker_gray"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.16"
+            android:padding="5sp"
+            android:src="@drawable/ic_remove_red_eye_blue_grey_600_24dp" />
+
+        <TextView
+            android:id="@+id/NEW_my_views"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17"
+            android:textColor="#000000"
+            android:padding="5sp" />
+
+        <View
+            android:layout_toRightOf="@+id/NEW_my_ad_delete"
+            android:layout_width="0.5dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/darker_gray"/>
+
+        <ImageView
+            android:id="@+id/NEW_my_ad_bookmarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.16"
+            android:padding="5sp"
+            android:src="@drawable/ic_bookmark_border_blue_grey_600_24dp" />
+
+        <TextView
+            android:id="@+id/number_of_bookmarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17"
+            android:textColor="#000000"
+            android:padding="5sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
