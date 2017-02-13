@@ -273,6 +273,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 .setPositiveButton("Delete", (dialog, whichButton) -> {
                     presenter.deleteAd(adId);
                     dialog.dismiss();
+                    finish();
                 })
                 .setNegativeButton("cancel", (dialog, whichButton) -> dialog.dismiss())
                 .create();
