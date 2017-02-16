@@ -502,7 +502,11 @@ public class MainActivity extends AppCompatActivity implements
                     String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
                     String priceTo = data.getStringExtra(Constants.PRICE_TO);
                     setMyAdsFlag(false);
-                    presenterLayer.searchForArticles(0, size, Integer.parseInt(priceFrom), Integer.parseInt(priceTo), keyword);
+
+                    presenterLayer.searchForArticles(0, size,
+                            priceFrom.equals("")? null: Integer.parseInt(priceFrom),
+                            priceTo.equals("")? null: Integer.parseInt(priceTo),
+                            keyword);
                     drawer.closeDrawer(GravityCompat.START);
                 }
                 break;
