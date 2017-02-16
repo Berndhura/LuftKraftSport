@@ -81,7 +81,10 @@ public class Service {
                                       @Query("priceFrom") int priceFrom,
                                       @Query("priceTo") int priceTo,
                                       @Query("page") int page,
-                                      @Query("size") int size);
+                                      @Query("size") int size,
+                                      @Query("lat") float lat,
+                                      @Query("lng") float lng,
+                                      @Query("distance") Long distance);
 
         @GET("articles")
         Observable<AdsAsPage> getAllAds(@Query("page") int page,
@@ -222,7 +225,7 @@ public class Service {
     }
 
     public Observable<AdsAsPage> findAdsObserv(String description, int priceFrom, int priceTo, int page, int size) {
-        return mWebServiceV3.findAds(description, priceFrom, priceTo, page, size);
+        return mWebServiceV3.findAds(description, priceFrom, priceTo, page, size, 52.5167f, 13.4f, Long.parseLong("10000000000"));
     }
 
     public Observable<AdsAsPage> getAllAdsObserv(int page, int size) {

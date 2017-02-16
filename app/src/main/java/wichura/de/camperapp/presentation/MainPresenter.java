@@ -95,6 +95,94 @@ public class MainPresenter {
         }
     }
 
+    public void searchForArticles(int page, int size, Integer priceFrom, Integer priceTo, String description) {
+        if (page == 0) {
+            if (view.listView != null) {
+                view.listView.setVisibility(View.INVISIBLE);
+            }
+        }
+        view.progressBar.setVisibility(ProgressBar.VISIBLE);
+
+        if (!getUserToken().equals("")) {
+            Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
+            Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, priceFrom, priceTo, page, size);
+
+            Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
+                    Observable.zip(getBookmarksObserv, searchForAdsObserv, (bookmarks, ads) ->
+                    {
+                        ArrayList<Long> bm = new ArrayList<>(Arrays.asList(bookmarks));
+                        AdsAndBookmarks elements = new AdsAndBookmarks();
+                        elements.setAds(ads);
+                        elements.setBookmarks(bm);
+                        return elements;
+                    });
+
+            subscription = zippedReqForBookmarksAndAds
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<AdsAndBookmarks>() {
+                        @Override
+                        public void onCompleted() {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("CONAN", "Error in getting all ads: " + e.toString());
+                            view.showEmptyView();
+                        }
+
+                        @Override
+                        public void onNext(AdsAndBookmarks element) {
+                            view.progressBar.setVisibility(ProgressBar.GONE);
+                            if (page == 0) {
+                                if (view.listView != null) {
+                                    view.listView.setVisibility(View.VISIBLE);
+                                }
+                                view.hideEmptyView();
+                                view.updateAds(element, null, priceFrom, priceTo, description);
+                            } else {
+                                view.addMoreAdsToList(element);
+                            }
+                        }
+                    });
+        } else {
+            Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, priceFrom, priceTo, page, size);
+
+            subscription = searchForAdsObserv
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<AdsAsPage>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("CONAN", "Error in getting all ads: " + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(AdsAsPage adsAsPage) {
+                            view.progressBar.setVisibility(ProgressBar.GONE);
+                            AdsAndBookmarks adsAndBookmarks = new AdsAndBookmarks();
+                            adsAndBookmarks.setAds(adsAsPage);
+                            //no user -> empty bookmarklist
+                            adsAndBookmarks.setBookmarks(new ArrayList<>());
+                            if (page == 0) {
+                                if (view.listView != null) {
+                                    view.listView.setVisibility(View.VISIBLE);
+                                }
+                                view.hideEmptyView();
+                                view.updateAds(adsAndBookmarks, null, priceFrom, priceTo, description);
+                            } else {
+                                view.addMoreAdsToList(adsAndBookmarks);
+                            }
+                        }
+                    });
+        }
+    }
+
     private void loadBookmarkedAds(int page, int size, String type) {
         if (page == 0) {
             if (view.listView != null) {
@@ -139,7 +227,7 @@ public class MainPresenter {
                                 view.listView.setVisibility(View.VISIBLE);
                             }
                             view.hideEmptyView();
-                            view.updateAds(element, type);
+                            view.updateAds(element, type, null, null, null);
                         } else {
                             view.addMoreAdsToList(element);
                         }
@@ -191,7 +279,7 @@ public class MainPresenter {
                                     view.listView.setVisibility(View.VISIBLE);
                                 }
                                 view.hideEmptyView();
-                                view.updateAds(element, type);
+                                view.updateAds(element, type, null, null, null);
                             } else {
                                 view.addMoreAdsToList(element);
                             }
@@ -226,7 +314,7 @@ public class MainPresenter {
                                     view.listView.setVisibility(View.VISIBLE);
                                 }
                                 view.hideEmptyView();
-                                view.updateAds(adsAndBookmarks, type);
+                                view.updateAds(adsAndBookmarks, type, null, null, null);
                             } else {
                                 view.addMoreAdsToList(adsAndBookmarks);
                             }
@@ -279,7 +367,7 @@ public class MainPresenter {
                                 view.listView.setVisibility(View.VISIBLE);
                             }
                             view.hideEmptyView();
-                            view.updateAds(element, type);
+                            view.updateAds(element, type, null, null, null);
                         } else {
                             view.addMoreAdsToList(element);
                         }

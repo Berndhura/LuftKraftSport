@@ -31,7 +31,6 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.squareup.picasso.Picasso;
@@ -120,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements
         progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
 
         //configure Flurry for analysis
-        configureFlurry();
+        //configureFlurry();
 
         //load toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -311,13 +310,13 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    private void configureFlurry() {
+    /*private void configureFlurry() {
         FlurryAgent.setLogEnabled(true);
         FlurryAgent.setCaptureUncaughtExceptions(true);
         FlurryAgent.setLogLevel(Log.ERROR);
         FlurryAgent.init(this, "3Q9GDM9TDX77WDGBN25S");
         FlurryAgent.logEvent("mainactivity started");
-    }
+    }*/
 
     /*
         Updates the empty list view with contextually relevant information that the user can
@@ -342,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    public void updateAds(AdsAndBookmarks elements, String type) {
+    public void updateAds(AdsAndBookmarks elements, String type, Integer priceFrom, Integer priceTo, String description) {
 
         rowItems = new ArrayList<>();
         for (RowItem e : elements.getAdsPage().getAds()) {
@@ -386,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements
             public boolean onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
-                loadNextDataFromApi(page, type);
+                loadNextDataFromApi(page, type, priceFrom, priceTo, description);
                 // or loadNextDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
@@ -395,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
-    public void loadNextDataFromApi(int offset, String type) {
+    public void loadNextDataFromApi(int offset, String type, Integer priceFrom, Integer priceTo, String description) {
         // Send an API request to retrieve appropriate paginated data
         //  --> Send the request including an offset value (i.e `page`) as a query parameter.
         //  --> Deserialize and construct new model objects from the API response
@@ -404,7 +403,11 @@ public class MainActivity extends AppCompatActivity implements
         Log.d("CONAN", "OFFSET: " + offset);
         if (offset <= pages) {
             page = page + 1;
-            presenterLayer.loadAdDataPage(page, size, type);
+            if (type==null) {
+                presenterLayer.searchForArticles(page, size, priceFrom, priceTo, description);
+            } else {
+                presenterLayer.loadAdDataPage(page, size, type);
+            }
         }
     }
 
@@ -499,9 +502,7 @@ public class MainActivity extends AppCompatActivity implements
                     String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
                     String priceTo = data.getStringExtra(Constants.PRICE_TO);
                     setMyAdsFlag(false);
-                    //TODO -> umstellen auf paging!!!!!!!!!!!!!!!!!!!!!!!
-                    getAds(Urls.MAIN_SERVER_URL + Urls.GET_ADS_FOR_KEYWORD_URL + keyword
-                            + "&priceFrom=" + priceFrom + "&priceTo=" + priceTo);
+                    presenterLayer.searchForArticles(0, size, Integer.parseInt(priceFrom), Integer.parseInt(priceTo), keyword);
                     drawer.closeDrawer(GravityCompat.START);
                 }
                 break;
@@ -684,7 +685,6 @@ public class MainActivity extends AppCompatActivity implements
     private String getUserType() {
         return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TYPE, "");
     }
-
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
