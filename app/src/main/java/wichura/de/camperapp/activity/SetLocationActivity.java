@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -42,6 +43,8 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
 
+    //TODO:  http://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&sensor=false  -> in service mit datenmodel BIG!!
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,14 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
             case ConnectionResult.NETWORK_ERROR: {
                 Log.d("CONAN", "Google play service: ConnectionResult.NETWORK_ERROR");
             }
+        }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.location_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
         buildGoogleApiClient();
