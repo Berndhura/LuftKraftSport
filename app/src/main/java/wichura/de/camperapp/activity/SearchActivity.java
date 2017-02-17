@@ -9,6 +9,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.gui.Widget;
 import wichura.de.camperapp.mainactivity.Constants;
 
 /**
@@ -48,6 +49,7 @@ public class SearchActivity extends AppCompatActivity {
         priceFrom = (TextView) findViewById(R.id.price_from);
         priceTo = (TextView) findViewById(R.id.price_to);
         distance = (Spinner) findViewById(R.id.spinner_distance);
+        Widget.addItemsOnSpinner(this, distance);
         searchButton = (Button) findViewById(R.id.search_button);
 
         searchButton.setOnClickListener(view -> {
@@ -55,7 +57,7 @@ public class SearchActivity extends AppCompatActivity {
             data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
             data.putExtra(Constants.PRICE_FROM, priceFrom.getText().toString());
             data.putExtra(Constants.PRICE_TO, priceTo.getText().toString());
-            //data.putExtra(Constants.DISTANCE, distance.getText());
+            data.putExtra(Constants.DISTANCE, Widget.getDistanceFromCombobox(distance));
             setResult(RESULT_OK, data);
             finish();
         });

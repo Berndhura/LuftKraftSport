@@ -95,7 +95,7 @@ public class MainPresenter {
         }
     }
 
-    public void searchForArticles(int page, int size, Integer priceFrom, Integer priceTo, String description) {
+    public void searchForArticles(int page, int size, Integer priceFrom, Integer priceTo, Long distance, String description) {
         if (page == 0) {
             if (view.listView != null) {
                 view.listView.setVisibility(View.INVISIBLE);
@@ -105,7 +105,7 @@ public class MainPresenter {
 
         if (!getUserToken().equals("")) {
             Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
-            Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, priceFrom, priceTo, page, size);
+            Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, distance, priceFrom, priceTo, page, size);
 
             Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                     Observable.zip(getBookmarksObserv, searchForAdsObserv, (bookmarks, ads) ->
@@ -139,14 +139,14 @@ public class MainPresenter {
                                     view.listView.setVisibility(View.VISIBLE);
                                 }
                                 view.hideEmptyView();
-                                view.updateAds(element, null, priceFrom, priceTo, description);
+                                view.updateAds(element, null, priceFrom, priceTo, distance, description);
                             } else {
                                 view.addMoreAdsToList(element);
                             }
                         }
                     });
         } else {
-            Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, priceFrom, priceTo, page, size);
+            Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, distance, priceFrom, priceTo, page, size);
 
             subscription = searchForAdsObserv
                     .subscribeOn(Schedulers.io())
@@ -174,7 +174,7 @@ public class MainPresenter {
                                     view.listView.setVisibility(View.VISIBLE);
                                 }
                                 view.hideEmptyView();
-                                view.updateAds(adsAndBookmarks, null, priceFrom, priceTo, description);
+                                view.updateAds(adsAndBookmarks, null, priceFrom, priceTo, distance, description);
                             } else {
                                 view.addMoreAdsToList(adsAndBookmarks);
                             }
@@ -227,7 +227,7 @@ public class MainPresenter {
                                 view.listView.setVisibility(View.VISIBLE);
                             }
                             view.hideEmptyView();
-                            view.updateAds(element, type, null, null, null);
+                            view.updateAds(element, type, null, null, null, null);
                         } else {
                             view.addMoreAdsToList(element);
                         }
@@ -279,7 +279,7 @@ public class MainPresenter {
                                     view.listView.setVisibility(View.VISIBLE);
                                 }
                                 view.hideEmptyView();
-                                view.updateAds(element, type, null, null, null);
+                                view.updateAds(element, type, null, null, null, null);
                             } else {
                                 view.addMoreAdsToList(element);
                             }
@@ -314,7 +314,7 @@ public class MainPresenter {
                                     view.listView.setVisibility(View.VISIBLE);
                                 }
                                 view.hideEmptyView();
-                                view.updateAds(adsAndBookmarks, type, null, null, null);
+                                view.updateAds(adsAndBookmarks, type, null, null, null, null);
                             } else {
                                 view.addMoreAdsToList(adsAndBookmarks);
                             }
@@ -367,7 +367,7 @@ public class MainPresenter {
                                 view.listView.setVisibility(View.VISIBLE);
                             }
                             view.hideEmptyView();
-                            view.updateAds(element, type, null, null, null);
+                            view.updateAds(element, type, null, null, null, null);
                         } else {
                             view.addMoreAdsToList(element);
                         }
