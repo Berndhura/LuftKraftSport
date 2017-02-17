@@ -52,9 +52,9 @@ public class SearchActivity extends AppCompatActivity {
 
         searchButton.setOnClickListener(view -> {
             final Intent data = new Intent();
-            data.putExtra(Constants.KEYWORDS, keywords.getText());
-            data.putExtra(Constants.PRICE_FROM, priceFrom.getText());
-            data.putExtra(Constants.PRICE_TO, priceTo.getText());
+            data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
+            data.putExtra(Constants.PRICE_FROM, priceFrom.getText().toString());
+            data.putExtra(Constants.PRICE_TO, priceTo.getText().toString());
             //data.putExtra(Constants.DISTANCE, distance.getText());
             setResult(RESULT_OK, data);
             finish();
