@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextView priceFrom;
     private TextView priceTo;
     private Spinner distance;
+    private ImageView locationButton;
 
 
     @Override
@@ -57,9 +59,15 @@ public class SearchActivity extends AppCompatActivity {
             data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
             data.putExtra(Constants.PRICE_FROM, priceFrom.getText().toString());
             data.putExtra(Constants.PRICE_TO, priceTo.getText().toString());
-            data.putExtra(Constants.DISTANCE, Widget.getDistanceFromCombobox(distance));
+            data.putExtra(Constants.DISTANCE, Widget.getDistanceFromSpinner(distance));
             setResult(RESULT_OK, data);
             finish();
+        });
+
+        locationButton = (ImageView) findViewById(R.id.set_location);
+        locationButton.setOnClickListener(view -> {
+            Intent location = new Intent(getApplicationContext(), SetLocationActivity.class);
+            startActivityForResult(location, Constants.REQUEST_ID_FOR_LOCATION);
         });
     }
 }

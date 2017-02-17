@@ -30,7 +30,7 @@ public class Widget {
         spinner.setAdapter(dataAdapter);
     }
 
-    public static Long getDistanceFromCombobox(Spinner spinner) {
+    public static Long getDistanceFromSpinner(Spinner spinner) {
         if ("unbegrenzt".contains(String.valueOf(spinner.getSelectedItem()))) {
             return 10000000L;
         } else {

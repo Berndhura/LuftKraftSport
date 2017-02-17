@@ -2,14 +2,14 @@ package wichura.de.camperapp.util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 /**
  * Created by ich on 25.06.2016.
  * CamperApp
  */
-public class ProportionalImageView extends ImageView {
+public class ProportionalImageView extends AppCompatImageView {
 
     public ProportionalImageView(Context context) {
         super(context);
@@ -30,7 +30,6 @@ public class ProportionalImageView extends ImageView {
             int w = MeasureSpec.getSize(widthMeasureSpec);
             int h = w * d.getIntrinsicHeight() / d.getIntrinsicWidth();
             setMeasuredDimension(w, h);
-        }
-        else super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        } else super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }

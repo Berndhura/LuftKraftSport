@@ -13,6 +13,7 @@ public class Constants {
     public static final int REQUEST_ID_FOR_MESSAGES = 6;
     public static final int REQUEST_ID_FOR_SETTINGS = 7;
     public static final int REQUEST_ID_FOR_SEARCHES = 8;
+    public static final int REQUEST_ID_FOR_LOCATION = 9;
     public static final int RC_SIGN_IN = 8;
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;

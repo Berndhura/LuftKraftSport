@@ -110,6 +110,10 @@
             android:label="@string/title_searches_page" />
 
         <activity
+            android:name=".activity.SetLocationActivity"
+            android:label="@string/title_locations_page" />
+
+        <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
