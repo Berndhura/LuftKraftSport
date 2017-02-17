@@ -45,6 +45,7 @@ public class Constants {
     public static final String AD_URL = "adURL";
     public static final String PRICE_FROM = "price_from";
     public static final String PRICE_TO = "price_to";
+    public static final String DISTANCE = "distance";
     public static final String FILENAME = "filename";
     public static final String ID = "id";
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import wichura.de.camperapp.R;
@@ -17,7 +18,12 @@ import wichura.de.camperapp.mainactivity.Constants;
 
 public class SearchActivity extends AppCompatActivity {
 
-    Button searchButton;
+    private Button searchButton;
+    private TextView keywords;
+    private TextView priceFrom;
+    private TextView priceTo;
+    private Spinner distance;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +40,22 @@ public class SearchActivity extends AppCompatActivity {
             }
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
-        searchButton();
+        createGui();
     }
 
-    private void searchButton() {
+    private void createGui() {
+        keywords = (TextView) findViewById(R.id.keywords);
+        priceFrom = (TextView) findViewById(R.id.price_from);
+        priceTo = (TextView) findViewById(R.id.price_to);
+        distance = (Spinner) findViewById(R.id.spinner_distance);
         searchButton = (Button) findViewById(R.id.search_button);
+
         searchButton.setOnClickListener(view -> {
             final Intent data = new Intent();
-            data.putExtra(Constants.KEYWORDS, ((TextView) findViewById(R.id.keywords)).getText().toString());
-            data.putExtra(Constants.PRICE_FROM, ((TextView) findViewById(R.id.price_from)).getText().toString());
-            data.putExtra(Constants.PRICE_TO, ((TextView) findViewById(R.id.price_to)).getText().toString());
+            data.putExtra(Constants.KEYWORDS, keywords.getText());
+            data.putExtra(Constants.PRICE_FROM, priceFrom.getText());
+            data.putExtra(Constants.PRICE_TO, priceTo.getText());
+            //data.putExtra(Constants.DISTANCE, distance.getText());
             setResult(RESULT_OK, data);
             finish();
         });
