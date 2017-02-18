@@ -1,6 +1,7 @@
 package wichura.de.camperapp.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -9,9 +10,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.gui.Widget;
 import wichura.de.camperapp.mainactivity.Constants;
+
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by Bernd Wichura on 05.04.2016.
@@ -69,5 +75,19 @@ public class SearchActivity extends AppCompatActivity {
             Intent location = new Intent(getApplicationContext(), SetLocationActivity.class);
             startActivityForResult(location, Constants.REQUEST_ID_FOR_LOCATION);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.REQUEST_ID_FOR_LOCATION) {
+            showLocation(data);
+        }
+    }
+
+    private void showLocation(Intent data) {
+        SharedPreferences location = getSharedPreferences(Constants.USERS_LOCATION, 0);
+        getSupportActionBar().setSubtitle("in " + location.getString(Constants.LOCATION, ""));
     }
 }

@@ -105,7 +105,7 @@ public class MainPresenter {
 
         if (!getUserToken().equals("")) {
             Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
-            Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, distance, priceFrom, priceTo, page, size);
+            Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, getLat(), getLng(), distance, priceFrom, priceTo, page, size);
 
             Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                     Observable.zip(getBookmarksObserv, searchForAdsObserv, (bookmarks, ads) ->
@@ -146,7 +146,7 @@ public class MainPresenter {
                         }
                     });
         } else {
-            Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, distance, priceFrom, priceTo, page, size);
+            Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, getLat(), getLng(), distance, priceFrom, priceTo, page, size);
 
             subscription = searchForAdsObserv
                     .subscribeOn(Schedulers.io())
@@ -382,6 +382,16 @@ public class MainPresenter {
         editor.putString(Constants.USER_ID, userId);
         editor.putString(Constants.USER_TOKEN, userToken);
         editor.apply();
+    }
+
+    public Float getLng() {
+        SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
+        return settings.getFloat(Constants.LNG, 0f);
+    }
+
+    public Float getLat() {
+        SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
+        return settings.getFloat(Constants.LAT, 0f);
     }
 
     private String getUserToken() {

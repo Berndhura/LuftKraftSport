@@ -29,7 +29,7 @@ public class GoogleService {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        //Googel api
+        //Google api
         OkHttpClient.Builder httpGoogleClient = new OkHttpClient.Builder();
 
         httpGoogleClient.addInterceptor(logging);
@@ -48,7 +48,6 @@ public class GoogleService {
         mGoogleWebService = restAdapterV2.create(GoogleService.WebService.class);
     }
 
-    //geocode/json?latlng=40.714224,-73.961452&sensor=false
     private interface WebService {
 
         @GET("geocode/json")

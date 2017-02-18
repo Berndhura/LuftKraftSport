@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -60,18 +59,19 @@ public class LocationPresenter {
                                 .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
                                 .get(2).getAsJsonObject().get("long_name");
 
-                        Log.d("CONAN", "city name from google maps api: " +city);
-                        storeCityName(city.getAsString());
+                        Log.d("CONAN", "city name from google maps api: " + city);
+                        storeCityName(lat, lng, city.getAsString());
                     }
                 });
     }
 
-    private void storeCityName(String location) {
-        //Float lat_float = (Float) lat;
+    private void storeCityName(Double lat, Double lng, String location) {
+
         SharedPreferences sp = context.getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
-        ed.putFloat("lat", 55.34f);
-        ed.putFloat("lng", 13.34f);
+        ed.putFloat(Constants.LAT, Double.doubleToRawLongBits(lat));
+        ed.putFloat(Constants.LNG, Double.doubleToRawLongBits(lng));
+        ed.putString(Constants.LOCATION, location);
         ed.apply();
 
         view.updateCity(location);

@@ -26,6 +26,14 @@
     </android.support.design.widget.AppBarLayout>
 
 
+    <SeekBar
+        android:id="@+id/seekBar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:max="10"
+        android:progress="3" />
+
     <com.google.android.gms.maps.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
