@@ -384,14 +384,14 @@ public class MainPresenter {
         editor.apply();
     }
 
-    public Float getLng() {
+    public Double getLng() {
         SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
-        return settings.getFloat(Constants.LNG, 0f);
+        return Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
     }
 
-    public Float getLat() {
+    public Double getLat() {
         SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
-        return settings.getFloat(Constants.LAT, 0f);
+        return  Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
     }
 
     private String getUserToken() {

@@ -69,8 +69,8 @@ public class LocationPresenter {
 
         SharedPreferences sp = context.getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
-        ed.putFloat(Constants.LAT, Double.doubleToRawLongBits(lat));
-        ed.putFloat(Constants.LNG, Double.doubleToRawLongBits(lng));
+        ed.putLong(Constants.LAT, Double.doubleToRawLongBits(lat));
+        ed.putLong(Constants.LNG, Double.doubleToRawLongBits(lng));
         ed.putString(Constants.LOCATION, location);
         ed.apply();
 
