@@ -66,6 +66,7 @@ public class Constants {
     public static final String MESSAGE_ACTIVITY = "messageActivity";
     public static final String SHOW_MY_ADS = "showMyAds";
     public static final String SHARED_PREFS_USER_INFO = "UserInfo";
+    public static final String USERS_LOCATION = "usersLocation";
 
     //Google
     public static String WEB_CLIENT_ID = "1083938171562-psgh1t07g9hgc328tmqa7afk3fq3pqf9.apps.googleusercontent.com";

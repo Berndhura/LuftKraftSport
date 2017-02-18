@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.presentation.LocationPresenter;
 
 import static wichura.de.camperapp.R.id.map;
 
@@ -43,6 +44,8 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
 
+    private LocationPresenter presenter;
+
     //TODO:  http://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&sensor=false  -> in service mit datenmodel BIG!!
 
     @Override
@@ -52,6 +55,8 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
         setContentView(R.layout.set_location_layout);
 
         MapsInitializer.initialize(this);
+
+        presenter = new LocationPresenter(getApplicationContext(), this);
 
         switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
             case ConnectionResult.SUCCESS: {
@@ -123,6 +128,11 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
 
     }
 
+    public void updateCity(String cityName) {
+        getSupportActionBar().setTitle("greifswald");
+
+    }
+
     protected synchronized void buildGoogleApiClient() {
         //Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -145,8 +155,12 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
 
     @Override
     public void onLocationChanged(Location location) {
-
+        Log.d("CONAN", "location changed");
+        Double lat = location.getLatitude();
+        Double lng = location.getLongitude();
+        presenter.saveUsersLocation(lat, lng);
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
