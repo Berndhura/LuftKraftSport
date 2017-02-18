@@ -2,6 +2,7 @@ package wichura.de.camperapp.http;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -51,11 +52,11 @@ public class GoogleService {
     private interface WebService {
 
         @GET("geocode/json")
-        Observable<String> getCityNameFrimLatLng(@Query("latlng") String latlng,
-                                                 @Query("sensor") Boolean sensor);
+        Observable<JsonObject> getCityNameFrimLatLng(@Query("latlng") String latlng,
+                                                     @Query("sensor") Boolean sensor);
     }
 
-    public Observable<String> getCityNameFrimLatLngObserv(Double lat, Double lng, Boolean sensor) {
+    public Observable<JsonObject> getCityNameFrimLatLngObserv(Double lat, Double lng, Boolean sensor) {
         String latlng = lat + "," + lng;
         return mGoogleWebService.getCityNameFrimLatLng(latlng, sensor);
     }

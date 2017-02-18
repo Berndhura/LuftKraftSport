@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.mainactivity.MainActivity;
 import wichura.de.camperapp.presentation.LocationPresenter;
 
 import static wichura.de.camperapp.R.id.map;
@@ -109,6 +111,34 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.setMyLocationEnabled(true);
 
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Lat " + latLng.latitude + " "
+                                + "Long " + latLng.longitude,
+                        Toast.LENGTH_LONG).show();
+                presenter.saveUsersLocation(latLng.latitude, latLng.longitude);
+            }
+        });
+
+        //click on marker, not on map
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                LatLng position = marker.getPosition();
+
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Lat " + position.latitude + " "
+                                + "Long " + position.longitude,
+                        Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+
            /* CircleOptions circleOptions = new CircleOptions()
                     .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
                     .radius(1000); // In meters
@@ -129,7 +159,7 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
     }
 
     public void updateCity(String cityName) {
-        getSupportActionBar().setTitle("greifswald");
+        getSupportActionBar().setTitle(cityName);
 
     }
 

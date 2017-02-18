@@ -3,7 +3,10 @@ package wichura.de.camperapp.presentation;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.View;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -36,12 +39,12 @@ public class LocationPresenter {
 
     public void saveUsersLocation(Double lat, Double lng) {
 
-        Observable<String> getCityNameFromLatLng = googleService.getCityNameFrimLatLngObserv(lat, lng, false);
+        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFrimLatLngObserv(lat, lng, false);
 
         subscription = getCityNameFromLatLng
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Subscriber<JsonObject>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -52,8 +55,13 @@ public class LocationPresenter {
                     }
 
                     @Override
-                    public void onNext(String location) {
-                        storeCityName(location);
+                    public void onNext(JsonObject location) {
+                        JsonElement city = location.get("results").getAsJsonArray()
+                                .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
+                                .get(2).getAsJsonObject().get("long_name");
+
+                        Log.d("CONAN", "city name from google maps api: " +city);
+                        storeCityName(city.getAsString());
                     }
                 });
     }
