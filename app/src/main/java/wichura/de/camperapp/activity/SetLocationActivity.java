@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -29,7 +31,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.mainactivity.Constants;
-import wichura.de.camperapp.mainactivity.MainActivity;
 import wichura.de.camperapp.presentation.LocationPresenter;
 
 import static wichura.de.camperapp.R.id.map;
@@ -48,13 +49,15 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
 
     private LocationPresenter presenter;
 
-    //TODO:  http://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&sensor=false  -> in service mit datenmodel BIG!!
+    private SeekBar seekBar;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.set_location_layout);
+
+        initDistanceSeekBar();
 
         MapsInitializer.initialize(this);
 
@@ -89,21 +92,44 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
 
     }
 
+    private void initDistanceSeekBar() {
+        TextView textView = (TextView) findViewById(R.id.textView9);
+
+        seekBar = (SeekBar) findViewById(R.id.distance_seek_bat);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                adaptToolbar(seekBar.getProgress() * 5);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                Integer distance = progress * 5;
+                textView.setText("Umkreis: " + String.valueOf(distance)+ " km");
+            }
+        });
+    }
+
+    private void adaptToolbar(int progress) {
+        getSupportActionBar().setSubtitle("im Umkreis von " + progress + " km");
+    }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        //Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
+
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
         // Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
         //       mGoogleApiClient);
         //if (mLastLocation != null) {
         //place marker at current position
-        googleMap.clear();
-        LatLng latLng = new LatLng(54.0, 13.0);
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        Marker mCurrLocation = googleMap.addMarker(markerOptions);
+
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(54.0, 13.0), 8));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setScrollGesturesEnabled(true);
@@ -115,11 +141,13 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
 
             @Override
             public void onMapClick(LatLng latLng) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Lat " + latLng.latitude + " "
-                                + "Long " + latLng.longitude,
-                        Toast.LENGTH_LONG).show();
+                googleMap.clear();
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                googleMap.addMarker(markerOptions);
+                //save position in shared preferences
                 presenter.saveUsersLocation(latLng.latitude, latLng.longitude);
             }
         });
