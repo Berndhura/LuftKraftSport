@@ -111,7 +111,9 @@
 
         <activity
             android:name=".activity.SetLocationActivity"
-            android:label="@string/title_locations_page" />
+            android:label="@string/title_locations_page"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
 
         <activity
             android:name="com.facebook.FacebookActivity"

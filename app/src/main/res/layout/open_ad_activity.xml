@@ -91,6 +91,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
+                android:background="#D7CECE"
                 android:textSize="18sp" />
 
             <TextView
