@@ -120,6 +120,7 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
                 // Get back the mutable Circle
                 Circle circle = googleMap.addCircle(circleOptions);
                 circle.setVisible(true);
+                storeDistance(seekBar.getProgress() * 5);
             }
 
             @Override
@@ -243,6 +244,14 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
     public Double getLat() {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
         return  Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
+    }
+
+    private void storeDistance(Integer distance) {
+
+        SharedPreferences sp = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putInt(Constants.DISTANCE, distance);
+        ed.apply();
     }
 
 

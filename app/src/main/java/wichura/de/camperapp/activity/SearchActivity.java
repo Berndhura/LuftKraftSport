@@ -83,6 +83,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void showLocation(Intent data) {
         SharedPreferences location = getSharedPreferences(Constants.USERS_LOCATION, 0);
-        getSupportActionBar().setSubtitle("in " + location.getString(Constants.LOCATION, ""));
+        getSupportActionBar()
+                .setSubtitle("in " + location.getString(Constants.LOCATION, "") + " (+" + location.getInt(Constants.DISTANCE, 0) + " km)");
     }
 }
