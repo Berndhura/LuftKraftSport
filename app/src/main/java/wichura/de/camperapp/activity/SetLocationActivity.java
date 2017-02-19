@@ -1,6 +1,7 @@
 package wichura.de.camperapp.activity;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +28,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -47,6 +52,9 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
 
+    private LinearLayout mainLinearLayout;
+    private LinearLayout distanceView;
+
     private LocationPresenter presenter;
 
     private SeekBar seekBar;
@@ -57,7 +65,9 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
 
         setContentView(R.layout.set_location_layout);
 
-        initDistanceSeekBar();
+        mainLinearLayout = (LinearLayout) findViewById(R.id.location_main_linear_layout);
+        distanceView = (LinearLayout) findViewById(R.id.location_distance_view);
+        distanceView.setVisibility(View.GONE);
 
         MapsInitializer.initialize(this);
 
@@ -93,6 +103,8 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
     }
 
     private void initDistanceSeekBar() {
+        distanceView.setVisibility(View.VISIBLE);
+
         TextView textView = (TextView) findViewById(R.id.textView9);
 
         seekBar = (SeekBar) findViewById(R.id.distance_seek_bat);
@@ -101,18 +113,30 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 adaptToolbar(seekBar.getProgress() * 5);
+                CircleOptions circleOptions = new CircleOptions()
+                        .center(new LatLng(getLat(), getLng()))
+                        .radius(seekBar.getProgress() * 5000); // In meters
+
+                // Get back the mutable Circle
+                Circle circle = googleMap.addCircle(circleOptions);
+                circle.setVisible(true);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
+                googleMap.clear();
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(new LatLng(getLat(), getLng()));
+                markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                googleMap.addMarker(markerOptions);
             }
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 Integer distance = progress * 5;
-                textView.setText("Umkreis: " + String.valueOf(distance)+ " km");
+                textView.setText("Umkreis: " + String.valueOf(distance) + " km");
             }
         });
     }
@@ -130,12 +154,13 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
         //if (mLastLocation != null) {
         //place marker at current position
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(54.0, 13.0), 8));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(54.0, 13.0), 9));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setScrollGesturesEnabled(true);
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.setMyLocationEnabled(true);
+        googleMap.clear();
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -149,6 +174,7 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
                 googleMap.addMarker(markerOptions);
                 //save position in shared preferences
                 presenter.saveUsersLocation(latLng.latitude, latLng.longitude);
+                initDistanceSeekBar();
             }
         });
 
@@ -167,15 +193,6 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
             }
         });
 
-           /* CircleOptions circleOptions = new CircleOptions()
-                    .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
-                    .radius(1000); // In meters
-
-            // Get back the mutable Circle
-            Circle circle = googleMap.addCircle(circleOptions);
-            circle.setVisible(true);*/
-        // }
-
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000); //5 seconds
         mLocationRequest.setFastestInterval(3000); //3 seconds
@@ -188,7 +205,6 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
 
     public void updateCity(String cityName) {
         getSupportActionBar().setTitle(cityName);
-
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -217,6 +233,16 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
         Double lat = location.getLatitude();
         Double lng = location.getLongitude();
         presenter.saveUsersLocation(lat, lng);
+    }
+
+    public Double getLng() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
+        return Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
+    }
+
+    public Double getLat() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
+        return  Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
     }
 
 

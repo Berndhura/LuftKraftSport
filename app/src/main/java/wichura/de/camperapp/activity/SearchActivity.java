@@ -10,14 +10,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.gui.Widget;
 import wichura.de.camperapp.mainactivity.Constants;
-
-import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by Bernd Wichura on 05.04.2016.
