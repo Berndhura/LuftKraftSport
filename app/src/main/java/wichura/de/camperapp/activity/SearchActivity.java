@@ -57,15 +57,24 @@ public class SearchActivity extends AppCompatActivity {
             final Intent data = new Intent();
             data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
 
-            if (price.getText() == null) {
+            if (getString(R.string.price_does_not_matter).equals(price.getText().toString())) {
                 data.putExtra(Constants.PRICE_FROM, "");
                 data.putExtra(Constants.PRICE_TO, "");
             } else {
-                if ("Beliebig".equals(price.getText().toString())) {
-                    data.putExtra(Constants.PRICE_FROM, "0");
-                    data.putExtra(Constants.PRICE_TO, "10000");
+
+                if (getString(R.string.price_does_not_matter).equals(priceFrom)) {
+                    data.putExtra(Constants.PRICE_FROM, "");
+                } else {
+                    data.putExtra(Constants.PRICE_FROM, priceFrom);
+                }
+
+                if (getString(R.string.price_does_not_matter).equals(priceTo)) {
+                    data.putExtra(Constants.PRICE_TO, "");
+                } else {
+                    data.putExtra(Constants.PRICE_TO, priceTo);
                 }
             }
+
             setResult(RESULT_OK, data);
             finish();
         });
@@ -90,7 +99,16 @@ public class SearchActivity extends AppCompatActivity {
             showLocation();
         } else if (requestCode == Constants.REQUEST_ID_FOR_PRICE) {
             priceFrom = data.getStringExtra(Constants.PRICE_FROM);
-            priceTo = data.getStringExtra(Constants.PRICE_FROM);
+            priceTo = data.getStringExtra(Constants.PRICE_TO);
+            adaptLayoutForPrice(priceFrom, priceTo);
+        }
+    }
+
+    private void adaptLayoutForPrice(String from, String to) {
+        if (getString(R.string.price_does_not_matter).equals(priceFrom)) {
+            price.setText(R.string.price_does_not_matter);
+        } else {
+            price.setText(from + " bis " + to);
         }
     }
 

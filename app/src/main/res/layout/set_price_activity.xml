@@ -78,7 +78,7 @@
             android:layout_marginLeft="0dp"
             android:layout_marginTop="33dp"
             android:ems="10"
-            android:text="Beliebig"
+            android:text="@string/price_does_not_matter"
             android:inputType="number"
             app:layout_constraintLeft_toLeftOf="@+id/textView4"
             tools:layout_editor_absoluteY="55dp" />
@@ -90,7 +90,7 @@
             android:layout_alignBaseline="@+id/priceFrom"
             android:layout_alignBottom="@+id/priceFrom"
             android:layout_alignParentEnd="true"
-            android:text="Beliebig"
+            android:text="@string/price_does_not_matter"
             android:ems="10"
             android:inputType="number"
             app:layout_constraintLeft_toLeftOf="@+id/textView5"
