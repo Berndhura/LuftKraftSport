@@ -116,8 +116,9 @@
         <activity
             android:name=".activity.SetPriceActivity"
             android:label="@string/title_set_price_page"
+            android:configChanges="keyboardHidden"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.AppCompat.Light.DialogWhenLarge" />
+            android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth"/>
 
 
         <activity

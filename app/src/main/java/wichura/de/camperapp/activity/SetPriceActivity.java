@@ -1,11 +1,14 @@
 package wichura.de.camperapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.mainactivity.Constants;
 
 /**
  * Created by bwichura on 20.02.2017.
@@ -20,12 +23,16 @@ public class SetPriceActivity extends AppCompatActivity {
 
         setContentView(R.layout.set_price_activity);
 
-        TextView priceFrom = (TextView) findViewById(R.id.priceFrom);
-        TextView priceTo = (TextView) findViewById(R.id.priceTo);
+        TextView priceFromTv = (TextView) findViewById(R.id.priceFrom);
+        TextView priceToTv = (TextView) findViewById(R.id.priceTo);
+
+        priceFromTv.setOnClickListener(view -> priceFromTv.setText(""));
+
+        priceToTv.setOnClickListener(view -> priceToTv.setText(""));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.set_price_toolbar);
         if (toolbar != null) {
-           // setSupportActionBar(toolbar);
+            setSupportActionBar(toolbar);
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -33,6 +40,17 @@ public class SetPriceActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
+        ImageView okButton = (ImageView) findViewById(R.id.store_price);
+        if (okButton != null) {
+            okButton.setOnClickListener((view) -> {
+                String priceFrom = priceFromTv.getText().toString();
+                String priceTo = priceToTv.getText().toString();
+                Intent result = new Intent();
+                result.putExtra(Constants.PRICE_FROM, priceFrom);
+                result.putExtra(Constants.PRICE_TO, priceTo);
+                setResult(RESULT_OK, result);
+                finish();
+            });
+        }
     }
-
 }

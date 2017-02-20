@@ -19,12 +19,10 @@ import wichura.de.camperapp.mainactivity.Constants;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private Button searchButton;
     private TextView keywords;
-    private TextView priceFrom;
-    private TextView priceTo;
-    private ImageView changePriceBtn;
-    private ImageView locationButton;
+    private TextView price;
+    private String priceTo;
+    private String priceFrom;
 
 
     @Override
@@ -43,26 +41,27 @@ public class SearchActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
         createGui();
+
+        showLocation();
     }
+
 
     private void createGui() {
         keywords = (TextView) findViewById(R.id.keywords);
-        priceFrom = (TextView) findViewById(R.id.price_from);
-        //priceTo = (TextView) findViewById(R.id.price_to);
-        //priceTo = (TextView) findViewById(R.id.price_to);
-        changePriceBtn = (ImageView) findViewById(R.id.changePrice);
-        //Widget.addItemsOnSpinner(this, distance);
-        searchButton = (Button) findViewById(R.id.search_button);
+        price = (TextView) findViewById(R.id.price_from);
+        ImageView changePriceBtn = (ImageView) findViewById(R.id.changePrice);
+
+        Button searchButton = (Button) findViewById(R.id.search_button);
 
         searchButton.setOnClickListener(view -> {
             final Intent data = new Intent();
             data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
 
-            if (priceFrom.getText() == null) {
+            if (price.getText() == null) {
                 data.putExtra(Constants.PRICE_FROM, "");
                 data.putExtra(Constants.PRICE_TO, "");
             } else {
-                if ("Beliebig".equals(priceFrom.getText().toString())) {
+                if ("Beliebig".equals(price.getText().toString())) {
                     data.putExtra(Constants.PRICE_FROM, "0");
                     data.putExtra(Constants.PRICE_TO, "10000");
                 }
@@ -76,7 +75,7 @@ public class SearchActivity extends AppCompatActivity {
             startActivityForResult(priceIntent, Constants.REQUEST_ID_FOR_PRICE);
         });
 
-        locationButton = (ImageView) findViewById(R.id.set_location);
+        ImageView locationButton = (ImageView) findViewById(R.id.set_location);
         locationButton.setOnClickListener(view -> {
             Intent location = new Intent(getApplicationContext(), SetLocationActivity.class);
             startActivityForResult(location, Constants.REQUEST_ID_FOR_LOCATION);
@@ -88,11 +87,14 @@ public class SearchActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constants.REQUEST_ID_FOR_LOCATION) {
-            showLocation(data);
+            showLocation();
+        } else if (requestCode == Constants.REQUEST_ID_FOR_PRICE) {
+            priceFrom = data.getStringExtra(Constants.PRICE_FROM);
+            priceTo = data.getStringExtra(Constants.PRICE_FROM);
         }
     }
 
-    private void showLocation(Intent data) {
+    private void showLocation() {
         SharedPreferences location = getSharedPreferences(Constants.USERS_LOCATION, 0);
         getSupportActionBar()
                 .setSubtitle("in " + location.getString(Constants.LOCATION, "") + " (+" + location.getInt(Constants.DISTANCE, 0) + " km)");
