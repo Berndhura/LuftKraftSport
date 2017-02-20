@@ -25,7 +25,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextView keywords;
     private TextView priceFrom;
     private TextView priceTo;
-    private Spinner distance;
+    private ImageView changePriceBtn;
     private ImageView locationButton;
 
 
@@ -50,19 +50,32 @@ public class SearchActivity extends AppCompatActivity {
     private void createGui() {
         keywords = (TextView) findViewById(R.id.keywords);
         priceFrom = (TextView) findViewById(R.id.price_from);
-        priceTo = (TextView) findViewById(R.id.price_to);
-        distance = (Spinner) findViewById(R.id.spinner_distance);
-        Widget.addItemsOnSpinner(this, distance);
+        //priceTo = (TextView) findViewById(R.id.price_to);
+        //priceTo = (TextView) findViewById(R.id.price_to);
+        changePriceBtn = (ImageView) findViewById(R.id.changePrice);
+        //Widget.addItemsOnSpinner(this, distance);
         searchButton = (Button) findViewById(R.id.search_button);
 
         searchButton.setOnClickListener(view -> {
             final Intent data = new Intent();
             data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
-            data.putExtra(Constants.PRICE_FROM, priceFrom.getText().toString());
-            data.putExtra(Constants.PRICE_TO, priceTo.getText().toString());
-            data.putExtra(Constants.DISTANCE, Widget.getDistanceFromSpinner(distance));
+
+            if (priceFrom.getText() == null) {
+                data.putExtra(Constants.PRICE_FROM, "");
+                data.putExtra(Constants.PRICE_TO, "");
+            } else {
+                if ("Beliebig".equals(priceFrom.getText().toString())) {
+                    data.putExtra(Constants.PRICE_FROM, "0");
+                    data.putExtra(Constants.PRICE_TO, "10000");
+                }
+            }
             setResult(RESULT_OK, data);
             finish();
+        });
+
+        changePriceBtn.setOnClickListener(view -> {
+            Intent priceIntent = new Intent(getApplicationContext(), SetPriceActivity.class);
+            startActivityForResult(priceIntent, Constants.REQUEST_ID_FOR_PRICE);
         });
 
         locationButton = (ImageView) findViewById(R.id.set_location);

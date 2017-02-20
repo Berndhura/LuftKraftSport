@@ -14,6 +14,7 @@
     <string name="title_settings_page">Einstellungen</string>
     <string name="title_searches_page">Meine Suchens</string>
     <string name="title_locations_page">Meine Position</string>
+    <string name="title_set_price_page">Preis</string>
 
     <string name="title_open_my_ads_page">Meine Anzeigen</string>
 
@@ -37,8 +38,8 @@
     <!-- Empty Ads Database -->
     <string name="empty_ads_list">No Ads Information Available</string>
     <string name="empty_Ads_list_no_network">No Ads information available. The network is not available to fetch data.</string>
-    <string name="search_for_keyword">Search for</string>
-    <string name="search_price">Price:</string>
+    <string name="search_for_keyword">Suche:</string>
+    <string name="search_price">Preis:</string>
 
 
 </resources>
