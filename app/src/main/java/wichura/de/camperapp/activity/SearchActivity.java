@@ -7,11 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import wichura.de.camperapp.R;
-import wichura.de.camperapp.gui.Widget;
 import wichura.de.camperapp.mainactivity.Constants;
 
 /**

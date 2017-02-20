@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -49,21 +50,21 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 
-
     <EditText
         android:id="@+id/price_from"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
+        android:editable="false"
         android:ems="10"
-        android:inputType="number"
+        android:inputType="none"
         android:maxLines="1"
         android:text="Beliebig"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/keywords"
         app:layout_constraintTop_toBottomOf="@+id/keywords"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="@+id/keywords" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/changePrice"
@@ -71,15 +72,14 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintLeft_toRightOf="@+id/price_from"
-        app:layout_constraintTop_toBottomOf="@+id/keywords"
-        app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginRight="0dp"
         app:layout_constraintRight_toRightOf="@+id/keywords"
-        app:layout_constraintHorizontal_bias="0.51" />
+        app:layout_constraintTop_toBottomOf="@+id/keywords"
+        app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -111,15 +111,13 @@
 
         <activity
             android:name=".activity.SetLocationActivity"
-            android:label="@string/title_locations_page"
-            android:launchMode="singleInstance"
-            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+            android:label="@string/title_locations_page" />
 
         <activity
             android:name=".activity.SetPriceActivity"
             android:label="@string/title_set_price_page"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+            android:theme="@style/Theme.AppCompat.Light.DialogWhenLarge" />
 
 
         <activity

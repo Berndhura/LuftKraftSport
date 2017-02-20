@@ -403,7 +403,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.d("CONAN", "OFFSET: " + offset);
         if (offset <= pages) {
             page = page + 1;
-            if (type==null) {
+            if (type == null) {
                 presenterLayer.searchForArticles(page, size, priceFrom, priceTo, distance, description);
             } else {
                 presenterLayer.loadAdDataPage(page, size, type);
@@ -505,8 +505,8 @@ public class MainActivity extends AppCompatActivity implements
                     setMyAdsFlag(false);
 
                     presenterLayer.searchForArticles(0, size,
-                            priceFrom.equals("")? null: Integer.parseInt(priceFrom),
-                            priceTo.equals("")? null: Integer.parseInt(priceTo),
+                            priceFrom.equals("") ? null : Integer.parseInt(priceFrom),
+                            priceTo.equals("") ? null : Integer.parseInt(priceTo),
                             distance,
                             keyword);
                     drawer.closeDrawer(GravityCompat.START);
