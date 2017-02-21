@@ -6,6 +6,8 @@ package wichura.de.camperapp.http;
  */
 public class Urls {
 
+    private Urls() {}
+
     public static final String MAIN_SERVER_URL = "http://raent.de:9876/api/";
     //public static final String MAIN_SERVER_URL_V2 = "http://raent.de:9876/api/V2/";
     public static final String MAIN_SERVER_URL_V3 = "http://raent.de:9876/api/V3/";

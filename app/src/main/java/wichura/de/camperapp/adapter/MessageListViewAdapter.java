@@ -30,7 +30,7 @@ public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
         this.context = context;
     }
 
-    private class ViewHolder {
+    private static class ViewHolder {
         TextView message;
         TextView date;
     }

@@ -31,7 +31,7 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
         this.context = context;
     }
 
-    private class ViewHolder {
+    private static class ViewHolder {
         TextView title;
         TextView name;
         TextView date;

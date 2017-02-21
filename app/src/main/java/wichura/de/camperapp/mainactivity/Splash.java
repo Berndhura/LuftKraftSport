@@ -16,7 +16,7 @@ import wichura.de.camperapp.http.StartActivity;
  */
 public class Splash extends Activity {
 
-    private final int STR_SPLASH_TIME = 3000;
+    private final static int STR_SPLASH_TIME = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

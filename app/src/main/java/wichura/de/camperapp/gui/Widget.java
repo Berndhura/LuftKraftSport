@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Widget {
 
-    public Widget() {}
+    private Widget() {}
 
     public static void addItemsOnSpinner(Activity activity, Spinner spinner) {
 

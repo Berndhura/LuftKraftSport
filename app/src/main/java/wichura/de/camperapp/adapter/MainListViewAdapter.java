@@ -69,7 +69,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     }
 
     /* private view holder class */
-    private class ViewHolder {
+    private static class ViewHolder {
         TextView txtTitle;
         TextView txtPrice;
         TextView txtDate;

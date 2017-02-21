@@ -51,6 +51,19 @@ public class SearchActivity extends AppCompatActivity {
         price = (TextView) findViewById(R.id.price_from);
         ImageView changePriceBtn = (ImageView) findViewById(R.id.changePrice);
 
+        ImageView saveSearchButton = (ImageView) findViewById(R.id.save_search);
+        saveSearchButton.setOnClickListener((view) -> {
+
+        });
+
+        ImageView overviewSearchesButton = (ImageView) findViewById(R.id.overview_searches);
+        overviewSearchesButton.setOnClickListener((view) -> {
+            Intent intent = new Intent(this, SearchesActivity.class);
+            startActivityForResult(intent, Constants.REQUEST_ID_FOR_SEARCHES);
+        });
+
+
+
         Button searchButton = (Button) findViewById(R.id.search_button);
 
         searchButton.setOnClickListener(view -> {
@@ -114,7 +127,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void showLocation() {
         SharedPreferences location = getSharedPreferences(Constants.USERS_LOCATION, 0);
-        getSupportActionBar()
+        if (getSupportActionBar() != null) getSupportActionBar()
                 .setSubtitle("in " + location.getString(Constants.LOCATION, "") + " (+" + location.getInt(Constants.DISTANCE, 0) + " km)");
     }
 }

@@ -51,12 +51,6 @@ public class CreateSearchFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        View showSearchBtn = getActivity().findViewById(R.id.savedSearchButton);
-        showSearchBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), SearchesActivity.class);
-            startActivityForResult(intent, Constants.REQUEST_ID_FOR_SEARCHES);
-        });
-
         Button saveButton = (Button) getView().findViewById(R.id.save_new_search_button);
         description = (EditText) getView().findViewById(R.id.search_description_et);
         priceFrom = (EditText) getView().findViewById(R.id.price_from_et);
@@ -77,6 +71,7 @@ public class CreateSearchFragment extends Fragment {
 
         Long distance = Widget.getDistanceFromSpinner(spinnerDistance);
 
+        //TODO lat lng fixen
         service.saveSearchObserv(description, priceFrom, priceTo, 0.0f, 0.0f, distance, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

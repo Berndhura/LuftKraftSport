@@ -23,9 +23,7 @@ import wichura.de.camperapp.presentation.SearchesPresenter;
 
 public class SearchesActivity extends AppCompatActivity {
 
-    private SearchesPresenter presenter;
     private ListView listView;
-    private SearchesListAdapter adapter;
     private ProgressBar progressBar;
 
     @Override
@@ -39,12 +37,14 @@ public class SearchesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.searches_overview_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+            }
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-        presenter = new SearchesPresenter(this, new Service(), getApplicationContext());
+        SearchesPresenter presenter = new SearchesPresenter(this, new Service(), getApplicationContext());
 
         listView = (ListView) findViewById(R.id.searches_overview_list);
 
@@ -56,9 +56,10 @@ public class SearchesActivity extends AppCompatActivity {
         List<SearchItem> rowItems = new ArrayList<>();
         rowItems.addAll(searchItem);
 
-        getSupportActionBar().setTitle("Searches: " + rowItems.size());
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle("Gespeicherte Suchen: " + rowItems.size());
 
-        adapter = new SearchesListAdapter(
+        SearchesListAdapter adapter = new SearchesListAdapter(
                 getApplicationContext(), R.layout.searches_overview_item, rowItems);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();

@@ -30,9 +30,26 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="right"
-                android:layout_marginEnd="11dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="20dp"
                 app:srcCompat="@drawable/ic_location_on_white_24dp" />
+
+            <ImageView
+                android:id="@+id/save_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:layout_toLeftOf="@+id/set_location"
+                app:srcCompat="@drawable/ic_save_white_24dp" />
+
+            <ImageView
+                android:id="@+id/overview_searches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:layout_toLeftOf="@+id/save_search"
+                app:srcCompat="@drawable/ic_list_white_24dp" />
 
         </RelativeLayout>
 
