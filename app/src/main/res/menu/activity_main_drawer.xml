@@ -4,18 +4,18 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/myads"
-            android:icon="@drawable/home"
+            android:icon="@drawable/ic_person_white_24dp"
             android:title="Meine Anzeigen" />
 
         <item
             android:id="@+id/bookmarks"
             android:icon="@drawable/star"
-            android:title="Bookmarks"/>
+            android:title="Favoriten"/>
 
         <item
             android:id="@+id/new_ad"
-            android:icon="@drawable/ic_arrow_back_black_24dp"
-            android:title="Anlegen"/>
+            android:icon="@drawable/ic_create_white_24dp"
+            android:title="Anzeige erstellen"/>
 
         <item
             android:id="@+id/search"
@@ -24,16 +24,16 @@
 
         <item
             android:id="@+id/messages_from_user"
-            android:icon="@drawable/email"
+            android:icon="@drawable/ic_email_white_24dp"
             android:title="Nachrichten"/>
 
         <item
             android:id="@+id/settings"
-            android:icon="@drawable/ic_action_settings"
+            android:icon="@drawable/ic_settings_white_24dp"
             android:title="Einstellungen" />
         <item
             android:id="@+id/refresh"
-            android:icon="@drawable/ic_action_refresh"
+            android:icon="@drawable/ic_refresh_white_24dp"
             android:title="Neu laden" />
 
     </group>
