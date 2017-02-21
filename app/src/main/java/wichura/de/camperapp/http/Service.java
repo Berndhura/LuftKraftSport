@@ -97,7 +97,13 @@ public class Service {
         Observable<AdsAsPage> getAdsMy(@Query("page") int page, @Query("size") int size, @Query("token") String token);
 
         @GET("bookmarks")
-        Observable<AdsAsPage> getMyBookmarkedAds(@Query("page") int page, @Query("size") int size, @Query("token") String token);
+        Observable<AdsAsPage> getMyBookmarkedAds(
+                @Query("lat") Double lat,
+                @Query("lng") Double lng,
+                @Query("distance") Long distance,
+                @Query("page") int page,
+                @Query("size") int size,
+                @Query("token") String token);
 
         @POST("articles/{articleId}/increaseViewCount")
         Observable<String> increaseViewCount(@Path("articleId") int articleId);
@@ -223,8 +229,8 @@ public class Service {
         return mWebServiceV3.getAdsMy(page, size, token);
     }
 
-    public Observable<AdsAsPage> getMyBookmarkedAdsObserv(int page, int size, String token) {
-        return mWebServiceV3.getMyBookmarkedAds(page, size, token);
+    public Observable<AdsAsPage> getMyBookmarkedAdsObserv(Double lat, Double lng, int page, int size, String token) {
+        return mWebServiceV3.getMyBookmarkedAds(lat, lng, 10000000L, page, size, token);
     }
 
     public Observable<AdsAsPage> findAdsObserv(String description, Double lat, Double lng, Long distance,  Integer priceFrom, Integer priceTo, int page, int size) {

@@ -189,11 +189,14 @@ public class MainPresenter {
                 view.listView.setVisibility(View.INVISIBLE);
             }
         }
+
+        Double lat = getLat();
+        Double lng = getLng();
+
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
-        //Log.d("CONAN", url);
 
         Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
-        Observable<AdsAsPage> getBookmarkedAdsObserv = service.getMyBookmarkedAdsObserv(page, size, getUserToken());
+        Observable<AdsAsPage> getBookmarkedAdsObserv = service.getMyBookmarkedAdsObserv(lat, lng, page, size, getUserToken());
 
         Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                 Observable.zip(getBookmarksObserv, getBookmarkedAdsObserv, (bookmarks, ads) ->
@@ -238,7 +241,6 @@ public class MainPresenter {
     private void loadAllAd(int page, int size, String type) {
         Double lat = getLat();
         Double lng = getLng();
-
 
         if (page == 0) {
             if (view.listView != null) {

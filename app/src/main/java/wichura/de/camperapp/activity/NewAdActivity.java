@@ -26,8 +26,10 @@ public class NewAdActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.new_ad_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+            }
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
