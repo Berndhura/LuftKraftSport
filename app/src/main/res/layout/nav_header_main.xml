@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="2nd Hand Oz"
+        android:text="2nd Hand Surf Gear"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <TextView

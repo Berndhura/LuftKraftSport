@@ -120,9 +120,8 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 .centerCrop()
                 .into(holder.thumbNail);
 
-        // Log.d("CONAN, get pic URLs: ", rowItem.getUrl());
         holder.txtTitle.setText(rowItem.getTitle());
-        holder.txtPrice.setText(rowItem.getPrice());
+        holder.txtPrice.setText(rowItem.getPrice() + " €");
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
         holder.distance.setText(rowItem.getDistance() + " km");
 
