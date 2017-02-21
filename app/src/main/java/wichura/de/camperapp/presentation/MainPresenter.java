@@ -236,6 +236,10 @@ public class MainPresenter {
     }
 
     private void loadAllAd(int page, int size, String type) {
+        Double lat = getLat();
+        Double lng = getLng();
+
+
         if (page == 0) {
             if (view.listView != null) {
                 view.listView.setVisibility(View.INVISIBLE);
@@ -245,7 +249,7 @@ public class MainPresenter {
 
         if (!getUserToken().equals("")) {
             Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
-            Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(page, size);
+            Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(lat, lng, page, size);
 
             Observable<AdsAndBookmarks> zippedReqForBookmarksAndAds =
                     Observable.zip(getBookmarksObserv, getAllAdsForUserObserv, (bookmarks, ads) ->
@@ -286,7 +290,7 @@ public class MainPresenter {
                         }
                     });
         } else {
-            Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(page, size);
+            Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(lat, lng, page, size);
 
             subscription = getAllAdsForUserObserv
                     .subscribeOn(Schedulers.io())

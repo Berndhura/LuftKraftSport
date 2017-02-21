@@ -73,6 +73,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         TextView txtTitle;
         TextView txtPrice;
         TextView txtDate;
+        TextView distance;
         ImageView bookmarkStar;
         LinearLayout myAdsView;
         LinearLayout mainLl;
@@ -95,6 +96,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             holder = new ViewHolder();
             holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
             holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
+            holder.distance = (TextView) convertView.findViewById(R.id.distance);
             holder.txtDate = (TextView) convertView.findViewById(R.id.creation_date);
             holder.bookmarkStar = (ImageView) convertView.findViewById(R.id.bookmark_star);
             holder.myAdsView = (LinearLayout) convertView.findViewById(R.id.my_ads_view);
@@ -113,8 +115,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         final RowItem rowItem = getItem(position);
 
         Picasso.with(context)
-                //.load(Urls.MAIN_SERVER_URL_V2 + Urls.GET_PICTURE_THUMB + rowItem.getUrl())
-                //pictures/{pictureId}/thumbnail
                 .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl() + "/thumbnail")
                 .resize(100, 100)
                 .centerCrop()
@@ -124,6 +124,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtTitle.setText(rowItem.getTitle());
         holder.txtPrice.setText(rowItem.getPrice());
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
+        holder.distance.setText(rowItem.getDistance() + " km");
 
         //bookmark star full for bookmarked ad
         if (bookmarks == null) {
@@ -278,9 +279,5 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
     private String getUserToken() {
         return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
-    }
-
-    private String getUserId() {
-        return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
 }

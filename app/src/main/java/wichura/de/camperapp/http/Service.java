@@ -87,7 +87,10 @@ public class Service {
                                       @Query("size") int size);
 
         @GET("articles")
-        Observable<AdsAsPage> getAllAds(@Query("page") int page,
+        Observable<AdsAsPage> getAllAds(@Query("lat") Double lat,
+                                        @Query("lng") Double lng,
+                                        @Query("distance") Long distance,
+                                        @Query("page") int page,
                                         @Query("size") int size);
 
         @GET("articles/my")
@@ -228,8 +231,8 @@ public class Service {
         return mWebServiceV3.findAds(description, lat, lng,  distance, priceFrom, priceTo, page, size);
     }
 
-    public Observable<AdsAsPage> getAllAdsObserv(int page, int size) {
-        return mWebServiceV3.getAllAds(page, size);
+    public Observable<AdsAsPage> getAllAdsObserv(Double lat, Double lng, int page, int size) {
+        return mWebServiceV3.getAllAds(lat, lng, 10000000L,  page, size);
     }
 
     public Observable<ArticleDetails> getAdDetailsObserv(Integer adId) {

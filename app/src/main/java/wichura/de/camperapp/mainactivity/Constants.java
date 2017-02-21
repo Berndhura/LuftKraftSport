@@ -70,7 +70,7 @@ public class Constants {
     public static final String USERS_LOCATION = "usersLocation";
 
     //Google
-    public static String WEB_CLIENT_ID = "1083938171562-psgh1t07g9hgc328tmqa7afk3fq3pqf9.apps.googleusercontent.com";
+    public static final String WEB_CLIENT_ID = "1083938171562-psgh1t07g9hgc328tmqa7afk3fq3pqf9.apps.googleusercontent.com";
 
     //Type of Ads to Get
     public static final String TYPE_BOOKMARK = "getBookmarks";

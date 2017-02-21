@@ -28,6 +28,8 @@ public class RowItem {
     private String views;
     @Expose
     private String bookmarks;
+    @Expose
+    private Integer distance;
 
     public RowItem () {}
 
@@ -117,5 +119,13 @@ public class RowItem {
 
     public void setUrl(final String url) {
         this.urls = url;
+    }
+
+    public Integer getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Integer distance) {
+        this.distance = distance;
     }
 }
