@@ -123,7 +123,12 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtTitle.setText(rowItem.getTitle());
         holder.txtPrice.setText(rowItem.getPrice() + " €");
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
-        holder.distance.setText(rowItem.getDistance() + " km");
+        if (isMyAdsRequest()) {
+            holder.distance.setText("Meine");
+        } else
+        {
+            holder.distance.setText(rowItem.getDistance() + " km");
+        }
 
         //bookmark star full for bookmarked ad
         if (bookmarks == null) {
