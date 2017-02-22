@@ -94,6 +94,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Boolean isUserLoggedIn() {
         SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
-        return (settings.getString(Constants.USER_ID, "").equals("") ? false : true);
+        return (!settings.getString(Constants.USER_ID, "").equals(""));
     }
 }
