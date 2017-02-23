@@ -73,6 +73,8 @@ public class SettingsActivity extends AppCompatActivity {
         if (requestCode == Constants.REQUEST_ID_FOR_LOGIN) {
             initLogoutButton();
             loginInfo.setText("Logged in as " + getUserName());
+            setResult(RESULT_OK, data);
+            finish();
         }
     }
 

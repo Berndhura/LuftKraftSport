@@ -276,14 +276,14 @@ public class LoginActivity extends AppCompatActivity {
 
         if (requestCode == Constants.RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+            handleSignInResult(result, data);
         }
 
         mCallbackMgt.onActivityResult(requestCode, resultCode, data);
         finish();
     }
 
-    private void handleSignInResult(GoogleSignInResult result) {
+    private void handleSignInResult(GoogleSignInResult result, Intent data) {
         Log.d("CONAN", "handleSignInResult:" + result.isSuccess());
         Log.d("CONAN", "handleSignInResult status:" + result.getStatus());
 
@@ -300,6 +300,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("CONAN", userPicture.toString());
                 setUserPreferences(name, userId, userPicture, Constants.GOOGLE_USER, token);
             }
+            setResult(RESULT_OK, data);
             finish();
         } else {
             // Signed out, show unauthenticated UI.
@@ -363,7 +364,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
     }
 
-    public void hideProgressdialog() {
+    public void hideProgressDialog() {
         progressDialog.hide();
     }
 }

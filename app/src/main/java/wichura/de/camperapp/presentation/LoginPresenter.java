@@ -47,7 +47,7 @@ public class LoginPresenter {
 
                     @Override
                     public void onNext(String result) {
-                        view.hideProgressdialog();
+                        view.hideProgressDialog();
                         if (!result.equals("wrong")) {
                             Toast.makeText(context, "User in", Toast.LENGTH_SHORT).show();
                             //get userid and back to mainActiv

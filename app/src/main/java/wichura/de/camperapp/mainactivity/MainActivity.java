@@ -519,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements
                 if (!isUserLoggedIn()) {
                     setProfileName("Please login...");
                 }
-                setProfilePicture(null);
+                setProfilePicture(Uri.parse(getUserProfilePic()));
                 break;
             }
         }
@@ -531,7 +531,7 @@ public class MainActivity extends AppCompatActivity implements
         if (!isUserLoggedIn()) {
             setProfileName("Please login...");
         }
-        setProfilePicture(null);
+        setProfilePicture(Uri.parse(getUserProfilePic()));
         return true;
     }
 
@@ -648,8 +648,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void setProfilePicture(Uri uri) {
+        Log.d("CONAN", "Set profile picture: " + uri.toString());
         ImageView proPic = (ImageView) findViewById(R.id.profile_image);
-        if (uri != null) {
+        if (uri != null && !"".equals(uri.toString())) {
             Picasso.with(getApplicationContext()).load(uri.toString()).into(proPic);
         } else {
             if (proPic != null) {
