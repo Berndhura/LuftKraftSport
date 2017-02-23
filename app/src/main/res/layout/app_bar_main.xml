@@ -28,10 +28,19 @@
             <ImageView
                 android:id="@+id/login_button"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/common_full_open_on_phone" />
+
+            <ImageView
+                android:id="@+id/send_log_cat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:layout_toLeftOf="@+id/login_button"
+                android:src="@drawable/ic_email_white_24dp" />
 
         </RelativeLayout>
 

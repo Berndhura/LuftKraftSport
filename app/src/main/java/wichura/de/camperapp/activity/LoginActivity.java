@@ -155,10 +155,10 @@ public class LoginActivity extends AppCompatActivity {
         ImageView okButton = (ImageView) findViewById(R.id.ok_button);
         if (okButton != null) {
             okButton.setOnClickListener((view) -> {
-                if (!validate()) {
+               /* if (!validate()) {
                     onLoginFailed();
                     return;
-                }
+                }*/
 
                 showProgressDialog();
                 String email = _emailText.getText().toString();
