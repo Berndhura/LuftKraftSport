@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/register_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintLeft_toLeftOf="@+id/editText5"
+        app:layout_constraintRight_toRightOf="@+id/editText5"
+        app:layout_constraintTop_toBottomOf="@+id/editText5" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="29dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Email"
+        app:layout_constraintLeft_toLeftOf="@+id/register_user_name"
+        app:layout_constraintRight_toRightOf="@+id/register_user_name"
+        app:layout_constraintTop_toBottomOf="@+id/register_user_name" />
+
+    <EditText
+        android:id="@+id/register_user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintLeft_toLeftOf="@+id/editText3"
+        app:layout_constraintRight_toRightOf="@+id/editText3"
+        app:layout_constraintTop_toBottomOf="@+id/editText3" />
+
+    <EditText
+        android:id="@+id/editText5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Name:" />
+
+    <EditText
+        android:id="@+id/register_user_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="31dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Password"
+        app:layout_constraintLeft_toLeftOf="@+id/register_user_email"
+        app:layout_constraintRight_toRightOf="@+id/register_user_email"
+        app:layout_constraintTop_toBottomOf="@+id/register_user_email" />
+
+    <EditText
+        android:id="@+id/editText7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintLeft_toLeftOf="@+id/register_user_password"
+        app:layout_constraintRight_toRightOf="@+id/register_user_password"
+        app:layout_constraintTop_toBottomOf="@+id/register_user_password" />
+
+    <Button
+        android:id="@+id/register_user_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:text="SEND"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText7" />
+</android.support.constraint.ConstraintLayout>

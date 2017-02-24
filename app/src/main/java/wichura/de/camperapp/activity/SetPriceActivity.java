@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,13 +27,13 @@ public class SetPriceActivity extends AppCompatActivity {
         TextView priceToTv = (TextView) findViewById(R.id.priceTo);
 
         priceFromTv.setOnClickListener(view -> priceFromTv.setText(""));
-        priceFromTv.setOnTouchListener((view, event) ->  {
+        priceFromTv.setOnTouchListener((view, event) -> {
             priceFromTv.setText("");
             return false;
         });
 
         priceToTv.setOnClickListener(view -> priceToTv.setText(""));
-        priceToTv.setOnTouchListener((view, event) ->  {
+        priceToTv.setOnTouchListener((view, event) -> {
             priceToTv.setText("");
             return false;
         });

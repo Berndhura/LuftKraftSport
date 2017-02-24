@@ -11,28 +11,28 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         android:layout_marginTop="32dp"
         android:contentDescription="Login with Facebook"
         android:scaleType="centerInside"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="24dp"
-        app:layout_constraintHorizontal_bias="0.0"
-        android:layout_marginRight="24dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         android:layout_marginTop="24dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button"
-        app:layout_constraintHorizontal_bias="0.0"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp" />
+        app:layout_constraintTop_toBottomOf="@+id/login_button" />
 
     <TextView
         android:id="@+id/textView6"
@@ -81,13 +81,13 @@
         app:layout_constraintTop_toBottomOf="@+id/login_name" />
 
 
-    <TextView
+    <Button
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:gravity="center_horizontal"
-        android:text="Register"
+        android:text="Registrieren"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/textView8"
@@ -102,7 +102,7 @@
         app:layout_constraintLeft_toRightOf="@+id/register"
         app:layout_constraintRight_toLeftOf="@+id/textView7" />
 
-    <TextView
+    <Button
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
         android:autoLink="web"
         android:gravity="center_horizontal"
         android:linksClickable="true"
-        android:text="Forget"
+        android:text="Passwort vergessen"
         app:layout_constraintLeft_toRightOf="@+id/textView8"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />

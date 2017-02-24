@@ -26,6 +26,7 @@ import wichura.de.camperapp.models.GroupedMsgItem;
 import wichura.de.camperapp.models.MsgRowItem;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.models.SearchItem;
+import wichura.de.camperapp.models.User;
 
 /**
  * Created by ich on 16.10.2016.
@@ -126,10 +127,6 @@ public class Service {
         Observable<String> sendDeviceToken(@Query("token") String token,
                                            @Query("deviceToken") String deviceToken);
 
-        @POST("users/login")
-        Observable<String> loginUser(@Query("email") String email,
-                                     @Query("password") String password);
-
         @GET("messages/forUser")
         Observable<List<GroupedMsgItem>> getAllMessagesFromUser(@Query("token") String userToken);
 
@@ -157,12 +154,41 @@ public class Service {
 
         @POST("search/new")
         Observable<String> saveSearch(@Query("description") String description,
-                                          @Query("priceFrom") Integer priceFrom,
-                                          @Query("priceTo") Integer priceTo,
-                                          @Query("lat") Float latitude,
-                                          @Query("lng") Float longitude,
-                                          @Query("distance") Long distance,
-                                          @Query("token") String userToken);
+                                      @Query("priceFrom") Integer priceFrom,
+                                      @Query("priceTo") Integer priceTo,
+                                      @Query("lat") Float latitude,
+                                      @Query("lng") Float longitude,
+                                      @Query("distance") Long distance,
+                                      @Query("token") String userToken);
+
+        @POST("users/register")
+        Observable<String> registerUser(@Query("name") String name,
+                                        @Query("email") String email,
+                                        @Query("password") String password);
+
+        @POST("users/activate")
+        Observable<String> activateUser(@Query("activation_code") String activationCode,
+                                        @Query("email") String email);
+
+        @POST("users/login")
+        Observable<User> loginUser(@Query("email") String email,
+                                   @Query("password") String password);
+    }
+
+    public Observable<String> registerUserObserv(String name,
+                                                 String email,
+                                                 String password) {
+        return mWebServiceV3.registerUser(name, email, password);
+    }
+
+    public Observable<String> activateUserObserv(String activationCode,
+                                                 String email) {
+        return mWebServiceV3.activateUser(activationCode, email);
+    }
+
+    public Observable<User> loginUserObserv(String email,
+                                            String password) {
+        return mWebServiceV3.loginUser(email, password);
     }
 
     public Observable<String> saveSearchObserv(String description,
@@ -171,7 +197,7 @@ public class Service {
                                                Float lat,
                                                Float lng,
                                                Long distance,
-                                               String userToken ) {
+                                               String userToken) {
         return mWebServiceV3.saveSearch(description, priceFrom, priceTo, lat, lng, distance, userToken);
     }
 
@@ -193,10 +219,6 @@ public class Service {
 
     public Observable<List<GroupedMsgItem>> getAllMessagesFromUserObserv(String userToken) {
         return mWebServiceV3.getAllMessagesFromUser(userToken);
-    }
-
-    public Observable<String> loginUserObserv(String email, String password) {
-        return mWebServiceV3.loginUser(email, password);
     }
 
     public Observable<String> sendDeviceTokenObserv(String userToken, String deviceToken) {
@@ -232,12 +254,12 @@ public class Service {
         return mWebServiceV3.getMyBookmarkedAds(lat, lng, page, size, token);
     }
 
-    public Observable<AdsAsPage> findAdsObserv(String description, Double lat, Double lng, Long distance,  Integer priceFrom, Integer priceTo, int page, int size) {
-        return mWebServiceV3.findAds(description, lat, lng,  distance, priceFrom, priceTo, page, size);
+    public Observable<AdsAsPage> findAdsObserv(String description, Double lat, Double lng, Long distance, Integer priceFrom, Integer priceTo, int page, int size) {
+        return mWebServiceV3.findAds(description, lat, lng, distance, priceFrom, priceTo, page, size);
     }
 
     public Observable<AdsAsPage> getAllAdsObserv(Double lat, Double lng, int page, int size) {
-        return mWebServiceV3.getAllAds(lat, lng, 10000000L,  page, size);
+        return mWebServiceV3.getAllAds(lat, lng, 10000000L, page, size);
     }
 
     public Observable<ArticleDetails> getAdDetailsObserv(Integer adId) {

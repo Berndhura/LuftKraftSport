@@ -10,6 +10,7 @@ import rx.schedulers.Schedulers;
 import wichura.de.camperapp.activity.LoginActivity;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.models.User;
 
 /**
  * Created by ich on 05.12.2016.
@@ -33,6 +34,35 @@ public class LoginPresenter {
         service.loginUserObserv(email, password)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<User>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error sending login email user " + e.getMessage());
+                        view.finish();
+                    }
+
+                    @Override
+                    public void onNext(User user) {
+                        view.hideProgressDialog();
+                        Toast.makeText(context, "User in", Toast.LENGTH_SHORT).show();
+                        Log.d("CONAN", "login email user " + user.getId());
+                        //String name, String userId, Uri userPic, String userType, String userToken
+                        view.setUserPreferences(user.getName(), user.getId().toString(), null, Constants.EMAIL_USER, user.getToken());
+                        view.finish();
+                    }
+                });
+    }
+
+    public String registerUser(String email, String password) {
+        view.showProgressDialog();
+        service.registerUserObserv(email, password, "john joop")
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
@@ -46,19 +76,12 @@ public class LoginPresenter {
                     }
 
                     @Override
-                    public void onNext(String result) {
+                    public void onNext(String info) {
                         view.hideProgressDialog();
-                        if (!result.equals("wrong")) {
-                            Toast.makeText(context, "User in", Toast.LENGTH_SHORT).show();
-                            //get userid and back to mainActiv
-                            String[] userInfos = result.split(",");
-                            //userToken is open -> null
-                            view.setUserPreferences(userInfos[1], userInfos[0], null, Constants.EMAIL_USER, null);
-                            view.finish();
-                        } else {
-                            Toast.makeText(context, "Wrong user or password. Try again!", Toast.LENGTH_SHORT).show();
-                        }
+                        view.finish();
+
                     }
                 });
+        return "ok";
     }
 }

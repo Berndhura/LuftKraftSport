@@ -7,25 +7,19 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.graphics.Picture;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -129,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setColorScheme(SignInButton.COLOR_DARK);
-        signInButton.setHovered(false);
+        signInButton.setHovered(true);
         // signInButton.setScopes(gso.getScopeArray());
         setGooglePlusButton(signInButton, "Sign in with Google");
 
@@ -155,10 +149,10 @@ public class LoginActivity extends AppCompatActivity {
         ImageView okButton = (ImageView) findViewById(R.id.ok_button);
         if (okButton != null) {
             okButton.setOnClickListener((view) -> {
-               /* if (!validate()) {
+                if (!validate()) {
                     onLoginFailed();
                     return;
-                }*/
+                }
 
                 showProgressDialog();
                 String email = _emailText.getText().toString();
@@ -170,10 +164,11 @@ public class LoginActivity extends AppCompatActivity {
         _emailText = (EditText) findViewById(R.id.login_name);
         _passwordText = (EditText) findViewById(R.id.password);
 
-        TextView tv = (TextView) findViewById(R.id.register);
-        tv.setText(Html.fromHtml("<a href=\"http://raent.de:9876/\">Register</a>"));
-        tv.setClickable(true);
-        tv.setMovementMethod(LinkMovementMethod.getInstance());
+        Button tv = (Button) findViewById(R.id.register);
+        tv.setOnClickListener(view -> {
+            Intent i = new Intent(getApplicationContext(), RegisterUser.class);
+            startActivityForResult(i, Constants.REQUEST_ID_FOR_REGISTER_USER);
+        });
 
         LoginButton fbLoginButton = (LoginButton) findViewById(R.id.login_button);
         if (fbLoginButton != null) {

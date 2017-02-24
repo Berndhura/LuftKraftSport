@@ -18,6 +18,7 @@ public class Constants {
     public static final int REQUEST_ID_FOR_LOCATION = 9;
     public static final int REQUEST_ID_FOR_PRICE = 10;
     public static final int RC_SIGN_IN = 11;
+    public static final int REQUEST_ID_FOR_REGISTER_USER = 12;
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -73,6 +74,7 @@ public class Constants {
 
     //Google
     public static final String WEB_CLIENT_ID = "1083938171562-psgh1t07g9hgc328tmqa7afk3fq3pqf9.apps.googleusercontent.com";
+    //public static final String WEB_CLIENT_ID = "1083938171562-0bbocc78sl1ucbgl5rtco5e11plukgho.apps.googleusercontent.com";
 
     //Type of Ads to Get
     public static final String TYPE_BOOKMARK = "getBookmarks";

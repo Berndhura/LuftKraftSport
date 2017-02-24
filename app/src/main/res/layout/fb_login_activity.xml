@@ -2,8 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -20,20 +20,20 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:titleTextColor="@android:color/white"/>
+                app:titleTextColor="@android:color/white" />
 
             <ImageView
                 android:id="@+id/ok_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/com_facebook_button_like_icon_selected"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:src="@drawable/com_facebook_button_like_icon_selected" />
 
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-   <include layout="@layout/fb_login_view" />
+    <include layout="@layout/fb_login_view" />
 
 </LinearLayout>
