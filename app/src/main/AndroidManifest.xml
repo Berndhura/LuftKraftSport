@@ -112,9 +112,14 @@
         <activity
             android:name=".activity.SetLocationActivity"
             android:label="@string/title_locations_page" />
+
         <activity
             android:name=".activity.RegisterUser"
             android:label="@string/title_register_user" />
+
+        <activity
+            android:name=".activity.ActivateUserActivity"
+            android:label="@string/title_activate_user" />
 
         <activity
             android:name=".activity.SetPriceActivity"

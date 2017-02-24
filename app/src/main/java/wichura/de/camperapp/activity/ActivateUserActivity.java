@@ -13,34 +13,33 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Service;
 
 /**
- * Created by bwichura on 24.02.2017.
+ * Created by ich on 24.02.2017.
  * blue ground
  */
 
-public class RegisterUser extends AppCompatActivity implements View.OnClickListener {
+public class ActivateUserActivity extends AppCompatActivity implements View.OnClickListener{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.register_user_activity);
-
-        findViewById(R.id.register_user_button).setOnClickListener(this);
+        setContentView(R.layout.activate_user_activity);
+        findViewById(R.id.activation_user_button).setOnClickListener(this);
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.register_user_button:
-                registerUser();
-                Log.d("CONAN", "sending...");
+    public void onClick(View view) {
+        switch (R.id.activation_user_button) {
+            case R.id.activation_user_button:
+            {
+                sendActivationCode();
                 break;
+            }
         }
     }
 
-    private void registerUser() {
+    private void sendActivationCode() {
         Service service = new Service();
-        service.registerUserObserv("farthole", "wichura@gmx.de", "john joop")
+        service.activateUserObserv("43116", "wichura@gmx.de")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -51,7 +50,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error registering email user " + e.getMessage());
+                        Log.d("CONAN", "error activate email user " + e.getMessage());
                         //view.finish();
                     }
 
@@ -59,7 +58,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                     public void onNext(String info) {
                         //view.hideProgressDialog();
                         //view.finish();
-                        Log.d("CONAN", "registering email user " + info);
+                        Log.d("CONAN", "activate email user " + info);
                         setResult(RESULT_OK, null);
                         finish();
                     }

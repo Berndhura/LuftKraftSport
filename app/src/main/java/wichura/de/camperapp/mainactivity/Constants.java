@@ -6,6 +6,8 @@ package wichura.de.camperapp.mainactivity;
  */
 public class Constants {
 
+
+
     private Constants() {}
 
     public static final int REQUEST_ID_FOR_NEW_AD = 1;
@@ -19,6 +21,7 @@ public class Constants {
     public static final int REQUEST_ID_FOR_PRICE = 10;
     public static final int RC_SIGN_IN = 11;
     public static final int REQUEST_ID_FOR_REGISTER_USER = 12;
+    public static final int REQUEST_ID_FOR_ACTIVATE_USER = 13;
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 

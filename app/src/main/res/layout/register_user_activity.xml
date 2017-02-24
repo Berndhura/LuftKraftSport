@@ -19,7 +19,7 @@
         app:layout_constraintRight_toRightOf="@+id/editText5"
         app:layout_constraintTop_toBottomOf="@+id/editText5" />
 
-    <EditText
+    <TextView
         android:id="@+id/editText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
         app:layout_constraintRight_toRightOf="@+id/editText3"
         app:layout_constraintTop_toBottomOf="@+id/editText3" />
 
-    <EditText
+    <TextView
         android:id="@+id/editText5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Name:" />
 
-    <EditText
+    <TextView
         android:id="@+id/register_user_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

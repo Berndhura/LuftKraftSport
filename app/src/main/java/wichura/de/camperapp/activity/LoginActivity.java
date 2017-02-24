@@ -274,6 +274,12 @@ public class LoginActivity extends AppCompatActivity {
             handleSignInResult(result, data);
         }
 
+        if (requestCode == Constants.REQUEST_ID_FOR_REGISTER_USER) {
+            //use request code from email to verify email
+            Intent i = new Intent(getApplicationContext(), ActivateUserActivity.class);
+            startActivityForResult(i, Constants.REQUEST_ID_FOR_ACTIVATE_USER);
+        }
+
         mCallbackMgt.onActivityResult(requestCode, resultCode, data);
         finish();
     }

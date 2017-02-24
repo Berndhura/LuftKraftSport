@@ -681,10 +681,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void setProfilePicture(Uri uri) {
-        if (uri != null)
+        if (uri != null) {
             Log.d("CONAN", "Set profile picture: " + uri.toString());
+        }
         ImageView proPic = (ImageView) findViewById(R.id.profile_image);
-        if (!"".equals(uri.toString())) {
+        if (uri != null && !"".equals(uri.toString())) {
             Picasso.with(getApplicationContext()).load(uri.toString()).into(proPic);
         } else {
             if (proPic != null) {
