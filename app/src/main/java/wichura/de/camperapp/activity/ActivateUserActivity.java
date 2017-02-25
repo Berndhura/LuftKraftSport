@@ -17,7 +17,7 @@ import wichura.de.camperapp.http.Service;
  * blue ground
  */
 
-public class ActivateUserActivity extends AppCompatActivity implements View.OnClickListener{
+public class ActivateUserActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,8 +29,7 @@ public class ActivateUserActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View view) {
         switch (R.id.activation_user_button) {
-            case R.id.activation_user_button:
-            {
+            case R.id.activation_user_button: {
                 sendActivationCode();
                 break;
             }

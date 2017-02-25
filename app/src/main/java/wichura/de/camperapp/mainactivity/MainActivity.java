@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -37,8 +36,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +57,7 @@ import wichura.de.camperapp.presentation.MainPresenter;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static wichura.de.camperapp.mainactivity.Constants.SHOW_MY_ADS;
+
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -91,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final String LIST_STATE = "listState";
     private Parcelable mListState = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,11 +139,6 @@ public class MainActivity extends AppCompatActivity implements
         if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
 
         loginBtn = (ImageView) findViewById(R.id.login_button);
-        ImageView sendLogCatbt = (ImageView) findViewById(R.id.send_log_cat);
-        sendLogCatbt.setOnClickListener(view -> {
-            sendLogcatMail();
-        });
-
         updateLoginButton();
 
         AccessTokenTracker tracker = new AccessTokenTracker() {
@@ -231,32 +225,6 @@ public class MainActivity extends AppCompatActivity implements
         if (presenterLayer.subscription != null && !presenterLayer.subscription.isUnsubscribed()) {
             presenterLayer.subscription.unsubscribe();
         }
-    }
-
-    public void sendLogcatMail() {
-
-        // save logcat in file
-        File outputFile = new File(Environment.getExternalStorageDirectory(),
-                "logcat.txt");
-        try {
-            Runtime.getRuntime().exec(
-                    "logcat -f " + outputFile.getAbsolutePath());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        //send file using email
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        // Set type to "email"
-        emailIntent.setType("vnd.android.cursor.dir/email");
-        String to[] = {"wichura@gmx.de"};
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-        // the attachment
-        emailIntent.putExtra(Intent.EXTRA_STREAM, outputFile.getAbsolutePath());
-        // the mail subject
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
     @Override
