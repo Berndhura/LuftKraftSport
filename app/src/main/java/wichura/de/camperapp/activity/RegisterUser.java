@@ -6,6 +6,7 @@ import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import rx.Subscriber;
@@ -64,15 +65,24 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onNext(String info) {
-                        //view.hideProgressDialog();
-                        //view.finish();
                         ((TextView)findViewById(R.id.register_user_info_box)).setText("Neues Konto wurde angelegt!" +
                                 " Ein Aktivierungscode wurde dir an deine Email gesendet. Bitte gib diesen ein, um deine" +
                                 " Kontoaktivierung abzuschliessen!");
                         Log.d("CONAN", "registering email user " + info);
                         // setResult(RESULT_OK, null);
                         //finish();
+
+                        adaptViewForActivaion();
                     }
                 });
     }
+
+    private void adaptViewForActivaion() {
+
+        findViewById(R.id.register_user_password).setVisibility(View.GONE);
+        ((TextView)findViewById(R.id.register_user_name)).setHint("Aktivierungscode");
+        ((Button)findViewById(R.id.register_user_button)).setText("Sende Aktiverungscode");
+    }
+
+
 }
