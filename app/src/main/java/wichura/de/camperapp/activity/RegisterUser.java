@@ -2,9 +2,11 @@ package wichura.de.camperapp.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -41,7 +43,9 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
 
     private void registerUser() {
+        ((TextView)findViewById(R.id.register_user_info_box)).setText("Registriere Konto...");
         Service service = new Service();
+
         service.registerUserObserv("farthole", "wichura@gmx.de", "john joop")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -54,16 +58,20 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "error registering email user " + e.getMessage());
-                        //view.finish();
+                        ((TextView)findViewById(R.id.register_user_info_box)).setText("Es gab ein Problem" +
+                                " das Konto anzulegen. Versuche es nochmal. ");
                     }
 
                     @Override
                     public void onNext(String info) {
                         //view.hideProgressDialog();
                         //view.finish();
+                        ((TextView)findViewById(R.id.register_user_info_box)).setText("Neues Konto wurde angelegt!" +
+                                " Ein Aktivierungscode wurde dir an deine Email gesendet. Bitte gib diesen ein, um deine" +
+                                " Kontoaktivierung abzuschliessen!");
                         Log.d("CONAN", "registering email user " + info);
-                        setResult(RESULT_OK, null);
-                        finish();
+                        // setResult(RESULT_OK, null);
+                        //finish();
                     }
                 });
     }
