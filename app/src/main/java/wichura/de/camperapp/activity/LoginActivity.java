@@ -276,8 +276,9 @@ public class LoginActivity extends AppCompatActivity {
 
         if (requestCode == Constants.REQUEST_ID_FOR_REGISTER_USER) {
             //use request code from email to verify email
-            Intent i = new Intent(getApplicationContext(), ActivateUserActivity.class);
-            startActivityForResult(i, Constants.REQUEST_ID_FOR_ACTIVATE_USER);
+           // Intent i = new Intent(getApplicationContext(), ActivateUserActivity.class);
+           // startActivityForResult(i, Constants.REQUEST_ID_FOR_ACTIVATE_USER);
+           // TODO: back from activate... einloggen...
         }
 
         mCallbackMgt.onActivityResult(requestCode, resultCode, data);
