@@ -74,6 +74,10 @@ public class Constants {
     public static final String SHOW_MY_ADS = "showMyAds";
     public static final String SHARED_PREFS_USER_INFO = "UserInfo";
     public static final String USERS_LOCATION = "usersLocation";
+    public static final String ACTIVATE_USER_STATUS = "usersActivate";
+
+    public static final String ACTIVATE_USER = "isUserActivated";
+    public static final String REGISTER_USER = "isUserRegistered";
 
     //Google
     public static final String WEB_CLIENT_ID = "1083938171562-psgh1t07g9hgc328tmqa7afk3fq3pqf9.apps.googleusercontent.com";

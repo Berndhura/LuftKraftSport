@@ -1,5 +1,6 @@
 package wichura.de.camperapp.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Service;
+import wichura.de.camperapp.mainactivity.Constants;
+
+import static wichura.de.camperapp.mainactivity.Constants.ACTIVATE_USER_STATUS;
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by bwichura on 24.02.2017.
@@ -54,23 +59,39 @@ public class RegisterUser extends AppCompatActivity  {
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "error registering email user " + e.getMessage());
-                        ((TextView)findViewById(R.id.register_user_info_box)).setText("Es gab ein Problem" +
-                                " das Konto anzulegen. Versuche es nochmal. ");
+                        ((TextView)findViewById(R.id.register_user_info_box)).setText(R.string.user_is_registered_problem);
                     }
 
                     @Override
                     public void onNext(String info) {
-                        ((TextView)findViewById(R.id.register_user_info_box)).setText("Neues Konto wurde angelegt!" +
-                                " Ein Aktivierungscode wurde dir an deine Email gesendet. Bitte gib diesen ein, um deine" +
-                                " Kontoaktivierung abzuschliessen!");
+                        ((TextView)findViewById(R.id.register_user_info_box)).setText(R.string.user_is_registered);
                         Log.d("CONAN", "registering email user " + info);
                         // setResult(RESULT_OK, null);
                         //finish();
-
+                        setRegisterUpdatePreferences(true, false);
                         adaptViewForActivation();
                     }
                 });
     }
+
+    private void setRegisterUpdatePreferences(boolean isUserRegistered, boolean isUserActivated) {
+        SharedPreferences settings = getBaseContext().getSharedPreferences(ACTIVATE_USER_STATUS, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(Constants.REGISTER_USER, isUserRegistered);
+        editor.putBoolean(Constants.ACTIVATE_USER, isUserActivated);
+        editor.apply();
+    }
+
+    public boolean isUserRegistered() {
+        SharedPreferences settings = getBaseContext().getSharedPreferences(Constants.ACTIVATE_USER_STATUS, 0);
+        return settings.getBoolean(Constants.REGISTER_USER, false);
+    }
+
+    public boolean isUserActive() {
+        SharedPreferences settings = getBaseContext().getSharedPreferences(Constants.ACTIVATE_USER_STATUS, 0);
+        return settings.getBoolean(Constants.ACTIVATE_USER, false);
+    }
+
 
     private void adaptViewForActivation() {
 
