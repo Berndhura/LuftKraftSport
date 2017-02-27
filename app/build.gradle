@@ -85,6 +85,8 @@ dependencies {
 
     //ACRA crash report
     compile 'ch.acra:acra:4.9.0'
+
+    compile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
 
 

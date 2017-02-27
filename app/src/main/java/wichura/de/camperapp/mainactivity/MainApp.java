@@ -2,6 +2,8 @@ package wichura.de.camperapp.mainactivity;
 
 import android.app.Application;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
@@ -38,6 +40,12 @@ public class MainApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
        // ACRA.init(this);
     }
 }
