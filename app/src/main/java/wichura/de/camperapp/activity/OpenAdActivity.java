@@ -171,7 +171,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 .load(pictureUri)
                 .placeholder(R.drawable.empty_photo)
                 .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
-                .centerCrop()
+                .centerInside()
                 .into(imgView, new Callback() {
                     @Override
                     public void onSuccess() {
