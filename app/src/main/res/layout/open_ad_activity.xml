@@ -36,7 +36,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.95">
+        android:layout_weight="0.95"
+        android:layout_marginBottom="10sp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,7 +92,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
-                android:background="#D7CECE"
+                android:background="@drawable/round_corner_for_tv"
                 android:textSize="18sp" />
 
             <TextView
@@ -100,7 +101,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="30dp"
+                android:background="@drawable/round_corner_for_tv"
                 android:gravity="center_horizontal"
                 android:textSize="18sp" />
 
@@ -108,8 +111,9 @@
                 android:id="@+id/map"
                 android:layout_width="match_parent"
                 android:layout_height="400sp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp" />
 
         </LinearLayout>
 

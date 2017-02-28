@@ -135,7 +135,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
             mPrice.setText(getIntent().getStringExtra(Constants.PRICE) );
             mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
-            mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
+            mDateText.setText("Erstellt am: "+ DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
             mAdId = getIntent().getIntExtra(Constants.ID, 0);
             lat = getIntent().getDoubleExtra(Constants.LAT, 0);
             lng = getIntent().getDoubleExtra(Constants.LNG, 0);
