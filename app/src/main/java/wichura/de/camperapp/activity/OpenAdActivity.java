@@ -133,7 +133,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             //intent comes from article overview
             String pictureUri = getIntent().getStringExtra(Constants.URI);
             mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
-            mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
+            mPrice.setText(getIntent().getStringExtra(Constants.PRICE) );
             mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
             mDateText.setText(DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
             mAdId = getIntent().getIntExtra(Constants.ID, 0);
@@ -182,7 +182,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                     public void onError() {
                         mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
                         Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
-                        finish();
+                        showDefaultPic();
                     }
                 });
 
@@ -222,6 +222,16 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         presenter.increaseViewCount(mAdId);
 
         Log.d("CONAN", "request Picture: " + pictureUri);
+    }
+
+    private void showDefaultPic() {
+        int ratio = Math.round((float) displayWidth / (float) displayWidth);
+        Picasso.with(getApplicationContext())
+                .load(R.drawable.applogo)
+                .placeholder(R.drawable.empty_photo)
+                .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
+                .centerCrop()
+                .into(imgView);
     }
 
     protected synchronized void buildGoogleApiClient() {

@@ -37,6 +37,13 @@ public class Utility {
                 activeNetwork.isConnectedOrConnecting();
     }
 
+    //TODO: cent nicht beachtet
+    public static String getFormatedPrice(String price) {
+        String [] buffer = price.split(".");
+        return buffer[0]+"."+"00 "+ "€";
+
+    }
+
     public String getUserToken() {
         return activity.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
     }
