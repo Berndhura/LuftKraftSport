@@ -2,8 +2,6 @@ package wichura.de.camperapp.mainactivity;
 
 import android.app.Application;
 
-import com.squareup.leakcanary.LeakCanary;
-
 import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
@@ -11,6 +9,7 @@ import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.Urls;
 
 /**
  * Created by ich on 25.02.2017.
@@ -18,7 +17,7 @@ import wichura.de.camperapp.R;
  */
 
 @ReportsCrashes(
-        formUri = "http://raent.de:9876/api/V3/appError",
+        formUri = Urls.UPLOAD_ERROR_URL,
         reportType = HttpSender.Type.JSON,
         httpMethod = HttpSender.Method.POST,
         customReportContent = {
@@ -49,6 +48,5 @@ public class MainApp extends Application {
             return;
         }
         LeakCanary.install(this);*/
-
     }
 }
