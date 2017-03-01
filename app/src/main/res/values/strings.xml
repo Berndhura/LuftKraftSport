@@ -32,7 +32,7 @@
     <string name="hello_world" tools:ignore="MissingTranslation,MissingTranslation">Tag</string>
 
     <string name="title_new_add_page" tools:ignore="MissingTranslation">Anlegen</string>
-    <string name="uploadAd">Upload ad</string>
+    <string name="uploadAd">Erstelle Anzeige</string>
     <string name="preis">Preis...</string>
     <string name="description">Beschreibe es...</string>
     <string name="keywords">Was verkaufst Du...</string>
@@ -44,6 +44,11 @@
     <string name="search_for_keyword">Suche:</string>
     <string name="search_price">Preis:</string>
 
+
+    <string name="crash_dialog_text">Senden der crash informationen. ok!!</string>
+    <string name="crash_notification_text">öffne mich!!!</string>
+    <string name="crash_titel">Bernds app aua</string>
+    <string name="crash_text">crash passiert, wie weiter?</string>
 
 
     <string name="user_is_registered">"Neues Konto wurde angelegt!" +

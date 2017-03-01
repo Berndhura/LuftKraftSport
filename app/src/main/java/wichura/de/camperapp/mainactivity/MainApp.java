@@ -18,11 +18,9 @@ import wichura.de.camperapp.R;
  */
 
 @ReportsCrashes(
-        formUri = "https://medo.cloudant.com/acra-example/_design/acra-storage/_update/report",
+        formUri = "http://raent.de:9876/api/V3/appError",
         reportType = HttpSender.Type.JSON,
         httpMethod = HttpSender.Method.POST,
-        formUriBasicAuthLogin = "tubtakedstinumenterences",
-        formUriBasicAuthPassword = "igqMFFMatvtMXVCKgy7u6a5W",
         customReportContent = {
                 ReportField.APP_VERSION_CODE,
                 ReportField.APP_VERSION_NAME,
@@ -32,20 +30,25 @@ import wichura.de.camperapp.R;
                 ReportField.BUILD,
                 ReportField.STACK_TRACE
         },
-        mode = ReportingInteractionMode.TOAST,
-        resToastText = R.string.app_name
+        mode = ReportingInteractionMode.NOTIFICATION,
+        resToastText = R.string.app_name,
+        resNotifTickerText = R.string.crash_text,
+        resNotifTitle = R.string.crash_titel,
+        resNotifText = R.string.crash_notification_text,
+        resDialogText = R.string.crash_dialog_text
 )
 public class MainApp extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        ACRA.init(this);
+       /* if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
         }
-        LeakCanary.install(this);
-       // ACRA.init(this);
+        LeakCanary.install(this);*/
+
     }
 }
