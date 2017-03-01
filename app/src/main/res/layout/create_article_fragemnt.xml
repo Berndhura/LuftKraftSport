@@ -30,11 +30,18 @@
     <LinearLayout
         android:id="@+id/linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/imageButton"
-        android:layout_marginTop="137dp"
-        android:orientation="vertical">
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <View
+            android:id="@+id/devider0"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
 
         <EditText
             android:id="@+id/keywords"
@@ -45,8 +52,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_weight="0.2"
             android:background="@android:color/transparent"
-
             android:ems="10"
             android:gravity="left"
             android:hint="@string/keywords"
@@ -55,7 +62,6 @@
         <View
             android:id="@+id/devider1"
             android:layout_width="match_parent"
-
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
 
@@ -63,13 +69,13 @@
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="17dp"
+            android:layout_weight="0.6"
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="left"
@@ -92,7 +98,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
-
+            android:layout_weight="0.2"
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="top|left|center_vertical"
@@ -100,17 +106,18 @@
             android:inputType="number" />
 
 
+        <Button
+            android:id="@+id/uploadButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:background="@color/colorPrimary"
+            android:text="@string/uploadAd"
+            android:textColor="#ffffff" />
+
+
     </LinearLayout>
 
-
-    <Button
-        android:id="@+id/uploadButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/colorPrimary"
-        android:text="@string/uploadAd"
-        android:textColor="#ffffff" />
 
 </RelativeLayout>

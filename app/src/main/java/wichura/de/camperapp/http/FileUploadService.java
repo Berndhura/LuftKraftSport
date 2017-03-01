@@ -25,6 +25,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.activity.CreateArticleFragment;
 import wichura.de.camperapp.activity.NewAdActivity;
+import wichura.de.camperapp.models.Location;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.util.BitmapHelper;
 import wichura.de.camperapp.mainactivity.Constants;
@@ -60,6 +61,11 @@ public class FileUploadService {
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
         item.setPrice(data.getStringExtra(Constants.PRICE));
         item.setDate(data.getLongExtra(Constants.DATE, 0));
+
+      /*  double[] latlng = {getLat(), getLng()};
+        Location location = new Location();
+        location.setCoordinates(latlng);
+        item.setLocation(location);*/
 
         service.saveNewAdObserv(getUserToken(), item)
                 .subscribeOn(Schedulers.newThread())
@@ -200,6 +206,15 @@ public class FileUploadService {
         return settings.getString(Constants.USER_ID, "");
     }
 
+    public Double getLat() {
+        SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
+        return  Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
+    }
+
+    public Double getLng() {
+        SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
+        return  Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
+    }
     private String getUserToken() {
         SharedPreferences settings = context.getSharedPreferences(Constants.SHARED_PREFS_USER_INFO, 0);
         return settings.getString(Constants.USER_TOKEN, "");
