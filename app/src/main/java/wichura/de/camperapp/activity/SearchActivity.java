@@ -114,9 +114,11 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void saveSearch() {
+        String description = keywords.getText().toString();
         Service service = new Service();
+
         //TODO: richtige werte bitte!
-        service.saveSearchObserv("Maul", 1, 5000, getLat(), getLng(), 500L, getUserToken())
+        service.saveSearchObserv(description, 1, 5000, getLat(), getLng(), 500L, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
