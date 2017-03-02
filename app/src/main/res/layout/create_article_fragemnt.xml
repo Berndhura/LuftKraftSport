@@ -14,13 +14,6 @@
         android:background="@drawable/side_nav_bar"
         app:srcCompat="@drawable/empty_photo" /-->
 
-    <ProgressBar
-        android:id="@+id/upload_ProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp" />
-
 
     <ImageView
         android:id="@+id/imageButton"
@@ -87,7 +80,8 @@
             android:ems="10"
             android:gravity="left"
             android:hint="@string/description"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:singleLine="false" />
 
         <View
             android:id="@+id/devider2"

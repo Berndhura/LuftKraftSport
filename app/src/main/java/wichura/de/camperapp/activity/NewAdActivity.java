@@ -1,21 +1,53 @@
 package wichura.de.camperapp.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.squareup.picasso.Picasso;
 
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.FileUploadService;
+import wichura.de.camperapp.http.Service;
+import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.util.Utility;
+
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 
 public class NewAdActivity extends AppCompatActivity {
+
+    private Service service;
+    private Utility utils;
+
+    private EditText mDescText;
+    private EditText mKeywords;
+    private EditText mPrice;
+
+
+    private static final int SELECT_PHOTO = 100;
+    private String mImage;
+    private int pictureCount = 1;
+
+    private ImageView mImgOne;
+    private ImageView mImgTwo;
+
+    private ProgressBar progress;
+
+    private FileUploadService fileUploadService;
+    private Button submitButton;
+
+    public NewAdActivity() {
+        service = new Service();
+        utils = new Utility(this);
+    }
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -33,49 +65,112 @@ public class NewAdActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-        // Set up the ViewPager with the sections adapter.
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
-        setupViewPager(mViewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
+        hideProgress();
+        fileUploadService = new FileUploadService(getApplicationContext(), this);
+
+        mDescText = (EditText) findViewById(R.id.description);
+        mKeywords = (EditText) findViewById(R.id.keywords);
+        mImgOne = (ImageView) findViewById(R.id.imageButton);
+        mPrice = (EditText) findViewById(R.id.preis);
+        mImgOne = (ImageView) findViewById(R.id.imageButton);
+
+
+        submitButton = (Button) findViewById(R.id.uploadButton);
+        submitButton.setOnClickListener((v) -> {
+
+            final String titleString = mKeywords.getText().toString();
+            final String descString = mDescText.getText().toString();
+            final String price = mPrice.getText().toString();
+            final String keyWordsString = "zelt";
+            final long date = System.currentTimeMillis();
+
+            final Intent data = new Intent();
+            data.putExtra(Constants.TITLE, titleString);
+            data.putExtra(Constants.ARTICLE_ID, "arcticleId");
+            data.putExtra(Constants.DESCRIPTION, descString);
+            data.putExtra(Constants.KEYWORDS, keyWordsString);
+            data.putExtra(Constants.FILENAME, mImage);
+            data.putExtra(Constants.LOCATION, "TODO");
+            data.putExtra(Constants.PHONE, "PHONE");
+            data.putExtra(Constants.PRICE, price);
+            data.putExtra(Constants.DATE, date);
+
+            showProgress();
+            disableUploadButton();
+            fileUploadService.multiPost(data);
+            //setResult(RESULT_OK, data);
+        });
+
+        final ImageView getPictureButton = (ImageView) findViewById(R.id.imageButton);
+
+        getPictureButton.setOnClickListener((v) -> {
+            final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        });
+
+
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new CreateArticleFragment(), "Artikel");
-        adapter.addFragment(new CreateSearchFragment(), "Suche folgen");
-        viewPager.setAdapter(adapter);
+    private void disableUploadButton() {
+        submitButton.setEnabled(false);
     }
 
-    private class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+    private void enableUploadButton() {
+        submitButton.setEnabled(true);
+    }
 
-        private ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
+    public void showProgress() {
+        progress.setVisibility(ProgressBar.VISIBLE);
+    }
 
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
+    public void hideProgress() {
+        progress.setVisibility(ProgressBar.GONE);
+    }
 
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
+    @Override
+    public void onActivityResult(final int requestCode,
+                                 final int resultCode, final Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        private void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == RESULT_OK && pictureCount < 4) {
+                    final Uri selectedImage = imageReturnedIntent.getData();
+                    //todo :works for one pic, need to work for more: array or comma separeted?
+                    mImage = selectedImage.toString();
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+                    switch (pictureCount) {
+                        case 1: {
+                            Picasso
+                                    .with(getApplicationContext())
+                                    .load(selectedImage)
+                                    .fit()
+                                    .into(mImgOne);
+                            pictureCount++;
+                            break;
+                        }
+                        case 2: {
+                            Picasso
+                                    .with(getApplicationContext())
+                                    .load(selectedImage)
+                                    .fit()
+                                    .into(mImgTwo);
+                            pictureCount++;
+                            break;
+                        }
+                    }
+                }
         }
     }
+
+    public String getUserToken() {
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
+    }
+
+
 }
 
 
