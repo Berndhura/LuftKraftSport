@@ -50,7 +50,7 @@ public class FileUploadService {
 
     public void multiPost(Intent data) {
 
-       // view.showProgress();
+        //view.showProgress();
 
         Service service = new Service();
 

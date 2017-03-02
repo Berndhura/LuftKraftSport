@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.squareup.picasso.Picasso;
@@ -50,9 +51,10 @@ public class CreateArticleFragment extends Fragment {
     private ImageView mImgOne;
     private ImageView mImgTwo;
 
-    //private ProgressBar progress;
+    private ProgressBar progress;
 
     private FileUploadService fileUploadService;
+    private Button submitButton;
 
     public CreateArticleFragment() {
         service = new Service();
@@ -71,8 +73,8 @@ public class CreateArticleFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        //progress = (ProgressBar) view.findViewById(R.id.upload_ProgressBar);
-        //hideProgress();
+        progress = (ProgressBar) view.findViewById(R.id.upload_ProgressBar);
+        hideProgress();
         fileUploadService = new FileUploadService(getActivity().getApplicationContext(), (NewAdActivity) getActivity());
 
         mDescText = (EditText) view.findViewById(R.id.description);
@@ -82,7 +84,7 @@ public class CreateArticleFragment extends Fragment {
         mImgOne = (ImageView) view.findViewById(R.id.imageButton);
 
 
-        final Button submitButton = (Button) view.findViewById(R.id.uploadButton);
+        submitButton = (Button) view.findViewById(R.id.uploadButton);
         submitButton.setOnClickListener((v) -> {
 
             final String titleString = mKeywords.getText().toString();
@@ -102,6 +104,8 @@ public class CreateArticleFragment extends Fragment {
             data.putExtra(Constants.PRICE, price);
             data.putExtra(Constants.DATE, date);
 
+            showProgress();
+            disableUploadButton();
             fileUploadService.multiPost(data);
             //setResult(RESULT_OK, data);
         });
@@ -115,13 +119,21 @@ public class CreateArticleFragment extends Fragment {
         });
     }
 
-   /* public void showProgress() {
+    private void disableUploadButton() {
+        submitButton.setEnabled(false);
+    }
+
+    private void enableUploadButton() {
+        submitButton.setEnabled(true);
+    }
+
+    public void showProgress() {
         progress.setVisibility(ProgressBar.VISIBLE);
     }
 
     public void hideProgress() {
         progress.setVisibility(ProgressBar.GONE);
-    }*/
+    }
 
     @Override
     public void onActivityResult(final int requestCode,
