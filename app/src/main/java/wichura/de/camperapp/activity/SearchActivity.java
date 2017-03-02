@@ -5,12 +5,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import wichura.de.camperapp.R;
+import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
+
+import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by Bernd Wichura on 05.04.2016.
@@ -53,6 +61,7 @@ public class SearchActivity extends AppCompatActivity {
 
         ImageView saveSearchButton = (ImageView) findViewById(R.id.save_search);
         saveSearchButton.setOnClickListener((view) -> {
+            saveSearch();
 
         });
 
@@ -104,6 +113,31 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    private void saveSearch() {
+        Service service = new Service();
+        //TODO: richtige werte bitte!
+        service.saveSearchObserv("Maul", 1, 5000, getLat(), getLng(), 500L, getUserToken())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Toast.makeText(getApplicationContext(), "Suche abgespeichert!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error saving searches: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String result) {
+
+                    }
+                });
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -129,5 +163,19 @@ public class SearchActivity extends AppCompatActivity {
         SharedPreferences location = getSharedPreferences(Constants.USERS_LOCATION, 0);
         if (getSupportActionBar() != null) getSupportActionBar()
                 .setSubtitle("in " + location.getString(Constants.LOCATION, "") + " (+" + location.getInt(Constants.DISTANCE, 0) + " km)");
+    }
+
+    public String getUserToken() {
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
+    }
+
+    public Double getLng() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
+        return Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
+    }
+
+    public Double getLat() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
+        return  Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
     }
 }

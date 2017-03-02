@@ -156,8 +156,8 @@ public class Service {
         Observable<String> saveSearch(@Query("description") String description,
                                       @Query("priceFrom") Integer priceFrom,
                                       @Query("priceTo") Integer priceTo,
-                                      @Query("lat") Float latitude,
-                                      @Query("lng") Float longitude,
+                                      @Query("lat") Double latitude,
+                                      @Query("lng") Double longitude,
                                       @Query("distance") Long distance,
                                       @Query("token") String userToken);
 
@@ -194,8 +194,8 @@ public class Service {
     public Observable<String> saveSearchObserv(String description,
                                                Integer priceFrom,
                                                Integer priceTo,
-                                               Float lat,
-                                               Float lng,
+                                               Double lat,
+                                               Double lng,
                                                Long distance,
                                                String userToken) {
         return mWebServiceV3.saveSearch(description, priceFrom, priceTo, lat, lng, distance, userToken);
