@@ -31,6 +31,13 @@ public class RowItem {
     @Expose
     private Integer distance;
 
+    double lat;
+    double lng;
+
+    public void setLat(double lat) {this.lat = lat;}
+    public void setLng(double lng) {this.lng = lng;}
+
+
     public RowItem () {}
 
     public RowItem(final int imageId,

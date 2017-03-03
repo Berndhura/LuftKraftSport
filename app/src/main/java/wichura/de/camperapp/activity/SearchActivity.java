@@ -36,6 +36,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextView price;
     private String priceTo;
     private String priceFrom;
+    private BottomBar bottomBar;
 
 
     @Override
@@ -57,7 +58,7 @@ public class SearchActivity extends AppCompatActivity {
 
         showLocation();
 
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -67,8 +68,13 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
                 if (tabId == R.id.tab_list_saved_searches) {
-                    Intent intent = new Intent(getApplicationContext(), SearchesActivity.class);
-                    startActivityForResult(intent, Constants.REQUEST_ID_FOR_SEARCHES);
+                    if ("".equals(getUserToken())) {
+                        final Intent facebookIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), SearchesActivity.class);
+                        startActivityForResult(intent, Constants.REQUEST_ID_FOR_SEARCHES);
+                    }
                 }
             }
         });
