@@ -3,6 +3,7 @@ package wichura.de.camperapp.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -10,6 +11,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabReselectListener;
+import com.roughike.bottombar.OnTabSelectListener;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -51,6 +56,29 @@ public class SearchActivity extends AppCompatActivity {
         createGui();
 
         showLocation();
+
+        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(@IdRes int tabId) {
+                if (tabId == R.id.tab_location) {
+                    Intent location = new Intent(getApplicationContext(), SetLocationActivity.class);
+                    startActivityForResult(location, Constants.REQUEST_ID_FOR_LOCATION);
+                }
+
+                if (tabId == R.id.tab_list_saved_searches) {
+                    Intent intent = new Intent(getApplicationContext(), SearchesActivity.class);
+                    startActivityForResult(intent, Constants.REQUEST_ID_FOR_SEARCHES);
+                }
+            }
+        });
+
+        bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+            @Override
+            public void onTabReSelected(@IdRes int tabId) {
+                //Toast.makeText(getApplicationContext(), "released", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -62,16 +90,7 @@ public class SearchActivity extends AppCompatActivity {
         ImageView saveSearchButton = (ImageView) findViewById(R.id.save_search);
         saveSearchButton.setOnClickListener((view) -> {
             saveSearch();
-
         });
-
-        ImageView overviewSearchesButton = (ImageView) findViewById(R.id.overview_searches);
-        overviewSearchesButton.setOnClickListener((view) -> {
-            Intent intent = new Intent(this, SearchesActivity.class);
-            startActivityForResult(intent, Constants.REQUEST_ID_FOR_SEARCHES);
-        });
-
-
 
         Button searchButton = (Button) findViewById(R.id.search_button);
 
@@ -104,12 +123,6 @@ public class SearchActivity extends AppCompatActivity {
         changePriceBtn.setOnClickListener(view -> {
             Intent priceIntent = new Intent(getApplicationContext(), SetPriceActivity.class);
             startActivityForResult(priceIntent, Constants.REQUEST_ID_FOR_PRICE);
-        });
-
-        ImageView locationButton = (ImageView) findViewById(R.id.set_location);
-        locationButton.setOnClickListener(view -> {
-            Intent location = new Intent(getApplicationContext(), SetLocationActivity.class);
-            startActivityForResult(location, Constants.REQUEST_ID_FOR_LOCATION);
         });
     }
 
@@ -146,6 +159,7 @@ public class SearchActivity extends AppCompatActivity {
 
         if (requestCode == Constants.REQUEST_ID_FOR_LOCATION) {
             showLocation();
+
         } else if (requestCode == Constants.REQUEST_ID_FOR_PRICE) {
             priceFrom = data.getStringExtra(Constants.PRICE_FROM);
             priceTo = data.getStringExtra(Constants.PRICE_TO);

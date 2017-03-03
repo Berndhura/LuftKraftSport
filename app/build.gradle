@@ -18,6 +18,7 @@ android {
         versionCode 1
         versionName "0.1"
         //multiDexEnabled true
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
 
     dexOptions {
@@ -87,6 +88,11 @@ dependencies {
     compile 'ch.acra:acra:4.9.0'
 
     compile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    compile 'com.roughike:bottom-bar:2.1.1'
+
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
 }
 
 
