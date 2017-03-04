@@ -1,16 +1,21 @@
 package wichura.de.camperapp.mainactivity;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -33,6 +38,8 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -61,7 +68,9 @@ import static wichura.de.camperapp.mainactivity.Constants.SHOW_MY_ADS;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     public ListView listView;
     private int page;
@@ -90,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements
     private static final String LIST_STATE = "listState";
     private Parcelable mListState = null;
 
+    private GoogleApiClient mGoogleApiClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements
 
         Service service = new Service();
         presenterLayer = new MainPresenter(this, service, getApplicationContext());
+
+        getLastLocation();
 
         //TODO: set active false in messageActivity in onDestroy, onStop, on???  BUT NOT HERE
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
@@ -217,6 +230,26 @@ public class MainActivity extends AppCompatActivity implements
         registerLoginReceiver();
         setMyAdsFlag(false);
         getAds(Constants.TYPE_ALL);
+    }
+
+    private void getLastLocation() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+    }
+
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
     }
 
     @Override
@@ -342,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    public void updateAds(AdsAndBookmarks elements, String type, Integer priceFrom, Integer priceTo, Long distance, String description) {
+    public void updateAds(AdsAndBookmarks elements, String type, Integer priceFrom, Integer priceTo, Integer distance, String description) {
 
         rowItems = new ArrayList<>();
         for (RowItem e : elements.getAdsPage().getAds()) {
@@ -395,7 +428,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
-    public void loadNextDataFromApi(int offset, String type, Integer priceFrom, Integer priceTo, Long distance, String description) {
+    public void loadNextDataFromApi(int offset, String type, Integer priceFrom, Integer priceTo, Integer distance, String description) {
         // Send an API request to retrieve appropriate paginated data
         //  --> Send the request including an offset value (i.e `page`) as a query parameter.
         //  --> Deserialize and construct new model objects from the API response
@@ -502,7 +535,7 @@ public class MainActivity extends AppCompatActivity implements
                     String keyword = data.getStringExtra(Constants.KEYWORDS);
                     String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
                     String priceTo = data.getStringExtra(Constants.PRICE_TO);
-                    Long distance = data.getLongExtra(Constants.DISTANCE, 10000000L);
+                    int distance = data.getIntExtra(Constants.DISTANCE, 10000000);
                     setMyAdsFlag(false);
 
                     presenterLayer.searchForArticles(0, size,
@@ -702,5 +735,36 @@ public class MainActivity extends AppCompatActivity implements
         if (key.equals(SHARED_PREFS_USER_INFO)) {
             Log.d("CONAN", "jooooooooooo");
         }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            double lat = mLastLocation.getLatitude();
+            double lng = mLastLocation.getLongitude();
+
+            saveLastPosition(lat, lng);
+        }
+    }
+
+    private void saveLastPosition(double lat, double lng) {
+        SharedPreferences sp = getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putLong(Constants.LAT, Double.doubleToRawLongBits(lat));
+        ed.putLong(Constants.LNG, Double.doubleToRawLongBits(lng));
+        ed.apply();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

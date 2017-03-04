@@ -81,7 +81,7 @@ public class Service {
         Observable<AdsAsPage> findAds(@Query("description") String description,
                                       @Query("lat") Double lat,
                                       @Query("lng") Double lng,
-                                      @Query("distance") Long distance,
+                                      @Query("distance") int distance,
                                       @Query("priceFrom") Integer priceFrom,
                                       @Query("priceTo") Integer priceTo,
                                       @Query("page") int page,
@@ -254,7 +254,7 @@ public class Service {
         return mWebServiceV3.getMyBookmarkedAds(lat, lng, page, size, token);
     }
 
-    public Observable<AdsAsPage> findAdsObserv(String description, Double lat, Double lng, Long distance, Integer priceFrom, Integer priceTo, int page, int size) {
+    public Observable<AdsAsPage> findAdsObserv(String description, Double lat, Double lng, int distance, Integer priceFrom, Integer priceTo, int page, int size) {
         return mWebServiceV3.findAds(description, lat, lng, distance, priceFrom, priceTo, page, size);
     }
 

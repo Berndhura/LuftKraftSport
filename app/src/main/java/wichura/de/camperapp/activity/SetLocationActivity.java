@@ -246,7 +246,7 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
         return  Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
     }
 
-    private void storeDistance(Integer distance) {
+    private void storeDistance(int distance) {
 
         SharedPreferences sp = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();

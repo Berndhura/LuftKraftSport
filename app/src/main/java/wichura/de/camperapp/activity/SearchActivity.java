@@ -36,8 +36,6 @@ public class SearchActivity extends AppCompatActivity {
     private TextView price;
     private String priceTo;
     private String priceFrom;
-    private BottomBar bottomBar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +56,7 @@ public class SearchActivity extends AppCompatActivity {
 
         showLocation();
 
-        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -121,6 +119,8 @@ public class SearchActivity extends AppCompatActivity {
                     data.putExtra(Constants.PRICE_TO, priceTo);
                 }
             }
+
+            data.putExtra(Constants.DISTANCE, getDistance());
 
             setResult(RESULT_OK, data);
             finish();
@@ -195,6 +195,12 @@ public class SearchActivity extends AppCompatActivity {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
         return Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
     }
+
+    public int getDistance() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
+        return settings.getInt(Constants.DISTANCE, 10000000);
+    }
+
 
     public Double getLat() {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);

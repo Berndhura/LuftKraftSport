@@ -95,7 +95,7 @@ public class MainPresenter {
         }
     }
 
-    public void searchForArticles(int page, int size, Integer priceFrom, Integer priceTo, Long distance, String description) {
+    public void searchForArticles(int page, int size, Integer priceFrom, Integer priceTo, int distance, String description) {
         if (page == 0) {
             if (view.listView != null) {
                 view.listView.setVisibility(View.INVISIBLE);
