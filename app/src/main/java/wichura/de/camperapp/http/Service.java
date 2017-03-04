@@ -132,9 +132,9 @@ public class Service {
 
         @Multipart
         @POST("articles/{articleId}/addPicture")
-        Observable<String> uploadPicture(@Query("articleId") Integer articleId,
+        Observable<String> uploadPicture(@Path("articleId") Long articleId,
                                          @Query("token") String userToken,
-                                         @Part("file") MultipartBody.Part file);
+                                         @Part MultipartBody.Part file);
 
         @POST("articles")
         Observable<RowItem> saveNewAd(@Query("token") String userToken,
@@ -209,7 +209,7 @@ public class Service {
         return mWebServiceV3.findSearches(userToken);
     }
 
-    public Observable<String> uploadPictureObserv(Integer adId, String userToken, MultipartBody.Part file) {
+    public Observable<String> uploadPictureObserv(Long adId, String userToken, MultipartBody.Part file) {
         return mWebServiceV3.uploadPicture(adId, userToken, file);
     }
 

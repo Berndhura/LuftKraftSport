@@ -9,14 +9,11 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.FileAsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 
-import cz.msebera.android.httpclient.Header;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -34,20 +31,17 @@ public class FileUploadService {
 
     private Context context;
     private NewAdActivity view;
-    private Integer adId;
+    private Long adId;
+    private Service service;
 
     public FileUploadService(Context context, NewAdActivity view) {
         this.context = context;
         this.view = view;
-
+        this.service = new Service();
     }
 
 
     public void multiPost(Intent data) {
-
-        //view.showProgress();
-
-        Service service = new Service();
 
         String picture = data.getStringExtra(Constants.FILENAME);
 
@@ -59,18 +53,13 @@ public class FileUploadService {
         item.setLat(getLat());
         item.setLng(getLng());
 
-        /*double[] latlng = {getLat(), getLng()};
-        Location location = new Location();
-        location.setCoordinates(latlng);
-        item.setLocation(location);*/
-
         service.saveNewAdObserv(getUserToken(), item)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<RowItem>() {
                     @Override
                     public void onCompleted() {
-                        multiPost_old(adId, picture);
+                        uploadPic(adId, picture);
                     }
 
                     @Override
@@ -80,65 +69,49 @@ public class FileUploadService {
 
                     @Override
                     public void onNext(RowItem rowItem) {
-                        adId = rowItem.getId();
+                        adId = Long.parseLong(rowItem.getId().toString());
                         Log.d("CONAN", "neue id " + adId);
                     }
                 });
     }
 
-    private void multiPost_old(Integer adId, String picture) {
+    private void uploadPic(Long adId, String picture) {
 
-        Uri fileUri = Uri.parse(picture.toString());
-        Log.i("CONAN", "fileURI: " + fileUri);
-
-        //thumbnail?
-        // Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagePath), THUMBSIZE, THUMBSIZE);
-
-        String fileString = getRealPathFromUri(context, fileUri);
-        Log.i("CONAN", "fileString: " + fileString);
-
-
+        String fileString = getRealPathFromUri(context, Uri.parse(picture));
         File file = new File(fileString.toString());
-        Log.d("CONAN", "file: " + file);
+
         BitmapHelper bitmapHelper = new BitmapHelper(context);
         final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
-        Log.d("CONAN", "newFile: " + reducedPicture);
-        Log.d("CONAN", "adId: " + adId);
 
+        RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(Uri.parse(picture))), reducedPicture);
 
-        //todo: add more pics here??
-        RequestParams params = new RequestParams();
-        try {
-            params.put("file", reducedPicture);
-        } catch (FileNotFoundException e) {
-        }
+        MultipartBody.Part multiPartBody = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
-        params.put("articleId", adId);
-        params.put("token", getUserToken());
-        Log.d("CONAN", "userid bei upload: " + getUserId());
-        Log.d("CONAN", "url for upload: " + Urls.MAIN_SERVER_URL_V3 + "ads/" + adId + "\u002F" + "addPicture");
+        service.uploadPictureObserv(adId, getUserToken(), multiPartBody)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        view.hideProgress();
+                    }
 
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post(Urls.MAIN_SERVER_URL_V3 + "articles/" + adId + "\u002F" + "addPicture", params, new FileAsyncHttpResponseHandler(reducedPicture) {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-                Toast.makeText(context, "Upload did not work!", Toast.LENGTH_SHORT).show();
-                Log.d("CONAN", "error in upload file to server: " + throwable.getMessage());
-                //view.hideProgress();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in upload" + e.toString());
+                    }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, File file) {
-                Log.d("CONAN", "Picture uploaded");
-                Toast.makeText(context, "Upload...done!", Toast.LENGTH_SHORT).show();
-                //jetzt bilder neu laden!! finish() geht zu früh zurück in mainactivity
-                Boolean deletetd = reducedPicture.delete();
-                if (!deletetd)
-                    Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
-                // view.hideProgress();
-                view.finish();
-            }
-        });
+                    @Override
+                    public void onNext(String status) {
+                        Log.d("CONAN", "Picture uploaded");
+                        Toast.makeText(context, "Upload...done!", Toast.LENGTH_SHORT).show();
+                        Boolean deletetd = reducedPicture.delete();
+                        if (!deletetd)
+                            Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
+                        ;
+                        view.finish();
+                    }
+                });
     }
 
     private static String getRealPathFromUri(Context context, Uri contentUri) {
@@ -154,11 +127,6 @@ public class FileUploadService {
                 cursor.close();
             }
         }
-    }
-
-    private String getUserId() {
-        SharedPreferences settings = context.getSharedPreferences(Constants.SHARED_PREFS_USER_INFO, 0);
-        return settings.getString(Constants.USER_ID, "");
     }
 
     private Double getLat() {
