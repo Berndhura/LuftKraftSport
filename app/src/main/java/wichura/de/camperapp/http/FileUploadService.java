@@ -41,7 +41,7 @@ public class FileUploadService {
     }
 
 
-    public void multiPost(Intent data) {
+    public void uploadNewArticle(Intent data) {
 
         String picture = data.getStringExtra(Constants.FILENAME);
 
@@ -64,13 +64,13 @@ public class FileUploadService {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error in upload Ad1 " + e.toString());
+                        Log.d("CONAN", "error in upload new Article" + e.toString());
                     }
 
                     @Override
                     public void onNext(RowItem rowItem) {
                         adId = Long.parseLong(rowItem.getId().toString());
-                        Log.d("CONAN", "neue id " + adId);
+                        Log.d("CONAN", "new article added with id: " + adId);
                     }
                 });
     }
@@ -105,10 +105,9 @@ public class FileUploadService {
                     public void onNext(String status) {
                         Log.d("CONAN", "Picture uploaded");
                         Toast.makeText(context, "Upload...done!", Toast.LENGTH_SHORT).show();
-                        Boolean deletetd = reducedPicture.delete();
-                        if (!deletetd)
+                        Boolean deleted = reducedPicture.delete();
+                        if (!deleted)
                             Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
-                        ;
                         view.finish();
                     }
                 });

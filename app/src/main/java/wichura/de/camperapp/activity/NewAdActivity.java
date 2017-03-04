@@ -23,9 +23,6 @@ import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO
 
 public class NewAdActivity extends AppCompatActivity {
 
-    private Service service;
-    private Utility utils;
-
     private EditText mDescText;
     private EditText mKeywords;
     private EditText mPrice;
@@ -36,17 +33,11 @@ public class NewAdActivity extends AppCompatActivity {
     private int pictureCount = 1;
 
     private ImageView mImgOne;
-    private ImageView mImgTwo;
 
     private ProgressBar progress;
 
     private FileUploadService fileUploadService;
     private Button submitButton;
-
-    public NewAdActivity() {
-        service = new Service();
-        utils = new Utility(this);
-    }
 
 
     @Override
@@ -74,7 +65,6 @@ public class NewAdActivity extends AppCompatActivity {
         mKeywords = (EditText) findViewById(R.id.keywords);
         mImgOne = (ImageView) findViewById(R.id.imageButton);
         mPrice = (EditText) findViewById(R.id.preis);
-        mImgOne = (ImageView) findViewById(R.id.imageButton);
 
 
         submitButton = (Button) findViewById(R.id.uploadButton);
@@ -99,7 +89,7 @@ public class NewAdActivity extends AppCompatActivity {
 
             showProgress();
             disableUploadButton();
-            fileUploadService.multiPost(data);
+            fileUploadService.uploadNewArticle(data);
             //setResult(RESULT_OK, data);
         });
 
@@ -152,15 +142,6 @@ public class NewAdActivity extends AppCompatActivity {
                             pictureCount++;
                             break;
                         }
-                        case 2: {
-                            Picasso
-                                    .with(getApplicationContext())
-                                    .load(selectedImage)
-                                    .fit()
-                                    .into(mImgTwo);
-                            pictureCount++;
-                            break;
-                        }
                     }
                 }
         }
@@ -169,8 +150,6 @@ public class NewAdActivity extends AppCompatActivity {
     public String getUserToken() {
         return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
     }
-
-
 }
 
 

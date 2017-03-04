@@ -6,7 +6,8 @@ package wichura.de.camperapp.http;
  */
 public class Urls {
 
-    private Urls() {}
+    private Urls() {
+    }
 
 
     public static final String UPLOAD_ERROR_URL = "http://raent.de:9876/api/V3/appError";
