@@ -120,7 +120,7 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
                 // Get back the mutable Circle
                 Circle circle = googleMap.addCircle(circleOptions);
                 circle.setVisible(true);
-                storeDistance(seekBar.getProgress() * 5);
+                storeDistance(seekBar.getProgress() * 5000);
             }
 
             @Override

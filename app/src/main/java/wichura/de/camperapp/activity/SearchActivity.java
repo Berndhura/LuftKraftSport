@@ -184,7 +184,7 @@ public class SearchActivity extends AppCompatActivity {
     private void showLocation() {
         SharedPreferences location = getSharedPreferences(Constants.USERS_LOCATION, 0);
         if (getSupportActionBar() != null) getSupportActionBar()
-                .setSubtitle("in " + location.getString(Constants.LOCATION, "") + " (+" + location.getInt(Constants.DISTANCE, 0) + " km)");
+                .setSubtitle("in " + location.getString(Constants.LOCATION, "") + " (+" + location.getInt(Constants.DISTANCE, 0)/1000 + " km)");
     }
 
     public String getUserToken() {
