@@ -120,7 +120,7 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
                 // Get back the mutable Circle
                 Circle circle = googleMap.addCircle(circleOptions);
                 circle.setVisible(true);
-                storeDistance(seekBar.getProgress() * 5000);
+                storeDistance((seekBar.getProgress() == 100 ) ? Constants.DISTANCE_INFINITY :seekBar.getProgress() * 5000);
             }
 
             @Override
@@ -137,13 +137,13 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 Integer distance = progress * 5;
-                textView.setText("Umkreis: " + String.valueOf(distance) + " km");
+                textView.setText(((distance == 500) ? "Unbegrenzt" : ("Umkreis: " +  String.valueOf(distance)) + " km"));
             }
         });
     }
 
     private void adaptToolbar(int progress) {
-        getSupportActionBar().setSubtitle("im Umkreis von " + progress + " km");
+        getSupportActionBar().setSubtitle(((progress == 500) ? "Unbegrenzt" : ("Im Umkreis: " +  String.valueOf(progress)) + " km"));
     }
 
     @Override

@@ -23,6 +23,7 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
 
+import static wichura.de.camperapp.mainactivity.Constants.DISTANCE_INFINITY;
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
@@ -183,8 +184,9 @@ public class SearchActivity extends AppCompatActivity {
 
     private void showLocation() {
         SharedPreferences location = getSharedPreferences(Constants.USERS_LOCATION, 0);
+        int distance = location.getInt(Constants.DISTANCE, DISTANCE_INFINITY);
         if (getSupportActionBar() != null) getSupportActionBar()
-                .setSubtitle("in " + location.getString(Constants.LOCATION, "") + " (+" + location.getInt(Constants.DISTANCE, 0)/1000 + " km)");
+                .setSubtitle("in " + location.getString(Constants.LOCATION, "") + ((distance == DISTANCE_INFINITY)? (" Unbegrenzt"): (" (+" + location.getInt(Constants.DISTANCE, 0)/1000 + " km)")));
     }
 
     public String getUserToken() {
@@ -198,7 +200,7 @@ public class SearchActivity extends AppCompatActivity {
 
     public int getDistance() {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
-        return settings.getInt(Constants.DISTANCE, 10000000);
+        return settings.getInt(Constants.DISTANCE, Constants.DISTANCE_INFINITY);
     }
 
 

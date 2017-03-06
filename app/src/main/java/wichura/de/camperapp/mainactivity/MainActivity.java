@@ -535,7 +535,7 @@ public class MainActivity extends AppCompatActivity implements
                     String keyword = data.getStringExtra(Constants.KEYWORDS);
                     String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
                     String priceTo = data.getStringExtra(Constants.PRICE_TO);
-                    int distance = data.getIntExtra(Constants.DISTANCE, 10000000);
+                    int distance = data.getIntExtra(Constants.DISTANCE, Constants.DISTANCE_INFINITY);
                     setMyAdsFlag(false);
 
                     presenterLayer.searchForArticles(0, size,

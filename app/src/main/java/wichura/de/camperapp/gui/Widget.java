@@ -7,6 +7,8 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
+import wichura.de.camperapp.mainactivity.Constants;
+
 /**
  * Created by ich on 17.02.2017.
  * desurf
@@ -30,12 +32,12 @@ public class Widget {
         spinner.setAdapter(dataAdapter);
     }
 
-    public static Long getDistanceFromSpinner(Spinner spinner) {
+    public static int getDistanceFromSpinner(Spinner spinner) {
         if ("unbegrenzt".contains(String.valueOf(spinner.getSelectedItem()))) {
-            return 10000000L;
+            return Constants.DISTANCE_INFINITY;
         } else {
             String value = String.valueOf(spinner.getSelectedItem());
-            return Long.parseLong(value.substring(0, value.indexOf(" ")));
+            return Integer.parseInt(value.substring(0, value.indexOf(" ")));
         }
     }
 }
