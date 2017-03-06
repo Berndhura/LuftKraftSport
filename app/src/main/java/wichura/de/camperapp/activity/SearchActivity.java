@@ -94,7 +94,9 @@ public class SearchActivity extends AppCompatActivity {
 
         ImageView saveSearchButton = (ImageView) findViewById(R.id.save_search);
         saveSearchButton.setOnClickListener((view) -> {
+            //TODO: check if loged in before save
             saveSearch();
+
         });
 
         Button searchButton = (Button) findViewById(R.id.search_button);
@@ -186,7 +188,7 @@ public class SearchActivity extends AppCompatActivity {
         SharedPreferences location = getSharedPreferences(Constants.USERS_LOCATION, 0);
         int distance = location.getInt(Constants.DISTANCE, DISTANCE_INFINITY);
         if (getSupportActionBar() != null) getSupportActionBar()
-                .setSubtitle("in " + location.getString(Constants.LOCATION, "") + ((distance == DISTANCE_INFINITY)? (" Unbegrenzt"): (" (+" + location.getInt(Constants.DISTANCE, 0)/1000 + " km)")));
+                .setSubtitle("in " + location.getString(Constants.LOCATION, "") + ((distance == DISTANCE_INFINITY) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)")));
     }
 
     public String getUserToken() {
@@ -206,6 +208,6 @@ public class SearchActivity extends AppCompatActivity {
 
     public Double getLat() {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
-        return  Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
+        return Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
     }
 }
