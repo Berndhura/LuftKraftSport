@@ -12,6 +12,7 @@ import wichura.de.camperapp.activity.OpenAdActivity;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.ArticleDetails;
+import wichura.de.camperapp.models.User;
 
 import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -189,6 +190,34 @@ public class OpenAdPresenter {
                         view.prepareDataFromArticle(articleDetails);
                     }
                 });
+    }
+
+    public void getSellerInformation(String userId) {
+       /* service.getSellerInformationObserv(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<User>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in getting seller details: " + e.getMessage());
+                        User user = new User();
+                        user.setName("Conan Superstar");
+                        view.updateSellerInformation(user);
+                    }
+
+                    @Override
+                    public void onNext(User user) {
+                        view.updateSellerInformation(user);
+                    }
+                });*/
+        User user = new User();
+        user.setName("Conan Superstar");
+        view.updateSellerInformation(user);
     }
 
     private String getUserToken() {

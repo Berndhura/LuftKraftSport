@@ -63,7 +63,6 @@ public class Service {
         mWebServiceV3 = restAdapterV2.create(WebService.class);
     }
 
-
     private interface WebService {
         @GET("bookmarkIds")
         Observable<Long[]> getBookmarksForUser(@Query("token") String userToken);
@@ -173,6 +172,13 @@ public class Service {
         @POST("users/login")
         Observable<User> loginUser(@Query("email") String email,
                                    @Query("password") String password);
+
+        @GET("users/{userId}")
+        Observable<User> getSellerInformation(@Path("userId") String userId);
+    }
+
+    public Observable<User> getSellerInformationObserv(String userId) {
+        return mWebServiceV3.getSellerInformation(userId);
     }
 
     public Observable<String> registerUserObserv(String name,

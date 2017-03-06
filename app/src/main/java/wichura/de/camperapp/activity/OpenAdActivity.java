@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.models.ArticleDetails;
+import wichura.de.camperapp.models.User;
 import wichura.de.camperapp.presentation.OpenAdPresenter;
 import wichura.de.camperapp.util.Utility;
 
@@ -74,6 +76,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private double lat;
     private double lng;
     private ImageView imgView;
+    private ImageView userPic;
+    private TextView userName;
     private Button mDelAndMsgButton;
     private TextView mTitleText;
     private TextView mPrice;
@@ -125,6 +129,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         imgView = (ImageView) findViewById(R.id.imageView);
         mDelAndMsgButton = (Button) findViewById(R.id.delButton);
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
+        userName = (TextView) findViewById(R.id.user_name);
+        userPic = (ImageView) findViewById(R.id.user_image);
 
         getDisplayDimensions();
 
@@ -146,6 +152,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             presenter.getAd(getIntent().getIntExtra(Constants.ID, 0));
             Log.e("CONAN", "articlevorschlag");
         }
+
+        presenter.getSellerInformation(getIntent().getStringExtra(Constants.USER_ID));
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
@@ -222,6 +230,19 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         presenter.increaseViewCount(mAdId);
 
         Log.d("CONAN", "request Picture: " + pictureUri);
+    }
+
+    public void updateSellerInformation(User user) {
+        userName.setText(user.getName());
+        Picasso.with(getApplicationContext())
+                .load(R.drawable.applogo)
+                .placeholder(R.drawable.empty_photo)
+                .into(userPic);
+
+        userPic.setOnClickListener(v-> {
+            //TODo lade artikel des user mit id 0815
+            Toast.makeText(this, "Lade andere Artikel des users", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void showDefaultPic() {

@@ -41,7 +41,6 @@ public class FileUploadService {
         this.service = new Service();
     }
 
-
     public void uploadNewArticle(Intent data) {
 
         String picture = data.getStringExtra(Constants.FILENAME);
