@@ -19,6 +19,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wichura.de.camperapp.activity.NewAdActivity;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.models.Location;
 import wichura.de.camperapp.models.RowItem;
 import wichura.de.camperapp.util.BitmapHelper;
 
@@ -50,8 +51,12 @@ public class FileUploadService {
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
         item.setPrice(data.getStringExtra(Constants.PRICE));
         item.setDate(data.getLongExtra(Constants.DATE, 0));
-        item.setLat(getLat());
-        item.setLng(getLng());
+
+        double[] latlng = {getLat(), getLng()};
+        Location location = new Location();
+        location.setCoordinates(latlng);
+        location.setType("Point");
+        item.setLocation(location);
 
         service.saveNewAdObserv(getUserToken(), item)
                 .subscribeOn(Schedulers.newThread())
