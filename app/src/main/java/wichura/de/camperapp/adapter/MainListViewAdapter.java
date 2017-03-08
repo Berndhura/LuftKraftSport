@@ -121,7 +121,8 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 .into(holder.thumbNail);
 
         holder.txtTitle.setText(rowItem.getTitle());
-        holder.txtPrice.setText(rowItem.getPrice() + " €");
+        String formatedPrice = rowItem.getPrice().split("\\.")[0] + " €";
+        holder.txtPrice.setText(formatedPrice);
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
         if (isMyAdsRequest()) {
             holder.distance.setText("Meine");
