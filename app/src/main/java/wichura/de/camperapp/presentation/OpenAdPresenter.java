@@ -84,8 +84,8 @@ public class OpenAdPresenter {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        Toast.makeText(view.getApplicationContext(), "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
-                        view.mBookmarkButton.setText("Remove Bookmark");
+                        Toast.makeText(view.getApplicationContext(), "Artikel ist ein der Merkliste", Toast.LENGTH_SHORT).show();
+                        view.mBookmarkButton.setText("Entferne von Merkliste");
                         view.isBookmarked = true;
                     }
 
@@ -109,7 +109,7 @@ public class OpenAdPresenter {
                     @Override
                     public void onCompleted() {
                         Toast.makeText(view.getApplicationContext(), "Bookmark deleted!", Toast.LENGTH_SHORT).show();
-                        view.mBookmarkButton.setText("Bookmark");
+                        view.mBookmarkButton.setText("Merken");
                         view.isBookmarked = false;
                     }
 
@@ -132,7 +132,7 @@ public class OpenAdPresenter {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        Toast.makeText(view.getContext(), "send message to user...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(view.getContext(), "Nachricht gesendet...", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -154,7 +154,7 @@ public class OpenAdPresenter {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        Toast.makeText(view.getApplicationContext(), "Ad deleted!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(view.getApplicationContext(), "Artikel gelöscht!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

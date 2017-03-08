@@ -66,9 +66,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="20dp"
-                    android:layout_weight="0.8"
+                    android:layout_weight="0.7"
                     android:gravity="left"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -77,10 +77,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="20dp"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.3"
                     android:gravity="right"
                     android:paddingBottom="10dp"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -91,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/round_corner_for_tv"
                 android:textSize="18sp" />
 
@@ -102,7 +103,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/round_corner_for_tv"
                 android:gravity="center_horizontal"
                 android:textSize="18sp" />
@@ -128,11 +129,11 @@
                     android:id="@+id/user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center_horizontal"
+                    android:layout_marginTop="0dp"
+                    android:gravity="start"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -141,6 +142,7 @@
                 android:id="@+id/map"
                 android:layout_width="match_parent"
                 android:layout_height="400sp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp" />

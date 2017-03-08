@@ -468,7 +468,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void showNumberOfAds(int numberOfAds) {
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setSubtitle("Ads: " + numberOfAds);
+            getSupportActionBar().setSubtitle("Anzeigen: " + numberOfAds);
         }
     }
 

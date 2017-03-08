@@ -139,7 +139,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             //intent comes from article overview
             String pictureUri = getIntent().getStringExtra(Constants.URI);
             mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
-            mPrice.setText(getIntent().getStringExtra(Constants.PRICE) );
+            String formatedPrice = getIntent().getStringExtra(Constants.PRICE).split("\\.")[0] + " €";
+            mPrice.setText(formatedPrice);
             mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
             mDateText.setText("Erstellt am: "+ DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
             mAdId = getIntent().getIntExtra(Constants.ID, 0);
@@ -201,7 +202,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 deleteAdRequest(mAdId);
             });
         } else {
-            mDelAndMsgButton.setText("Send message");
+            mDelAndMsgButton.setText("Nachricht");
             mDelAndMsgButton.setOnClickListener((view) -> {
 
                 if (!getUserId().equals("")) {
@@ -274,11 +275,11 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         isBookmarked = false;
         ArrayList<Long> bookmarkList = new ArrayList<>(Arrays.asList(bookmark));
         if (bookmarkList.contains(Long.parseLong(mAdId.toString()))) {
-            mBookmarkButton.setText("Remove bookmark!");
+            mBookmarkButton.setText("Vergessen");
             mBookmarkButton.setClickable(true);
             isBookmarked = true;
         } else {
-            mBookmarkButton.setText("Bookmark");
+            mBookmarkButton.setText("Merken");
             mBookmarkButton.setClickable(true);
         }
     }
@@ -286,27 +287,27 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private void sendMessage(final Integer adId, final String receiverId) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(OpenAdActivity.this);
-        alert.setTitle("Send a message");
+        alert.setTitle("Sende eine Nachricht");
         alert.setView(edittext);
-        alert.setPositiveButton("Send", (dialog, whichButton) -> {
+        alert.setPositiveButton("Senden", (dialog, whichButton) -> {
             String message = edittext.getText().toString();
             presenter.sendNewMessage(message, adId, receiverId, utils.getUserToken());
         });
-        alert.setNegativeButton("not yet", (dismissDialog, whichButton) -> {/*just go away*/});
+        alert.setNegativeButton("nein doch nicht", (dismissDialog, whichButton) -> {/*just go away*/});
         alert.show();
     }
 
     private void deleteAdRequest(final Integer adId) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
-                .setTitle("Delete Ad")
-                .setMessage("Do you want to delete this ad?")
+                .setTitle("Artikel Löschen")
+                .setMessage("Willst du den Artikel wirklich löschen?")
                 .setIcon(R.drawable.delete)
-                .setPositiveButton("Delete", (dialog, whichButton) -> {
+                .setPositiveButton("Löschen!", (dialog, whichButton) -> {
                     presenter.deleteAd(adId);
                     dialog.dismiss();
                     finish();
                 })
-                .setNegativeButton("cancel", (dialog, whichButton) -> dialog.dismiss())
+                .setNegativeButton("nein doch nicht", (dialog, whichButton) -> dialog.dismiss())
                 .create();
         myQuittingDialogBox.show();
     }
