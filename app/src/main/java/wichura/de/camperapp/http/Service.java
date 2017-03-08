@@ -176,6 +176,15 @@ public class Service {
 
         @GET("users/{userId}")
         Observable<User> getSellerInformation(@Path("userId") String userId);
+
+        @POST("users/pisture")
+        Observable<String> saveUserPicture(
+                @Query("pictureUrl") String pictureUrl,
+                @Query("userId") String userId);
+    }
+
+    public Observable<String> saveUserPictureObserv(String pictureUrl, String userId) {
+        return mWebServiceV3.saveUserPicture(pictureUrl, userId);
     }
 
     public Observable<User> getSellerInformationObserv(String userId) {

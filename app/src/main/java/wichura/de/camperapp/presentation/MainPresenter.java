@@ -403,4 +403,26 @@ public class MainPresenter {
     private String getUserToken() {
         return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
     }
+
+    public void sendUserPicToServer(String userProfilePic, String userId) {
+
+        service.saveUserPictureObserv(userProfilePic, userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in sending pictureUri to server: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        Log.d("CONAN", "pictureUri send: " + s);
+                    }
+                });
+    }
 }

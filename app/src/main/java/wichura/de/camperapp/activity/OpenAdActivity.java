@@ -234,10 +234,10 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     public void updateSellerInformation(User user) {
         userName.setText(user.getName());
-        Picasso.with(getApplicationContext())
-                .load(R.drawable.applogo)
-                .placeholder(R.drawable.empty_photo)
+        Picasso.with(getContext())
+                .load("https://scontent.xx.fbcdn.net/v/t1.0-1/c50.0.200.200/p200x200/10801679_10205367858456124_6140613419874640973_n.jpg?oh=f2485358948c669694523d5ba640e71f&oe=597208E8")
                 .into(userPic);
+
 
         userPic.setOnClickListener(v-> {
             //TODo lade artikel des user mit id 0815
