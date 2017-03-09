@@ -66,7 +66,8 @@ public class Service {
 
     private interface WebService {
         @GET("bookmarkIds")
-        Observable<Long[]> getBookmarksForUser(@Query("token") String userToken);
+        Observable<Long[]> getBookmarksForUser(
+                @Query("token") String userToken);
 
         @GET("messages/forArticle")
         Observable<List<MsgRowItem>> getAllMessagesForAd(

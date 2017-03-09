@@ -164,7 +164,7 @@
             android:layout_marginRight="1dp"
             android:layout_weight="0.5"
             android:background="#639bc5"
-            android:text="Delete" />
+            android:text="Löschen" />
 
         <Button
             android:id="@+id/bookmarkButton"
@@ -173,7 +173,7 @@
             android:layout_marginLeft="1dp"
             android:layout_weight="0.5"
             android:background="#639bc5"
-            android:text="Bookmark" />
+            android:text="Merken" />
 
     </LinearLayout>
 
