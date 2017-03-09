@@ -84,8 +84,8 @@ public class OpenAdPresenter {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        Toast.makeText(view.getApplicationContext(), "Artikel ist ein der Merkliste", Toast.LENGTH_SHORT).show();
-                        view.mBookmarkButton.setText("Entferne von Merkliste");
+                        Toast.makeText(view.getApplicationContext(), "Artikel ist gemerkt", Toast.LENGTH_SHORT).show();
+                        view.mBookmarkButton.setText("Vergessen");
                         view.isBookmarked = true;
                     }
 
