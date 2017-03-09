@@ -14,4 +14,5 @@
     <color name="colorBackgroundForLists">#D8D8D8</color>
     <color name="googlePlusLoginBtn">#D34836</color>
     <color name="facebookLoginBtn">#3B5998</color>
+    <color name="app_blue">#639bc5</color>
 </resources>

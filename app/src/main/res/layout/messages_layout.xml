@@ -42,7 +42,7 @@
                 android:layout_weight="0.3"
                 android:background="@drawable/rounded_corners"
                 android:text="ANZEIGE"
-                android:textColor="#639bc5" />
+                android:textColor="@color/app_blue" />
 
         </LinearLayout>
 
