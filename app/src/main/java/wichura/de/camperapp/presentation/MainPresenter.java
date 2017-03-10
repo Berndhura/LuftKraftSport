@@ -70,6 +70,7 @@ public class MainPresenter {
                     if (profile != null) {
                         Uri uri = profile.getProfilePictureUri(200, 200);
                         view.setProfilePicture(uri);
+                        sendUserPicToServer(uri.toString());
                     }
                     setUserPreferences(json.getString("name"), json.getString("id"), token);
                 }

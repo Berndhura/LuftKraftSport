@@ -502,6 +502,8 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 if (getUserType().equals(Constants.GOOGLE_USER) && isUserLoggedIn()) {
+                    presenterLayer.sendUserPicToServer(getUserProfilePic());
+
                     //request Token from GCM and update in DB
                     if (checkPlayServices() && isUserLoggedIn()) {
                         // Start IntentService to register this application with GCM.
@@ -521,8 +523,6 @@ public class MainActivity extends AppCompatActivity implements
                     setProfilePicture(null);
                 }
                 Log.d("CONAN", "Return from login, userid: " + getUserId());
-
-                presenterLayer.sendUserPicToServer(getUserProfilePic());
 
                 setMyAdsFlag(false);
 
