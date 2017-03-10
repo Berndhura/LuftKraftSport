@@ -65,7 +65,7 @@ public class Service {
     }
 
     private interface WebService {
-        @GET("bookmarkIds")
+        @GET("bookmarks/ids")
         Observable<Long[]> getBookmarksForUser(
                 @Query("token") String userToken);
 
@@ -124,10 +124,6 @@ public class Service {
         @DELETE("articles/{articleId}")
         Observable<String> deleteAd(@Path("articleId") int articleId, @Query("token") String token);
 
-        @POST("users/sendToken")
-        Observable<String> sendDeviceToken(@Query("token") String token,
-                                           @Query("deviceToken") String deviceToken);
-
         @GET("messages/forUser")
         Observable<List<GroupedMsgItem>> getAllMessagesFromUser(@Query("token") String userToken);
 
@@ -162,6 +158,10 @@ public class Service {
                                       @Query("distance") Long distance,
                                       @Query("token") String userToken);
 
+        @POST("users/sendToken")
+        Observable<String> sendDeviceToken(@Query("token") String token,
+                                           @Query("deviceToken") String deviceToken);
+
         @POST("users/register")
         Observable<String> registerUser(@Query("name") String name,
                                         @Query("email") String email,
@@ -178,14 +178,14 @@ public class Service {
         @GET("users/{userId}")
         Observable<User> getSellerInformation(@Path("userId") String userId);
 
-        @POST("users/pisture")
+        @POST("users/profilePictureUrl")
         Observable<String> saveUserPicture(
-                @Query("pictureUrl") String pictureUrl,
-                @Query("userId") String userId);
+                @Query("token") String userToken,
+                @Query("url") String userPicUrl);
     }
 
-    public Observable<String> saveUserPictureObserv(String pictureUrl, String userId) {
-        return mWebServiceV3.saveUserPicture(pictureUrl, userId);
+    public Observable<String> saveUserPictureObserv(String token, String userPicUrl) {
+        return mWebServiceV3.saveUserPicture(token, userPicUrl);
     }
 
     public Observable<User> getSellerInformationObserv(String userId) {

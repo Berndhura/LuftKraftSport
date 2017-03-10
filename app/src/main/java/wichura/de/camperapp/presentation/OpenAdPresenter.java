@@ -193,7 +193,7 @@ public class OpenAdPresenter {
     }
 
     public void getSellerInformation(String userId) {
-       /* service.getSellerInformationObserv(userId)
+        service.getSellerInformationObserv(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<User>() {
@@ -214,7 +214,7 @@ public class OpenAdPresenter {
                     public void onNext(User user) {
                         view.updateSellerInformation(user);
                     }
-                });*/
+                });
         User user = new User();
         user.setName("Conan Superstar");
         view.updateSellerInformation(user);

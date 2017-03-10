@@ -142,7 +142,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             String formatedPrice = getIntent().getStringExtra(Constants.PRICE).split("\\.")[0] + " €";
             mPrice.setText(formatedPrice);
             mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
-            mDateText.setText("Erstellt am: "+ DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
+            mDateText.setText("Erstellt am: " + DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
             mAdId = getIntent().getIntExtra(Constants.ID, 0);
             lat = getIntent().getDoubleExtra(Constants.LAT, 0);
             lng = getIntent().getDoubleExtra(Constants.LNG, 0);
@@ -164,7 +164,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         Log.e("CONAN", "prepare");
         String pictureUri = Urls.MAIN_SERVER_URL_V3 + "pictures/" + articleDetails.getUrls();
         mTitleText.setText(articleDetails.getTitle());
-        mPrice.setText(articleDetails.getPrice());
+        String formatedPrice = getIntent().getStringExtra(Constants.PRICE).split("\\.")[0] + " €";
+        mPrice.setText(formatedPrice);
         mDescText.setText(articleDetails.getDescription());
         mDateText.setText(DateFormat.getDateInstance().format(articleDetails.getDate()));
         mAdId = articleDetails.getId();
@@ -240,7 +241,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 .into(userPic);
 
 
-        userPic.setOnClickListener(v-> {
+        userPic.setOnClickListener(v -> {
             //TODo lade artikel des user mit id 0815
             Toast.makeText(this, "Lade andere Artikel des users", Toast.LENGTH_SHORT).show();
         });

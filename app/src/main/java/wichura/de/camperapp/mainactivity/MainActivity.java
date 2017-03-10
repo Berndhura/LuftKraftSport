@@ -522,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 Log.d("CONAN", "Return from login, userid: " + getUserId());
 
-                presenterLayer.sendUserPicToServer(getUserProfilePic(), getUserId());
+                presenterLayer.sendUserPicToServer(getUserProfilePic());
 
                 setMyAdsFlag(false);
 

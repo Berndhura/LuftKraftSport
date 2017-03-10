@@ -404,9 +404,10 @@ public class MainPresenter {
         return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
     }
 
-    public void sendUserPicToServer(String userProfilePic, String userId) {
+    public void sendUserPicToServer(String userProfilePic) {
 
-        service.saveUserPictureObserv(userProfilePic, userId)
+        Log.d("CONAN", "FART: "+userProfilePic);
+        service.saveUserPictureObserv(getUserToken(), userProfilePic)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
