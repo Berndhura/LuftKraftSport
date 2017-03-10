@@ -176,20 +176,23 @@ public class Service {
                                    @Query("password") String password);
 
         @GET("users/{userId}")
-        Observable<User> getSellerInformation(@Path("userId") String userId);
+        Observable<User> getSellerInformation(
+                @Path("userId") String userId,
+                @Query("token") String userToken);
 
         @POST("users/profilePictureUrl")
         Observable<String> saveUserPicture(
                 @Query("token") String userToken,
                 @Query("url") String userPicUrl);
+
     }
 
     public Observable<String> saveUserPictureObserv(String token, String userPicUrl) {
         return mWebServiceV3.saveUserPicture(token, userPicUrl);
     }
 
-    public Observable<User> getSellerInformationObserv(String userId) {
-        return mWebServiceV3.getSellerInformation(userId);
+    public Observable<User> getSellerInformationObserv(String userId, String token) {
+        return mWebServiceV3.getSellerInformation(userId, token);
     }
 
     public Observable<String> registerUserObserv(String name,

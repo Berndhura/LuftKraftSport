@@ -154,7 +154,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             Log.e("CONAN", "articlevorschlag");
         }
 
-        presenter.getSellerInformation(getIntent().getStringExtra(Constants.USER_ID));
+        presenter.getSellerInformation(getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
@@ -237,7 +237,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     public void updateSellerInformation(User user) {
         userName.setText(user.getName());
         Picasso.with(getContext())
-                .load("https://scontent.xx.fbcdn.net/v/t1.0-1/c50.0.200.200/p200x200/10801679_10205367858456124_6140613419874640973_n.jpg?oh=f2485358948c669694523d5ba640e71f&oe=597208E8")
+                .load(user.getProfilePictureUrl())
                 .into(userPic);
 
 
