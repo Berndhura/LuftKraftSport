@@ -143,13 +143,13 @@ public class Service {
         @GET("pictures/{pictureId}")
         Observable<byte[]> getPicture(@Path("pictureId") Integer pictureId);
 
-        @GET("search")
+        @GET("searches")
         Observable<List<SearchItem>> findSearches(@Query("token") String userToken);
 
-        @DELETE("search/{id}")
+        @DELETE("searches/{id}")
         Observable<String> deleteSearch(@Path("id") Long id, @Query("token") String userToken);
 
-        @POST("search/new")
+        @POST("searches/new")
         Observable<String> saveSearch(@Query("description") String description,
                                       @Query("priceFrom") Integer priceFrom,
                                       @Query("priceTo") Integer priceTo,

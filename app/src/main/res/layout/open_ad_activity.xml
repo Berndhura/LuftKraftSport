@@ -105,7 +105,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/round_corner_for_tv"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:textSize="18sp" />
 
             <LinearLayout

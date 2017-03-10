@@ -35,7 +35,7 @@ import static wichura.de.camperapp.mainactivity.Constants.SHARED_PREFS_USER_INFO
 
 /**
  * Created by ich on 20.10.2016.
- * CamperApp
+ * LuftKraftSport
  */
 
 public class MainPresenter {
@@ -398,7 +398,7 @@ public class MainPresenter {
 
     public Double getLat() {
         SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
-        return  Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
+        return Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
     }
 
     private String getUserToken() {
@@ -407,7 +407,7 @@ public class MainPresenter {
 
     public void sendUserPicToServer(String userProfilePic) {
 
-        Log.d("CONAN", "FART: "+userProfilePic);
+        Log.d("CONAN", "FART: " + userProfilePic);
         service.saveUserPictureObserv(getUserToken(), userProfilePic)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
