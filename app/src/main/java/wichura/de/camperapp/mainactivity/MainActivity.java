@@ -228,8 +228,21 @@ public class MainActivity extends AppCompatActivity implements
         };
 
         registerLoginReceiver();
-        setMyAdsFlag(false);
-        getAds(Constants.TYPE_ALL);
+
+        if (getIntent().getStringExtra(Constants.USER_ID_FROM_AD) != null) {
+            String userId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
+            setMyAdsFlag(false);
+            presenterLayer.searchForArticles(0, size,
+                    null,
+                    null,
+                    Constants.DISTANCE_INFINITY,
+                    null,
+                    userId); //userId
+        } else {
+
+            setMyAdsFlag(false);
+            getAds(Constants.TYPE_ALL);
+        }
     }
 
     private void getLastLocation() {
@@ -375,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    public void updateAds(AdsAndBookmarks elements, String type, Integer priceFrom, Integer priceTo, Integer distance, String description) {
+    public void updateAds(AdsAndBookmarks elements, String type, Integer priceFrom, Integer priceTo, Integer distance, String description, String userId) {
 
         rowItems = new ArrayList<>();
         for (RowItem e : elements.getAdsPage().getAds()) {
@@ -419,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements
             public boolean onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
-                loadNextDataFromApi(page, type, priceFrom, priceTo, distance, description);
+                loadNextDataFromApi(page, type, priceFrom, priceTo, distance, description, userId);
                 // or loadNextDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
@@ -428,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
-    public void loadNextDataFromApi(int offset, String type, Integer priceFrom, Integer priceTo, Integer distance, String description) {
+    public void loadNextDataFromApi(int offset, String type, Integer priceFrom, Integer priceTo, Integer distance, String description, String userId) {
         // Send an API request to retrieve appropriate paginated data
         //  --> Send the request including an offset value (i.e `page`) as a query parameter.
         //  --> Deserialize and construct new model objects from the API response
@@ -438,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements
         if (offset <= pages) {
             page = page + 1;
             if (type == null) {
-                presenterLayer.searchForArticles(page, size, priceFrom, priceTo, distance, description);
+                presenterLayer.searchForArticles(page, size, priceFrom, priceTo, distance, description, userId);
             } else {
                 presenterLayer.loadAdDataPage(page, size, type);
             }
@@ -548,7 +561,8 @@ public class MainActivity extends AppCompatActivity implements
                             priceFrom.equals("") ? null : Integer.parseInt(priceFrom),
                             priceTo.equals("") ? null : Integer.parseInt(priceTo),
                             distance,
-                            keyword);
+                            keyword,
+                            null); //userId
                     drawer.closeDrawer(GravityCompat.START);
                 }
                 break;

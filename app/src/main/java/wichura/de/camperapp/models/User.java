@@ -7,19 +7,20 @@ package wichura.de.camperapp.models;
 
 public class User {
 
-    private Long id;
+    private String id;
     private String email;
     private String password;
     private String token;
     private String activationCode;
     private String name;
     private String profilePictureUrl;
+    private Integer numberOfArticles;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -69,5 +70,13 @@ public class User {
 
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public Integer getNumberOfArticles() {
+        return numberOfArticles;
+    }
+
+    public void setNumberOfArticles(Integer numberOfArticles) {
+        this.numberOfArticles = numberOfArticles;
     }
 }

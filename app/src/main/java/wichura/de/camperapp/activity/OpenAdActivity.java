@@ -48,6 +48,7 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.http.Service;
 import wichura.de.camperapp.http.Urls;
 import wichura.de.camperapp.mainactivity.Constants;
+import wichura.de.camperapp.mainactivity.MainActivity;
 import wichura.de.camperapp.models.ArticleDetails;
 import wichura.de.camperapp.models.User;
 import wichura.de.camperapp.presentation.OpenAdPresenter;
@@ -78,6 +79,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private ImageView imgView;
     private ImageView userPic;
     private TextView userName;
+    private TextView userNumberOfArticles;
     private Button mDelAndMsgButton;
     private TextView mTitleText;
     private TextView mPrice;
@@ -130,6 +132,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         mDelAndMsgButton = (Button) findViewById(R.id.delButton);
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         userName = (TextView) findViewById(R.id.user_name);
+        userNumberOfArticles = (TextView) findViewById(R.id.user_number_of_articles);
         userPic = (ImageView) findViewById(R.id.user_image);
 
         getDisplayDimensions();
@@ -236,14 +239,16 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     public void updateSellerInformation(User user) {
         userName.setText(user.getName());
+        userNumberOfArticles.setText("Anzeigen: " + user.getNumberOfArticles().toString());
         Picasso.with(getContext())
                 .load(user.getProfilePictureUrl())
                 .into(userPic);
 
 
         userPic.setOnClickListener(v -> {
-            //TODo lade artikel des user mit id 0815
-            Toast.makeText(this, "Lade andere Artikel des users", Toast.LENGTH_SHORT).show();
+            Intent i  = new Intent(getApplicationContext(), MainActivity.class);
+            i.putExtra(Constants.USER_ID_FROM_AD,getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
+            startActivityForResult(i, Constants.REQUEST_ID_FOR_MAINACTIVITY);
         });
     }
 

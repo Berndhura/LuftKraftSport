@@ -65,6 +65,7 @@ public class Service {
     }
 
     private interface WebService {
+
         @GET("bookmarks/ids")
         Observable<Long[]> getBookmarksForUser(
                 @Query("token") String userToken);
@@ -86,7 +87,8 @@ public class Service {
                                       @Query("priceFrom") Integer priceFrom,
                                       @Query("priceTo") Integer priceTo,
                                       @Query("page") int page,
-                                      @Query("size") int size);
+                                      @Query("size") int size,
+                                      @Query("userId") String userId);
 
         @GET("articles")
         Observable<AdsAsPage> getAllAds(@Query("lat") Double lat,
@@ -274,8 +276,8 @@ public class Service {
         return mWebServiceV3.getMyBookmarkedAds(lat, lng, page, size, token);
     }
 
-    public Observable<AdsAsPage> findAdsObserv(String description, Double lat, Double lng, int distance, Integer priceFrom, Integer priceTo, int page, int size) {
-        return mWebServiceV3.findAds(description, lat, lng, distance, priceFrom, priceTo, page, size);
+    public Observable<AdsAsPage> findAdsObserv(String description, Double lat, Double lng, int distance, Integer priceFrom, Integer priceTo, int page, int size, String userId) {
+        return mWebServiceV3.findAds(description, lat, lng, distance, priceFrom, priceTo, page, size, userId);
     }
 
     public Observable<AdsAsPage> getAllAdsObserv(Double lat, Double lng, int page, int size) {

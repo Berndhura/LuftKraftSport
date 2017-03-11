@@ -22,6 +22,7 @@ public class Constants {
     public static final int RC_SIGN_IN = 11;
     public static final int REQUEST_ID_FOR_REGISTER_USER = 12;
     public static final int REQUEST_ID_FOR_ACTIVATE_USER = 13;
+    public static final int REQUEST_ID_FOR_MAINACTIVITY = 14;
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -87,6 +88,7 @@ public class Constants {
     public static final String TYPE_BOOKMARK = "getBookmarks";
     public static final String TYPE_ALL = "getAll";
     public static final String TYPE_USER = "getUser";
+    public static final String TYPE_USER_WITH_ID = "getUserWithId";
 
     public static final int DISTANCE_INFINITY = 10000000;
 }
