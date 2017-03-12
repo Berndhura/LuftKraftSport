@@ -54,19 +54,14 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
 
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
-
-    private LinearLayout mainLinearLayout;
     private LinearLayout distanceView;
-
     private LocationPresenter presenter;
 
-    private SeekBar seekBar;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         return inflater.inflate(R.layout.set_location_layout, container, false);
     }
@@ -74,8 +69,6 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-
-        mainLinearLayout = (LinearLayout) view.findViewById(R.id.location_main_linear_layout);
         distanceView = (LinearLayout) view.findViewById(R.id.location_distance_view);
         distanceView.setVisibility(View.GONE);
 
@@ -117,7 +110,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
 
         TextView textView = (TextView) getView().findViewById(R.id.textView9);
 
-        seekBar = (SeekBar) getView().findViewById(R.id.distance_seek_bat);
+        SeekBar seekBar = (SeekBar) getView().findViewById(R.id.distance_seek_bat);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
