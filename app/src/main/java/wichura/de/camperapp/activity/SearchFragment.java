@@ -64,6 +64,12 @@ public class SearchFragment extends Fragment {
             toolbar.setNavigationOnClickListener((v) -> getActivity().finish());
         }
 
+        ImageView saveSearchButton = (ImageView) view.findViewById(R.id.save_search);
+        saveSearchButton.setOnClickListener((v) -> {
+            //TODO: check if loged in before save
+            saveSearch();
+        });
+
         keywords = (TextView) view.findViewById(R.id.keywords);
         price = (TextView) view.findViewById(R.id.price_from);
         ImageView changePriceBtn = (ImageView) view.findViewById(R.id.changePrice);
