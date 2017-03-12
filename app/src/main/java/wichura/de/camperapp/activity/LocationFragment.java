@@ -94,9 +94,9 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.location_toolbar);
         if (toolbar != null) {
             ((SearchActivity) getActivity()).setSupportActionBar(toolbar);
-            ((SearchActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((SearchActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener((v) -> getActivity().finish());
+            //((SearchActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //((SearchActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+            //toolbar.setNavigationOnClickListener((v) -> getActivity().finish());
         }
 
         buildGoogleApiClient();
