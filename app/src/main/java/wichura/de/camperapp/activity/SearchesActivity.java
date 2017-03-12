@@ -1,9 +1,11 @@
 package wichura.de.camperapp.activity;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -18,35 +20,41 @@ import wichura.de.camperapp.presentation.SearchesPresenter;
 
 /**
  * Created by bwichura on 07.02.2017.
- * desurf
+ * LuftKraftSport
  */
 
-public class SearchesActivity extends AppCompatActivity {
+public class SearchesActivity extends Fragment {
 
     private ListView listView;
     private ProgressBar progressBar;
 
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
 
-        setContentView(R.layout.searches_overview_layout);
+        return inflater.inflate(R.layout.searches_overview_layout, container, false);
+    }
 
-        progressBar = (ProgressBar) findViewById(R.id.searches_overview_ProgressBar);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.searches_overview_toolbar);
+        progressBar = (ProgressBar) view.findViewById(R.id.searches_overview_ProgressBar);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.searches_overview_toolbar);
         if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setDisplayShowHomeEnabled(true);
+            ((SearchActivity) getActivity()).setSupportActionBar(toolbar);
+            if (((SearchActivity) getActivity()).getSupportActionBar() != null) {
+                ((SearchActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                ((SearchActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
             }
-            toolbar.setNavigationOnClickListener((view) -> finish());
+            toolbar.setNavigationOnClickListener((v) -> getActivity().finish());
         }
 
-        SearchesPresenter presenter = new SearchesPresenter(this, new Service(), getApplicationContext());
+        SearchesPresenter presenter = new SearchesPresenter(this, new Service(), getActivity().getApplicationContext());
 
-        listView = (ListView) findViewById(R.id.searches_overview_list);
+        listView = (ListView) view.findViewById(R.id.searches_overview_list);
 
         presenter.loadSearchesForUser();
     }
@@ -56,11 +64,11 @@ public class SearchesActivity extends AppCompatActivity {
         List<SearchItem> rowItems = new ArrayList<>();
         rowItems.addAll(searchItem);
 
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setTitle("Gespeicherte Suchen: " + rowItems.size());
+        if (((SearchActivity) getActivity()).getSupportActionBar() != null)
+            ((SearchActivity) getActivity()).getSupportActionBar().setTitle("Gespeicherte Suchen: " + rowItems.size());
 
         SearchesListAdapter adapter = new SearchesListAdapter(
-                getApplicationContext(), R.layout.searches_overview_item, rowItems);
+                getActivity().getApplicationContext(), R.layout.searches_overview_item, rowItems);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         disableProgressbar();

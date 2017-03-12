@@ -6,11 +6,13 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -38,14 +40,15 @@ import wichura.de.camperapp.R;
 import wichura.de.camperapp.mainactivity.Constants;
 import wichura.de.camperapp.presentation.LocationPresenter;
 
+import static android.content.Context.MODE_PRIVATE;
 import static wichura.de.camperapp.R.id.map;
 
 /**
- * Created by ich on 17.02.2017.
- * deSurf
+ * Created by ich on 11.03.2017.
+ * LKS
  */
 
-public class SetLocationActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+public class LocationFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, OnMapReadyCallback {
 
@@ -59,23 +62,30 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
 
     private SeekBar seekBar;
 
+
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
 
-        setContentView(R.layout.set_location_layout);
+        return inflater.inflate(R.layout.set_location_layout, container, false);
+    }
 
-        mainLinearLayout = (LinearLayout) findViewById(R.id.location_main_linear_layout);
-        distanceView = (LinearLayout) findViewById(R.id.location_distance_view);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+
+        mainLinearLayout = (LinearLayout) view.findViewById(R.id.location_main_linear_layout);
+        distanceView = (LinearLayout) view.findViewById(R.id.location_distance_view);
         distanceView.setVisibility(View.GONE);
 
-        MapsInitializer.initialize(this);
+        MapsInitializer.initialize(getActivity());
 
-        presenter = new LocationPresenter(getApplicationContext(), this);
+        presenter = new LocationPresenter(getActivity().getApplicationContext(), (SearchActivity) getActivity());
 
-        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
             case ConnectionResult.SUCCESS: {
-                MapView mapView = (MapView) findViewById(map);
+                MapView mapView = (MapView) view.findViewById(map);
                 mapView.onCreate(savedInstanceState);
                 mapView.onResume();
                 mapView.getMapAsync(this);
@@ -88,12 +98,12 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
             }
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.location_toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.location_toolbar);
         if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener((view) -> finish());
+            ((SearchActivity) getActivity()).setSupportActionBar(toolbar);
+            ((SearchActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((SearchActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener((v) -> getActivity().finish());
         }
 
         buildGoogleApiClient();
@@ -105,9 +115,9 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
     private void initDistanceSeekBar() {
         distanceView.setVisibility(View.VISIBLE);
 
-        TextView textView = (TextView) findViewById(R.id.textView9);
+        TextView textView = (TextView) getView().findViewById(R.id.textView9);
 
-        seekBar = (SeekBar) findViewById(R.id.distance_seek_bat);
+        seekBar = (SeekBar) getView().findViewById(R.id.distance_seek_bat);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
@@ -120,7 +130,7 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
                 // Get back the mutable Circle
                 Circle circle = googleMap.addCircle(circleOptions);
                 circle.setVisible(true);
-                storeDistance((seekBar.getProgress() == 100 ) ? Constants.DISTANCE_INFINITY :seekBar.getProgress() * 5000);
+                storeDistance((seekBar.getProgress() == 100) ? Constants.DISTANCE_INFINITY : seekBar.getProgress() * 5000);
             }
 
             @Override
@@ -128,7 +138,7 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
                 googleMap.clear();
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(new LatLng(getLat(), getLng()));
-                markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
+                //markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 googleMap.addMarker(markerOptions);
             }
@@ -137,19 +147,19 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 Integer distance = progress * 5;
-                textView.setText(((distance == 500) ? "Unbegrenzt" : ("Umkreis: " +  String.valueOf(distance)) + " km"));
+                textView.setText(((distance == 500) ? "Unbegrenzt" : ("Umkreis: " + String.valueOf(distance)) + " km"));
             }
         });
     }
 
     private void adaptToolbar(int progress) {
-        getSupportActionBar().setSubtitle(((progress == 500) ? "Unbegrenzt" : ("Im Umkreis: " +  String.valueOf(progress)) + " km"));
+        ((SearchActivity) getActivity()).getSupportActionBar().setSubtitle(((progress == 500) ? "Unbegrenzt" : ("Im Umkreis: " + String.valueOf(progress)) + " km"));
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
+        ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_NETWORK_STATE);
         // Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
         //       mGoogleApiClient);
         //if (mLastLocation != null) {
@@ -170,7 +180,7 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
                 googleMap.clear();
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
-                markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
+                //markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 googleMap.addMarker(markerOptions);
                 //save position in shared preferences
@@ -186,7 +196,7 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
                 LatLng position = marker.getPosition();
 
                 Toast.makeText(
-                        getApplicationContext(),
+                        getActivity(),
                         "Lat " + position.latitude + " "
                                 + "Long " + position.longitude,
                         Toast.LENGTH_LONG).show();
@@ -205,12 +215,12 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
     }
 
     public void updateCity(String cityName) {
-        getSupportActionBar().setTitle(cityName);
+        ((SearchActivity) getActivity()).getSupportActionBar().setTitle(cityName);
     }
 
     protected synchronized void buildGoogleApiClient() {
         //Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -237,18 +247,18 @@ public class SetLocationActivity extends AppCompatActivity implements GoogleApiC
     }
 
     public Double getLng() {
-        SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
+        SharedPreferences settings = getActivity().getSharedPreferences(Constants.USERS_LOCATION, 0);
         return Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
     }
 
     public Double getLat() {
-        SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
-        return  Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
+        SharedPreferences settings = getActivity().getSharedPreferences(Constants.USERS_LOCATION, 0);
+        return Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
     }
 
     private void storeDistance(int distance) {
 
-        SharedPreferences sp = getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
+        SharedPreferences sp = getActivity().getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putInt(Constants.DISTANCE, distance);
         ed.apply();

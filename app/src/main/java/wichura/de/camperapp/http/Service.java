@@ -157,7 +157,7 @@ public class Service {
                                       @Query("priceTo") Integer priceTo,
                                       @Query("lat") Double latitude,
                                       @Query("lng") Double longitude,
-                                      @Query("distance") Long distance,
+                                      @Query("distance") Integer distance,
                                       @Query("token") String userToken);
 
         @POST("users/sendToken")
@@ -218,7 +218,7 @@ public class Service {
                                                Integer priceTo,
                                                Double lat,
                                                Double lng,
-                                               Long distance,
+                                               Integer distance,
                                                String userToken) {
         return mWebServiceV3.saveSearch(description, priceFrom, priceTo, lat, lng, distance, userToken);
     }

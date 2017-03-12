@@ -3,6 +3,13 @@
 
     <tab
         barColorWhenSelected="#FFFFFF"
+        icon="@drawable/ic_search_white_24dp"
+        id="@+id/tab_main_search"
+        title="Suchen" />
+
+
+    <tab
+        barColorWhenSelected="#FFFFFF"
         icon="@drawable/ic_save_white_24dp"
         id="@+id/tab_follow_search"
         title="Suche folgen" />

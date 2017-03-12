@@ -12,7 +12,7 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import wichura.de.camperapp.activity.SetLocationActivity;
+import wichura.de.camperapp.activity.SearchActivity;
 import wichura.de.camperapp.http.GoogleService;
 import wichura.de.camperapp.mainactivity.Constants;
 
@@ -28,9 +28,9 @@ public class LocationPresenter {
     private Context context;
     private GoogleService googleService;
     private Subscription subscription;
-    private SetLocationActivity view;
+    private SearchActivity view;
 
-    public LocationPresenter(Context applicationContext, SetLocationActivity view) {
+    public LocationPresenter(Context applicationContext, SearchActivity view) {
         this.context = applicationContext;
         this.googleService = new GoogleService();
         this.view = view;
@@ -74,6 +74,6 @@ public class LocationPresenter {
         ed.putString(Constants.LOCATION, location);
         ed.apply();
 
-        view.updateCity(location);
+        //view.updateCity(location);
     }
 }

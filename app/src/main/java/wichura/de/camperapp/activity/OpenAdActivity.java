@@ -157,7 +157,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             Log.e("CONAN", "articlevorschlag");
         }
 
-        presenter.getSellerInformation(getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
+        if (!"article".equals(getIntent().getStringExtra(Constants.NOTIFICATION_TYPE))) {
+            presenter.getSellerInformation(getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
+        }
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
@@ -175,6 +177,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         String ownerId = articleDetails.getUserId();
         lat = articleDetails.getLocation().getCoordinates()[0];
         lng = articleDetails.getLocation().getCoordinates()[1];
+        presenter.getSellerInformation(articleDetails.getUserId());
         setupPanel(pictureUri, ownerId);
     }
 

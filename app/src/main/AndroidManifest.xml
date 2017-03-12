@@ -108,14 +108,6 @@
             android:label="@string/title_settings_page" />
 
         <activity
-            android:name=".activity.SearchesActivity"
-            android:label="@string/title_searches_page" />
-
-        <activity
-            android:name=".activity.SetLocationActivity"
-            android:label="@string/title_locations_page" />
-
-        <activity
             android:name=".activity.RegisterUser"
             android:label="@string/title_register_user" />
 
@@ -125,10 +117,10 @@
 
         <activity
             android:name=".activity.SetPriceActivity"
-            android:label="@string/title_set_price_page"
             android:configChanges="keyboardHidden"
+            android:label="@string/title_set_price_page"
             android:launchMode="standard"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth"/>
+            android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth" />
 
 
         <activity

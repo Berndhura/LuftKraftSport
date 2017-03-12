@@ -31,7 +31,7 @@ public class SearchesPresenter {
         this.service = service;
         this.context = applicationContext;
         this.view = searchesActivity;
-        this.utils = new Utility(searchesActivity);
+        this.utils = new Utility(searchesActivity.getActivity());
     }
 
     public void loadSearchesForUser() {
