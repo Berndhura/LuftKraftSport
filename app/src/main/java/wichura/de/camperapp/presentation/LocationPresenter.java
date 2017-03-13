@@ -2,6 +2,8 @@ package wichura.de.camperapp.presentation;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.google.gson.JsonElement;
@@ -12,6 +14,7 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import wichura.de.camperapp.activity.LocationFragment;
 import wichura.de.camperapp.activity.SearchActivity;
 import wichura.de.camperapp.http.GoogleService;
 import wichura.de.camperapp.mainactivity.Constants;
@@ -74,6 +77,15 @@ public class LocationPresenter {
         ed.putString(Constants.LOCATION, location);
         ed.apply();
 
-        //view.updateCity(location);
+        Fragment f = getCurrentFragment();
+        ((LocationFragment) f).updateCity(location);
+    }
+
+    private Fragment getCurrentFragment() {
+        FragmentManager fragmentManager = view.getSupportFragmentManager();
+        int stackCount = fragmentManager.getBackStackEntryCount();
+        if (fragmentManager.getFragments() != null)
+            return fragmentManager.getFragments().get(stackCount > 0 ? stackCount - 1 : stackCount);
+        else return null;
     }
 }
