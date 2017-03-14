@@ -9,7 +9,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="wichura.de.camperapp.mainactivity.MainActivity"
+    tools:context="de.wichura.lks.mainactivity.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <ListView

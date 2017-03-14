@@ -1,49 +1,42 @@
 {
   "project_info": {
-    "project_id": "camperapp-8cb37",
-    "project_number": "1083938171562",
-    "name": "CamperApp"
+    "project_number": "381115604823",
+    "project_id": "luftkraftsport"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1083938171562:android:2992f6d0840ead94",
-        "client_id": "android:wichura.de.camperapp",
-        "client_type": 1,
+        "mobilesdk_app_id": "1:381115604823:android:2d6a6a75fe51ec97",
         "android_client_info": {
-          "package_name": "wichura.de.camperapp",
-          "certificate_hash": []
+          "package_name": "de.wichura.lks"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1083938171562-0bbocc78sl1ucbgl5rtco5e11plukgho.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "wichura.de.camperapp",
-            "certificate_hash": "9390952941F40BA07097DB4C419785108C26577F"
-          }
+          "client_id": "381115604823-mll31gbbktvbutv10jeg9ngcplthfdq7.apps.googleusercontent.com",
+          "client_type": 3
         },
         {
-          "client_id": "1083938171562-psgh1t07g9hgc328tmqa7afk3fq3pqf9.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "381115604823-vsqprm4sst6ucl0pnfcbjae3farmkesu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.wichura.lks",
+            "certificate_hash": "9390952941f40ba07097db4c419785108c26577f"
+          }
         }
       ],
-      "api_key": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAByXTblOupLM3DotelSe6xa554z7wXDYU"
+        }
+      ],
       "services": {
         "analytics_service": {
           "status": 1
         },
-        "cloud_messaging_service": {
-          "status": 1,
-          "apns_config": []
-        },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
-        },
-        "google_signin_service": {
-          "status": 2
         },
         "ads_service": {
           "status": 1
@@ -51,6 +44,5 @@
       }
     }
   ],
-  "client_info": [],
-  "ARTIFACT_VERSION": "1"
+  "configuration_version": "1"
 }

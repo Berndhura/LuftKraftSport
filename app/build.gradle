@@ -8,7 +8,7 @@ android {
         abortOnError true
     }
     defaultConfig {
-        applicationId "wichura.de.camperapp"
+        applicationId "de.wichura.lks"
         minSdkVersion 17
         targetSdkVersion 25
         versionCode 1

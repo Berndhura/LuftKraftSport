@@ -45,7 +45,7 @@
             android:orientation="vertical">
 
 
-            <wichura.de.camperapp.util.ProportionalImageView
+            <de.wichura.lks.util.ProportionalImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="wichura.de.camperapp">
+    package="de.wichura.lks">
 
     <supports-screens
         android:largeScreens="true"
@@ -15,12 +15,12 @@
     <uses-permission android:name="MY_PERMISSION_REQUEST_ACCESS_FINE_LOCATION" />
 
     <permission
-        android:name="wichura.de.camperapp.permission.C2D_MESSAGE"
+        android:name="de.wichura.lks.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="wichura.de.camperapp.permission.C2D_MESSAGE" />
+    <uses-permission android:name="de.wichura.lks.permission.C2D_MESSAGE" />
 
     <application
-        android:name=".mainactivity.MainApp"
+        android:name="de.wichura.lks.mainactivity.MainApp"
         android:allowBackup="true"
         android:icon="@drawable/applogo"
         android:label="@string/app_name"
@@ -41,12 +41,12 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="wichura.de.camperapp" />
+                <category android:name="de.wichura.lks" />
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".gcm.MyGcmListenerService"
+            android:name="de.wichura.lks.gcm.MyGcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -54,7 +54,7 @@
         </service>
 
         <service
-            android:name=".gcm.MyInstanceIDListenerService"
+            android:name="de.wichura.lks.gcm.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
@@ -62,14 +62,14 @@
         </service>
 
         <service
-            android:name=".gcm.RegistrationIntentService"
+            android:name="de.wichura.lks.gcm.RegistrationIntentService"
             android:exported="false">
 
         </service>
 
 
         <activity
-            android:name=".mainactivity.MainActivity"
+            android:name="de.wichura.lks.mainactivity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -80,43 +80,43 @@
 
 
         <activity
-            android:name="wichura.de.camperapp.activity.NewAdActivity"
+            android:name="de.wichura.lks.activity.NewAdActivity"
             android:label="@string/title_new_add_page" />
 
         <activity
-            android:name="wichura.de.camperapp.activity.LoginActivity"
+            android:name="de.wichura.lks.activity.LoginActivity"
             android:label="@string/title_login_page" />
 
         <activity
-            android:name="wichura.de.camperapp.activity.OpenAdActivity"
+            android:name="de.wichura.lks.activity.OpenAdActivity"
             android:label="@string/title_open_ad_page" />
 
         <activity
-            android:name="wichura.de.camperapp.activity.SearchActivity"
+            android:name="de.wichura.lks.activity.SearchActivity"
             android:label="@string/title_search_page" />
 
         <activity
-            android:name=".activity.MessagesActivity"
+            android:name="de.wichura.lks.activity.MessagesActivity"
             android:label="@string/title_message_page" />
 
         <activity
-            android:name=".activity.MessagesOverviewActivity"
+            android:name="de.wichura.lks.activity.MessagesOverviewActivity"
             android:label="@string/title_msg_overview_page" />
 
         <activity
-            android:name=".activity.SettingsActivity"
+            android:name="de.wichura.lks.activity.SettingsActivity"
             android:label="@string/title_settings_page" />
 
         <activity
-            android:name=".activity.RegisterUser"
+            android:name="de.wichura.lks.activity.RegisterUser"
             android:label="@string/title_register_user" />
 
         <activity
-            android:name=".activity.ActivateUserActivity"
+            android:name="de.wichura.lks.activity.ActivateUserActivity"
             android:label="@string/title_activate_user" />
 
         <activity
-            android:name=".activity.SetPriceActivity"
+            android:name="de.wichura.lks.activity.SetPriceActivity"
             android:configChanges="keyboardHidden"
             android:label="@string/title_set_price_page"
             android:launchMode="standard"
