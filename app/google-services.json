@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "381115604823",
-    "project_id": "luftkraftsport"
+    "project_number": "485775614575",
+    "project_id": "luftkraftsport-161620"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:381115604823:android:2d6a6a75fe51ec97",
+        "mobilesdk_app_id": "1:485775614575:android:2d6a6a75fe51ec97",
         "android_client_info": {
           "package_name": "de.wichura.lks"
         }
       },
       "oauth_client": [
         {
-          "client_id": "381115604823-mll31gbbktvbutv10jeg9ngcplthfdq7.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "381115604823-vsqprm4sst6ucl0pnfcbjae3farmkesu.apps.googleusercontent.com",
+          "client_id": "485775614575-ricrfh10pmrij4gpud7kiaegi2trr5d0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "de.wichura.lks",
             "certificate_hash": "9390952941f40ba07097db4c419785108c26577f"
           }
+        },
+        {
+          "client_id": "485775614575-27f5t9e8kvh2airvacpr2o4ct3rnlik3.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAByXTblOupLM3DotelSe6xa554z7wXDYU"
+          "current_key": "AIzaSyBktz59APy1fAmxd09CLFY9BZnnL9O9t0s"
         }
       ],
       "services": {

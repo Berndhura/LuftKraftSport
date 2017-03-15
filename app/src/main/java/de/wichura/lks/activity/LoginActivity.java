@@ -305,8 +305,7 @@ public class LoginActivity extends AppCompatActivity {
             setResult(RESULT_OK, data);
             finish();
         } else {
-            // Signed out, show unauthenticated UI.
-            //updateUI(false);
+           Log.d("CONAN", result.toString());
         }
     }
 
