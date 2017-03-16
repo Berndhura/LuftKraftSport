@@ -238,18 +238,25 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     public void updateSellerInformation(User user) {
-        userName.setText(user.getName());
-        userNumberOfArticles.setText("Anzeigen: " + user.getNumberOfArticles().toString());
-        Picasso.with(getContext())
-                .load(user.getProfilePictureUrl())
-                .into(userPic);
 
+        if (user != null) {
+            userName.setText(user.getName());
+            userNumberOfArticles.setText("Anzeigen: " + user.getNumberOfArticles().toString());
+            Picasso.with(getContext())
+                    .load(user.getProfilePictureUrl())
+                    .into(userPic);
 
-        userPic.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            i.putExtra(Constants.USER_ID_FROM_AD, getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
-            startActivityForResult(i, Constants.REQUEST_ID_FOR_MAINACTIVITY);
-        });
+            userPic.setOnClickListener(v -> {
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.putExtra(Constants.USER_ID_FROM_AD, getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
+                startActivityForResult(i, Constants.REQUEST_ID_FOR_MAINACTIVITY);
+            });
+        } else {
+            userName.setText("Keine Benutzer Infos vorhanden!");
+            Picasso.with(getContext())
+                    .load(R.drawable.applogo)
+                    .into(userPic);
+        }
     }
 
     private void showDefaultPic() {

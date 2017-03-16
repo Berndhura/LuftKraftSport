@@ -205,9 +205,7 @@ public class OpenAdPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "error in getting seller details: " + e.getMessage());
-                        User user = new User();
-                        user.setName("Conan Superstar");
-                        view.updateSellerInformation(user);
+                        view.updateSellerInformation(null);
                     }
 
                     @Override
