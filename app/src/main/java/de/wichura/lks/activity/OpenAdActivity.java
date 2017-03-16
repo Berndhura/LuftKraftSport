@@ -25,7 +25,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,7 +33,6 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -248,8 +246,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
 
         userPic.setOnClickListener(v -> {
-            Intent i  = new Intent(getApplicationContext(), MainActivity.class);
-            i.putExtra(Constants.USER_ID_FROM_AD,getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            i.putExtra(Constants.USER_ID_FROM_AD, getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
             startActivityForResult(i, Constants.REQUEST_ID_FOR_MAINACTIVITY);
         });
     }
@@ -265,7 +263,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     protected synchronized void buildGoogleApiClient() {
-        //Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -346,41 +343,19 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        //Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
-        // Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-        //       mGoogleApiClient);
-        //if (mLastLocation != null) {
-        //place marker at current position
         googleMap.clear();
         LatLng latLng = new LatLng(lat, lng);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        Marker mCurrLocation = googleMap.addMarker(markerOptions);
+        googleMap.addMarker(markerOptions);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 7));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setScrollGesturesEnabled(true);
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-
-           /* CircleOptions circleOptions = new CircleOptions()
-                    .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
-                    .radius(1000); // In meters
-
-            // Get back the mutable Circle
-            Circle circle = googleMap.addCircle(circleOptions);
-            circle.setVisible(true);*/
-        // }
-
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000); //5 seconds
-        mLocationRequest.setFastestInterval(3000); //3 seconds
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
-
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     @Override
@@ -395,6 +370,5 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onLocationChanged(Location location) {
-
     }
 }
