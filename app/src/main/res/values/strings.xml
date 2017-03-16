@@ -26,9 +26,9 @@
 
     <string name="facebook_app_id">535532649933816</string>
 
-    <string name="google_maps_key">AIzaSyD3jwkcOkM2-NOZHhQmUcYuVq2jEOg-Ox0</string>
+    <string name="google_maps_key">AIzaSyCmTWsTXw80szVj0MtogQ57epeBIOSYtr4</string>
 
-    <string name="server_client_id">485775614575-27f5t9e8kvh2airvacpr2o4ct3rnlik3.apps.googleusercontent.com</string>
+    <string name="server_client_id">485775614575-bgge92h3jhg7hm24qlmrl7bekcd64mbp.apps.googleusercontent.com</string>
 
     <string name="uploadPic_string" tools:ignore="MissingTranslation">Pictures</string>
 

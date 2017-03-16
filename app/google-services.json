@@ -13,21 +13,21 @@
       },
       "oauth_client": [
         {
-          "client_id": "485775614575-ricrfh10pmrij4gpud7kiaegi2trr5d0.apps.googleusercontent.com",
+          "client_id": "485775614575-f7n1o30oic97s3rc85el5shdui9kl8dm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "de.wichura.lks",
-            "certificate_hash": "9390952941f40ba07097db4c419785108c26577f"
+            "certificate_hash": "12e4feaecd774a920dc4e51ac365faa30c50f968"
           }
         },
         {
-          "client_id": "485775614575-27f5t9e8kvh2airvacpr2o4ct3rnlik3.apps.googleusercontent.com",
+          "client_id": "485775614575-bgge92h3jhg7hm24qlmrl7bekcd64mbp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBktz59APy1fAmxd09CLFY9BZnnL9O9t0s"
+          "current_key": "AIzaSyDYcC66curYS3L7ZbS4B1LbEvQIm4xtSu8"
         }
       ],
       "services": {

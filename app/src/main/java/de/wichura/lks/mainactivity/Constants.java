@@ -81,7 +81,7 @@ public class Constants {
     public static final String REGISTER_USER = "isUserRegistered";
 
     //Google
-    public static final String WEB_CLIENT_ID = "485775614575-27f5t9e8kvh2airvacpr2o4ct3rnlik3.apps.googleusercontent.com";
+    public static final String WEB_CLIENT_ID = "485775614575-bgge92h3jhg7hm24qlmrl7bekcd64mbp.apps.googleusercontent.com";
 
     //Type of Ads to Get
     public static final String TYPE_BOOKMARK = "getBookmarks";
