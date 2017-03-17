@@ -129,6 +129,7 @@ public class MainPresenter {
                         @Override
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
+                            view.progressBar.setVisibility(ProgressBar.GONE);
                             view.showEmptyView();
                         }
 
@@ -161,6 +162,7 @@ public class MainPresenter {
                         @Override
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
+                            view.progressBar.setVisibility(ProgressBar.GONE);
                         }
 
                         @Override
@@ -220,6 +222,7 @@ public class MainPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "Error in getting bookmarked ads: " + e.toString());
+                        view.progressBar.setVisibility(ProgressBar.GONE);
                         view.showEmptyView();
                     }
 
@@ -242,6 +245,8 @@ public class MainPresenter {
     private void loadAllAd(int page, int size, String type) {
         Double lat = getLat();
         Double lng = getLng();
+
+        view.hideEmptyView();
 
         if (page == 0) {
             if (view.listView != null) {
@@ -275,6 +280,7 @@ public class MainPresenter {
                         @Override
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
+                            view.progressBar.setVisibility(ProgressBar.GONE);
                             view.showEmptyView();
                         }
 
@@ -307,6 +313,7 @@ public class MainPresenter {
                         @Override
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
+                            view.progressBar.setVisibility(ProgressBar.GONE);
                         }
 
                         @Override
@@ -363,6 +370,7 @@ public class MainPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "Error in getting user's ads: " + e.toString());
+                        view.progressBar.setVisibility(ProgressBar.GONE);
                         view.showEmptyView();
                     }
 

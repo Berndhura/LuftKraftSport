@@ -357,14 +357,6 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    /*private void configureFlurry() {
-        FlurryAgent.setLogEnabled(true);
-        FlurryAgent.setCaptureUncaughtExceptions(true);
-        FlurryAgent.setLogLevel(Log.ERROR);
-        FlurryAgent.init(this, "3Q9GDM9TDX77WDGBN25S");
-        FlurryAgent.logEvent("mainactivity started");
-    }*/
-
     /*
         Updates the empty list view with contextually relevant information that the user can
         use to determine why they aren't seeing ads.
