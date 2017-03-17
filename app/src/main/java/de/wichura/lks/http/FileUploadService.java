@@ -28,7 +28,7 @@ import de.wichura.lks.util.BitmapHelper;
  * Camper App
  */
 
-public class FileUploadService {
+public class FileUploadService implements ProgressRequestBody.UploadCallbacks  {
 
     private Context context;
     private NewAdActivity view;
@@ -42,6 +42,8 @@ public class FileUploadService {
     }
 
     public void uploadNewArticle(Intent data) {
+
+        view.showProgress();
 
         String picture = data.getStringExtra(Constants.FILENAME);
 
@@ -68,6 +70,7 @@ public class FileUploadService {
 
                     @Override
                     public void onError(Throwable e) {
+                        view.hideProgress();
                         Log.d("CONAN", "error in upload new Article" + e.toString());
                     }
 
@@ -87,7 +90,9 @@ public class FileUploadService {
         BitmapHelper bitmapHelper = new BitmapHelper(context);
         final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
 
-        RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(Uri.parse(picture))), reducedPicture);
+        //RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(Uri.parse(picture))), reducedPicture);
+        ProgressRequestBody requestFile = new ProgressRequestBody(reducedPicture, this);
+
 
         MultipartBody.Part multiPartBody = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
@@ -102,6 +107,7 @@ public class FileUploadService {
 
                     @Override
                     public void onError(Throwable e) {
+                        view.hideProgress();
                         Log.d("CONAN", "error in upload" + e.toString());
                     }
 
@@ -145,5 +151,22 @@ public class FileUploadService {
     private String getUserToken() {
         SharedPreferences settings = context.getSharedPreferences(Constants.SHARED_PREFS_USER_INFO, 0);
         return settings.getString(Constants.USER_TOKEN, "");
+    }
+
+    @Override
+    public void onProgressUpdate(int percentage) {
+        view.progress.setProgress(percentage);
+        Log.d("CONAN", "Fileupload: " + percentage);
+    }
+
+    @Override
+    public void onError() {
+
+    }
+
+    @Override
+    public void onFinish() {
+        view.progress.setProgress(100);
+
     }
 }

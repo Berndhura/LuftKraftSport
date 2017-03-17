@@ -32,7 +32,7 @@ public class NewAdActivity extends AppCompatActivity {
 
     private ImageView mImgOne;
 
-    private ProgressBar progress;
+    public ProgressBar progress;
 
     private FileUploadService fileUploadService;
     private Button submitButton;
@@ -56,6 +56,7 @@ public class NewAdActivity extends AppCompatActivity {
 
 
         progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
+        progress.setMax(100);
         hideProgress();
         fileUploadService = new FileUploadService(getApplicationContext(), this);
 
@@ -85,7 +86,6 @@ public class NewAdActivity extends AppCompatActivity {
             data.putExtra(Constants.PRICE, price);
             data.putExtra(Constants.DATE, date);
 
-            showProgress();
             disableUploadButton();
             fileUploadService.uploadNewArticle(data);
             //setResult(RESULT_OK, data);
