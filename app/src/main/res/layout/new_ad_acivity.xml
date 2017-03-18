@@ -36,17 +36,18 @@
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="10dp"
         android:background="@android:color/transparent">
 
         <ProgressBar
             android:id="@+id/upload_ProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="13dp"
             android:layout_gravity="top"
             android:layout_marginTop="-3dp"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:progressDrawable="@drawable/custom_progress"/>
 
     </FrameLayout>
 
