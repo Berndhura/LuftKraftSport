@@ -47,21 +47,13 @@
     <string name="search_for_keyword">Suche:</string>
     <string name="search_price">Preis:</string>
 
-
-    <string name="crash_dialog_text">Senden der crash informationen. ok!!</string>
+    <string name="crash_dialog_text">Senden der crashinformationen. ok!!</string>
     <string name="crash_notification_text">öffne mich!!!</string>
     <string name="crash_titel">Bernds app aua</string>
     <string name="crash_text">crash passiert, wie weiter?</string>
 
+    <string name="user_is_registered">"Neues Konto wurde angelegt!" Ein Aktivierungscode wurde dir an deine Email gesendet. Bitte gib diesen ein, um deine Kontoaktivierung abzuschliessen!"</string>
 
-    <string name="user_is_registered">"Neues Konto wurde angelegt!" +
-                                " Ein Aktivierungscode wurde dir an deine Email gesendet. Bitte gib diesen ein, um deine" +
-                                " Kontoaktivierung abzuschliessen!"</string>
-
-
-    <string name="user_is_registered_problem">"Es gab ein Problem" +
-    " das Konto anzulegen. Versuche es nochmal. "</string>
-
-
+    <string name="user_is_registered_problem">"Es gab ein Problem das Konto anzulegen. Versuche es nochmal. "</string>
 
 </resources>

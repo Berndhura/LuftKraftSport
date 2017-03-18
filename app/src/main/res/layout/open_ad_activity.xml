@@ -22,16 +22,34 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <ProgressBar
+            <!--ProgressBar
                 android:id="@+id/open_Ad_ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp" /-->
 
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@android:color/transparent">
+
+        <ProgressBar
+            android:id="@+id/open_Ad_ProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="13dp"
+            android:layout_gravity="top"
+            android:layout_marginTop="-3dp"
+            android:background="@android:color/transparent"
+            android:progressDrawable="@drawable/custom_progress"/>
+
+    </FrameLayout>
 
     <ScrollView
         android:layout_width="match_parent"

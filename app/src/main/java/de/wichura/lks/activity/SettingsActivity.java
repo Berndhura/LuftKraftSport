@@ -59,8 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
                 updateUserInfo();
                 finish();
             } else {
-                final Intent intent = new Intent(getApplicationContext(),
-                        LoginActivity.class);
+                final Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivityForResult(intent, Constants.REQUEST_ID_FOR_LOGIN);
             }
         });
