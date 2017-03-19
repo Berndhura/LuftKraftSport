@@ -49,7 +49,7 @@ public class LoginPresenter {
                     @Override
                     public void onNext(User user) {
                         view.hideProgressDialog();
-                        Toast.makeText(context, "User in", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Benutzer " + user.getName() + " angemeldet!", Toast.LENGTH_SHORT).show();
                         Log.d("CONAN", "login email user " + user.getId());
                         //String name, String userId, Uri userPic, String userType, String userToken
                         view.setUserPreferences(user.getName(), user.getId().toString(), null, Constants.EMAIL_USER, user.getToken());

@@ -110,7 +110,7 @@ public class NewAdActivity extends AppCompatActivity {
     public void showProblem(String error) {
         errorImage.setVisibility(View.VISIBLE);
         errorImage.setOnClickListener(v -> {
-            Toast.makeText(this, "Problem: " + error , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Problem beim Anlegen: " + error , Toast.LENGTH_LONG).show();
         });
     }
 
@@ -122,7 +122,7 @@ public class NewAdActivity extends AppCompatActivity {
         submitButton.setEnabled(false);
     }
 
-    private void enableUploadButton() {
+    public void enableUploadButton() {
         submitButton.setEnabled(true);
     }
 

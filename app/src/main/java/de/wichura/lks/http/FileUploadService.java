@@ -74,13 +74,14 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks  {
                         view.hideProgress();
                         Log.d("CONAN", "error in upload new Article" + e.toString());
                         Toast.makeText(view, "Problem beim Senden der Daten!" + e, Toast.LENGTH_SHORT).show();
-                        String error = "";
+                        String error;
                         if (e.toString().contains("SocketTimeoutException")) {
                             error = "Timeout im Netzwerk";
                         } else {
                             error = e.toString();
                         }
                         view.showProblem(error);
+                        view.enableUploadButton();
                     }
 
                     @Override
@@ -119,6 +120,14 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks  {
                         view.hideProgress();
                         Log.d("CONAN", "error in upload" + e.toString());
                         Toast.makeText(view, "Problem beim Senden der Daten!", Toast.LENGTH_SHORT).show();
+                        String error;
+                        if (e.toString().contains("SocketTimeoutException")) {
+                            error = "Timeout im Netzwerk";
+                        } else {
+                            error = e.toString();
+                        }
+                        view.showProblem(error);
+                        view.enableUploadButton();
                     }
 
                     @Override
