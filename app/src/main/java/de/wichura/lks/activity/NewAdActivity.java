@@ -102,6 +102,12 @@ public class NewAdActivity extends AppCompatActivity {
             final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
             photoPickerIntent.setType("image/*");
             startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+
+
+            // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            //startActivityForResult(cameraIntent, SELECT_PHOTO);
+            //TODO camera plus photo picker
+            //http://stackoverflow.com/questions/5991319/capture-image-from-camera-and-display-in-activity
         });
 
 
@@ -110,7 +116,7 @@ public class NewAdActivity extends AppCompatActivity {
     public void showProblem(String error) {
         errorImage.setVisibility(View.VISIBLE);
         errorImage.setOnClickListener(v -> {
-            Toast.makeText(this, "Problem beim Anlegen: " + error , Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Problem beim Anlegen: " + error, Toast.LENGTH_LONG).show();
         });
     }
 
