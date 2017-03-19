@@ -5,10 +5,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -31,6 +33,7 @@ public class NewAdActivity extends AppCompatActivity {
     private int pictureCount = 1;
 
     private ImageView mImgOne;
+    private ImageView errorImage;
 
     public ProgressBar progress;
 
@@ -63,6 +66,8 @@ public class NewAdActivity extends AppCompatActivity {
         mDescText = (EditText) findViewById(R.id.description);
         mKeywords = (EditText) findViewById(R.id.keywords);
         mImgOne = (ImageView) findViewById(R.id.imageButton);
+        errorImage = (ImageView) findViewById(R.id.problem_during_upload);
+        hideProblem();
         mPrice = (EditText) findViewById(R.id.preis);
 
 
@@ -102,6 +107,17 @@ public class NewAdActivity extends AppCompatActivity {
 
     }
 
+    public void showProblem(String error) {
+        errorImage.setVisibility(View.VISIBLE);
+        errorImage.setOnClickListener(v -> {
+            Toast.makeText(this, "Problem: " + error , Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    public void hideProblem() {
+        errorImage.setVisibility(View.GONE);
+    }
+
     private void disableUploadButton() {
         submitButton.setEnabled(false);
     }
@@ -127,9 +143,7 @@ public class NewAdActivity extends AppCompatActivity {
             case SELECT_PHOTO:
                 if (resultCode == RESULT_OK && pictureCount < 4) {
                     final Uri selectedImage = imageReturnedIntent.getData();
-                    //todo :works for one pic, need to work for more: array or comma separeted?
                     mImage = selectedImage.toString();
-
                     switch (pictureCount) {
                         case 1: {
                             Picasso

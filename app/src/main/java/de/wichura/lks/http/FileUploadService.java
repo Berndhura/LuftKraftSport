@@ -44,6 +44,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks  {
     public void uploadNewArticle(Intent data) {
 
         view.showProgress();
+        view.hideProblem();
 
         String picture = data.getStringExtra(Constants.FILENAME);
 
@@ -72,6 +73,14 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks  {
                     public void onError(Throwable e) {
                         view.hideProgress();
                         Log.d("CONAN", "error in upload new Article" + e.toString());
+                        Toast.makeText(view, "Problem beim Senden der Daten!" + e, Toast.LENGTH_SHORT).show();
+                        String error = "";
+                        if (e.toString().contains("SocketTimeoutException")) {
+                            error = "Timeout im Netzwerk";
+                        } else {
+                            error = e.toString();
+                        }
+                        view.showProblem(error);
                     }
 
                     @Override
@@ -109,12 +118,13 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks  {
                     public void onError(Throwable e) {
                         view.hideProgress();
                         Log.d("CONAN", "error in upload" + e.toString());
+                        Toast.makeText(view, "Problem beim Senden der Daten!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onNext(String status) {
                         Log.d("CONAN", "Picture uploaded");
-                        Toast.makeText(context, "Upload...done!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
                         Boolean deleted = reducedPicture.delete();
                         if (!deleted)
                             Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
@@ -160,13 +170,10 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks  {
     }
 
     @Override
-    public void onError() {
-
-    }
+    public void onError() {}
 
     @Override
     public void onFinish() {
         view.progress.setProgress(100);
-
     }
 }
