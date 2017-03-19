@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("CONAN", "Error while Facebook login " + e);
         }
 
-        setContentView(R.layout.fb_login_activity);
+        setContentView(R.layout.login_activity);
 
         mCallbackMgt = CallbackManager.Factory.create();
 
@@ -120,17 +119,17 @@ public class LoginActivity extends AppCompatActivity {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        SignInButton signInButton = (SignInButton) findViewById(R.id.google_login_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setColorScheme(SignInButton.COLOR_DARK);
         signInButton.setHovered(true);
         // signInButton.setScopes(gso.getScopeArray());
-        setGooglePlusButton(signInButton, "Sign in with Google");
+        setGooglePlusButton(signInButton, "Anmelden mit Google");
 
 
-        findViewById(R.id.sign_in_button).setOnClickListener(v -> {
+        findViewById(R.id.google_login_button).setOnClickListener(v -> {
             switch (v.getId()) {
-                case R.id.sign_in_button:
+                case R.id.google_login_button:
                     signIn();
                     break;
                 // ...
@@ -146,9 +145,9 @@ public class LoginActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-        ImageView okButton = (ImageView) findViewById(R.id.ok_button);
-        if (okButton != null) {
-            okButton.setOnClickListener((view) -> {
+        Button email_login_button = (Button) findViewById(R.id.email_login_button);
+        if (email_login_button != null) {
+            email_login_button.setOnClickListener((view) -> {
                 if (!validate()) {
                     onLoginFailed();
                     return;
@@ -164,19 +163,19 @@ public class LoginActivity extends AppCompatActivity {
         _emailText = (EditText) findViewById(R.id.login_name);
         _passwordText = (EditText) findViewById(R.id.password);
 
-        Button tv = (Button) findViewById(R.id.register);
-        tv.setOnClickListener(view -> {
+        Button register = (Button) findViewById(R.id.register);
+        register.setOnClickListener(view -> {
             Intent i = new Intent(getApplicationContext(), RegisterUser.class);
             startActivityForResult(i, Constants.REQUEST_ID_FOR_REGISTER_USER);
         });
 
-        LoginButton fbLoginButton = (LoginButton) findViewById(R.id.login_button);
+        LoginButton fbLoginButton = (LoginButton) findViewById(R.id.fb_login_button);
         if (fbLoginButton != null) {
             fbLoginButton.setReadPermissions("user_friends");
             fbLoginButton.registerCallback(mCallbackMgt, mCallback);
         }
         adaptFacebookButton(fbLoginButton);
-        setFbButton(fbLoginButton, "Sign in with Facebook");
+        setFbButton(fbLoginButton, "Anmelden mit Facebook");
     }
 
     private void adaptFacebookButton(LoginButton loginButton) {
@@ -201,23 +200,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setGooglePlusButton(SignInButton signInButton, String buttonText) {
-        // ExceptionHelpers.dLog("GOOGLE_PLUS_TAG", "Child Count : "+signInButton.getChildCount());
-        //signInButton.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.MarginLayoutParams, ViewGroup.LayoutParams.WRAP_CONTENT));
-        //ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_CONSTRAINT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-        //lp.setMargins(0, 0, 0, 0);
-        //signInButton.setLayoutParams(lp);
+
         for (int i = 0; i < signInButton.getChildCount(); i++) {
             View v = signInButton.getChildAt(i);
             Log.d("GOOGLE_PLUS_TAG", "Type Of Child : " + v.getClass().getName());
             if (v instanceof TextView) {
                 TextView tv = (TextView) v;
                 tv.setText(buttonText);
-                //tv.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                //tv.setBackgroundResource(R.drawable.applogo);
-                //tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_google_signin_btn_icon_dark_normal, 0, 0, 0);
-                // int padding = (int) getResources().getDimension(R.dimen.nav_header_height
                 int drawablePadding = 0;
-                //tv.setPadding(padding, padding, padding, padding);
                 tv.setCompoundDrawablePadding(drawablePadding);
                 tv.setTextColor(getResources().getColor(R.color.white_smoke));
                 tv.setTextSize(15);
@@ -230,7 +220,6 @@ public class LoginActivity extends AppCompatActivity {
     private void setFbButton(LoginButton signInButton, String buttonText) {
         signInButton.setBackgroundColor(getResources().getColor(R.color.facebookLoginBtn));
         signInButton.setText(buttonText);
-
     }
 
     private void signIn() {
@@ -276,9 +265,9 @@ public class LoginActivity extends AppCompatActivity {
 
         if (requestCode == Constants.REQUEST_ID_FOR_REGISTER_USER) {
             //use request code from email to verify email
-           // Intent i = new Intent(getApplicationContext(), ActivateUserActivity.class);
-           // startActivityForResult(i, Constants.REQUEST_ID_FOR_ACTIVATE_USER);
-           // TODO: back from activate... einloggen...
+            // Intent i = new Intent(getApplicationContext(), ActivateUserActivity.class);
+            // startActivityForResult(i, Constants.REQUEST_ID_FOR_ACTIVATE_USER);
+            // TODO: back from activate... einloggen...
         }
 
         mCallbackMgt.onActivityResult(requestCode, resultCode, data);
@@ -305,7 +294,7 @@ public class LoginActivity extends AppCompatActivity {
             setResult(RESULT_OK, data);
             finish();
         } else {
-           Log.d("CONAN", result.toString());
+            Log.d("CONAN", result.toString());
         }
     }
 
@@ -331,7 +320,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Login fehl geschlagen", Toast.LENGTH_LONG).show();
     }
 
     public boolean validate() {
@@ -341,14 +330,14 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            _emailText.setError("gib eine richtige email an!");
             valid = false;
         } else {
             _emailText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
+            _passwordText.setError("zwischen 4 und 10 alphanumerische Zeichen!");
             valid = false;
         } else {
             _passwordText.setError(null);

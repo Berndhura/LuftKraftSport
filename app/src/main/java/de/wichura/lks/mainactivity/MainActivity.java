@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
 
-        loginBtn = (ImageView) findViewById(R.id.login_button);
+        loginBtn = (ImageView) findViewById(R.id.main_login_button);
         updateLoginButton();
 
         AccessTokenTracker tracker = new AccessTokenTracker() {
