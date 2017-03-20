@@ -471,12 +471,6 @@ public class MainActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    private void showNumberOfAds(int numberOfAds) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setSubtitle("Anzeigen: " + numberOfAds);
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -768,6 +762,18 @@ public class MainActivity extends AppCompatActivity implements
         ed.putLong(Constants.LAT, Double.doubleToRawLongBits(lat));
         ed.putLong(Constants.LNG, Double.doubleToRawLongBits(lng));
         ed.apply();
+    }
+
+    public void showNumberOfAds(int numberOfAds) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setSubtitle("Anzeigen: " + numberOfAds);
+        }
+    }
+
+    public void setMainTitle(String title) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
     }
 
     @Override

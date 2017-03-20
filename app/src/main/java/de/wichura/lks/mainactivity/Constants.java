@@ -75,6 +75,7 @@ public class Constants {
     public static final String SHOW_MY_ADS = "showMyAds";
     public static final String SHARED_PREFS_USER_INFO = "UserInfo";
     public static final String USERS_LOCATION = "usersLocation";
+    public static final String USER_PRICE_RANGE = "usersPriceRange";
     public static final String ACTIVATE_USER_STATUS = "usersActivate";
 
     public static final String ACTIVATE_USER = "isUserActivated";

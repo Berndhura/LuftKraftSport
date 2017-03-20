@@ -187,10 +187,13 @@ public class MainPresenter {
     }
 
     private void loadBookmarkedAds(int page, int size, String type) {
+        view.setMainTitle("Meine Favoriten");
+
         if (page == 0) {
             if (view.listView != null) {
                 view.listView.setVisibility(View.INVISIBLE);
             }
+            view.showNumberOfAds(0);
         }
 
         Double lat = getLat();
@@ -243,6 +246,7 @@ public class MainPresenter {
     }
 
     private void loadAllAd(int page, int size, String type) {
+        view.setMainTitle("Luftkraftsport");
         Double lat = getLat();
         Double lng = getLng();
 
@@ -252,6 +256,7 @@ public class MainPresenter {
             if (view.listView != null) {
                 view.listView.setVisibility(View.INVISIBLE);
             }
+            view.showNumberOfAds(0);
         }
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
 
@@ -338,10 +343,12 @@ public class MainPresenter {
     }
 
     private void getAdsForUser(int page, int size, String type, String token) {
+        view.setMainTitle("Meine Anzeigen");
         if (page == 0) {
             if (view.listView != null) {
                 view.listView.setVisibility(View.INVISIBLE);
             }
+            view.showNumberOfAds(0);
         }
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
 

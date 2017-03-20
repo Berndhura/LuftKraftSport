@@ -24,6 +24,7 @@ import de.wichura.lks.mainactivity.Constants;
 import static android.app.Activity.RESULT_OK;
 import static de.wichura.lks.mainactivity.Constants.DISTANCE_INFINITY;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+import static de.wichura.lks.mainactivity.Constants.USER_PRICE_RANGE;
 
 /**
  * Created by ich on 12.03.2017.
@@ -153,8 +154,8 @@ public class SearchFragment extends Fragment {
             showLocation();
 
         } else if (requestCode == Constants.REQUEST_ID_FOR_PRICE) {
-            priceFrom = data.getStringExtra(Constants.PRICE_FROM);
-            priceTo = data.getStringExtra(Constants.PRICE_TO);
+            priceFrom = getPrice(Constants.PRICE_FROM);
+            priceTo = getPrice(Constants.PRICE_TO);
             adaptLayoutForPrice(priceFrom, priceTo);
         }
     }
@@ -170,6 +171,10 @@ public class SearchFragment extends Fragment {
 
     public String getUserToken() {
         return getActivity().getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
+    }
+
+    public String getPrice(String price) {
+        return getActivity().getSharedPreferences(USER_PRICE_RANGE, 0).getString(price, "");
     }
 
     public Double getLng() {
