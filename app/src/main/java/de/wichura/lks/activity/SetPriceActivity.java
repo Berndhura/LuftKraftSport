@@ -52,7 +52,20 @@ public class SetPriceActivity extends AppCompatActivity {
         if (okButton != null) {
             okButton.setOnClickListener((view) -> {
                 String priceFrom = priceFromTv.getText().toString();
+                if ("Beliebig".equals(priceFrom)) {
+                    priceFrom = "0";
+                } else {
+                    priceFrom = priceFromTv.getText().toString();
+                }
+
                 String priceTo = priceToTv.getText().toString();
+                if ("Beliebig".equals(priceTo)) {
+                    //TODO: hoechstgrenze unklar
+                    priceTo = Constants.MAX_PRICE.toString();
+                } else {
+                    priceTo = priceToTv.getText().toString();
+                }
+
                 Intent result = new Intent();
                 result.putExtra(Constants.PRICE_FROM, priceFrom);
                 result.putExtra(Constants.PRICE_TO, priceTo);

@@ -52,7 +52,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.1"
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="left"
@@ -75,7 +75,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="17dp"
-            android:layout_weight="0.6"
+            android:layout_weight="0.4"
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="left"
@@ -86,7 +86,6 @@
         <View
             android:id="@+id/devider2"
             android:layout_width="match_parent"
-
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
 
@@ -105,6 +104,37 @@
             android:gravity="top|left|center_vertical"
             android:hint="@string/preis"
             android:inputType="number" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="horizontal"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/create_standort_id"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Standort: "/>
+
+            <TextView
+                android:id="@+id/create_location_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Greifswald"/>
+
+            <ImageView
+                android:id="@+id/create_change_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+        </LinearLayout>
 
 
         <Button

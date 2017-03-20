@@ -33,6 +33,7 @@ public class NewAdActivity extends AppCompatActivity {
     private int pictureCount = 1;
 
     private ImageView mImgOne;
+    private ImageView location;
     private ImageView errorImage;
 
     public ProgressBar progress;
@@ -69,6 +70,11 @@ public class NewAdActivity extends AppCompatActivity {
         errorImage = (ImageView) findViewById(R.id.problem_during_upload);
         hideProblem();
         mPrice = (EditText) findViewById(R.id.preis);
+        location = (ImageView) findViewById(R.id.create_change_location);
+        location.setOnClickListener(v -> {
+            Toast.makeText(this, "aufruf der location", Toast.LENGTH_SHORT).show();
+        });
+
 
 
         submitButton = (Button) findViewById(R.id.uploadButton);
