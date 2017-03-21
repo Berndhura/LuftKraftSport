@@ -31,6 +31,7 @@ public class LoginPresenter {
 
     public void sendLoginReq(String email, String password) {
         view.showProgressDialog();
+        view.hideInfo();
         service.loginUserObserv(email, password)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -43,9 +44,11 @@ public class LoginPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "error sending login email user " + e.getMessage());
+                        view.hideProgressDialog();
                         //"The user does not exist, or wrong password"
                         //TODO throwable richtig hier? von holger kommt string denke ich
-                        if ("The user does not exist, or wrong password".equals(e.getMessage().toString())) {
+                        if ("HTTP 401 Unauthorized".equals(e.getMessage().toString())) {
+
                             String info = "Dieser Nutzer ist nicht vorhanden oder es wurde ein falsches Passwort angegeben.";
                             view.showInfo(info);
                         }

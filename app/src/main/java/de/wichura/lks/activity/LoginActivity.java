@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
 
     private LoginPresenter presenter;
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
 
     private ImageView errorImage;
 
@@ -181,6 +182,9 @@ public class LoginActivity extends AppCompatActivity {
         setFbButton(fbLoginButton, "Anmelden mit Facebook");
 
         errorImage = (ImageView) findViewById(R.id.problem_during_login);
+        errorImage.setVisibility(View.GONE);
+        progressBar = (ProgressBar) findViewById(R.id.login_ProgressBar);
+        progressBar.setMax(100);
     }
 
     private void adaptFacebookButton(LoginButton loginButton) {
@@ -352,15 +356,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void showProgressDialog() {
-        progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressDialog() {
-        progressDialog.hide();
+        progressBar.setVisibility(View.GONE);
+    }
+
+    public void hideInfo() {
+        errorImage.setVisibility(View.GONE);
     }
 
     public void showInfo(String info) {

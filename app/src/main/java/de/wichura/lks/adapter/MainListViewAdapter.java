@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.IntDef;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,20 +16,18 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import de.wichura.lks.R;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.RowItem;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.IS_MY_ADS;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -43,17 +40,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     private ArrayList<Long> bookmarks;
     private Activity activity;
     private Service service;
-
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID, LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
-    public @interface LocationStatus {
-    }
-
-    public static final int LOCATION_STATUS_OK = 0;
-    public static final int LOCATION_STATUS_SERVER_DOWN = 1;
-    public static final int LOCATION_STATUS_SERVER_INVALID = 2;
-    public static final int LOCATION_STATUS_UNKNOWN = 3;
-    public static final int LOCATION_STATUS_INVALID = 4;
 
     public MainListViewAdapter(final Activity activity, final Context context, final int resourceId,
                                final List<RowItem> items, final ArrayList<Long> bookmarks) {
@@ -88,8 +74,8 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        final LayoutInflater mInflater = (LayoutInflater) context
-                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        //final LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.list_item, parent, false);
@@ -126,8 +112,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
         if (isMyAdsRequest()) {
             holder.distance.setText("Meine");
-        } else
-        {
+        } else {
             holder.distance.setText(rowItem.getDistance() + " km");
         }
 
@@ -170,22 +155,34 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             holder.txtNumberOfBookmarks.setText(rowItem.getBookmarks());
         }
 
-        //click to bookmark/debookmark an ad
+
         holder.bookmarkStar.setOnClickListener((view) -> {
-            if (bookmarks != null && bookmarks.contains(Long.parseLong(rowItem.getId().toString()))) {
-                deleteBookmark(rowItem.getId());
-                holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
-                notifyDataSetChanged();
+            Integer id = rowItem.getId();
+            if (bookmarks != null && bookmarks.contains(Long.parseLong(id.toString()))) {
+                LinearLayout vwParentRow = (LinearLayout) view.getParent();
+                ((ImageView) vwParentRow.getChildAt(1)).setImageResource(R.drawable.bockmark_star_empty);
+                vwParentRow.refreshDrawableState();
+                removeFromBookmark(id);
+                deleteBookmark(id);
             } else {
-                bookmarkAd(rowItem.getId());
-                holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
-                notifyDataSetChanged();
+                LinearLayout vwParentRow = (LinearLayout) view.getParent();
+                ((ImageView) vwParentRow.getChildAt(1)).setImageResource(R.drawable.bockmark_star_full);
+                vwParentRow.refreshDrawableState();
+                bookmarks.add(Long.parseLong(id.toString()));
+                bookmarkAd(id);
             }
         });
 
         return convertView;
     }
 
+    private void removeFromBookmark(Integer id) {
+        int i = 0;
+        for (Long bm : new ArrayList<>(bookmarks)) {
+            if (bm == Long.parseLong(id.toString())) bookmarks.remove(i);
+            i++;
+        }
+    }
 
     private void deleteBookmark(Integer adId) {
         service.delBookmarkAdObserv(adId, getUserToken())
@@ -207,7 +204,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                         Log.d("CONAN", "bookmark deleted: " + result);
                     }
                 });
-
     }
 
     private void bookmarkAd(Integer adId) {
