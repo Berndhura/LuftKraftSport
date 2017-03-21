@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -28,7 +30,7 @@ import de.wichura.lks.util.BitmapHelper;
  * Camper App
  */
 
-public class FileUploadService implements ProgressRequestBody.UploadCallbacks  {
+public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
     private Context context;
     private NewAdActivity view;
@@ -96,6 +98,17 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks  {
 
         String fileString = getRealPathFromUri(context, Uri.parse(picture));
         File file = new File(fileString.toString());
+
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        Log.d("CONAN", "picture orientation: " + orientation);
 
         BitmapHelper bitmapHelper = new BitmapHelper(context);
         final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
@@ -179,7 +192,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks  {
     }
 
     @Override
-    public void onError() {}
+    public void onError() {
+    }
 
     @Override
     public void onFinish() {

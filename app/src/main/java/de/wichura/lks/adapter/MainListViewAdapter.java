@@ -117,15 +117,17 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         }
 
         //bookmark star full for bookmarked ad
-        if (bookmarks == null) {
-            holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
-        } else {
-            if (bookmarks.contains(Long.parseLong(rowItem.getId().toString()))) {
-                holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
-            } else {
-                holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
-            }
-        }
+       if (!"".equals(getUserToken())) {
+           if (bookmarks == null) {
+               holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+           } else {
+               if (bookmarks.contains(Long.parseLong(rowItem.getId().toString()))) {
+                   holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
+               } else {
+                   holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+               }
+           }
+       }
 
         long date = System.currentTimeMillis();
         final long oneWeek = 7 * 24 * 60 * 60 * 1000;
@@ -191,7 +193,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        Toast.makeText(context, "Bookmark deleted!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Von den Favoriten gelöscht!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -213,7 +215,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        Toast.makeText(context, "Ad is bookmarked!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Zu der Favoritenliste hinzugefügt!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
