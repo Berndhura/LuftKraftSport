@@ -4,13 +4,13 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import de.wichura.lks.activity.LoginActivity;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.User;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by ich on 05.12.2016.
@@ -43,7 +43,12 @@ public class LoginPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "error sending login email user " + e.getMessage());
-                        view.finish();
+                        //"The user does not exist, or wrong password"
+                        //TODO throwable richtig hier? von holger kommt string denke ich
+                        if ("The user does not exist, or wrong password".equals(e.getMessage().toString())) {
+                            String info = "Dieser Nutzer ist nicht vorhanden oder es wurde ein falsches Passwort angegeben.";
+                            view.showInfo(info);
+                        }
                     }
 
                     @Override

@@ -70,6 +70,7 @@ public class NewAdActivity extends AppCompatActivity {
         errorImage = (ImageView) findViewById(R.id.problem_during_upload);
         hideProblem();
         mPrice = (EditText) findViewById(R.id.preis);
+
         location = (ImageView) findViewById(R.id.create_change_location);
         location.setOnClickListener(v -> {
             Toast.makeText(this, "aufruf der location", Toast.LENGTH_SHORT).show();

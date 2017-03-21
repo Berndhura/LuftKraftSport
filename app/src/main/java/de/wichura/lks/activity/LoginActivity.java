@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +68,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginPresenter presenter;
     private ProgressDialog progressDialog;
+
+    private ImageView errorImage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -176,6 +179,8 @@ public class LoginActivity extends AppCompatActivity {
         }
         adaptFacebookButton(fbLoginButton);
         setFbButton(fbLoginButton, "Anmelden mit Facebook");
+
+        errorImage = (ImageView) findViewById(R.id.problem_during_login);
     }
 
     private void adaptFacebookButton(LoginButton loginButton) {
@@ -356,5 +361,13 @@ public class LoginActivity extends AppCompatActivity {
 
     public void hideProgressDialog() {
         progressDialog.hide();
+    }
+
+    public void showInfo(String info) {
+        errorImage.setVisibility(View.VISIBLE);
+        errorImage.setOnClickListener(v -> {
+            Toast.makeText(this, info, Toast.LENGTH_LONG).show();
+        });
+
     }
 }
