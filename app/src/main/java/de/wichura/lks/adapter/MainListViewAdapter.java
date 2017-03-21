@@ -237,7 +237,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
-                        Service service = new Service();
                         service.deleteAdObserv(adId, getUserToken())
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread())
