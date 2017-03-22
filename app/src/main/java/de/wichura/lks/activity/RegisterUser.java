@@ -29,6 +29,8 @@ import static de.wichura.lks.mainactivity.Constants.ACTIVATE_USER_STATUS;
 public class RegisterUser extends AppCompatActivity {
 
     private EditText email;
+    private EditText name;
+    private EditText password;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,13 +48,13 @@ public class RegisterUser extends AppCompatActivity {
 
         Service service = new Service();
 
-        String name = ((TextView) findViewById(R.id.register_user_name)).getText().toString();
+        name =  (EditText) findViewById(R.id.register_user_name);
         email = (EditText) findViewById(R.id.register_user_email);
-        String password = ((TextView) findViewById(R.id.register_user_password)).getText().toString();
+        password = (EditText) findViewById(R.id.register_user_password);
 
         if (validate()) {
             ((TextView) findViewById(R.id.register_user_info_box)).setText("Registriere Konto...");
-            service.registerUserObserv(name, email.getText().toString(), password)
+            service.registerUserObserv(name.getText().toString(), email.getText().toString(), password.getText().toString())
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<String>() {
@@ -130,28 +132,46 @@ public class RegisterUser extends AppCompatActivity {
         String email = ((TextView) findViewById(R.id.register_user_email)).getText().toString();
         String code = ((TextView) findViewById(R.id.register_user_name)).getText().toString();
 
-        service.activateUserObserv(code, email)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
+        if (validateActivationCode()) {
+            service.activateUserObserv(code, email)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("CONAN", "error activating email user " + e.getMessage());
-                        ((TextView) findViewById(R.id.register_user_info_box)).setText("Es gab ein Problem das Konto zu aktivieren. Versuche es nochmal. ");
-                    }
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("CONAN", "error activating email user " + e.getMessage());
+                            ((TextView) findViewById(R.id.register_user_info_box)).setText("Es gab ein Problem das Konto zu aktivieren. Versuche es nochmal. ");
+                        }
 
-                    @Override
-                    public void onNext(String info) {
-                        ((TextView) findViewById(R.id.register_user_info_box)).setText("Neues Konto wurde aktiviert! Du kannst dich mit deiner Email und Passwort anmelden.");
-                        Log.d("CONAN", "activating email user " + info);
-                        adaptViewForExitActivation();
-                    }
-                });
+                        @Override
+                        public void onNext(String info) {
+                            ((TextView) findViewById(R.id.register_user_info_box)).setText("Neues Konto wurde aktiviert! Du kannst dich mit deiner Email und Passwort anmelden.");
+                            Log.d("CONAN", "activating email user " + info);
+                            adaptViewForExitActivation();
+                        }
+                    });
+        }
+    }
+
+    public boolean validateActivationCode() {
+
+        boolean valid = true;
+
+        String nameStr = name.getText().toString();
+
+        if (nameStr.isEmpty()) {
+            name.setError("Aktivierungscode angeben!");
+            valid = false;
+        } else {
+            name.setError(null);
+        }
+
+        return valid;
     }
 
     public boolean validate() {
@@ -164,6 +184,24 @@ public class RegisterUser extends AppCompatActivity {
             valid = false;
         } else {
             email.setError(null);
+        }
+
+        String nameStr = name.getText().toString();
+
+        if (nameStr.isEmpty()) {
+            name.setError("Namen angeben!");
+            valid = false;
+        } else {
+            name.setError(null);
+        }
+
+        String passwordStr = password.getText().toString();
+
+        if (passwordStr.isEmpty()) {
+            password.setError("Passwort angeben!");
+            valid = false;
+        } else {
+            password.setError(null);
         }
 
         return valid;

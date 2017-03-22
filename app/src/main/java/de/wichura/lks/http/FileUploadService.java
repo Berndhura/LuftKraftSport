@@ -188,7 +188,6 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
     @Override
     public void onProgressUpdate(int percentage) {
         view.progress.setProgress(percentage);
-        Log.d("CONAN", "Fileupload: " + percentage);
     }
 
     @Override
