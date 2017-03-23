@@ -44,7 +44,7 @@
             android:background="@android:color/darker_gray" />
 
         <EditText
-            android:id="@+id/keywords"
+            android:id="@+id/new_ad_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -57,7 +57,7 @@
             android:ems="10"
             android:gravity="left"
             android:hint="@string/keywords"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName|textMultiLine" />
 
         <View
             android:id="@+id/devider1"
@@ -66,7 +66,7 @@
             android:background="@android:color/darker_gray" />
 
         <EditText
-            android:id="@+id/description"
+            android:id="@+id/new_ad_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -80,8 +80,7 @@
             android:ems="10"
             android:gravity="left"
             android:hint="@string/description"
-            android:inputType="textPersonName"
-            android:singleLine="false" />
+            android:inputType="textPersonName|textMultiLine" />
 
         <View
             android:id="@+id/devider2"
@@ -90,7 +89,7 @@
             android:background="@android:color/darker_gray" />
 
         <EditText
-            android:id="@+id/preis"
+            android:id="@+id/new_ad_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -108,31 +107,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:orientation="horizontal"
             android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp">
+            android:layout_marginStart="16dp"
+            android:layout_weight="0.3"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/create_standort_id"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Standort: "/>
+                android:text="Standort: " />
 
             <TextView
                 android:id="@+id/create_location_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Greifswald"/>
+                android:text="Greifswald" />
 
             <ImageView
                 android:id="@+id/create_change_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
         </LinearLayout>
 

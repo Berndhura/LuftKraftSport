@@ -23,8 +23,8 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 public class NewAdActivity extends AppCompatActivity {
 
-    private EditText mDescText;
-    private EditText mKeywords;
+    private EditText mDescription;
+    private EditText mTitle;
     private EditText mPrice;
 
 
@@ -64,43 +64,32 @@ public class NewAdActivity extends AppCompatActivity {
         hideProgress();
         fileUploadService = new FileUploadService(getApplicationContext(), this);
 
-        mDescText = (EditText) findViewById(R.id.description);
-        mKeywords = (EditText) findViewById(R.id.keywords);
+        mDescription = (EditText) findViewById(R.id.new_ad_description);
+        mTitle = (EditText) findViewById(R.id.new_ad_title);
         mImgOne = (ImageView) findViewById(R.id.imageButton);
         errorImage = (ImageView) findViewById(R.id.problem_during_upload);
         hideProblem();
-        mPrice = (EditText) findViewById(R.id.preis);
+        mPrice = (EditText) findViewById(R.id.new_ad_price);
 
         location = (ImageView) findViewById(R.id.create_change_location);
         location.setOnClickListener(v -> {
             Toast.makeText(this, "aufruf der location", Toast.LENGTH_SHORT).show();
         });
 
-
-
         submitButton = (Button) findViewById(R.id.uploadButton);
         submitButton.setOnClickListener((v) -> {
 
-            final String titleString = mKeywords.getText().toString();
-            final String descString = mDescText.getText().toString();
-            final String price = mPrice.getText().toString();
-            final String keyWordsString = "zelt";
-            final long date = System.currentTimeMillis();
-
             final Intent data = new Intent();
-            data.putExtra(Constants.TITLE, titleString);
-            data.putExtra(Constants.ARTICLE_ID, "arcticleId");
-            data.putExtra(Constants.DESCRIPTION, descString);
-            data.putExtra(Constants.KEYWORDS, keyWordsString);
+            data.putExtra(Constants.TITLE, mTitle.getText().toString());
+            data.putExtra(Constants.DESCRIPTION, mDescription.getText().toString());
             data.putExtra(Constants.FILENAME, mImage);
-            data.putExtra(Constants.LOCATION, "TODO");
-            data.putExtra(Constants.PHONE, "PHONE");
-            data.putExtra(Constants.PRICE, price);
-            data.putExtra(Constants.DATE, date);
+            data.putExtra(Constants.PRICE, mPrice.getText().toString());
+            data.putExtra(Constants.DATE, System.currentTimeMillis());
 
-            disableUploadButton();
-            fileUploadService.uploadNewArticle(data);
-            //setResult(RESULT_OK, data);
+            if (validateInputs()) {
+                disableUploadButton();
+                fileUploadService.uploadNewArticle(data);
+            }
         });
 
         final ImageView getPictureButton = (ImageView) findViewById(R.id.imageButton);
@@ -170,6 +159,36 @@ public class NewAdActivity extends AppCompatActivity {
                     }
                 }
         }
+    }
+
+    public boolean validateInputs() {
+        boolean valid = true;
+
+        String title = mTitle.getText().toString();
+        if (title.isEmpty()) {
+            mTitle.setError("Der Titel darf nicht leer sein!");
+            valid = false;
+        } else {
+            mTitle.setError(null);
+        }
+
+        String desc = mDescription.getText().toString();
+        if (desc.isEmpty()) {
+            mDescription.setError("Die Beschreibung darf nicht leer sein!");
+            valid = false;
+        } else {
+            mDescription.setError(null);
+        }
+
+        String price = mPrice.getText().toString();
+        if (price.isEmpty()) {
+            mPrice.setError("Der Preis darf nicht leer sein!");
+            valid = false;
+        } else {
+            mPrice.setError(null);
+        }
+
+        return valid;
     }
 
     public String getUserToken() {

@@ -13,17 +13,15 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import de.wichura.lks.activity.NewAdActivity;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.Location;
 import de.wichura.lks.models.RowItem;
 import de.wichura.lks.util.BitmapHelper;
+import okhttp3.MultipartBody;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by ich on 25.10.2016.
@@ -96,63 +94,70 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
     private void uploadPic(Long adId, String picture) {
 
-        String fileString = getRealPathFromUri(context, Uri.parse(picture));
-        File file = new File(fileString.toString());
+        if (picture != null) {
 
-        ExifInterface exif = null;
-        try {
-            exif = new ExifInterface(file.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED);
+            String fileString = getRealPathFromUri(context, Uri.parse(picture));
 
-        Log.d("CONAN", "picture orientation: " + orientation);
+            File file = new File(fileString.toString());
 
-        BitmapHelper bitmapHelper = new BitmapHelper(context);
-        final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
+            ExifInterface exif = null;
+            try {
+                exif = new ExifInterface(file.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
 
-        //RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(Uri.parse(picture))), reducedPicture);
-        ProgressRequestBody requestFile = new ProgressRequestBody(reducedPicture, this);
+            Log.d("CONAN", "picture orientation: " + orientation);
+
+            BitmapHelper bitmapHelper = new BitmapHelper(context);
+            final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
+
+            //RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(Uri.parse(picture))), reducedPicture);
+            ProgressRequestBody requestFile = new ProgressRequestBody(reducedPicture, this);
 
 
-        MultipartBody.Part multiPartBody = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+            MultipartBody.Part multiPartBody = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
-        service.uploadPictureObserv(adId, getUserToken(), multiPartBody)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        view.hideProgress();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        view.hideProgress();
-                        Log.d("CONAN", "error in upload" + e.toString());
-                        Toast.makeText(view, "Problem beim Senden der Daten!", Toast.LENGTH_SHORT).show();
-                        String error;
-                        if (e.toString().contains("SocketTimeoutException")) {
-                            error = "Timeout im Netzwerk";
-                        } else {
-                            error = e.toString();
+            service.uploadPictureObserv(adId, getUserToken(), multiPartBody)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+                            view.hideProgress();
                         }
-                        view.showProblem(error);
-                        view.enableUploadButton();
-                    }
 
-                    @Override
-                    public void onNext(String status) {
-                        Log.d("CONAN", "Picture uploaded");
-                        Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
-                        Boolean deleted = reducedPicture.delete();
-                        if (!deleted)
-                            Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
-                        view.finish();
-                    }
-                });
+                        @Override
+                        public void onError(Throwable e) {
+                            view.hideProgress();
+                            Log.d("CONAN", "error in upload" + e.toString());
+                            Toast.makeText(view, "Problem beim Senden der Daten!", Toast.LENGTH_SHORT).show();
+                            String error;
+                            if (e.toString().contains("SocketTimeoutException")) {
+                                error = "Timeout im Netzwerk";
+                            } else {
+                                error = e.toString();
+                            }
+                            view.showProblem(error);
+                            view.enableUploadButton();
+                        }
+
+                        @Override
+                        public void onNext(String status) {
+                            Log.d("CONAN", "Picture uploaded");
+                            Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
+                            Boolean deleted = reducedPicture.delete();
+                            if (!deleted)
+                                Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
+                            view.finish();
+                        }
+                    });
+        } else {
+            Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
+            view.finish();
+        }
     }
 
     private static String getRealPathFromUri(Context context, Uri contentUri) {
