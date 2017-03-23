@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.wichura.lks.R;
+import de.wichura.lks.activity.NewAdActivity;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
@@ -64,6 +66,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         LinearLayout myAdsView;
         LinearLayout mainLl;
         ImageView deleteButton;
+        ImageView editButton;
         TextView txtViews;
         ImageView thumbNail;
         TextView txtNumberOfBookmarks;
@@ -88,6 +91,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             holder.myAdsView = (LinearLayout) convertView.findViewById(R.id.my_ads_view);
             holder.mainLl = (LinearLayout) convertView.findViewById(R.id.main_linear_layout);
             holder.deleteButton = (ImageView) convertView.findViewById(R.id.NEW_my_ad_delete);
+            holder.editButton = (ImageView) convertView.findViewById(R.id.edit_my_article);
             holder.txtViews = (TextView) convertView.findViewById(R.id.NEW_my_views);
             holder.txtNumberOfBookmarks = (TextView) convertView.findViewById(R.id.number_of_bookmarks);
             holder.thumbNail = (ImageView) convertView.findViewById(R.id.icon);
@@ -174,6 +178,13 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 deleteAdRequest(adId, view);
             });
             holder.deleteButton.setTag(position);
+
+            //edit my article
+            holder.editButton.setOnClickListener(view -> {
+                Integer adId = rowItem.getId();
+                Intent i = new Intent(activity.getApplicationContext(), NewAdActivity.class);
+                activity.startActivityForResult(i, Constants.REQUEST_ID_FOR_NEW_AD);
+            });
 
             //Views
             holder.txtViews.setText(rowItem.getViews());

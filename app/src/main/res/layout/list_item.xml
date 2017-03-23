@@ -136,20 +136,33 @@
             android:id="@+id/NEW_my_ad_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
+            android:layout_weight="0.25"
             android:padding="5sp"
             android:src="@drawable/ic_delete_blue_grey_600_24dp" />
 
         <View
             android:layout_width="0.5dp"
             android:layout_height="fill_parent"
-            android:layout_toRightOf="@+id/NEW_my_ad_delete"
             android:background="@android:color/darker_gray" />
+
+        <ImageView
+            android:id="@+id/edit_my_article"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:padding="5sp"
+            android:src="@drawable/ic_mode_edit_blue_grey_600_24dp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/darker_gray" />
+
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.16"
+            android:layout_weight="0.1"
             android:padding="5sp"
             android:src="@drawable/ic_remove_red_eye_blue_grey_600_24dp" />
 
@@ -157,21 +170,20 @@
             android:id="@+id/NEW_my_views"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.17"
+            android:layout_weight="0.1"
             android:padding="5sp"
             android:textColor="#000000" />
 
         <View
             android:layout_width="0.5dp"
             android:layout_height="fill_parent"
-            android:layout_toRightOf="@+id/NEW_my_ad_delete"
             android:background="@android:color/darker_gray" />
 
         <ImageView
             android:id="@+id/NEW_my_ad_bookmarks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.16"
+            android:layout_weight="0.15"
             android:padding="5sp"
             android:src="@drawable/ic_bookmark_border_blue_grey_600_24dp" />
 
@@ -179,7 +191,7 @@
             android:id="@+id/number_of_bookmarks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.17"
+            android:layout_weight="0.15"
             android:padding="5sp"
             android:textColor="#000000" />
 
