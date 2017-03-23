@@ -117,17 +117,40 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         }
 
         //bookmark star full for bookmarked ad
-       if (!"".equals(getUserToken())) {
-           if (bookmarks == null) {
-               holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
-           } else {
-               if (bookmarks.contains(Long.parseLong(rowItem.getId().toString()))) {
-                   holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
-               } else {
-                   holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
-               }
-           }
-       }
+
+        if (bookmarks == null) {
+            holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+        } else {
+            if (bookmarks.contains(Long.parseLong(rowItem.getId().toString()))) {
+                holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_full);
+            } else {
+                holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
+            }
+        }
+
+        //no login -> disable bookmark button
+        if ("".equals(getUserToken())) {
+            holder.bookmarkStar.setEnabled(true);
+            holder.bookmarkStar.setOnClickListener(v -> Toast.makeText(context, "Bitte anmelden!", Toast.LENGTH_LONG).show());
+        } else {
+            holder.bookmarkStar.setOnClickListener((view) -> {
+                Integer id = rowItem.getId();
+                if (bookmarks != null && bookmarks.contains(Long.parseLong(id.toString()))) {
+                    LinearLayout vwParentRow = (LinearLayout) view.getParent();
+                    ((ImageView) vwParentRow.getChildAt(1)).setImageResource(R.drawable.bockmark_star_empty);
+                    vwParentRow.refreshDrawableState();
+                    removeFromBookmark(id);
+                    deleteBookmark(id);
+                } else {
+                    LinearLayout vwParentRow = (LinearLayout) view.getParent();
+                    ((ImageView) vwParentRow.getChildAt(1)).setImageResource(R.drawable.bockmark_star_full);
+                    vwParentRow.refreshDrawableState();
+                    bookmarks.add(Long.parseLong(id.toString()));
+                    bookmarkAd(id);
+                }
+            });
+        }
+
 
         long date = System.currentTimeMillis();
         final long oneWeek = 7 * 24 * 60 * 60 * 1000;
@@ -156,24 +179,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             holder.txtViews.setText(rowItem.getViews());
             holder.txtNumberOfBookmarks.setText(rowItem.getBookmarks());
         }
-
-
-        holder.bookmarkStar.setOnClickListener((view) -> {
-            Integer id = rowItem.getId();
-            if (bookmarks != null && bookmarks.contains(Long.parseLong(id.toString()))) {
-                LinearLayout vwParentRow = (LinearLayout) view.getParent();
-                ((ImageView) vwParentRow.getChildAt(1)).setImageResource(R.drawable.bockmark_star_empty);
-                vwParentRow.refreshDrawableState();
-                removeFromBookmark(id);
-                deleteBookmark(id);
-            } else {
-                LinearLayout vwParentRow = (LinearLayout) view.getParent();
-                ((ImageView) vwParentRow.getChildAt(1)).setImageResource(R.drawable.bockmark_star_full);
-                vwParentRow.refreshDrawableState();
-                bookmarks.add(Long.parseLong(id.toString()));
-                bookmarkAd(id);
-            }
-        });
 
         return convertView;
     }
