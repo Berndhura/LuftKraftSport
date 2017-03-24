@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -49,6 +50,50 @@ public class MainPresenter {
         this.view = view;
         this.service = service;
         this.context = context;
+    }
+
+    public void deleteBookmark(Integer adId) {
+        service.delBookmarkAdObserv(adId, getUserToken())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Toast.makeText(context, "Von den Favoriten gelöscht!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in bookmark ad: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String result) {
+                        Log.d("CONAN", "bookmark deleted: " + result);
+                    }
+                });
+    }
+
+    public void bookmarkAd(Integer adId) {
+        service.bookmarkAdObserv(adId, getUserToken())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Toast.makeText(context, "Zu der Favoritenliste hinzugefügt!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error in bookmark ad: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String result) {
+                        Log.d("CONAN", "bookmark ad: " + result);
+                    }
+                });
     }
 
     public void getFacebookUserInfo() {

@@ -26,7 +26,9 @@ import de.wichura.lks.activity.NewAdActivity;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
+import de.wichura.lks.mainactivity.MainActivity;
 import de.wichura.lks.models.RowItem;
+import de.wichura.lks.presentation.MainPresenter;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -42,6 +44,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     private ArrayList<Long> bookmarks;
     private Activity activity;
     private Service service;
+    private MainPresenter presenter;
 
     public MainListViewAdapter(final Activity activity, final Context context, final int resourceId,
                                final List<RowItem> items, final ArrayList<Long> bookmarks) {
@@ -54,6 +57,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             this.bookmarks = null;
         }
         service = new Service();
+        presenter = new MainPresenter((MainActivity) activity, service, context);
     }
 
     /* private view holder class */
@@ -144,13 +148,13 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                     ((ImageView) vwParentRow.getChildAt(1)).setImageResource(R.drawable.bockmark_star_empty);
                     vwParentRow.refreshDrawableState();
                     removeFromBookmark(id);
-                    deleteBookmark(id);
+                    presenter.deleteBookmark(id);
                 } else {
                     LinearLayout vwParentRow = (LinearLayout) view.getParent();
                     ((ImageView) vwParentRow.getChildAt(1)).setImageResource(R.drawable.bockmark_star_full);
                     vwParentRow.refreshDrawableState();
                     bookmarks.add(Long.parseLong(id.toString()));
-                    bookmarkAd(id);
+                    presenter.bookmarkAd(id);
                 }
             });
         }
@@ -181,8 +185,12 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
             //edit my article
             holder.editButton.setOnClickListener(view -> {
-                Integer adId = rowItem.getId();
                 Intent i = new Intent(activity.getApplicationContext(), NewAdActivity.class);
+                i.putExtra(Constants.ARTICLE_ID, rowItem.getId());
+                i.putExtra(Constants.TITLE, rowItem.getTitle());
+                i.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
+                i.putExtra(Constants.PRICE, rowItem.getPrice());
+                i.putExtra(Constants.URI, rowItem.getUrl());
                 activity.startActivityForResult(i, Constants.REQUEST_ID_FOR_NEW_AD);
             });
 
@@ -202,49 +210,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         }
     }
 
-    private void deleteBookmark(Integer adId) {
-        service.delBookmarkAdObserv(adId, getUserToken())
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        Toast.makeText(context, "Von den Favoriten gelöscht!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("CONAN", "error in bookmark ad: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(String result) {
-                        Log.d("CONAN", "bookmark deleted: " + result);
-                    }
-                });
-    }
-
-    private void bookmarkAd(Integer adId) {
-        service.bookmarkAdObserv(adId, getUserToken())
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        Toast.makeText(context, "Zu der Favoritenliste hinzugefügt!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("CONAN", "error in bookmark ad: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(String result) {
-                        Log.d("CONAN", "bookmark ad: " + result);
-                    }
-                });
-    }
 
     private void deleteAdRequest(final Integer adId, final View view) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(activity)

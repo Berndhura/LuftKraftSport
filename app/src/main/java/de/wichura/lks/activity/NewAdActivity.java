@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import de.wichura.lks.R;
 import de.wichura.lks.http.FileUploadService;
+import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -58,7 +60,6 @@ public class NewAdActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-
         progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
         progress.setMax(100);
         hideProgress();
@@ -75,6 +76,17 @@ public class NewAdActivity extends AppCompatActivity {
         location.setOnClickListener(v -> {
             Toast.makeText(this, "aufruf der location", Toast.LENGTH_SHORT).show();
         });
+
+        //edit my article:
+        if (getIntent().getStringExtra(Constants.TITLE) != null) {
+            mTitle.setText(getIntent().getStringExtra(Constants.TITLE));
+            mDescription.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
+            mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
+            Log.d("CONAN", getIntent().getStringExtra(Constants.URI));
+            Picasso.with(getApplicationContext())
+                    .load((Urls.MAIN_SERVER_URL_V3 + "pictures/" + (getIntent().getStringExtra(Constants.URI + "/thumbnail")))).into(mImgOne);
+        }
+
 
         submitButton = (Button) findViewById(R.id.uploadButton);
         submitButton.setOnClickListener((v) -> {
