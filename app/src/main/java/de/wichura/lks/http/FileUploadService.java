@@ -41,6 +41,54 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         this.service = new Service();
     }
 
+    public void updateArticle(Intent data) {
+
+        RowItem item = new RowItem();
+        item.setId(data.getIntExtra(Constants.ARTICLE_ID, 0));
+        item.setTitle(data.getStringExtra(Constants.TITLE));
+        item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
+        item.setPrice(data.getStringExtra(Constants.PRICE));
+        item.setDate(data.getLongExtra(Constants.DATE, 0));
+
+        double[] latlng = {getLat(), getLng()};
+        Location location = new Location();
+        location.setCoordinates(latlng);
+        location.setType("Point");
+        item.setLocation(location);
+
+        service.saveNewAdObserv(getUserToken(), item)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<RowItem>() {
+                    @Override
+                    public void onCompleted() {
+                        view.hideProgress();
+                        view.finish();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.hideProgress();
+                        Log.d("CONAN", "error in updating Article" + e.toString());
+                        Toast.makeText(view, "Problem beim Senden der Daten!" + e, Toast.LENGTH_SHORT).show();
+                        String error;
+                        if (e.toString().contains("SocketTimeoutException")) {
+                            error = "Timeout im Netzwerk";
+                        } else {
+                            error = e.toString();
+                        }
+                        view.showProblem(error);
+                        view.enableUploadButton();
+                    }
+
+                    @Override
+                    public void onNext(RowItem rowItem) {
+
+                    }
+                });
+
+    }
+
     public void uploadNewArticle(Intent data) {
 
         view.showProgress();

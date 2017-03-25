@@ -43,6 +43,9 @@ public class NewAdActivity extends AppCompatActivity {
     private FileUploadService fileUploadService;
     private Button submitButton;
 
+    private Integer articleIdForEdit;
+    private Boolean editMode;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class NewAdActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
+        editMode = false;
         progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
         progress.setMax(100);
         hideProgress();
@@ -93,19 +97,21 @@ public class NewAdActivity extends AppCompatActivity {
         });
 
 
-
         //edit my article:
         if (getIntent().getStringExtra(Constants.TITLE) != null) {
+            editMode = true;
             mTitle.setText(getIntent().getStringExtra(Constants.TITLE));
             mDescription.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
             mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
             Picasso.with(getApplicationContext())
                     .load((Urls.MAIN_SERVER_URL_V3 + "pictures/" + (getIntent().getStringExtra(Constants.URI) + "/thumbnail"))).into(mImgOne);
-
-             }
+            articleIdForEdit = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
+            Log.d("CONAN", "edit: " + articleIdForEdit);
+        }
 
 
         submitButton = (Button) findViewById(R.id.uploadButton);
+        if (editMode) submitButton.setText("Speichern");
         submitButton.setOnClickListener((v) -> {
 
             final Intent data = new Intent();
@@ -115,9 +121,14 @@ public class NewAdActivity extends AppCompatActivity {
             data.putExtra(Constants.PRICE, mPrice.getText().toString());
             data.putExtra(Constants.DATE, System.currentTimeMillis());
 
-            if (validateInputs()) {
+            if (validateInputs() && !editMode) {
                 disableUploadButton();
                 fileUploadService.uploadNewArticle(data);
+            }
+            if (validateInputs() && editMode) {
+                disableUploadButton();
+                data.putExtra(Constants.ARTICLE_ID, articleIdForEdit);
+                fileUploadService.updateArticle(data);
             }
         });
     }
