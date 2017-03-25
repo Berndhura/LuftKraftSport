@@ -77,15 +77,32 @@ public class NewAdActivity extends AppCompatActivity {
             Toast.makeText(this, "aufruf der location", Toast.LENGTH_SHORT).show();
         });
 
+
+        final ImageView getPictureButton = (ImageView) findViewById(R.id.imageButton);
+
+        getPictureButton.setOnClickListener((v) -> {
+            final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+
+
+            // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            //startActivityForResult(cameraIntent, SELECT_PHOTO);
+            //TODO camera plus photo picker
+            //http://stackoverflow.com/questions/5991319/capture-image-from-camera-and-display-in-activity
+        });
+
+
+
         //edit my article:
         if (getIntent().getStringExtra(Constants.TITLE) != null) {
             mTitle.setText(getIntent().getStringExtra(Constants.TITLE));
             mDescription.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
             mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
-            Log.d("CONAN", getIntent().getStringExtra(Constants.URI));
             Picasso.with(getApplicationContext())
-                    .load((Urls.MAIN_SERVER_URL_V3 + "pictures/" + (getIntent().getStringExtra(Constants.URI + "/thumbnail")))).into(mImgOne);
-        }
+                    .load((Urls.MAIN_SERVER_URL_V3 + "pictures/" + (getIntent().getStringExtra(Constants.URI) + "/thumbnail"))).into(mImgOne);
+
+             }
 
 
         submitButton = (Button) findViewById(R.id.uploadButton);
@@ -103,22 +120,6 @@ public class NewAdActivity extends AppCompatActivity {
                 fileUploadService.uploadNewArticle(data);
             }
         });
-
-        final ImageView getPictureButton = (ImageView) findViewById(R.id.imageButton);
-
-        getPictureButton.setOnClickListener((v) -> {
-            final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-
-
-            // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            //startActivityForResult(cameraIntent, SELECT_PHOTO);
-            //TODO camera plus photo picker
-            //http://stackoverflow.com/questions/5991319/capture-image-from-camera-and-display-in-activity
-        });
-
-
     }
 
     public void showProblem(String error) {
