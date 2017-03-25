@@ -108,6 +108,7 @@ public class NewAdActivity extends AppCompatActivity {
         //edit my article:
         if (getIntent().getStringExtra(Constants.TITLE) != null) {
             isEditMode = true;
+            getSupportActionBar().setTitle("Bearbeiten");
             mTitle.setText(getIntent().getStringExtra(Constants.TITLE));
             mDescription.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
             mPrice.setText(getIntent().getStringExtra(Constants.PRICE));

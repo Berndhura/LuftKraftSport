@@ -57,6 +57,7 @@ public class Constants {
     public static final String DISTANCE = "distance";
     public static final String FILENAME = "filename";
     public static final String ID = "id";
+    public static final String POSITION_IN_LIST = "positionInList";
 
     //Broadcast messages
     public static final String LOGIN_COMPLETE = "loginComplete";

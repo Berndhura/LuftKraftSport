@@ -418,6 +418,7 @@ public class MainActivity extends AppCompatActivity implements
             intent.putExtra(Constants.VIEWS, rowItem.getViews());
             intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
             intent.putExtra(Constants.USER_ID, getUserId());
+            intent.putExtra(Constants.POSITION_IN_LIST, position);
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
         });
 
@@ -533,8 +534,11 @@ public class MainActivity extends AppCompatActivity implements
                 //end case UserLogin
             }
             case Constants.REQUEST_ID_FOR_OPEN_AD: {
-                //setMyAdsFlag(true);
-                //getAds(Constants.TYPE_ALL);
+                //in case article is deleted -> remove from list
+                if (data != null) {
+                    adapter.remove(adapter.getItem(data.getIntExtra(Constants.POSITION_IN_LIST, 0)));
+                    adapter.notifyDataSetChanged();
+                }
                 break;
             }
             case Constants.REQUEST_ID_FOR_SEARCH: {

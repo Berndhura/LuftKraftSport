@@ -209,7 +209,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             mDelAndMsgButton.setOnClickListener((view) -> {
                 //get ad id and send delete request
                 Log.i("CONAN", "AdId: " + mAdId);
-                deleteAdRequest(mAdId);
+                int position = getIntent().getIntExtra(Constants.POSITION_IN_LIST, 0);
+                deleteAdRequest(mAdId, position);
             });
         } else {
             mDelAndMsgButton.setText("Nachricht");
@@ -315,7 +316,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         alert.show();
     }
 
-    private void deleteAdRequest(final Integer adId) {
+    private void deleteAdRequest(final Integer adId, int position) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 .setTitle("Artikel Löschen")
                 .setMessage("Willst du den Artikel wirklich löschen?")
@@ -323,6 +324,10 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 .setPositiveButton("Löschen!", (dialog, whichButton) -> {
                     presenter.deleteAd(adId);
                     dialog.dismiss();
+                    //get back postion from main list to remove from view in mainActivity
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.POSITION_IN_LIST, position);
+                    setResult(RESULT_OK, intent);
                     finish();
                 })
                 .setNegativeButton("nein doch nicht", (dialog, whichButton) -> dialog.dismiss())
