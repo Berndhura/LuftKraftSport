@@ -539,6 +539,9 @@ public class MainActivity extends AppCompatActivity implements
                     adapter.remove(adapter.getItem(data.getIntExtra(Constants.POSITION_IN_LIST, 0)));
                     adapter.notifyDataSetChanged();
                 }
+                //in case article is bookmarked -> show blue star
+                // if (data.getIntExtra(Constants.POSITION_IN_LIST, 0) != 0 && data.getStringExtra(Constants.BOOKMARKED_FLAG == true)) {
+
                 break;
             }
             case Constants.REQUEST_ID_FOR_SEARCH: {
