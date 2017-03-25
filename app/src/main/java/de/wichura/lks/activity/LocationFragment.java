@@ -16,13 +16,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,7 +31,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import de.wichura.lks.R;
@@ -56,7 +53,6 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     private GoogleApiClient mGoogleApiClient;
     private LinearLayout distanceView;
     private LocationPresenter presenter;
-
 
 
     @Override
@@ -152,11 +148,13 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-        ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_NETWORK_STATE);
-        // Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-        //       mGoogleApiClient);
-        //if (mLastLocation != null) {
-        //place marker at current position
+        int accessFineLoc = ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        int accessCoarseLoc = ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        // if (accessCoarseLoc == PackageManager.PERMISSION_DENIED && accessFineLoc == PackageManager.PERMISSION_DENIED) {
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(54.0, 13.0), 9));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -181,30 +179,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
                 initDistanceSeekBar();
             }
         });
-
-        //click on marker, not on map
-        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                LatLng position = marker.getPosition();
-
-                Toast.makeText(
-                        getActivity(),
-                        "Lat " + position.latitude + " "
-                                + "Long " + position.longitude,
-                        Toast.LENGTH_LONG).show();
-                return true;
-            }
-        });
-
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000); //5 seconds
-        mLocationRequest.setFastestInterval(3000); //3 seconds
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
-
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
+        //}
     }
 
     public void updateCity(String cityName) {
