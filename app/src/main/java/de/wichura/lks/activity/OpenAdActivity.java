@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -157,6 +159,10 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         if (!"article".equals(getIntent().getStringExtra(Constants.NOTIFICATION_TYPE))) {
             presenter.getSellerInformation(getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
         }
+
+        imgView.setOnClickListener(v -> {
+            Toast.makeText(this, "ganzer bildschirm ansicht", Toast.LENGTH_SHORT).show();
+        });
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();

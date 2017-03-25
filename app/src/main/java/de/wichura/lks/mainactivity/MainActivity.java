@@ -280,7 +280,9 @@ public class MainActivity extends AppCompatActivity implements
         registerLoginReceiver();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.registerOnSharedPreferenceChangeListener(this);
-        setMyAdsFlag(false);
+        //TODO meine anzeigen -> open -> zurück meine anzeigen müssen del und edit weiter sichbar sein, weil vorher flag auf true war
+        //richtig?
+        //setMyAdsFlag(false);
 
         if (mListState != null)
             listView.onRestoreInstanceState(mListState);

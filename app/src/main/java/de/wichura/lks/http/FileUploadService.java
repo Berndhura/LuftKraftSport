@@ -91,7 +91,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
     public void uploadNewArticle(Intent data) {
 
-        view.showProgress();
+        view.showMainProgress();
         view.hideProblem();
 
         String picture = data.getStringExtra(Constants.FILENAME);
@@ -114,6 +114,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                 .subscribe(new Subscriber<RowItem>() {
                     @Override
                     public void onCompleted() {
+                        view.hideMainProgress();
                         uploadPic(adId, picture);
                     }
 
@@ -141,6 +142,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
     }
 
     private void uploadPic(Long adId, String picture) {
+
+        view.showProgress();
 
         if (picture != null) {
 

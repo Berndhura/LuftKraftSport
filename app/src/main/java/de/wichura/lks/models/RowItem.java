@@ -3,11 +3,8 @@ package de.wichura.lks.models;
 import com.google.gson.annotations.Expose;
 
 public class RowItem {
-    private int imageId;
     @Expose
     private String title;
-    @Expose
-    private String keywords;
     @Expose
     private String urls;
     @Expose
@@ -33,10 +30,8 @@ public class RowItem {
 
     public RowItem () {}
 
-    public RowItem(final int imageId,
-                   final String title,
+    public RowItem(final String title,
                    final Integer id,
-                   final String keywords,
                    final String url,
                    final String des,
                    final String phone,
@@ -46,10 +41,8 @@ public class RowItem {
                    final String userid,
                    final String views,
                    final String bookmarks) {
-        this.imageId = imageId;
         this.title = title;
         this.id = id;
-        this.keywords = keywords;
         this.urls = url;
         this.description = des;
         this.phone = phone;

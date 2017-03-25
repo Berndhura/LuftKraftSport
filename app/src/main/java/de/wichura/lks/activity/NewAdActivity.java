@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -44,7 +45,10 @@ public class NewAdActivity extends AppCompatActivity {
     private Button submitButton;
 
     private Integer articleIdForEdit;
-    private Boolean editMode;
+    private Boolean isEditMode;
+
+    private LinearLayout emptyBackgroundLl;
+    private LinearLayout mainLl;
 
 
     @Override
@@ -63,10 +67,14 @@ public class NewAdActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-        editMode = false;
+        isEditMode = false;
         progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
         progress.setMax(100);
         hideProgress();
+
+        emptyBackgroundLl = (LinearLayout) findViewById(R.id.upload_background);
+        mainLl = (LinearLayout) findViewById(R.id.main_upload_linear_layout);
+
         fileUploadService = new FileUploadService(getApplicationContext(), this);
 
         mDescription = (EditText) findViewById(R.id.new_ad_description);
@@ -99,7 +107,7 @@ public class NewAdActivity extends AppCompatActivity {
 
         //edit my article:
         if (getIntent().getStringExtra(Constants.TITLE) != null) {
-            editMode = true;
+            isEditMode = true;
             mTitle.setText(getIntent().getStringExtra(Constants.TITLE));
             mDescription.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
             mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
@@ -111,7 +119,7 @@ public class NewAdActivity extends AppCompatActivity {
 
 
         submitButton = (Button) findViewById(R.id.uploadButton);
-        if (editMode) submitButton.setText("Speichern");
+        if (isEditMode) submitButton.setText("Speichern");
         submitButton.setOnClickListener((v) -> {
 
             final Intent data = new Intent();
@@ -121,11 +129,11 @@ public class NewAdActivity extends AppCompatActivity {
             data.putExtra(Constants.PRICE, mPrice.getText().toString());
             data.putExtra(Constants.DATE, System.currentTimeMillis());
 
-            if (validateInputs() && !editMode) {
+            if (validateInputs() && !isEditMode) {
                 disableUploadButton();
                 fileUploadService.uploadNewArticle(data);
             }
-            if (validateInputs() && editMode) {
+            if (validateInputs() && isEditMode) {
                 disableUploadButton();
                 data.putExtra(Constants.ARTICLE_ID, articleIdForEdit);
                 fileUploadService.updateArticle(data);
@@ -158,6 +166,16 @@ public class NewAdActivity extends AppCompatActivity {
 
     public void hideProgress() {
         progress.setVisibility(ProgressBar.GONE);
+    }
+
+    public void showMainProgress() {
+        mainLl.setVisibility(View.GONE);
+        emptyBackgroundLl.setVisibility(View.VISIBLE);
+    }
+
+    public void hideMainProgress() {
+        emptyBackgroundLl.setVisibility(View.GONE);
+        mainLl.setVisibility(View.VISIBLE);
     }
 
     @Override
