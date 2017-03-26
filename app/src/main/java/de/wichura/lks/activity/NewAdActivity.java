@@ -68,7 +68,15 @@ public class NewAdActivity extends AppCompatActivity {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
             }
-            toolbar.setNavigationOnClickListener((view) -> finish());
+            toolbar.setNavigationOnClickListener(view -> {
+                if (isEditMode) {
+                    Intent i = new Intent();
+                    i.putExtra(Constants.IS_EDIT_MODE, "fromEditArticle");
+                    setResult(RESULT_OK, i);
+                    finish();
+                }
+                finish();
+            });
         }
 
         isEditMode = false;
@@ -130,8 +138,7 @@ public class NewAdActivity extends AppCompatActivity {
             Picasso.with(getApplicationContext())
                     .load(pictureUri)
                     .placeholder(R.drawable.empty_photo)
-                    //.resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
-                    //.centerInside()
+                    .fit()
                     .into(mImgOne, new Callback() {
                         @Override
                         public void onSuccess() {

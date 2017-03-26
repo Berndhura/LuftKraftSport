@@ -58,6 +58,7 @@ public class Constants {
     public static final String FILENAME = "filename";
     public static final String ID = "id";
     public static final String POSITION_IN_LIST = "positionInList";
+    public static final String IS_EDIT_MODE = "isEditMode";
 
     //Broadcast messages
     public static final String LOGIN_COMPLETE = "loginComplete";

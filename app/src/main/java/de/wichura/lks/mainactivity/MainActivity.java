@@ -481,6 +481,13 @@ public class MainActivity extends AppCompatActivity implements
 
         switch (requestCode) {
             case Constants.REQUEST_ID_FOR_NEW_AD: {
+                //my articles -> edit one -> just go back -> still show my articles
+                if (data.getStringExtra(Constants.IS_EDIT_MODE) != null) {
+                    setMyAdsFlag(true);
+                    getAds(Constants.TYPE_USER);
+                    break;
+                }
+                //just show all
                 setMyAdsFlag(false);
                 getAds(Constants.TYPE_ALL);
                 break;
