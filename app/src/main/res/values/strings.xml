@@ -40,6 +40,7 @@
     <string name="description">Beschreibe es...</string>
     <string name="keywords">Was verkaufst Du...</string>
     <string name="price_does_not_matter">Beliebig</string>
+    <string name="exit_question">Wirklich beenden?</string>
 
     <!-- Empty Ads Database -->
     <string name="empty_ads_list">No Ads Information Available</string>

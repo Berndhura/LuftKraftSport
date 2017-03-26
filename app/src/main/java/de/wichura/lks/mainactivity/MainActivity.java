@@ -482,7 +482,7 @@ public class MainActivity extends AppCompatActivity implements
         switch (requestCode) {
             case Constants.REQUEST_ID_FOR_NEW_AD: {
                 //my articles -> edit one -> just go back -> still show my articles
-                if (data.getStringExtra(Constants.IS_EDIT_MODE) != null) {
+                if (data != null && data.getStringExtra(Constants.IS_EDIT_MODE) != null) {
                     setMyAdsFlag(true);
                     getAds(Constants.TYPE_USER);
                     break;
@@ -583,6 +583,16 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onBackPressed() {
+        if(isTaskRoot()) {
+            new ExitDialogFragment().show(getSupportFragmentManager(), null);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         setProfileName(getUserName());
         if (!isUserLoggedIn()) {
@@ -590,17 +600,6 @@ public class MainActivity extends AppCompatActivity implements
         }
         setProfilePicture(Uri.parse(getUserProfilePic()));
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer != null) {
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                super.onBackPressed();
-            }
-        }
     }
 
     private void updateLoginButton() {
