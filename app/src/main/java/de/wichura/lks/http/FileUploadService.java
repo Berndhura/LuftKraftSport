@@ -65,11 +65,12 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onCompleted() {
                         view.hideProgress();
-                        //view.finish();
                         if (data.getStringExtra(Constants.FILENAME) != null) {
                             String imageString = data.getStringExtra(Constants.FILENAME);
                             view.hideMainProgress();
                             uploadPic(adId, imageString);
+                        } else {
+                            view.finish();
                         }
                     }
 
@@ -80,7 +81,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         Toast.makeText(view, "Problem beim Senden der Daten!" + e, Toast.LENGTH_SHORT).show();
                         String error;
                         if (e.toString().contains("SocketTimeoutException")) {
-                            error = "Timeout im Netzwerk";
+                            error = "Probleme mit der Verbindung";
                         } else {
                             error = e.toString();
                         }
@@ -205,6 +206,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         @Override
                         public void onNext(String status) {
                             Log.d("CONAN", "Picture uploaded");
+                            //TODO unterscheiden ob new oder update -> Toast anpassen
                             Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
                             Boolean deleted = reducedPicture.delete();
                             if (!deleted)
