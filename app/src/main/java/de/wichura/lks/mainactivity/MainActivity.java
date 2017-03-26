@@ -636,7 +636,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         final String userId = getUserId();
 
@@ -678,6 +678,8 @@ public class MainActivity extends AppCompatActivity implements
             }
             case R.id.refresh: {
                 setMyAdsFlag(false);
+                isMyAds = false;
+                isMyAds = false;
                 getAds(Constants.TYPE_ALL);
                 if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                 return true;
