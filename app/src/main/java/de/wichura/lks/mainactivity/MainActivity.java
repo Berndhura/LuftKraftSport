@@ -101,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements
 
     private GoogleApiClient mGoogleApiClient;
 
+    //app navigation
+    private Boolean isBookmaks;
+    private Boolean isMyAds;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements
         size = 10;
         pages = 0;
         total = 0;
+
+        isBookmaks = false;
+        isMyAds = false;
 
         Service service = new Service();
         presenterLayer = new MainPresenter(this, service, getApplicationContext());
@@ -584,10 +591,20 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        if(isTaskRoot()) {
-            new ExitDialogFragment().show(getSupportFragmentManager(), null);
+        if (isBookmaks) {
+            setMyAdsFlag(false);
+            isBookmaks = false;
+            getAds(Constants.TYPE_ALL);
+        } else if (isMyAds) {
+            setMyAdsFlag(false);
+            isMyAds = false;
+            getAds(Constants.TYPE_ALL);
         } else {
-            super.onBackPressed();
+            if (isTaskRoot()) {
+                new ExitDialogFragment().show(getSupportFragmentManager(), null);
+            } else {
+                super.onBackPressed();}
+
         }
     }
 
@@ -632,6 +649,8 @@ public class MainActivity extends AppCompatActivity implements
                     page = 0;
                     size = 10;
                     setMyAdsFlag(true);
+                    isMyAds = true;
+                    isBookmaks = false;
                     getAds(Constants.TYPE_USER);
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
@@ -669,6 +688,8 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
                 } else {
                     setMyAdsFlag(false);
+                    isBookmaks = true;
+                    isMyAds = false;
                     getAds(Constants.TYPE_BOOKMARK);
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
