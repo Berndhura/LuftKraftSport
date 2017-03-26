@@ -190,8 +190,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 i.putExtra(Constants.TITLE, rowItem.getTitle());
                 i.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
                 i.putExtra(Constants.PRICE, rowItem.getPrice());
-                i.putExtra(Constants.URI, rowItem.getUrl());
-                //TODO hier geht was durcheinander
                 i.putExtra(Constants.AD_URL, rowItem.getUrl());
                 i.putExtra(Constants.LAT, rowItem.getLocation().getCoordinates()[0]);
                 i.putExtra(Constants.LNG, rowItem.getLocation().getCoordinates()[1]);

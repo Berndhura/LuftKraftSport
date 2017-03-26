@@ -65,7 +65,12 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onCompleted() {
                         view.hideProgress();
-                        view.finish();
+                        //view.finish();
+                        if (data.getStringExtra(Constants.FILENAME) != null) {
+                            String imageString = data.getStringExtra(Constants.FILENAME);
+                            view.hideMainProgress();
+                            uploadPic(adId, imageString);
+                        }
                     }
 
                     @Override
@@ -85,7 +90,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
                     @Override
                     public void onNext(RowItem rowItem) {
-
+                        adId = Long.parseLong(rowItem.getId().toString());
                     }
                 });
 

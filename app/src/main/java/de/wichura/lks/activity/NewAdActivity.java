@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import de.wichura.lks.R;
@@ -33,9 +34,11 @@ public class NewAdActivity extends AppCompatActivity {
 
     private static final int SELECT_PHOTO = 100;
     private String mImage;
+    private String mImage2;
     private int pictureCount = 1;
 
     private ImageView mImgOne;
+    private ImageView mImgTwo;
     private ImageView location;
     private ImageView errorImage;
 
@@ -46,6 +49,7 @@ public class NewAdActivity extends AppCompatActivity {
 
     private Integer articleIdForEdit;
     private Boolean isEditMode;
+    private Boolean isImageChanged;
 
     private LinearLayout emptyBackgroundLl;
     private LinearLayout mainLl;
@@ -68,6 +72,7 @@ public class NewAdActivity extends AppCompatActivity {
         }
 
         isEditMode = false;
+        isImageChanged = false;
         progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
         progress.setMax(100);
         hideProgress();
@@ -80,6 +85,7 @@ public class NewAdActivity extends AppCompatActivity {
         mDescription = (EditText) findViewById(R.id.new_ad_description);
         mTitle = (EditText) findViewById(R.id.new_ad_title);
         mImgOne = (ImageView) findViewById(R.id.imageButton);
+        mImgTwo = (ImageView) findViewById(R.id.imageButton2);
         errorImage = (ImageView) findViewById(R.id.problem_during_upload);
         hideProblem();
         mPrice = (EditText) findViewById(R.id.new_ad_price);
@@ -89,12 +95,10 @@ public class NewAdActivity extends AppCompatActivity {
             Toast.makeText(this, "aufruf der location", Toast.LENGTH_SHORT).show();
         });
 
-
-        final ImageView getPictureButton = (ImageView) findViewById(R.id.imageButton);
-
-        getPictureButton.setOnClickListener((v) -> {
+        mImgOne.setOnClickListener((v) -> {
             final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
             photoPickerIntent.setType("image/*");
+            photoPickerIntent.putExtra("imageOne", true);
             startActivityForResult(photoPickerIntent, SELECT_PHOTO);
 
 
@@ -102,6 +106,14 @@ public class NewAdActivity extends AppCompatActivity {
             //startActivityForResult(cameraIntent, SELECT_PHOTO);
             //TODO camera plus photo picker
             //http://stackoverflow.com/questions/5991319/capture-image-from-camera-and-display-in-activity
+        });
+
+        mImgTwo.setOnClickListener(v -> {
+            /*final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            photoPickerIntent.putExtra("imageTwo", true);
+            startActivityForResult(photoPickerIntent, SELECT_PHOTO);*/
+            Toast.makeText(this, "Dies kommt bald... in Arbeit :-)", Toast.LENGTH_LONG).show();
         });
 
 
@@ -112,9 +124,28 @@ public class NewAdActivity extends AppCompatActivity {
             mTitle.setText(getIntent().getStringExtra(Constants.TITLE));
             mDescription.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
             mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
-            Picasso.with(getApplicationContext())
-                    .load((Urls.MAIN_SERVER_URL_V3 + "pictures/" + (getIntent().getStringExtra(Constants.URI) + "/thumbnail"))).into(mImgOne);
             articleIdForEdit = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
+            //TODO: show pic loading progress!!!
+            String pictureUri = Urls.MAIN_SERVER_URL_V3 + "pictures/" + (getIntent().getStringExtra(Constants.AD_URL));
+            Picasso.with(getApplicationContext())
+                    .load(pictureUri)
+                    .placeholder(R.drawable.empty_photo)
+                    //.resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
+                    //.centerInside()
+                    .into(mImgOne, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                           // mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
+                        }
+
+                        @Override
+                        public void onError() {
+                           // mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
+                            Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
+                           // showDefaultPic();
+                        }
+                    });
+
             Log.d("CONAN", "edit: " + articleIdForEdit);
         }
 
@@ -141,6 +172,7 @@ public class NewAdActivity extends AppCompatActivity {
                 data.putExtra(Constants.LAT, getIntent().getDoubleExtra(Constants.LAT, 0));
                 data.putExtra(Constants.LNG, getIntent().getDoubleExtra(Constants.LNG, 0));
                 data.putExtra(Constants.DATE, getIntent().getLongExtra(Constants.DATE, 0));
+                if (isImageChanged) data.putExtra(Constants.FILENAME, mImage);
 
                 fileUploadService.updateArticle(data);
             }
@@ -185,13 +217,13 @@ public class NewAdActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(final int requestCode,
-                                 final int resultCode, final Intent imageReturnedIntent) {
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
         switch (requestCode) {
             case SELECT_PHOTO:
                 if (resultCode == RESULT_OK && pictureCount < 4) {
+                    isImageChanged = true;
                     final Uri selectedImage = imageReturnedIntent.getData();
                     mImage = selectedImage.toString();
                     switch (pictureCount) {

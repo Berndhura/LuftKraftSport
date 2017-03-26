@@ -54,7 +54,7 @@
 
     </FrameLayout>
 
-    <include layout="@layout/create_article_fragemnt" />
+    <include layout="@layout/create_article_fragment" />
 
     <LinearLayout
         android:id="@+id/upload_background"

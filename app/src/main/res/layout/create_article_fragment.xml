@@ -14,25 +14,47 @@
         android:background="@drawable/side_nav_bar"
         app:srcCompat="@drawable/empty_photo" /-->
 
-
-    <ImageView
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="19dp"
-        app:srcCompat="@drawable/empty_photo" />
+        android:id="@+id/picture_ll"
+        android:orientation="horizontal"
+        android:paddingLeft="4.0dip"
+        android:paddingTop="5.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingBottom="1.0dip"
+        android:layout_gravity="center_horizontal|center">
+
+        <ImageView
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="19dp"
+            app:srcCompat="@drawable/empty_photo"
+            android:layout_weight="1.0" />
+
+        <ImageView
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="19dp"
+            app:srcCompat="@drawable/empty_photo"
+            android:layout_weight="1.0" />
+
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageButton"
+        android:layout_below="@+id/picture_ll"
         android:layout_marginTop="32dp"
         android:orientation="vertical"
         android:weightSum="1">
