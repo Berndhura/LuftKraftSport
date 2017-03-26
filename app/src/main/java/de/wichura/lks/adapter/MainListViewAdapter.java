@@ -193,6 +193,9 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 i.putExtra(Constants.URI, rowItem.getUrl());
                 //TODO hier geht was durcheinander
                 i.putExtra(Constants.AD_URL, rowItem.getUrl());
+                i.putExtra(Constants.LAT, rowItem.getLocation().getCoordinates()[0]);
+                i.putExtra(Constants.LNG, rowItem.getLocation().getCoordinates()[1]);
+                i.putExtra(Constants.DATE, rowItem.getDate());
                 activity.startActivityForResult(i, Constants.REQUEST_ID_FOR_NEW_AD);
             });
 

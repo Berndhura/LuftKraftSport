@@ -41,7 +41,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         this.service = new Service();
     }
 
-    public void updateArticle(Intent data) {
+    public void
+    updateArticle(Intent data) {
 
         RowItem item = new RowItem();
         item.setId(data.getIntExtra(Constants.ARTICLE_ID, 0));
@@ -51,7 +52,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         item.setDate(data.getLongExtra(Constants.DATE, 0));
         item.setUrl(data.getStringExtra(Constants.AD_URL));
 
-        double[] latlng = {getLat(), getLng()};
+        double[] latlng = {data.getDoubleExtra(Constants.LAT, 0), data.getDoubleExtra(Constants.LNG, 0)};
         Location location = new Location();
         location.setCoordinates(latlng);
         location.setType("Point");

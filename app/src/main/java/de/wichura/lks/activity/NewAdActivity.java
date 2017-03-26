@@ -138,6 +138,10 @@ public class NewAdActivity extends AppCompatActivity {
                 disableUploadButton();
                 data.putExtra(Constants.ARTICLE_ID, articleIdForEdit);
                 data.putExtra(Constants.AD_URL, getIntent().getStringExtra(Constants.AD_URL));
+                data.putExtra(Constants.LAT, getIntent().getDoubleExtra(Constants.LAT, 0));
+                data.putExtra(Constants.LNG, getIntent().getDoubleExtra(Constants.LNG, 0));
+                data.putExtra(Constants.DATE, getIntent().getLongExtra(Constants.DATE, 0));
+
                 fileUploadService.updateArticle(data);
             }
         });
