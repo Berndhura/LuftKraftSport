@@ -419,6 +419,7 @@ public class MainActivity extends AppCompatActivity implements
             intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
             intent.putExtra(Constants.USER_ID, getUserId());
             intent.putExtra(Constants.POSITION_IN_LIST, position);
+            intent.putExtra(Constants.AD_URL, rowItem.getUrl());
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
         });
 

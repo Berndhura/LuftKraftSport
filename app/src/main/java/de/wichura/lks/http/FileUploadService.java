@@ -49,6 +49,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
         item.setPrice(data.getStringExtra(Constants.PRICE));
         item.setDate(data.getLongExtra(Constants.DATE, 0));
+        item.setUrl(data.getStringExtra(Constants.AD_URL));
 
         double[] latlng = {getLat(), getLng()};
         Location location = new Location();

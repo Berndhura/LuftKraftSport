@@ -137,6 +137,7 @@ public class NewAdActivity extends AppCompatActivity {
             if (validateInputs() && isEditMode) {
                 disableUploadButton();
                 data.putExtra(Constants.ARTICLE_ID, articleIdForEdit);
+                data.putExtra(Constants.AD_URL, getIntent().getStringExtra(Constants.AD_URL));
                 fileUploadService.updateArticle(data);
             }
         });

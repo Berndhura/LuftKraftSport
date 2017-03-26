@@ -191,6 +191,8 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 i.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
                 i.putExtra(Constants.PRICE, rowItem.getPrice());
                 i.putExtra(Constants.URI, rowItem.getUrl());
+                //TODO hier geht was durcheinander
+                i.putExtra(Constants.AD_URL, rowItem.getUrl());
                 activity.startActivityForResult(i, Constants.REQUEST_ID_FOR_NEW_AD);
             });
 
