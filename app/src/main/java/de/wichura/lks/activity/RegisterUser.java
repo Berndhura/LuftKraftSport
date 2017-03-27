@@ -120,6 +120,7 @@ public class RegisterUser extends AppCompatActivity {
         ((Button) findViewById(R.id.register_user_button)).setText("Zurück zum Login");
         findViewById(R.id.register_user_button).setOnClickListener(v -> {
             final Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            finish();
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_LOGIN);
         });
     }

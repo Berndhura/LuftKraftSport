@@ -112,10 +112,6 @@
             android:label="@string/title_register_user" />
 
         <activity
-            android:name="de.wichura.lks.activity.ActivateUserActivity"
-            android:label="@string/title_activate_user" />
-
-        <activity
             android:name="de.wichura.lks.activity.SetPriceActivity"
             android:configChanges="keyboardHidden"
             android:label="@string/title_set_price_page"
