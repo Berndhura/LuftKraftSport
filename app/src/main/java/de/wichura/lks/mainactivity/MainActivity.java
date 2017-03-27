@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements
     //app navigation
     private Boolean isBookmaks;
     private Boolean isMyAds;
+    private Boolean isSearch;
 
 
     @Override
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements
 
         isBookmaks = false;
         isMyAds = false;
+        isSearch = false;
 
         Service service = new Service();
         presenterLayer = new MainPresenter(this, service, getApplicationContext());
@@ -601,6 +603,10 @@ public class MainActivity extends AppCompatActivity implements
             setMyAdsFlag(false);
             isMyAds = false;
             getAds(Constants.TYPE_ALL);
+        } else if (isSearch) {
+            setMyAdsFlag(false);
+            isSearch = false;
+            getAds(Constants.TYPE_ALL);
         } else {
             if (isTaskRoot()) {
                 new ExitDialogFragment().show(getSupportFragmentManager(), null);
@@ -653,6 +659,7 @@ public class MainActivity extends AppCompatActivity implements
                     setMyAdsFlag(true);
                     isMyAds = true;
                     isBookmaks = false;
+                    isSearch = false;
                     getAds(Constants.TYPE_USER);
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
@@ -669,6 +676,9 @@ public class MainActivity extends AppCompatActivity implements
                 return true;
             }
             case R.id.search: {
+                isMyAds = false;
+                isBookmaks = false;
+                isSearch = true;
                 final Intent searchIntent = new Intent(this, SearchActivity.class);
                 startActivityForResult(searchIntent, Constants.REQUEST_ID_FOR_SEARCH);
                 return true;
@@ -681,7 +691,8 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.refresh: {
                 setMyAdsFlag(false);
                 isMyAds = false;
-                isMyAds = false;
+                isBookmaks = false;
+                isSearch = false;
                 getAds(Constants.TYPE_ALL);
                 if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                 return true;
@@ -694,6 +705,7 @@ public class MainActivity extends AppCompatActivity implements
                     setMyAdsFlag(false);
                     isBookmaks = true;
                     isMyAds = false;
+                    isSearch = false;
                     getAds(Constants.TYPE_BOOKMARK);
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                     return true;
