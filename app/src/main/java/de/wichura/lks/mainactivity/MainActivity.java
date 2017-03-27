@@ -591,7 +591,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        if (isBookmaks) {
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (isBookmaks) {
             setMyAdsFlag(false);
             isBookmaks = false;
             getAds(Constants.TYPE_ALL);
@@ -603,8 +605,8 @@ public class MainActivity extends AppCompatActivity implements
             if (isTaskRoot()) {
                 new ExitDialogFragment().show(getSupportFragmentManager(), null);
             } else {
-                super.onBackPressed();}
-
+                super.onBackPressed();
+            }
         }
     }
 
