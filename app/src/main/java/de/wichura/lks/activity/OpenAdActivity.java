@@ -2,6 +2,7 @@ package de.wichura.lks.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -14,8 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -96,21 +97,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
         MapsInitializer.initialize(this);
 
-        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-            case ConnectionResult.SUCCESS: {
-                //Toast.makeText(this, "SUCCESS", Toast.LENGTH_SHORT).show();
-                MapView mapView = (MapView) findViewById(map);
-                mapView.onCreate(savedInstanceState);
-                mapView.onResume();
-                mapView.getMapAsync(this);
-            }
-            case ConnectionResult.INVALID_ACCOUNT: {
-                Log.d("CONAN", "Google play service: ConnectionResult.INVALID_ACCOUNT");
-            }
-            case ConnectionResult.NETWORK_ERROR: {
-                Log.d("CONAN", "Google play service: ConnectionResult.NETWORK_ERROR");
-            }
-        }
+        checkGoogleConnection(savedInstanceState);
 
         presenter = new OpenAdPresenter(this, new Service(), getApplicationContext());
 
@@ -160,16 +147,63 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             presenter.getSellerInformation(getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
         }
 
-        imgView.setOnClickListener(v -> {
-            Toast.makeText(this, "ganzer bildschirm ansicht", Toast.LENGTH_SHORT).show();
-        });
+        attachOnClickToImage();
 
         buildGoogleApiClient();
+
         mGoogleApiClient.connect();
     }
 
+    private void checkGoogleConnection(Bundle savedInstanceState) {
+        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+            case ConnectionResult.SUCCESS: {
+                MapView mapView = (MapView) findViewById(map);
+                mapView.onCreate(savedInstanceState);
+                mapView.onResume();
+                mapView.getMapAsync(this);
+            }
+            case ConnectionResult.INVALID_ACCOUNT: {
+                Log.d("CONAN", "Google play service: ConnectionResult.INVALID_ACCOUNT");
+            }
+            case ConnectionResult.NETWORK_ERROR: {
+                Log.d("CONAN", "Google play service: ConnectionResult.NETWORK_ERROR");
+            }
+        }
+    }
+
+    private void attachOnClickToImage() {
+        imgView.setOnClickListener(v -> {
+            final Dialog nagDialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+            nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            nagDialog.setCancelable(false);
+            nagDialog.setContentView(R.layout.full_screen_image);
+
+            ImageView ivPreview = (ImageView) nagDialog.findViewById(R.id.iv_preview_image);
+            Picasso.with(getApplicationContext())
+                    .load(getIntent().getStringExtra(Constants.URI))
+                    .fit()
+                    .into(ivPreview, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
+                            ImageView closeImage = (ImageView) nagDialog.findViewById(R.id.close_full_screen_image);
+                            closeImage.setVisibility(View.VISIBLE);
+                            closeImage.setOnClickListener(dialog -> nagDialog.dismiss());
+                        }
+
+                        @Override
+                        public void onError() {
+                            mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
+                            Toast.makeText(getApplicationContext(), "Problem beim Laden!", Toast.LENGTH_SHORT).show();
+                            showDefaultPic();
+                        }
+                    });
+
+            nagDialog.show();
+        });
+    }
+
     public void prepareDataFromArticle(ArticleDetails articleDetails) {
-        Log.e("CONAN", "prepare");
         String pictureUri = Urls.MAIN_SERVER_URL_V3 + "pictures/" + articleDetails.getUrls();
         mTitleText.setText(articleDetails.getTitle());
         String formatedPrice = getIntent().getStringExtra(Constants.PRICE).split("\\.")[0] + " €";
@@ -283,7 +317,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 .addApi(LocationServices.API)
                 .build();
     }
-
 
     @Override
     public void onMapReady(GoogleMap map) {
