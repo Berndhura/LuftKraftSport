@@ -81,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="0.3.0 version 13"
+            android:text="0.3.3 version 16"
             android:layout_marginTop="10sp" />
 
 
