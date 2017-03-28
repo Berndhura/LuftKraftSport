@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -54,6 +56,7 @@ import de.wichura.lks.models.User;
 import de.wichura.lks.presentation.OpenAdPresenter;
 import de.wichura.lks.util.Utility;
 
+import static de.wichura.lks.R.id.imageView;
 import static de.wichura.lks.R.id.map;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -172,6 +175,31 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     private void attachOnClickToImage() {
+
+        Transformation transformation = new Transformation() {
+
+            @Override
+            public Bitmap transform(Bitmap source) {
+                int targetWidth = imgView.getWidth();
+
+                double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
+                int targetHeight = (int) (targetWidth * aspectRatio);
+                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+                if (result != source) {
+                    // Same bitmap is returned if sizes are the same
+                    source.recycle();
+                }
+                return result;
+            }
+
+            @Override
+            public String key() {
+                return "transformation" + " desiredWidth";
+            }
+        };
+
+        getDisplayDimensions();
+
         imgView.setOnClickListener(v -> {
             final Dialog nagDialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
             nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -181,7 +209,10 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             ImageView ivPreview = (ImageView) nagDialog.findViewById(R.id.iv_preview_image);
             Picasso.with(getApplicationContext())
                     .load(getIntent().getStringExtra(Constants.URI))
-                    .fit()
+                    .centerInside()
+                    .resize(displayWidth, displayHeight)
+                    //.fit()
+                    //.transform(transformation)
                     .into(ivPreview, new Callback() {
                         @Override
                         public void onSuccess() {

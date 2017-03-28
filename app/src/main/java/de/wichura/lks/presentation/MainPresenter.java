@@ -142,10 +142,12 @@ public class MainPresenter {
     }
 
     public void searchForArticles(int page, int size, Integer priceFrom, Integer priceTo, int distance, String description, String userId) {
+        view.setMainTitle("Suche");
         if (page == 0) {
             if (view.listView != null) {
                 view.listView.setVisibility(View.INVISIBLE);
             }
+            view.showNumberOfAds(0);
         }
         view.progressBar.setVisibility(ProgressBar.VISIBLE);
 
