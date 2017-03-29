@@ -2,10 +2,12 @@ package de.wichura.lks.activity;
 
 import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -55,12 +57,32 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     private LinearLayout distanceView;
     private LocationPresenter presenter;
 
+    private CameraPosition cp;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.set_location_layout, container, false);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //mMapView.onPause();
+
+        cp = googleMap.getCameraPosition();
+        //mMap = null;
+    }
+
+    public void onResume() {
+        super.onResume();
+        //setUpMapIfNeeded();
+        if (cp != null) {
+          //  mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cp));
+            cp = null;
+        }
     }
 
     @Override
@@ -150,32 +172,62 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
         int accessCoarseLoc = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_COARSE_LOCATION);
 
-        // if (accessCoarseLoc == PackageManager.PERMISSION_DENIED && accessFineLoc == PackageManager.PERMISSION_DENIED) {
+        if (accessCoarseLoc == PackageManager.PERMISSION_DENIED && accessFineLoc == PackageManager.PERMISSION_DENIED) {
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(54.0, 13.0), 9));
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.getUiSettings().setScrollGesturesEnabled(true);
-        googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        googleMap.setMyLocationEnabled(true);
-        googleMap.clear();
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 666);
 
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        } else {
 
-            @Override
-            public void onMapClick(LatLng latLng) {
-                googleMap.clear();
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
-                //markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                googleMap.addMarker(markerOptions);
-                //save position in shared preferences
-                presenter.saveUsersLocation(latLng.latitude, latLng.longitude);
-                initDistanceSeekBar();
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(54.0, 13.0), 9));
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+            googleMap.setMyLocationEnabled(true);
+            googleMap.clear();
+
+            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    googleMap.clear();
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(latLng);
+                    //markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    googleMap.addMarker(markerOptions);
+                    //save position in shared preferences
+                    presenter.saveUsersLocation(latLng.latitude, latLng.longitude);
+                    initDistanceSeekBar();
+                }
+            });
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 666: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
             }
-        });
-        //}
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     public void updateCity(String cityName) {
