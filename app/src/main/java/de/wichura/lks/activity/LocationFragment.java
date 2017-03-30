@@ -50,7 +50,7 @@ import static de.wichura.lks.R.id.map;
 
 public class LocationFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, OnMapReadyCallback {
+        LocationListener, OnMapReadyCallback, GoogleMap.OnCameraChangeListener {
 
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -70,19 +70,11 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     @Override
     public void onPause() {
         super.onPause();
-        //mMapView.onPause();
-
-        cp = googleMap.getCameraPosition();
-        //mMap = null;
     }
 
     public void onResume() {
         super.onResume();
-        //setUpMapIfNeeded();
-        if (cp != null) {
-          //  mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cp));
-            cp = null;
-        }
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
     }
 
     @Override
@@ -284,5 +276,10 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+    }
+
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
+        cp = googleMap.getCameraPosition();
     }
 }

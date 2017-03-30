@@ -56,7 +56,6 @@ import de.wichura.lks.models.User;
 import de.wichura.lks.presentation.OpenAdPresenter;
 import de.wichura.lks.util.Utility;
 
-import static de.wichura.lks.R.id.imageView;
 import static de.wichura.lks.R.id.map;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -73,6 +72,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private int displayWidth;
 
     private ProgressBar mOpenAdProgressBar;
+    private ProgressBar mOpenFullScreenImgProgressBar;
     private OpenAdPresenter presenter;
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -206,6 +206,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             nagDialog.setCancelable(false);
             nagDialog.setContentView(R.layout.full_screen_image);
 
+            mOpenFullScreenImgProgressBar = (ProgressBar) nagDialog.findViewById(R.id.progress_loading_full_screen_pic);
+            mOpenFullScreenImgProgressBar.setVisibility(View.VISIBLE);
+
             ImageView ivPreview = (ImageView) nagDialog.findViewById(R.id.iv_preview_image);
             Picasso.with(getApplicationContext())
                     .load(getIntent().getStringExtra(Constants.URI))
@@ -216,7 +219,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                     .into(ivPreview, new Callback() {
                         @Override
                         public void onSuccess() {
-                            mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
+                            mOpenFullScreenImgProgressBar.setVisibility(ProgressBar.GONE);
                             ImageView closeImage = (ImageView) nagDialog.findViewById(R.id.close_full_screen_image);
                             closeImage.setVisibility(View.VISIBLE);
                             closeImage.setOnClickListener(dialog -> nagDialog.dismiss());
@@ -224,7 +227,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
                         @Override
                         public void onError() {
-                            mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
+                            mOpenFullScreenImgProgressBar.setVisibility(ProgressBar.GONE);
                             Toast.makeText(getApplicationContext(), "Problem beim Laden!", Toast.LENGTH_SHORT).show();
                             showDefaultPic();
                         }
@@ -250,6 +253,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     private void setupPanel(String pictureUri, String ownerId) {
+        mOpenAdProgressBar.setVisibility(View.VISIBLE);
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
         Picasso.with(getApplicationContext())
                 .load(pictureUri)

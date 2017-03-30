@@ -1,24 +1,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="#000000">
+    android:background="#000000"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/iv_preview_image"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
+    <ProgressBar
+        android:id="@+id/progress_loading_full_screen_pic"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/close_full_screen_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_margin="8dp"
-        android:padding="8dp"
         android:background="@drawable/ic_cancel_white_24dp"
-        android:visibility="gone"/>
+        android:padding="8dp"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -22,40 +22,23 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <!--ProgressBar
+            <ProgressBar
                 android:id="@+id/open_Ad_ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp" /-->
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@android:color/transparent">
-
-        <ProgressBar
-            android:id="@+id/open_Ad_ProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="13dp"
-            android:layout_gravity="top"
-            android:layout_marginTop="-3dp"
-            android:background="@android:color/transparent"
-            android:progressDrawable="@drawable/custom_progress"/>
-
-    </FrameLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.95"
-        android:layout_marginBottom="10sp">
+        android:layout_marginBottom="10sp"
+        android:layout_weight="0.95">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,7 +57,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -82,10 +65,10 @@
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="20dp"
                     android:layout_weight="0.7"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -93,10 +76,10 @@
                     android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginTop="20dp"
                     android:layout_weight="0.3"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:paddingBottom="10dp"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -107,10 +90,10 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:background="@drawable/round_corner_for_tv"
                 android:textSize="18sp" />
 
@@ -118,23 +101,23 @@
                 android:id="@+id/ad_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/round_corner_for_tv"
-                android:gravity="left"
+                android:gravity="start"
                 android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:background="@drawable/round_corner_for_tv"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_corner_for_tv"
+                android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/user_image"
@@ -180,10 +163,10 @@
                 android:id="@+id/map"
                 android:layout_width="match_parent"
                 android:layout_height="400sp"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginTop="10dp" />
 
         </LinearLayout>
 
@@ -199,7 +182,7 @@
             android:id="@+id/delButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
+            android:layout_marginEnd="1dp"
             android:layout_weight="0.5"
             android:background="@color/app_blue"
             android:text="Löschen" />
@@ -208,7 +191,7 @@
             android:id="@+id/bookmarkButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="1dp"
+            android:layout_marginStart="1dp"
             android:layout_weight="0.5"
             android:background="@color/app_blue"
             android:text="Merken" />
