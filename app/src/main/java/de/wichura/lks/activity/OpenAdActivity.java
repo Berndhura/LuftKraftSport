@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private int displayHeight;
     private int displayWidth;
 
-    private ProgressBar mOpenAdProgressBar;
+    private AVLoadingIndicatorView mOpenAdProgressBar;
     private ProgressBar mOpenFullScreenImgProgressBar;
     private OpenAdPresenter presenter;
     private GoogleMap googleMap;
@@ -112,7 +113,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-        mOpenAdProgressBar = (ProgressBar) findViewById(R.id.open_Ad_ProgressBar);
+        mOpenAdProgressBar = (AVLoadingIndicatorView) findViewById(R.id.open_Ad_ProgressBar);
         mTitleText = (TextView) findViewById(R.id.title);
         mPrice = (TextView) findViewById(R.id.price);
         mDescText = (TextView) findViewById(R.id.description);

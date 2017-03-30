@@ -74,7 +74,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
 
     public void onResume() {
         super.onResume();
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
+        if (googleMap != null) googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
     }
 
     @Override

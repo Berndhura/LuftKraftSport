@@ -22,13 +22,15 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <ProgressBar
+            <com.wang.avi.AVLoadingIndicatorView
                 android:id="@+id/open_Ad_ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:indicator="LineScaleParty"
+                app:indicator_color="#FFFFFF"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:visibility="gone" />
+                android:layout_margin="10dp"
+                android:visibility="visible" />
 
         </RelativeLayout>
 
