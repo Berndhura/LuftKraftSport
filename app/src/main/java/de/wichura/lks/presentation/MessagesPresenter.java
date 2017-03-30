@@ -1,6 +1,7 @@
 package de.wichura.lks.presentation;
 
 import android.util.Log;
+import android.view.View;
 
 import java.util.List;
 
@@ -50,6 +51,8 @@ public class MessagesPresenter {
 
                     @Override
                     public void onNext(List<MsgRowItem> msgRowItems) {
+                        view.progress.setVisibility(View.GONE);
+                        view.showLinkToAdButton();
                         view.showMessages(msgRowItems);
                         view.showLinkToAdButton();
                     }

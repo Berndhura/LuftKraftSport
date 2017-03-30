@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,8 @@ public class MessagesActivity extends AppCompatActivity {
     private MessageListViewAdapter adapter;
     private EditText text;
     private MessagesPresenter presenter;
+
+    public AVLoadingIndicatorView progress;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -71,6 +76,7 @@ public class MessagesActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.message_list);
         text = (EditText) findViewById(R.id.edit_message);
+        progress = (AVLoadingIndicatorView) findViewById(R.id.msg_progressBar);
 
         final Integer articleId = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);
@@ -190,6 +196,7 @@ public class MessagesActivity extends AppCompatActivity {
 
     public void showLinkToAdButton() {
         Button link = (Button) findViewById(R.id.link_to_ad_button);
+        link.setVisibility(View.VISIBLE);
         link.setOnClickListener((view) -> {
             Integer articleId = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
             presenter.getAd(articleId);

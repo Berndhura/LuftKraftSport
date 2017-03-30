@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:indicator="BallTrianglePath"
+        app:indicator="LineScaleParty"
         app:indicator_color="#12aaff"/>
 
 </LinearLayout>

@@ -4,48 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/chat_background"
     android:orientation="vertical"
-    android:weightSum="1"
-    android:background="@drawable/chat_background">
+    android:weightSum="1">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:layout_height="?attr/actionBarSize">
 
-            <!--de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ad_in_toolbar"
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="?attr/actionBarSize"
-                app:civ_border_width="0dp"
-                app:paddingStart="5sp"
-                android:layout_margin="5sp"/-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/message_toolbar"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_weight="0.7"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/msg_progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:visibility="visible"
+                app:indicator="LineScaleParty"
+                app:indicator_color="#FFFFFF" />
+
             <Button
                 android:id="@+id/link_to_ad_button"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_margin="8dp"
-                android:layout_weight="0.3"
                 android:background="@drawable/rounded_corners"
                 android:text="ANZEIGE"
-                android:textColor="@color/app_blue" />
+                android:textColor="@color/app_blue"
+                android:visibility="gone" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
 
