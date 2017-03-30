@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#000000"
     android:orientation="vertical">
 
@@ -9,14 +10,14 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <ProgressBar
+    <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/progress_loading_full_screen_pic"
-        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@android:color/transparent"
+        app:indicator="LineScaleParty"
+        app:indicator_color="#FFFFFF"
         android:visibility="gone" />
 
     <ImageView

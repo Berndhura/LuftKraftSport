@@ -73,7 +73,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private int displayWidth;
 
     private AVLoadingIndicatorView mOpenAdProgressBar;
-    private ProgressBar mOpenFullScreenImgProgressBar;
+    private AVLoadingIndicatorView mOpenFullScreenImgProgressBar;
     private OpenAdPresenter presenter;
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -207,7 +207,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             nagDialog.setCancelable(false);
             nagDialog.setContentView(R.layout.full_screen_image);
 
-            mOpenFullScreenImgProgressBar = (ProgressBar) nagDialog.findViewById(R.id.progress_loading_full_screen_pic);
+            mOpenFullScreenImgProgressBar = (AVLoadingIndicatorView) nagDialog.findViewById(R.id.progress_loading_full_screen_pic);
             mOpenFullScreenImgProgressBar.setVisibility(View.VISIBLE);
 
             ImageView ivPreview = (ImageView) nagDialog.findViewById(R.id.iv_preview_image);

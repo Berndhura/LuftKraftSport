@@ -50,15 +50,12 @@ import static de.wichura.lks.R.id.map;
 
 public class LocationFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, OnMapReadyCallback, GoogleMap.OnCameraChangeListener {
+        LocationListener, OnMapReadyCallback {
 
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
     private LinearLayout distanceView;
     private LocationPresenter presenter;
-
-    private CameraPosition cp;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,9 +69,21 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
         super.onPause();
     }
 
-    public void onResume() {
-        super.onResume();
-        if (googleMap != null) googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            //Restore the fragment's state here
+            Log.d("CONAN", "restore.....");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d("CONAN", "save.....");
+        //Save the fragment's state here
     }
 
     @Override
@@ -276,10 +285,5 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-    }
-
-    @Override
-    public void onCameraChange(CameraPosition cameraPosition) {
-        cp = googleMap.getCameraPosition();
     }
 }
