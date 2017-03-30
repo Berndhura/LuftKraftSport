@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
 
     private ListView listView;
 
-    private ProgressBar mMessagesProgressBar;
+    private AVLoadingIndicatorView mMessagesProgressBar;
 
     private MsgOverviewPresenter presenter;
 
@@ -49,7 +51,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-        mMessagesProgressBar = (ProgressBar) findViewById(R.id.msg_overview_ProgressBar);
+        mMessagesProgressBar = (AVLoadingIndicatorView) findViewById(R.id.msg_overview_ProgressBar);
 
         listView = (ListView) findViewById(R.id.message_overview_list);
 
