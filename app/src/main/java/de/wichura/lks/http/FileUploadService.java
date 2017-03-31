@@ -110,7 +110,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         item.setPrice(data.getStringExtra(Constants.PRICE));
         item.setDate(data.getLongExtra(Constants.DATE, 0));
 
-        double[] latlng = {getLat(), getLng()};
+        double[] latlng = {data.getDoubleExtra(Constants.LAT, 0), data.getDoubleExtra(Constants.LNG, 0)};
         Location location = new Location();
         location.setCoordinates(latlng);
         location.setType("Point");
@@ -233,16 +233,6 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                 cursor.close();
             }
         }
-    }
-
-    private Double getLat() {
-        SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
-        return Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
-    }
-
-    private Double getLng() {
-        SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
-        return Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
     }
 
     private String getUserToken() {

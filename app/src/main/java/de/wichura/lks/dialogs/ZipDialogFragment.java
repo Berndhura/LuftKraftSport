@@ -18,7 +18,7 @@ import de.wichura.lks.R;
 public class ZipDialogFragment extends DialogFragment {
 
     public interface OnCompleteListener {
-        void onComplete(String zipCode);
+        void onZipCodeComplete(String zipCode);
     }
 
     private OnCompleteListener mListener;
@@ -43,7 +43,7 @@ public class ZipDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String zipCode = ((EditText)getDialog().findViewById(R.id.new_article_zip_code)).getText().toString();
-                        mListener.onComplete(zipCode);
+                        mListener.onZipCodeComplete(zipCode);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

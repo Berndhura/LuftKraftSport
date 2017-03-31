@@ -79,7 +79,8 @@ public class NewAdActivity extends AppCompatActivity implements
     private Location mLastLocation;
     private TextView locationName;
     private Boolean isLocationSet;
-    private String zipCode;
+    private double lat;
+    private double lng;
 
 
     @Override
@@ -201,6 +202,8 @@ public class NewAdActivity extends AppCompatActivity implements
             data.putExtra(Constants.FILENAME, mImage);
             data.putExtra(Constants.PRICE, mPrice.getText().toString());
             data.putExtra(Constants.DATE, System.currentTimeMillis());
+            data.putExtra(Constants.LAT, lat);
+            data.putExtra(Constants.LNG, lng);
 
             if (validateInputs() && !isEditMode) {
                 disableUploadButton();
@@ -210,8 +213,8 @@ public class NewAdActivity extends AppCompatActivity implements
                 disableUploadButton();
                 data.putExtra(Constants.ARTICLE_ID, articleIdForEdit);
                 data.putExtra(Constants.AD_URL, getIntent().getStringExtra(Constants.AD_URL));
-                data.putExtra(Constants.LAT, getIntent().getDoubleExtra(Constants.LAT, 0));
-                data.putExtra(Constants.LNG, getIntent().getDoubleExtra(Constants.LNG, 0));
+                data.putExtra(Constants.LAT, lat);
+                data.putExtra(Constants.LNG, lng);
                 data.putExtra(Constants.DATE, getIntent().getLongExtra(Constants.DATE, 0));
                 if (isImageChanged) data.putExtra(Constants.FILENAME, mImage);
 
@@ -250,10 +253,9 @@ public class NewAdActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onComplete(String zipCode) {
-        this.zipCode = zipCode;
+    public void onZipCodeComplete(String zipCode) {
         Log.d("CONAN", "Zipcode from dialog: " + zipCode);
-
+        getLatLngFromPlz(zipCode);
     }
 
 
@@ -341,13 +343,16 @@ public class NewAdActivity extends AppCompatActivity implements
             List<Address> addresses = geocoder.getFromLocationName(zip, 1);
             if (addresses != null && !addresses.isEmpty()) {
                 Address address = addresses.get(0);
-                // Use the address as needed
-                String message = String.format("Latitude: %f, Longitude: %f",
-                        address.getLatitude(), address.getLongitude());
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+                //store lat lng for article
+                lat = address.getLatitude();
+                lng = address.getLongitude();
+
+                //show city name
+                presenter.getCityNameFromLatLng(address.getLatitude(), address.getLongitude());
             } else {
                 // Display appropriate message when Geocoder services are not available
-                // Toast.makeToast(this, "Unable to geocode zipcode", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Hat leider nicht geklappt mit deiner PLZ, versuche nochmal!", Toast.LENGTH_LONG).show();
             }
         } catch (IOException e) {
             // handle exception
