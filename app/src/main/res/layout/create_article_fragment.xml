@@ -145,8 +145,7 @@
             <TextView
                 android:id="@+id/create_location_name"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Greifswald" />
+                android:layout_height="match_parent" />
 
             <ImageView
                 android:id="@+id/create_change_location"
