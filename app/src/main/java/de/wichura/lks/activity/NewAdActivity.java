@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.List;
 
 import de.wichura.lks.R;
+import de.wichura.lks.dialogs.ZipDialogFragment;
 import de.wichura.lks.http.FileUploadService;
 import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
@@ -42,7 +43,8 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 
 public class NewAdActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        ZipDialogFragment.OnCompleteListener {
 
     private EditText mDescription;
     private EditText mTitle;
@@ -76,11 +78,15 @@ public class NewAdActivity extends AppCompatActivity implements
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private TextView locationName;
+    private Boolean isLocationSet;
+    private String zipCode;
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        isLocationSet = false;
 
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
@@ -229,13 +235,27 @@ public class NewAdActivity extends AppCompatActivity implements
     private void setupLocation() {
 
         locationName = (TextView) findViewById(R.id.create_location_name);
-        presenter.getCityNameFromLatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        if (mLastLocation != null) {
+            presenter.getCityNameFromLatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            isLocationSet = true;
+        } else {
+            locationName.setText("Bitte auswählen");
+            isLocationSet = false;
+        }
 
         location = (ImageView) findViewById(R.id.create_change_location);
         location.setOnClickListener(v -> {
-            //aufruf loco
+            new ZipDialogFragment().show(getSupportFragmentManager(), null);
         });
     }
+
+    @Override
+    public void onComplete(String zipCode) {
+        this.zipCode = zipCode;
+        Log.d("CONAN", "Zipcode from dialog: " + zipCode);
+
+    }
+
 
     public void setCityName(String city) {
         locationName.setText(city);
@@ -359,6 +379,11 @@ public class NewAdActivity extends AppCompatActivity implements
             valid = false;
         } else {
             mPrice.setError(null);
+        }
+
+        if (!isLocationSet) {
+            locationName.setError("Location nicht gesetzt!");
+            valid = false;
         }
 
         return valid;

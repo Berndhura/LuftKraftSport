@@ -41,6 +41,7 @@
     <string name="keywords">Was verkaufst Du...</string>
     <string name="price_does_not_matter">Beliebig</string>
     <string name="exit_question">Wirklich beenden?</string>
+    <string name="zip_request">Gib deine Postleitzahl ein!</string>
 
     <!-- Empty Ads Database -->
     <string name="empty_ads_list">No Ads Information Available</string>
