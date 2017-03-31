@@ -289,15 +289,8 @@ public class MainActivity extends AppCompatActivity implements
         registerLoginReceiver();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.registerOnSharedPreferenceChangeListener(this);
-        //TODO meine anzeigen -> open -> zurück meine anzeigen müssen del und edit weiter sichbar sein, weil vorher flag auf true war
-        //richtig?
-        //setMyAdsFlag(false);
 
-        if (mListState != null)
-            listView.onRestoreInstanceState(mListState);
-
-        //TODO: resource immer null????!!!!
-        //setProfilePicture(Uri.parse(getUserProfilePic()));
+        if (mListState != null) listView.onRestoreInstanceState(mListState);
     }
 
     @Override
@@ -311,13 +304,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         mListState = state.getParcelable(LIST_STATE);
-
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(newBase);
-        MultiDex.install(this);
     }
 
     @Override

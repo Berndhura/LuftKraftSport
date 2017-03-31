@@ -12,10 +12,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -62,7 +65,8 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, OnMapReadyCallback {
+        LocationListener, OnMapReadyCallback,
+        GestureDetector.OnGestureListener {
 
     public Button mBookmarkButton;
     public boolean isBookmarked;
@@ -91,6 +95,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private TextView mDateText;
     private Integer mAdId;
 
+    GestureDetector detector;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
@@ -98,6 +104,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         setContentView(R.layout.open_ad_activity);
 
         utils = new Utility(this);
+        detector = new GestureDetector(this, this);
 
         MapsInitializer.initialize(this);
 
@@ -457,5 +464,43 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onLocationChanged(Location location) {
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        finish();
+        Log.d("CONAN", "touch!!!");
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        detector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 }

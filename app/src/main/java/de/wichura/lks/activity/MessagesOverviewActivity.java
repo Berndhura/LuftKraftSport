@@ -2,6 +2,7 @@ package de.wichura.lks.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
@@ -30,6 +31,9 @@ public class MessagesOverviewActivity extends AppCompatActivity {
 
     private ListView listView;
 
+    private static final String LIST_STATE = "listState";
+    private Parcelable mListState = null;
+
     private AVLoadingIndicatorView mMessagesProgressBar;
 
     private MsgOverviewPresenter presenter;
@@ -57,6 +61,25 @@ public class MessagesOverviewActivity extends AppCompatActivity {
 
         //getMessagesForUser(getUserId(), mMessagesProgressBar);
         presenter.loadAllMessages(getUserToken());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mListState != null) listView.onRestoreInstanceState(mListState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        mListState = listView.onSaveInstanceState();
+        state.putParcelable(LIST_STATE, mListState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        mListState = state.getParcelable(LIST_STATE);
     }
 
     public void updateMsgList(List<GroupedMsgItem> messageList) {

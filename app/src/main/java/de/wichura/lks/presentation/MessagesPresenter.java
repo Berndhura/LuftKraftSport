@@ -54,7 +54,6 @@ public class MessagesPresenter {
                         view.progress.setVisibility(View.GONE);
                         view.showLinkToAdButton();
                         view.showMessages(msgRowItems);
-                        view.showLinkToAdButton();
                     }
                 });
     }
