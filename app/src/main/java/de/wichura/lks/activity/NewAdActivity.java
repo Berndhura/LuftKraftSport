@@ -239,6 +239,8 @@ public class NewAdActivity extends AppCompatActivity implements
 
         locationName = (TextView) findViewById(R.id.create_location_name);
         if (mLastLocation != null) {
+            lat = mLastLocation.getLatitude();
+            lng = mLastLocation.getLongitude();
             presenter.getCityNameFromLatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             isLocationSet = true;
         } else {
@@ -347,6 +349,9 @@ public class NewAdActivity extends AppCompatActivity implements
                 //store lat lng for article
                 lat = address.getLatitude();
                 lng = address.getLongitude();
+
+                //location is set -> for validation before upload new article
+                isLocationSet = true;
 
                 //show city name
                 presenter.getCityNameFromLatLng(address.getLatitude(), address.getLongitude());
