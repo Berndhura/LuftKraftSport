@@ -11,11 +11,9 @@ public class ArticleDetails {
     private Integer id;
     private String title;
     private String description;
-    private Object keywords;
-    private Object phone;
     private String urls;
     private String userId;
-    private String price;
+    private Integer price;
     private Long date;
     private Integer views;
     private Location location;
@@ -46,22 +44,6 @@ public class ArticleDetails {
         this.description = description;
     }
 
-    public Object getKeywords() {
-        return keywords;
-    }
-
-    public void setKeywords(Object keywords) {
-        this.keywords = keywords;
-    }
-
-    public Object getPhone() {
-        return phone;
-    }
-
-    public void setPhone(Object phone) {
-        this.phone = phone;
-    }
-
     public String getUrls() {
         return urls;
     }
@@ -78,11 +60,11 @@ public class ArticleDetails {
         this.userId = userId;
     }
 
-    public String getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

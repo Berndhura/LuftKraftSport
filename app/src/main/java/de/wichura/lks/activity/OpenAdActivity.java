@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -139,7 +138,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             //intent comes from article overview
             String pictureUri = getIntent().getStringExtra(Constants.URI);
             mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
-            String formatedPrice = getIntent().getStringExtra(Constants.PRICE).split("\\.")[0] + " €";
+            Integer price = getIntent().getIntExtra(Constants.PRICE, 0);
+            String formatedPrice = price.toString().split("\\.")[0] + " €";
             mPrice.setText(formatedPrice);
             mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
             mDateText.setText("Erstellt am: " + DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
@@ -246,9 +246,18 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     public void prepareDataFromArticle(ArticleDetails articleDetails) {
-        String pictureUri = Urls.MAIN_SERVER_URL_V3 + "pictures/" + articleDetails.getUrls();
+
+        //artikelvorschlag, deshalb muss USER_ID_FROM_AD mit aufs Intent -> delete oder message button
+        getIntent().putExtra(Constants.USER_ID_FROM_AD, articleDetails.getUserId());
+
+        String pictureUri = "";
+        if (articleDetails.getUrls() != null) {
+            pictureUri = Urls.MAIN_SERVER_URL_V3 + "pictures/" + articleDetails.getUrls();
+        }
+
         mTitleText.setText(articleDetails.getTitle());
-        String formatedPrice = getIntent().getStringExtra(Constants.PRICE).split("\\.")[0] + " €";
+        Integer price = getIntent().getIntExtra(Constants.PRICE, 0);
+        String formatedPrice = (price.toString().split("\\.")[0] + " €");
         mPrice.setText(formatedPrice);
         mDescText.setText(articleDetails.getDescription());
         mDateText.setText(DateFormat.getDateInstance().format(articleDetails.getDate()));

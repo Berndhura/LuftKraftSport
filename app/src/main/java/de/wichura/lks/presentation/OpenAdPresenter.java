@@ -181,8 +181,7 @@ public class OpenAdPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error in getting article details: " + e.getMessage());
-                        Log.e("CONAN", "presenter ERROR" + e.getMessage());
+                        Log.d("CONAN", "error in getting article details: ");
                     }
 
                     @Override
