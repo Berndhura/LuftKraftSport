@@ -256,8 +256,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         }
 
         mTitleText.setText(articleDetails.getTitle());
-        Integer price = getIntent().getIntExtra(Constants.PRICE, 0);
-        String formatedPrice = (price.toString().split("\\.")[0] + " €");
+        Integer price = articleDetails.getPrice();
+        String formatedPrice = price.toString().split("\\.")[0] + " €";
         mPrice.setText(formatedPrice);
         mDescText.setText(articleDetails.getDescription());
         mDateText.setText(DateFormat.getDateInstance().format(articleDetails.getDate()));
@@ -267,6 +267,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         lng = articleDetails.getLocation().getCoordinates()[1];
         presenter.getSellerInformation(articleDetails.getUserId());
         setupPanel(pictureUri, ownerId);
+        //TODO ok mit onConnect nochmal aufrufen?
+        //daten fuer artikel kommen später als onConnect
+        onConnected(null);
     }
 
     private void setupPanel(String pictureUri, String ownerId) {
