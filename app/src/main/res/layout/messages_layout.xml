@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.9"
             android:hint="new message..."
-            android:inputType="textAutoComplete|textMultiLine|textAutoCorrect" />
+            android:inputType="textPersonName|textMultiLine"  />
 
         <ImageView
             android:id="@+id/send_msg_button"
