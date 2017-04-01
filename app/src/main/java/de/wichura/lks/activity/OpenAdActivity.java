@@ -133,12 +133,12 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
         getDisplayDimensions();
 
-        //get data from Intent
+        //get data from Intent from mainActivity
         if (!"article".equals(getIntent().getStringExtra(Constants.NOTIFICATION_TYPE))) {
             //intent comes from article overview
             String pictureUri = getIntent().getStringExtra(Constants.URI);
             mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
-            Integer price = getIntent().getIntExtra(Constants.PRICE, 0);
+            Float price = getIntent().getFloatExtra(Constants.PRICE, 0);
             String formatedPrice = price.toString().split("\\.")[0] + " €";
             mPrice.setText(formatedPrice);
             mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));

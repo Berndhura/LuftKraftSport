@@ -48,7 +48,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         item.setId(data.getIntExtra(Constants.ARTICLE_ID, 0));
         item.setTitle(data.getStringExtra(Constants.TITLE));
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
-        item.setPrice(data.getStringExtra(Constants.PRICE));
+        //TODO mist oder
+        item.setPrice(Float.parseFloat(data.getStringExtra(Constants.PRICE)));
         item.setDate(data.getLongExtra(Constants.DATE, 0));
         item.setUrl(data.getStringExtra(Constants.AD_URL));
 
@@ -107,7 +108,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         RowItem item = new RowItem();
         item.setTitle(data.getStringExtra(Constants.TITLE));
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
-        item.setPrice(data.getStringExtra(Constants.PRICE));
+        //TODO Mist oder float.parse(...)
+        item.setPrice(Float.parseFloat(data.getStringExtra(Constants.PRICE)));
         item.setDate(data.getLongExtra(Constants.DATE, 0));
 
         double[] latlng = {data.getDoubleExtra(Constants.LAT, 0), data.getDoubleExtra(Constants.LNG, 0)};

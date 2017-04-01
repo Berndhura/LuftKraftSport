@@ -326,14 +326,17 @@ public class NewAdActivity extends AppCompatActivity implements
                     break;
                 }
             case SELECT_PHOTO_TWO: {
-                final Uri selectedImage = imageReturnedIntent.getData();
-                mImage2 = selectedImage.toString();
-                Picasso
-                        .with(getApplicationContext())
-                        .load(selectedImage)
-                        .fit()
-                        .into(mImgTwo);
-                pictureCount++;
+                if (resultCode == RESULT_OK) {
+                    final Uri selectedImage = imageReturnedIntent.getData();
+                    mImage2 = selectedImage.toString();
+                    Picasso
+                            .with(getApplicationContext())
+                            .load(selectedImage)
+                            .fit()
+                            .into(mImgTwo);
+                    pictureCount++;
+                    break;
+                }
                 break;
             }
         }

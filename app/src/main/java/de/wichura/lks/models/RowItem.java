@@ -14,7 +14,7 @@ public class RowItem {
     @Expose
     private long date;
     @Expose
-    private String price;
+    private Float price;
     @Expose
     private Integer id;
     @Expose
@@ -28,7 +28,8 @@ public class RowItem {
     @Expose
     private Integer distance;
 
-    public RowItem () {}
+    public RowItem() {
+    }
 
     public RowItem(final String title,
                    final Integer id,
@@ -36,7 +37,7 @@ public class RowItem {
                    final String des,
                    final String phone,
                    final long date,
-                   final String price,
+                   final Float price,
                    final Location location,
                    final String userid,
                    final String views,
@@ -66,9 +67,13 @@ public class RowItem {
         return userId;
     }
 
-    public Integer getId() {return id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public void setId(Integer id) {this.id = id;}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Location getLocation() {
         return location;
@@ -78,15 +83,19 @@ public class RowItem {
         this.location = loc;
     }
 
-    public long getDate() {return date;}
-
-    public void setDate(long date) {this.date = date;}
-
-    public String getPrice() {
-        return price;
+    public long getDate() {
+        return date;
     }
 
-    public void setPrice(String price) {
+    public void setDate(long date) {
+        this.date = date;
+    }
+
+    public String getPrice() {
+        return price.toString();
+    }
+
+    public void setPrice(Float price) {
         this.price = price;
     }
 
