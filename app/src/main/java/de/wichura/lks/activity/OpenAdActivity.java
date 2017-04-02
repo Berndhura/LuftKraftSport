@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -240,6 +241,14 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                             showDefaultPic();
                         }
                     });
+
+            nagDialog.setOnKeyListener((arg0, keyCode, event) -> {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    finish();
+                    nagDialog.dismiss();
+                }
+                return true;
+            });
 
             nagDialog.show();
         });

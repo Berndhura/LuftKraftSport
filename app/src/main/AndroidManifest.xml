@@ -111,13 +111,6 @@
             android:name="de.wichura.lks.activity.RegisterUser"
             android:label="@string/title_register_user" />
 
-        <activity
-            android:name="de.wichura.lks.activity.SetPriceActivity"
-            android:configChanges="keyboardHidden"
-            android:label="@string/title_set_price_page"
-            android:launchMode="standard"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth" />
-
 
         <activity
             android:name="com.facebook.FacebookActivity"

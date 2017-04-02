@@ -42,6 +42,7 @@
     <string name="price_does_not_matter">Beliebig</string>
     <string name="exit_question">Wirklich beenden?</string>
     <string name="zip_request">Gib deine Postleitzahl ein!</string>
+    <string name="price_range">Gib deine Preisspanne an!</string>
     <string name="empty_result">Keine Ergebnisse gefunden!</string>
 
     <!-- Empty Ads Database -->

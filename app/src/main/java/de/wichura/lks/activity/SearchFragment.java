@@ -14,12 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import de.wichura.lks.R;
+import de.wichura.lks.dialogs.SetPriceDialog;
+import de.wichura.lks.http.Service;
+import de.wichura.lks.mainactivity.Constants;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import de.wichura.lks.R;
-import de.wichura.lks.http.Service;
-import de.wichura.lks.mainactivity.Constants;
 
 import static android.app.Activity.RESULT_OK;
 import static de.wichura.lks.mainactivity.Constants.DISTANCE_INFINITY;
@@ -72,12 +73,19 @@ public class SearchFragment extends Fragment {
         });
 
         keywords = (TextView) view.findViewById(R.id.keywords);
+
         price = (TextView) view.findViewById(R.id.price_from);
+        price.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
+
         ImageView changePriceBtn = (ImageView) view.findViewById(R.id.changePrice);
 
         Button searchButton = (Button) view.findViewById(R.id.search_button);
 
         searchButton.setOnClickListener(v -> {
+
+            priceFrom = getPrice(Constants.PRICE_FROM);
+            priceTo = getPrice(Constants.PRICE_TO);
+
             final Intent data = new Intent();
             data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
 
@@ -105,13 +113,10 @@ public class SearchFragment extends Fragment {
             getActivity().finish();
         });
 
-        changePriceBtn.setOnClickListener(v -> {
-            Intent priceIntent = new Intent(getActivity(), SetPriceActivity.class);
-            startActivityForResult(priceIntent, Constants.REQUEST_ID_FOR_PRICE);
-        });
+        changePriceBtn.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
     }
 
-    private void adaptLayoutForPrice(String from, String to) {
+    public void adaptLayoutForPrice(String from, String to) {
         if (getString(R.string.price_does_not_matter).equals(priceFrom)) {
             price.setText(R.string.price_does_not_matter);
         } else {
@@ -152,11 +157,6 @@ public class SearchFragment extends Fragment {
 
         if (requestCode == Constants.REQUEST_ID_FOR_LOCATION) {
             showLocation();
-
-        } else if (requestCode == Constants.REQUEST_ID_FOR_PRICE) {
-            priceFrom = getPrice(Constants.PRICE_FROM);
-            priceTo = getPrice(Constants.PRICE_TO);
-            adaptLayoutForPrice(priceFrom, priceTo);
         }
     }
 
@@ -192,5 +192,4 @@ public class SearchFragment extends Fragment {
         SharedPreferences settings = getActivity().getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
         return Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
     }
-
 }
