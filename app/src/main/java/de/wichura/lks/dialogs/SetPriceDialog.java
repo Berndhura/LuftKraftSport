@@ -6,8 +6,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import de.wichura.lks.R;
 import de.wichura.lks.mainactivity.Constants;
@@ -17,7 +23,7 @@ import de.wichura.lks.mainactivity.Constants;
  * Luftkraftsport
  */
 
-public class SetPriceDialog  extends DialogFragment {
+public class SetPriceDialog extends DialogFragment {
 
     private TextView priceFromTv;
     private TextView  priceToTv;
@@ -41,9 +47,12 @@ public class SetPriceDialog  extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(getActivity())
+
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.price_range)
                 .setView(R.layout.set_price_activity)
+                .setCancelable(false)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -72,6 +81,10 @@ public class SetPriceDialog  extends DialogFragment {
                     }
                 })
                 .create();
+
+        //((TextView)dialog.findViewById(R.id.priceFrom)).setText("");
+
+        return dialog;
     }
 
     private void getPrices() {

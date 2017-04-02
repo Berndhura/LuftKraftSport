@@ -26,7 +26,6 @@
         android:layout_alignBottom="@+id/textView4"
         android:layout_alignStart="@+id/priceTo"
         android:text="Bis"
-        app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="235dp" />
 
     <EditText
@@ -39,9 +38,7 @@
         android:layout_marginTop="33dp"
         android:ems="10"
         android:inputType="number"
-        android:text="@string/price_does_not_matter"
-        app:layout_constraintLeft_toLeftOf="@+id/textView4"
-        tools:layout_editor_absoluteY="55dp" />
+        android:text="@string/price_does_not_matter" />
 
     <EditText
         android:id="@+id/priceTo"
@@ -52,8 +49,8 @@
         android:layout_alignParentEnd="true"
         android:ems="10"
         android:inputType="number"
-        android:text="@string/price_does_not_matter"
-        app:layout_constraintLeft_toLeftOf="@+id/textView5"
-        tools:layout_editor_absoluteY="55dp" />
+        tools:layout_editor_absoluteY="55dp"
+        android:text="@string/price_does_not_matter" />
+
 
 </RelativeLayout>
