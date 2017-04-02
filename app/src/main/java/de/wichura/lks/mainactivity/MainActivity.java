@@ -354,29 +354,6 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    /*
-        Updates the empty list view with contextually relevant information that the user can
-        use to determine why they aren't seeing ads.
-     */
-    public void showEmptyView() {
-        //if ( adapter.getCount() == 0 ) {
-        TextView tv = (TextView) findViewById(R.id.recyclerview_ads_list_empty);
-        if (tv != null) tv.setVisibility(View.VISIBLE);
-
-        // if cursor is empty, why? do we have an invalid location
-        //Log.d("CONAN", "nix");
-    }
-
-    public void hideEmptyView() {
-        //if ( adapter.getCount() == 0 ) {
-        TextView tv = (TextView) findViewById(R.id.recyclerview_ads_list_empty);
-        if (tv != null) tv.setVisibility(View.GONE);
-
-        // if cursor is empty, why? do we have an invalid location
-        //Log.d("CONAN", "nix");
-    }
-
-
     public void updateAds(AdsAndBookmarks elements, String type, Integer priceFrom, Integer priceTo, Integer distance, String description, String userId) {
 
         rowItems = new ArrayList<>();
@@ -418,6 +395,9 @@ public class MainActivity extends AppCompatActivity implements
             intent.putExtra(Constants.AD_URL, rowItem.getUrl());
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
         });
+
+        View empty = findViewById(R.id.empty_list_view);
+        listView.setEmptyView(empty);
 
         listView.setOnScrollListener(new EndlessScrollListener() {
             @Override

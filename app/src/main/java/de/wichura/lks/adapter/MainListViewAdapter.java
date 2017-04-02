@@ -213,7 +213,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         }
     }
 
-
     private void deleteAdRequest(final Integer adId, final View view) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(activity)
                 //set message, title, and icon

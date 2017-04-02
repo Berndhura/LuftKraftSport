@@ -177,7 +177,6 @@ public class MainPresenter {
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
                             view.progressBar.setVisibility(ProgressBar.GONE);
-                            view.showEmptyView();
                         }
 
                         @Override
@@ -187,7 +186,6 @@ public class MainPresenter {
                                 if (view.listView != null) {
                                     view.listView.setVisibility(View.VISIBLE);
                                 }
-                                view.hideEmptyView();
                                 view.updateAds(element, null, priceFrom, priceTo, distance, description, userId);
                             } else {
                                 view.addMoreAdsToList(element);
@@ -223,7 +221,6 @@ public class MainPresenter {
                                 if (view.listView != null) {
                                     view.listView.setVisibility(View.VISIBLE);
                                 }
-                                view.hideEmptyView();
                                 view.updateAds(adsAndBookmarks, null, priceFrom, priceTo, distance, description, userId);
                             } else {
                                 view.addMoreAdsToList(adsAndBookmarks);
@@ -273,7 +270,6 @@ public class MainPresenter {
                     public void onError(Throwable e) {
                         Log.d("CONAN", "Error in getting bookmarked ads: " + e.toString());
                         view.progressBar.setVisibility(ProgressBar.GONE);
-                        view.showEmptyView();
                     }
 
                     @Override
@@ -283,7 +279,6 @@ public class MainPresenter {
                             if (view.listView != null) {
                                 view.listView.setVisibility(View.VISIBLE);
                             }
-                            view.hideEmptyView();
                             view.updateAds(element, type, null, null, null, null, null);
                         } else {
                             view.addMoreAdsToList(element);
@@ -296,8 +291,6 @@ public class MainPresenter {
         view.setMainTitle("Luftkraftsport");
         Double lat = getLat();
         Double lng = getLng();
-
-        view.hideEmptyView();
 
         if (page == 0) {
             if (view.listView != null) {
@@ -333,7 +326,6 @@ public class MainPresenter {
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
                             view.progressBar.setVisibility(ProgressBar.GONE);
-                            view.showEmptyView();
                         }
 
                         @Override
@@ -343,7 +335,6 @@ public class MainPresenter {
                                 if (view.listView != null) {
                                     view.listView.setVisibility(View.VISIBLE);
                                 }
-                                view.hideEmptyView();
                                 view.updateAds(element, type, null, null, null, null, null);
                             } else {
                                 view.addMoreAdsToList(element);
@@ -379,7 +370,6 @@ public class MainPresenter {
                                 if (view.listView != null) {
                                     view.listView.setVisibility(View.VISIBLE);
                                 }
-                                view.hideEmptyView();
                                 view.updateAds(adsAndBookmarks, type, null, null, null, null, null);
                             } else {
                                 view.addMoreAdsToList(adsAndBookmarks);
@@ -425,7 +415,6 @@ public class MainPresenter {
                     public void onError(Throwable e) {
                         Log.d("CONAN", "Error in getting user's ads: " + e.toString());
                         view.progressBar.setVisibility(ProgressBar.GONE);
-                        view.showEmptyView();
                     }
 
                     @Override
@@ -435,7 +424,6 @@ public class MainPresenter {
                             if (view.listView != null) {
                                 view.listView.setVisibility(View.VISIBLE);
                             }
-                            view.hideEmptyView();
                             view.updateAds(element, type, null, null, null, null, null);
                         } else {
                             view.addMoreAdsToList(element);
