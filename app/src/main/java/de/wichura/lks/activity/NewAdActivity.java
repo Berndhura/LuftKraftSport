@@ -250,10 +250,10 @@ public class NewAdActivity extends AppCompatActivity implements
             }
         }
 
+        locationName.setOnClickListener(v -> new ZipDialogFragment().show(getSupportFragmentManager(), null));
+
         location = (ImageView) findViewById(R.id.create_change_location);
-        location.setOnClickListener(v -> {
-            new ZipDialogFragment().show(getSupportFragmentManager(), null);
-        });
+        location.setOnClickListener(v -> new ZipDialogFragment().show(getSupportFragmentManager(), null));
     }
 
     @Override

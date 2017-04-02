@@ -15,15 +15,15 @@
         app:srcCompat="@drawable/empty_photo" /-->
 
     <LinearLayout
+        android:id="@+id/picture_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/picture_ll"
+        android:layout_gravity="center_horizontal|center"
         android:orientation="horizontal"
-        android:paddingLeft="4.0dip"
-        android:paddingTop="5.0dip"
-        android:paddingRight="4.0dip"
         android:paddingBottom="1.0dip"
-        android:layout_gravity="center_horizontal|center">
+        android:paddingLeft="4.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingTop="5.0dip">
 
         <ImageView
             android:id="@+id/imageButton"
@@ -32,8 +32,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="19dp"
-            app:srcCompat="@drawable/empty_photo"
-            android:layout_weight="1.0" />
+            android:layout_weight="1.0"
+            app:srcCompat="@drawable/empty_photo" />
 
         <ImageView
             android:id="@+id/imageButton2"
@@ -42,8 +42,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="19dp"
-            app:srcCompat="@drawable/empty_photo"
-            android:layout_weight="1.0" />
+            android:layout_weight="1.0"
+            app:srcCompat="@drawable/empty_photo" />
 
 
     </LinearLayout>
@@ -69,15 +69,11 @@
             android:id="@+id/new_ad_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_margin="16dp"
             android:layout_weight="0.1"
             android:background="@android:color/transparent"
             android:ems="10"
-            android:gravity="left"
+            android:gravity="start"
             android:hint="@string/keywords"
             android:inputType="textPersonName|textMultiLine" />
 
@@ -91,16 +87,12 @@
             android:id="@+id/new_ad_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="17dp"
             android:layout_weight="0.4"
             android:background="@android:color/transparent"
             android:ems="10"
-            android:gravity="left"
+            android:gravity="start"
             android:hint="@string/description"
             android:inputType="textPersonName|textMultiLine" />
 
@@ -114,15 +106,11 @@
             android:id="@+id/new_ad_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_margin="16dp"
             android:layout_weight="0.2"
             android:background="@android:color/transparent"
             android:ems="10"
-            android:gravity="top|left|center_vertical"
+            android:gravity="start"
             android:hint="@string/preis"
             android:inputType="number" />
 
@@ -135,10 +123,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_margin="16dp"
             android:layout_weight="0.3"
             android:orientation="horizontal">
 
@@ -146,12 +131,14 @@
                 android:id="@+id/create_standort_id"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Standort: " />
+                android:text="Standort: "
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/create_location_name"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/create_change_location"
@@ -166,14 +153,10 @@
             android:id="@+id/uploadButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
             android:background="@color/colorPrimary"
             android:text="@string/uploadAd"
             android:textColor="#ffffff" />
 
-
     </LinearLayout>
-
 
 </RelativeLayout>
