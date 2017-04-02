@@ -5,8 +5,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import de.wichura.lks.R;
+import de.wichura.lks.activity.SearchFragment;
 import de.wichura.lks.mainactivity.Constants;
 
 /**
@@ -59,7 +63,7 @@ public class SetPriceDialog extends DialogFragment {
                         priceFromTv = (TextView) getDialog().findViewById(R.id.priceFrom);
                         priceToTv = (TextView) getDialog().findViewById(R.id.priceTo);
 
-                        priceFromTv.setOnClickListener(view -> priceFromTv.setText(""));
+                       /* priceFromTv.setOnClickListener(view -> priceFromTv.setText(""));
                         priceFromTv.setOnTouchListener((view, event) -> {
                             priceFromTv.setText("");
                             return false;
@@ -69,7 +73,7 @@ public class SetPriceDialog extends DialogFragment {
                         priceToTv.setOnTouchListener((view, event) -> {
                             priceToTv.setText("");
                             return false;
-                        });
+                        });*/
 
                         getPrices();
                     }
@@ -82,9 +86,27 @@ public class SetPriceDialog extends DialogFragment {
                 })
                 .create();
 
-        //((TextView)dialog.findViewById(R.id.priceFrom)).setText("");
+        Fragment f = getCurrentFragment();
 
+        LayoutInflater inflater = f.getLayoutInflater(savedInstanceState);
+
+        View view = inflater.inflate(R.layout.set_price_activity, null);
+
+        ((TextView)view.findViewById(R.id.priceFrom)).setOnTouchListener((v,  event) -> {
+            ((TextView)view.findViewById(R.id.priceFrom)).setText("");
+            return false;
+        });
+
+        ((TextView)view.findViewById(R.id.priceFrom)).setOnClickListener(v ->  ((TextView)view.findViewById(R.id.priceFrom)).setText(""));
         return dialog;
+    }
+
+    private Fragment getCurrentFragment() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        int stackCount = fragmentManager.getBackStackEntryCount();
+        if (fragmentManager.getFragments() != null)
+            return fragmentManager.getFragments().get(stackCount > 0 ? stackCount - 1 : stackCount);
+        else return null;
     }
 
     private void getPrices() {
