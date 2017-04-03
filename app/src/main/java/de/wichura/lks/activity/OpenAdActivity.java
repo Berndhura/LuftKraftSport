@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,10 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -45,7 +40,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.DateFormat;
@@ -61,6 +55,7 @@ import de.wichura.lks.models.ArticleDetails;
 import de.wichura.lks.models.User;
 import de.wichura.lks.presentation.OpenAdPresenter;
 import de.wichura.lks.util.Utility;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static de.wichura.lks.R.id.map;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -95,10 +90,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private TextView mDescText;
     private TextView mDateText;
     private Integer mAdId;
-
-    Matrix matrix = new Matrix();
-    Float scale = 1f;
-    ScaleGestureDetector scaleGestureDetector;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -187,27 +178,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     private void attachOnClickToImage() {
 
-
-
         getDisplayDimensions();
 
         imgView.setOnClickListener(v -> {
-
-           class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-
-                @Override
-                public boolean onScale(ScaleGestureDetector detector) {
-
-                    scale = scale * detector.getScaleFactor();
-                    scale = Math.max(0.1f, Math.min(scale, 5f));
-                    matrix.setScale(scale, scale);
-                    imgView.setImageMatrix(matrix);
-                    Log.d("CONAN", "scale: "+detector.getScaleFactor());
-                    return true;
-                }
-            }
-
-            scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
             final Dialog nagDialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
             nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -218,6 +191,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             mOpenFullScreenImgProgressBar.setVisibility(View.VISIBLE);
 
             ImageView ivPreview = (ImageView) nagDialog.findViewById(R.id.iv_preview_image);
+            PhotoViewAttacher photoView = new PhotoViewAttacher(ivPreview);
+            photoView.update();
             Picasso.with(getApplicationContext())
                     .load(getIntent().getStringExtra(Constants.URI))
                     .centerInside()
@@ -251,13 +226,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         });
     }
 
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        //detector.onTouchEvent(event);
-        scaleGestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
 
     public void prepareDataFromArticle(ArticleDetails articleDetails) {
 
@@ -489,5 +457,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     @Override
-    public void onLocationChanged(Location location) {}
+    public void onLocationChanged(Location location) {
+    }
 }
