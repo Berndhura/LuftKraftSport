@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.Display;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -65,8 +67,7 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, OnMapReadyCallback,
-        GestureDetector.OnGestureListener {
+        LocationListener, OnMapReadyCallback {
 
     public Button mBookmarkButton;
     public boolean isBookmarked;
@@ -95,7 +96,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private TextView mDateText;
     private Integer mAdId;
 
-    GestureDetector detector;
+    Matrix matrix = new Matrix();
+    Float scale = 1f;
+    ScaleGestureDetector scaleGestureDetector;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -104,7 +107,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         setContentView(R.layout.open_ad_activity);
 
         utils = new Utility(this);
-        detector = new GestureDetector(this, this);
 
         MapsInitializer.initialize(this);
 
@@ -185,31 +187,28 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     private void attachOnClickToImage() {
 
-        Transformation transformation = new Transformation() {
 
-            @Override
-            public Bitmap transform(Bitmap source) {
-                int targetWidth = imgView.getWidth();
-
-                double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
-                int targetHeight = (int) (targetWidth * aspectRatio);
-                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
-                if (result != source) {
-                    // Same bitmap is returned if sizes are the same
-                    source.recycle();
-                }
-                return result;
-            }
-
-            @Override
-            public String key() {
-                return "transformation" + " desiredWidth";
-            }
-        };
 
         getDisplayDimensions();
 
         imgView.setOnClickListener(v -> {
+
+           class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+                @Override
+                public boolean onScale(ScaleGestureDetector detector) {
+
+                    scale = scale * detector.getScaleFactor();
+                    scale = Math.max(0.1f, Math.min(scale, 5f));
+                    matrix.setScale(scale, scale);
+                    imgView.setImageMatrix(matrix);
+                    Log.d("CONAN", "scale: "+detector.getScaleFactor());
+                    return true;
+                }
+            }
+
+            scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
+
             final Dialog nagDialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
             nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             nagDialog.setCancelable(false);
@@ -223,8 +222,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                     .load(getIntent().getStringExtra(Constants.URI))
                     .centerInside()
                     .resize(displayWidth, displayHeight)
-                    //.fit()
-                    //.transform(transformation)
                     .into(ivPreview, new Callback() {
                         @Override
                         public void onSuccess() {
@@ -252,6 +249,14 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
             nagDialog.show();
         });
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //detector.onTouchEvent(event);
+        scaleGestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 
     public void prepareDataFromArticle(ArticleDetails articleDetails) {
@@ -484,44 +489,5 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-    }
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        finish();
-        Log.d("CONAN", "touch!!!");
-        return true;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        detector.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
+    public void onLocationChanged(Location location) {}
 }
