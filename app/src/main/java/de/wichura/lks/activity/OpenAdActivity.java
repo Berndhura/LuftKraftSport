@@ -302,10 +302,14 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         presenter.loadBookmarksForUser();
 
         mBookmarkButton.setOnClickListener((view) -> {
-            if (isBookmarked) {
-                presenter.deleteBookmark(mAdId, utils.getUserToken());
+            if (!"".equals(getUserId())) {
+                if (isBookmarked) {
+                    presenter.deleteBookmark(mAdId, utils.getUserToken());
+                } else {
+                    presenter.bookmarkAd(mAdId, utils.getUserToken());
+                }
             } else {
-                presenter.bookmarkAd(mAdId, utils.getUserToken());
+                Toast.makeText(this, "Bitte anmelden!", Toast.LENGTH_LONG).show();
             }
         });
 
