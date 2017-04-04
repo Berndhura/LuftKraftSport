@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/iv_preview_image"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/progress_loading_full_screen_pic"

@@ -119,8 +119,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
                         public void onError() {
                             activity.mOpenFullScreenImgProgressBar.setVisibility(ProgressBar.GONE);
                             Toast.makeText(context, "Problem beim Laden!", Toast.LENGTH_SHORT).show();
-                            //TODO default pic
-                            //showDefaultPic();
+                            showDefaultPic(image_view);
                         }
                     });
 
