@@ -19,6 +19,7 @@ public class HeightWrappingViewPager extends ViewPager {
     public HeightWrappingViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
     private int mCurrentPagePosition = 0;
 
     @Override

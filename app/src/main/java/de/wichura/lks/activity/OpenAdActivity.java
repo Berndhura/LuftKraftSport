@@ -2,7 +2,6 @@ package de.wichura.lks.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -11,18 +10,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +34,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -57,7 +51,6 @@ import de.wichura.lks.models.ArticleDetails;
 import de.wichura.lks.models.User;
 import de.wichura.lks.presentation.OpenAdPresenter;
 import de.wichura.lks.util.Utility;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static de.wichura.lks.R.id.map;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -75,7 +68,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private int displayWidth;
 
     public AVLoadingIndicatorView mOpenAdProgressBar;
-    private AVLoadingIndicatorView mOpenFullScreenImgProgressBar;
+    public AVLoadingIndicatorView mOpenFullScreenImgProgressBar;
     private OpenAdPresenter presenter;
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -158,8 +151,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             presenter.getSellerInformation(getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
         }
 
-        attachOnClickToImage();
-
         buildGoogleApiClient();
 
         mGoogleApiClient.connect();
@@ -181,58 +172,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             }
         }
     }
-
-    private void attachOnClickToImage() {
-
-        getDisplayDimensions();
-
-        imagePager.setOnClickListener(v -> {
-
-            final Dialog nagDialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-            nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            nagDialog.setCancelable(false);
-            nagDialog.setContentView(R.layout.full_screen_image);
-
-            mOpenFullScreenImgProgressBar = (AVLoadingIndicatorView) nagDialog.findViewById(R.id.progress_loading_full_screen_pic);
-            mOpenFullScreenImgProgressBar.setVisibility(View.VISIBLE);
-
-            ImageView ivPreview = (ImageView) nagDialog.findViewById(R.id.iv_preview_image);
-            PhotoViewAttacher photoView = new PhotoViewAttacher(ivPreview);
-            photoView.update();
-            Picasso.with(getApplicationContext())
-                    .load(getIntent().getStringExtra(Constants.URI))
-                    .centerInside()
-                    .resize(displayWidth, displayHeight)
-                    .into(ivPreview, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            mOpenFullScreenImgProgressBar.setVisibility(ProgressBar.GONE);
-                            ImageView closeImage = (ImageView) nagDialog.findViewById(R.id.close_full_screen_image);
-                            closeImage.setVisibility(View.VISIBLE);
-                            closeImage.setOnClickListener(dialog -> nagDialog.dismiss());
-                        }
-
-                        @Override
-                        public void onError() {
-                            mOpenFullScreenImgProgressBar.setVisibility(ProgressBar.GONE);
-                            Toast.makeText(getApplicationContext(), "Problem beim Laden!", Toast.LENGTH_SHORT).show();
-                            //TODO default pic
-                            //showDefaultPic();
-                        }
-                    });
-
-            nagDialog.setOnKeyListener((arg0, keyCode, event) -> {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    finish();
-                    nagDialog.dismiss();
-                }
-                return true;
-            });
-
-            nagDialog.show();
-        });
-    }
-
 
     public void prepareDataFromArticle(ArticleDetails articleDetails) {
 
