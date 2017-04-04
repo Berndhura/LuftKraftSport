@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import de.wichura.lks.R;
+import de.wichura.lks.adapter.CustomSwipeadapter;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
@@ -80,7 +82,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     private double lat;
     private double lng;
-    private ImageView imgView;
+    //private ImageView imgView;
+    private ViewPager imagePager;
+    private CustomSwipeadapter swipeadapter;
     private ImageView userPic;
     private TextView userName;
     private TextView userNumberOfArticles;
@@ -118,7 +122,11 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         mPrice = (TextView) findViewById(R.id.price);
         mDescText = (TextView) findViewById(R.id.description);
         mDateText = (TextView) findViewById(R.id.ad_date);
-        imgView = (ImageView) findViewById(R.id.imageView);
+        //imgView = (ImageView) findViewById(R.id.imageView);
+        imagePager = (ViewPager) findViewById(R.id.view_pager);
+        swipeadapter = new CustomSwipeadapter(this);
+        imagePager.setAdapter(swipeadapter);
+
         mDelAndMsgButton = (Button) findViewById(R.id.delButton);
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         userName = (TextView) findViewById(R.id.user_name);
@@ -180,7 +188,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
         getDisplayDimensions();
 
-        imgView.setOnClickListener(v -> {
+        imagePager.setOnClickListener(v -> {
 
             final Dialog nagDialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
             nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -262,7 +270,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 .placeholder(R.drawable.empty_photo)
                 .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
                 .centerInside()
-                .into(imgView, new Callback() {
+                .into(imagePager, new Callback() {
                     @Override
                     public void onSuccess() {
                         mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
