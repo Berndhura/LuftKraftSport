@@ -84,7 +84,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private double lng;
     //private ImageView imgView;
     private ViewPager imagePager;
-    private CustomSwipeadapter swipeadapter;
+    private CustomSwipeadapter swipeAdapter;
     private ImageView userPic;
     private TextView userName;
     private TextView userNumberOfArticles;
@@ -124,8 +124,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         mDateText = (TextView) findViewById(R.id.ad_date);
         //imgView = (ImageView) findViewById(R.id.imageView);
         imagePager = (ViewPager) findViewById(R.id.view_pager);
-        swipeadapter = new CustomSwipeadapter(this);
-        imagePager.setAdapter(swipeadapter);
 
         mDelAndMsgButton = (Button) findViewById(R.id.delButton);
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
@@ -218,7 +216,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                         public void onError() {
                             mOpenFullScreenImgProgressBar.setVisibility(ProgressBar.GONE);
                             Toast.makeText(getApplicationContext(), "Problem beim Laden!", Toast.LENGTH_SHORT).show();
-                            showDefaultPic();
+                            //TODO default pic
+                            //showDefaultPic();
                         }
                     });
 
@@ -264,25 +263,10 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     private void setupPanel(String pictureUri, String ownerId) {
         mOpenAdProgressBar.setVisibility(View.VISIBLE);
-        int ratio = Math.round((float) displayWidth / (float) displayWidth);
-        Picasso.with(getApplicationContext())
-                .load(pictureUri)
-                .placeholder(R.drawable.empty_photo)
-                .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
-                .centerInside()
-                .into(imagePager, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
-                    }
 
-                    @Override
-                    public void onError() {
-                        mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
-                        Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
-                        showDefaultPic();
-                    }
-                });
+        swipeAdapter = new CustomSwipeadapter(this, pictureUri);
+        imagePager.setAdapter(swipeAdapter);
+
 
         if (isOwnAd() && mDelAndMsgButton != null) {
             mDelAndMsgButton.setOnClickListener((view) -> {
@@ -349,7 +333,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    private void showDefaultPic() {
+   /* private void showDefaultPic() {
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
         Picasso.with(getApplicationContext())
                 .load(R.drawable.applogo)
@@ -357,7 +341,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
                 .centerCrop()
                 .into(imgView);
-    }
+    }*/
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
