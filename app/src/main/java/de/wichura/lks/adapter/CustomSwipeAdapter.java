@@ -18,24 +18,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.wichura.lks.R;
+import de.wichura.lks.activity.OpenAdActivity;
 
 /**
  * Created by bwichura on 04.04.2017.
  * Luftkraftsport
  */
 
-public class CustomSwipeadapter extends PagerAdapter {
+public class CustomSwipeAdapter extends PagerAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
+    private OpenAdActivity activity;
     private String pictureUri;
+    private int displayWidth;
+    private int displayHeight;
 
     private List<String> IMAGES = new ArrayList<>();
 
-    public CustomSwipeadapter(Context context, String pictureUri) {
+    public CustomSwipeAdapter(OpenAdActivity activity, String pictureUri, int displayHeight, int displayWidth) {
 
-        this.context = context;
+        this.context = activity.getContext();
+        this.activity = activity;
         this.pictureUri = pictureUri;
+        this.displayWidth = displayWidth;
+        this.displayHeight = displayHeight;
         this.IMAGES.add(0, pictureUri);
         this.IMAGES.add(1, pictureUri);
         this.IMAGES.add(2, pictureUri);
@@ -48,7 +55,7 @@ public class CustomSwipeadapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return (view == (LinearLayout)object );
+        return (view == object );
     }
 
     @Override
@@ -58,10 +65,7 @@ public class CustomSwipeadapter extends PagerAdapter {
         View item_view = layoutInflater.inflate(R.layout.swipe_layout, container, false);
         ImageView image_view = (ImageView) item_view.findViewById(R.id.imageView);
 
-        int displayHeight=1600;
-        int displayWidth=1000;
 
-        //image_view.setImageResource(R.drawable.applogo);
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
         Picasso.with(context)
                 .load(IMAGES.get(position))
@@ -71,21 +75,16 @@ public class CustomSwipeadapter extends PagerAdapter {
                 .into(image_view, new Callback() {
                     @Override
                     public void onSuccess() {
-
-                        //mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
+                        activity.mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
                     }
 
                     @Override
                     public void onError() {
-                        //mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
+                        activity.mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
                         Toast.makeText(context, "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
-                        //showDefaultPic();
+                        //activity.showDefaultPic();
                     }
                 });
-
-
-
-
 
         container.addView(item_view);
 
@@ -96,6 +95,6 @@ public class CustomSwipeadapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((LinearLayout)container);
+        container.removeView(container);
     }
 }

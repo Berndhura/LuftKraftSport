@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import de.wichura.lks.R;
-import de.wichura.lks.adapter.CustomSwipeadapter;
+import de.wichura.lks.adapter.CustomSwipeAdapter;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
@@ -74,7 +74,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private int displayHeight;
     private int displayWidth;
 
-    private AVLoadingIndicatorView mOpenAdProgressBar;
+    public AVLoadingIndicatorView mOpenAdProgressBar;
     private AVLoadingIndicatorView mOpenFullScreenImgProgressBar;
     private OpenAdPresenter presenter;
     private GoogleMap googleMap;
@@ -83,8 +83,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private double lat;
     private double lng;
     //private ImageView imgView;
-    private ViewPager imagePager;
-    private CustomSwipeadapter swipeAdapter;
+    private HeightWrappingViewPager imagePager;
+    private CustomSwipeAdapter swipeAdapter;
     private ImageView userPic;
     private TextView userName;
     private TextView userNumberOfArticles;
@@ -123,7 +123,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         mDescText = (TextView) findViewById(R.id.description);
         mDateText = (TextView) findViewById(R.id.ad_date);
         //imgView = (ImageView) findViewById(R.id.imageView);
-        imagePager = (ViewPager) findViewById(R.id.view_pager);
+        imagePager = (HeightWrappingViewPager) findViewById(R.id.view_pager);
 
         mDelAndMsgButton = (Button) findViewById(R.id.delButton);
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
@@ -264,7 +264,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private void setupPanel(String pictureUri, String ownerId) {
         mOpenAdProgressBar.setVisibility(View.VISIBLE);
 
-        swipeAdapter = new CustomSwipeadapter(this, pictureUri);
+        swipeAdapter = new CustomSwipeAdapter(this, pictureUri, displayHeight, displayWidth);
         imagePager.setAdapter(swipeAdapter);
 
 
