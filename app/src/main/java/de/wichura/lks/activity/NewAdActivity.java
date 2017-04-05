@@ -30,6 +30,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.wichura.lks.R;
@@ -37,6 +38,7 @@ import de.wichura.lks.dialogs.ZipDialogFragment;
 import de.wichura.lks.http.FileUploadService;
 import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
+import de.wichura.lks.models.FileNameParcelable;
 import de.wichura.lks.presentation.NewArticlePresenter;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -53,8 +55,8 @@ public class NewAdActivity extends AppCompatActivity implements
 
     private static final int SELECT_PHOTO_ONE = 100;
     private static final int SELECT_PHOTO_TWO = 101;
-    private String mImage;
-    private String mImage2;
+
+    private ArrayList<FileNameParcelable> mImage;
     private int pictureCount = 0;
 
     private ImageView mImgOne;
@@ -88,6 +90,7 @@ public class NewAdActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
 
         isLocationSet = false;
+        mImage = new ArrayList<>();
 
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
@@ -156,7 +159,6 @@ public class NewAdActivity extends AppCompatActivity implements
             photoPickerIntent.setType("image/*");
             photoPickerIntent.putExtra("imageTwo", true);
             startActivityForResult(photoPickerIntent, SELECT_PHOTO_TWO);
-            //Toast.makeText(this, "Dies kommt bald... in Arbeit :-)", Toast.LENGTH_LONG).show();
         });
 
 
@@ -199,10 +201,7 @@ public class NewAdActivity extends AppCompatActivity implements
             final Intent data = new Intent();
             data.putExtra(Constants.TITLE, mTitle.getText().toString());
             data.putExtra(Constants.DESCRIPTION, mDescription.getText().toString());
-            data.putExtra(Constants.FILENAME, mImage);
-            //TODO 2. file upload.... allgemein machen
-            data.putExtra(Constants.FILENAME, mImage);
-            data.putExtra(Constants.FILENAME2, mImage2);
+            data.putParcelableArrayListExtra(Constants.FILENAME, mImage);
             data.putExtra(Constants.PRICE, mPrice.getText().toString());
             data.putExtra(Constants.DATE, System.currentTimeMillis());
             data.putExtra(Constants.LAT, lat);
@@ -316,7 +315,8 @@ public class NewAdActivity extends AppCompatActivity implements
                 if (resultCode == RESULT_OK && pictureCount < 4) {
                     isImageChanged = true;
                     final Uri selectedImage = imageReturnedIntent.getData();
-                    mImage = selectedImage.toString();
+                    FileNameParcelable file = new FileNameParcelable(selectedImage.toString());
+                    mImage.add(file);
                     switch (pictureCount) {
                         case 0: {
                             Picasso
@@ -333,7 +333,8 @@ public class NewAdActivity extends AppCompatActivity implements
             case SELECT_PHOTO_TWO: {
                 if (resultCode == RESULT_OK) {
                     final Uri selectedImage = imageReturnedIntent.getData();
-                    mImage2 = selectedImage.toString();
+                    FileNameParcelable file = new FileNameParcelable(selectedImage.toString());
+                    mImage.add(file);
                     Picasso
                             .with(getApplicationContext())
                             .load(selectedImage)

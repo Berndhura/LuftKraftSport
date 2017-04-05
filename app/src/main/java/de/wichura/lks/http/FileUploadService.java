@@ -12,9 +12,11 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import de.wichura.lks.activity.NewAdActivity;
 import de.wichura.lks.mainactivity.Constants;
+import de.wichura.lks.models.FileNameParcelable;
 import de.wichura.lks.models.Location;
 import de.wichura.lks.models.RowItem;
 import de.wichura.lks.util.BitmapHelper;
@@ -66,6 +68,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onCompleted() {
                         view.hideProgress();
+                        data.getParcelableArrayListExtra(Constants.FILENAME);
                         if (data.getStringExtra(Constants.FILENAME) != null) {
                             String imageString = data.getStringExtra(Constants.FILENAME);
                             view.hideMainProgress();
@@ -103,8 +106,11 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         view.showMainProgress();
         view.hideProblem();
 
-        String picture = data.getStringExtra(Constants.FILENAME);
-        String picture2 = data.getStringExtra(Constants.FILENAME2);
+        ArrayList<FileNameParcelable> mImage = new ArrayList<>();
+        mImage = data.getParcelableArrayListExtra(Constants.FILENAME);
+
+        FileNameParcelable picture = mImage.get(0);
+        FileNameParcelable picture2 = mImage.get(1);
 
         RowItem item = new RowItem();
         item.setTitle(data.getStringExtra(Constants.TITLE));
@@ -126,7 +132,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onCompleted() {
                         view.hideMainProgress();
-                        uploadPic(adId, picture, picture2);
+                        uploadPic(adId, picture.getFileName(), picture2.getFileName());
                     }
 
                     @Override
