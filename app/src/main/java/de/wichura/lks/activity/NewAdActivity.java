@@ -61,7 +61,6 @@ public class NewAdActivity extends AppCompatActivity implements
 
     private ImageView mImgOne;
     private ImageView mImgTwo;
-    private ImageView location;
     private ImageView errorImage;
 
     public ProgressBar progress;
@@ -171,6 +170,7 @@ public class NewAdActivity extends AppCompatActivity implements
             mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
             articleIdForEdit = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
 
+            //TODO: mehrere bilder anzeige umstellen
             String pictureUri = Urls.MAIN_SERVER_URL_V3 + "pictures/" + (getIntent().getStringExtra(Constants.AD_URL));
             showProgress();
             Picasso.with(getApplicationContext())
@@ -240,21 +240,30 @@ public class NewAdActivity extends AppCompatActivity implements
     private void setupLocation() {
 
         locationName = (TextView) findViewById(R.id.create_location_name);
-        if (!isLocationSet) {
-            if (mLastLocation != null) {
-                lat = mLastLocation.getLatitude();
-                lng = mLastLocation.getLongitude();
-                presenter.getCityNameFromLatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                isLocationSet = true;
-            } else {
-                locationName.setText("Bitte auswählen");
-                isLocationSet = false;
+
+        //do not set location new if edit mode
+        if (isEditMode) {
+            lat = getIntent().getDoubleExtra(Constants.LAT, 0);
+            lng = getIntent().getDoubleExtra(Constants.LNG, 0);
+            presenter.getCityNameFromLatLng(lat, lng);
+            isLocationSet = true;
+        } else {
+            if (!isLocationSet) {
+                if (mLastLocation != null) {
+                    lat = mLastLocation.getLatitude();
+                    lng = mLastLocation.getLongitude();
+                    presenter.getCityNameFromLatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                    isLocationSet = true;
+                } else {
+                    locationName.setText("Bitte auswählen");
+                    isLocationSet = false;
+                }
             }
         }
 
         locationName.setOnClickListener(v -> new ZipDialogFragment().show(getSupportFragmentManager(), null));
 
-        location = (ImageView) findViewById(R.id.create_change_location);
+        ImageView location = (ImageView) findViewById(R.id.create_change_location);
         location.setOnClickListener(v -> new ZipDialogFragment().show(getSupportFragmentManager(), null));
     }
 
@@ -263,7 +272,6 @@ public class NewAdActivity extends AppCompatActivity implements
         Log.d("CONAN", "Zipcode from dialog: " + zipCode);
         getLatLngFromPlz(zipCode);
     }
-
 
     public void setCityName(String city) {
         locationName.setText(city);
@@ -395,6 +403,9 @@ public class NewAdActivity extends AppCompatActivity implements
         String price = mPrice.getText().toString();
         if (price.isEmpty()) {
             mPrice.setError("Der Preis darf nicht leer sein!");
+            valid = false;
+        } else if (Integer.parseInt(price) >= Integer.MAX_VALUE) {
+            mPrice.setError("Komm schon, etwas teuer oder?");
             valid = false;
         } else {
             mPrice.setError(null);

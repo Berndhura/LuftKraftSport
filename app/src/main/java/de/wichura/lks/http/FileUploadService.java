@@ -68,11 +68,10 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onCompleted() {
                         view.hideProgress();
-                        data.getParcelableArrayListExtra(Constants.FILENAME);
                         if (data.getStringExtra(Constants.FILENAME) != null) {
                             String imageString = data.getStringExtra(Constants.FILENAME);
                             view.hideMainProgress();
-                            uploadPic(adId, imageString, imageString);  //TODO auf n images umstellen
+                            uploadPic(adId, data.getParcelableArrayListExtra(Constants.FILENAME));  //TODO so einfach ?
                         } else {
                             view.finish();
                         }
@@ -106,11 +105,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         view.showMainProgress();
         view.hideProblem();
 
-        ArrayList<FileNameParcelable> mImage = new ArrayList<>();
-        mImage = data.getParcelableArrayListExtra(Constants.FILENAME);
-
-        FileNameParcelable picture = mImage.get(0);
-        FileNameParcelable picture2 = mImage.get(1);
+        final ArrayList<FileNameParcelable> mImage = new ArrayList<>(data.getParcelableArrayListExtra(Constants.FILENAME));
 
         RowItem item = new RowItem();
         item.setTitle(data.getStringExtra(Constants.TITLE));
@@ -132,7 +127,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onCompleted() {
                         view.hideMainProgress();
-                        uploadPic(adId, picture.getFileName(), picture2.getFileName());
+                        uploadPic(adId, mImage);
                     }
 
                     @Override
@@ -158,13 +153,13 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                 });
     }
 
-    private void uploadPic(Long adId, String picture, String picture2) {
+    private void uploadPic(Long adId, ArrayList<FileNameParcelable> imageFiles) {
 
         view.showProgress();
 
-        if (picture != null) {
+        if (imageFiles.size() > 0) {
 
-            String fileString = getRealPathFromUri(context, Uri.parse(picture));
+            String fileString = getRealPathFromUri(context, Uri.parse(imageFiles.get(0).getFileName()));
 
             File file = new File(fileString.toString());
 
@@ -228,9 +223,9 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             view.finish();
         }
 
-        if (picture2 != null) {
+        if (imageFiles.size() > 1) {
 
-            String fileString = getRealPathFromUri(context, Uri.parse(picture2));
+            String fileString = getRealPathFromUri(context, Uri.parse(imageFiles.get(1).getFileName()));
 
             File file = new File(fileString.toString());
 
