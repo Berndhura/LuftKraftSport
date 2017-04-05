@@ -129,7 +129,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         //get data from Intent from mainActivity
         if (!"article".equals(getIntent().getStringExtra(Constants.NOTIFICATION_TYPE))) {
             //intent comes from article overview
-            String pictureUri = getIntent().getStringExtra(Constants.URI);
+            //TODO more images
+            //String pictureUri = getIntent().getStringExtra(Constants.URI);
+            String pictureUri = getIntent().getStringExtra(Constants.URI_AS_LIST);
             mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
             Float price = getIntent().getFloatExtra(Constants.PRICE, 0);
             String formatedPrice = price.toString().split("\\.")[0] + " €";

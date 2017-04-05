@@ -108,8 +108,10 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         // getting ad data for the row
         final RowItem rowItem = getItem(position);
 
+        Log.d("CONAN", "rowItem "+ rowItem.getPictureIds().length);
+        //TODO: (rowItem.getPictureIds().length > 0)? rowItem.getPictureIds()[0]: ""  -> im else zweig ?
         Picasso.with(context)
-                .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl() + "/thumbnail")
+                .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + ((rowItem.getPictureIds().length > 0)? rowItem.getPictureIds()[0]: "") + "/thumbnail")
                 .resize(100, 100)
                 .centerCrop()
                 .into(holder.thumbNail);

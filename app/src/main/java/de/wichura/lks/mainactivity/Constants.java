@@ -39,6 +39,7 @@ public class Constants {
 
     //Intent
     public static final String URI = "uri";
+    public static final String URI_AS_LIST = "uri_as_list";
     public static final String TITLE = "title";
     public static final String IMAGE = "image";
     public static final String DESCRIPTION = "description";
@@ -56,6 +57,8 @@ public class Constants {
     public static final String PRICE_TO = "price_to";
     public static final String DISTANCE = "distance";
     public static final String FILENAME = "filename";
+    //TODO filename2 wieder raus bitte
+    public static final String FILENAME2 = "filename2";
     public static final String ID = "id";
     public static final String POSITION_IN_LIST = "positionInList";
     public static final String IS_EDIT_MODE = "isEditMode";

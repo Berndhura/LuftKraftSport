@@ -26,6 +26,8 @@ public class RowItem {
     @Expose
     private String bookmarks;
     @Expose
+    private String[] pictureIds;
+    @Expose
     private Integer distance;
 
     public RowItem() {
@@ -41,7 +43,8 @@ public class RowItem {
                    final Location location,
                    final String userid,
                    final String views,
-                   final String bookmarks) {
+                   final String bookmarks,
+                   final String[] pictureIds) {
         this.title = title;
         this.id = id;
         this.urls = url;
@@ -53,6 +56,7 @@ public class RowItem {
         this.userId = userid;
         this.views = views;
         this.bookmarks = bookmarks;
+        this.pictureIds = pictureIds;
     }
 
     public String getBookmarks() {
@@ -133,5 +137,13 @@ public class RowItem {
 
     public void setDistance(Integer distance) {
         this.distance = distance;
+    }
+
+    public String[] getPictureIds() {
+        return pictureIds;
+    }
+
+    public void setPictureIds(String[] pictureIds) {
+        this.pictureIds = pictureIds;
     }
 }

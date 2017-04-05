@@ -69,7 +69,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         if (data.getStringExtra(Constants.FILENAME) != null) {
                             String imageString = data.getStringExtra(Constants.FILENAME);
                             view.hideMainProgress();
-                            uploadPic(adId, imageString);
+                            uploadPic(adId, imageString, imageString);  //TODO auf n images umstellen
                         } else {
                             view.finish();
                         }
@@ -104,6 +104,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         view.hideProblem();
 
         String picture = data.getStringExtra(Constants.FILENAME);
+        String picture2 = data.getStringExtra(Constants.FILENAME2);
 
         RowItem item = new RowItem();
         item.setTitle(data.getStringExtra(Constants.TITLE));
@@ -125,7 +126,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onCompleted() {
                         view.hideMainProgress();
-                        uploadPic(adId, picture);
+                        uploadPic(adId, picture, picture2);
                     }
 
                     @Override
@@ -151,7 +152,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                 });
     }
 
-    private void uploadPic(Long adId, String picture) {
+    private void uploadPic(Long adId, String picture, String picture2) {
 
         view.showProgress();
 
@@ -209,8 +210,74 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         public void onNext(String status) {
                             Log.d("CONAN", "Picture uploaded");
                             //TODO unterscheiden ob new oder update -> Toast anpassen
-                            Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Neue Anzeige erstellt PICTURE 1!", Toast.LENGTH_SHORT).show();
                             Boolean deleted = reducedPicture.delete();
+                            if (!deleted)
+                                Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
+                            //view.finish();
+                        }
+                    });
+        } else {
+            Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
+            view.finish();
+        }
+
+        if (picture2 != null) {
+
+            String fileString = getRealPathFromUri(context, Uri.parse(picture2));
+
+            File file = new File(fileString.toString());
+
+            ExifInterface exif = null;
+            try {
+                exif = new ExifInterface(file.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
+
+            Log.d("CONAN", "picture orientation: " + orientation);
+
+            BitmapHelper bitmapHelper = new BitmapHelper(context);
+            final File reducedPicture2 = bitmapHelper.saveBitmapToFile(file);
+
+            //RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(Uri.parse(picture2))), reducedPicture);
+            ProgressRequestBody requestFile = new ProgressRequestBody(reducedPicture2, this);
+
+
+            MultipartBody.Part multiPartBody = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+
+            service.uploadPictureObserv(adId, getUserToken(), multiPartBody)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+                            view.hideProgress();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            view.hideProgress();
+                            Log.d("CONAN", "error in upload" + e.toString());
+                            Toast.makeText(view, "Problem beim Senden der Daten!", Toast.LENGTH_SHORT).show();
+                            String error;
+                            if (e.toString().contains("SocketTimeoutException")) {
+                                error = "Timeout im Netzwerk";
+                            } else {
+                                error = e.toString();
+                            }
+                            view.showProblem(error);
+                            view.enableUploadButton();
+                        }
+
+                        @Override
+                        public void onNext(String status) {
+                            Log.d("CONAN", "Picture uploaded");
+                            //TODO unterscheiden ob new oder update -> Toast anpassen
+                            Toast.makeText(context, "Neue Anzeige erstellt! PICTURE 2", Toast.LENGTH_SHORT).show();
+                            Boolean deleted = reducedPicture2.delete();
                             if (!deleted)
                                 Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
                             view.finish();

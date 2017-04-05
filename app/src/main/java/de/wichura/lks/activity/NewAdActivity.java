@@ -200,6 +200,9 @@ public class NewAdActivity extends AppCompatActivity implements
             data.putExtra(Constants.TITLE, mTitle.getText().toString());
             data.putExtra(Constants.DESCRIPTION, mDescription.getText().toString());
             data.putExtra(Constants.FILENAME, mImage);
+            //TODO 2. file upload.... allgemein machen
+            data.putExtra(Constants.FILENAME, mImage);
+            data.putExtra(Constants.FILENAME2, mImage2);
             data.putExtra(Constants.PRICE, mPrice.getText().toString());
             data.putExtra(Constants.DATE, System.currentTimeMillis());
             data.putExtra(Constants.LAT, lat);

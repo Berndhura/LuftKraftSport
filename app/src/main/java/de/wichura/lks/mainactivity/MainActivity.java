@@ -377,6 +377,8 @@ public class MainActivity extends AppCompatActivity implements
         listView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
             final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
             final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
+            //TODO more images anzeigen...
+            intent.putExtra(Constants.URI_AS_LIST, rowItem.getUrl());
             intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl());
             intent.putExtra(Constants.ID, rowItem.getId());
             intent.putExtra(Constants.TITLE, rowItem.getTitle());

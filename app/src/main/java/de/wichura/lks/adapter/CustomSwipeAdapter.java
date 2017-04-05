@@ -3,6 +3,7 @@ package de.wichura.lks.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import de.wichura.lks.R;
 import de.wichura.lks.activity.OpenAdActivity;
+import de.wichura.lks.http.Urls;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -32,7 +34,6 @@ public class CustomSwipeAdapter extends PagerAdapter {
 
     private Context context;
     private OpenAdActivity activity;
-    private String pictureUri;
     private int displayWidth;
     private int displayHeight;
 
@@ -42,12 +43,15 @@ public class CustomSwipeAdapter extends PagerAdapter {
 
         this.context = activity.getContext();
         this.activity = activity;
-        this.pictureUri = pictureUri;
         this.displayWidth = displayWidth;
         this.displayHeight = displayHeight;
-        this.IMAGES.add(0, pictureUri);
-        this.IMAGES.add(1, pictureUri);
-        this.IMAGES.add(2, pictureUri);
+
+        String[] uris = pictureUri.split(",");
+        int size = uris.length;
+        for (int i = 0; i < size; i++) {
+            IMAGES.add(i, uris[i]);
+        }
+        Log.d("CONAN", "all pictures from article: " + pictureUri);
     }
 
     @Override
@@ -67,9 +71,10 @@ public class CustomSwipeAdapter extends PagerAdapter {
         View item_view = layoutInflater.inflate(R.layout.swipe_layout, container, false);
         ImageView image_view = (ImageView) item_view.findViewById(R.id.imageView);
 
+
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
         Picasso.with(context)
-                .load(IMAGES.get(position))
+                .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(position))
                 .placeholder(R.drawable.empty_photo)
                 .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
                 .centerInside()
@@ -103,7 +108,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
             PhotoViewAttacher photoView = new PhotoViewAttacher(ivPreview);
             photoView.update();
             Picasso.with(context)
-                    .load(IMAGES.get(position))
+                    .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(position))
                     .centerInside()
                     .resize(displayWidth, displayHeight)
                     .into(ivPreview, new Callback() {
