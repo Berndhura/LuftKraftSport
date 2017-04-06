@@ -69,7 +69,6 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     public void onCompleted() {
                         view.hideProgress();
                         if (data.getStringExtra(Constants.FILENAME) != null) {
-                            String imageString = data.getStringExtra(Constants.FILENAME);
                             view.hideMainProgress();
                             uploadPic(adId, data.getParcelableArrayListExtra(Constants.FILENAME));  //TODO so einfach ?
                         } else {

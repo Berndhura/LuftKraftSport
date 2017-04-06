@@ -130,7 +130,6 @@ public class CustomSwipeAdapter extends PagerAdapter {
 
             nagDialog.setOnKeyListener((arg0, keyCode, event) -> {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    activity.finish();
                     nagDialog.dismiss();
                 }
                 return true;
@@ -151,7 +150,6 @@ public class CustomSwipeAdapter extends PagerAdapter {
                 .centerCrop()
                 .into(image_view);
     }
-
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {

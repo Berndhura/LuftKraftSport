@@ -69,15 +69,15 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     public AVLoadingIndicatorView mOpenAdProgressBar;
     public AVLoadingIndicatorView mOpenFullScreenImgProgressBar;
+
     private OpenAdPresenter presenter;
     private GoogleMap googleMap;
     private GoogleApiClient mGoogleApiClient;
 
     private double lat;
     private double lng;
-    //private ImageView imgView;
+
     private HeightWrappingViewPager imagePager;
-    private CustomSwipeAdapter swipeAdapter;
     private ImageView userPic;
     private TextView userName;
     private TextView userNumberOfArticles;
@@ -98,9 +98,9 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
         MapsInitializer.initialize(this);
 
-        checkGoogleConnection(savedInstanceState);
-
         presenter = new OpenAdPresenter(this, new Service(), getApplicationContext());
+
+        checkGoogleConnection(savedInstanceState);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.open_ad_toolbar);
         if (toolbar != null) {
@@ -115,9 +115,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         mPrice = (TextView) findViewById(R.id.price);
         mDescText = (TextView) findViewById(R.id.description);
         mDateText = (TextView) findViewById(R.id.ad_date);
-        //imgView = (ImageView) findViewById(R.id.imageView);
         imagePager = (HeightWrappingViewPager) findViewById(R.id.view_pager);
-
         mDelAndMsgButton = (Button) findViewById(R.id.delButton);
         mBookmarkButton = (Button) findViewById(R.id.bookmarkButton);
         userName = (TextView) findViewById(R.id.user_name);
@@ -205,7 +203,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private void setupPanel(String pictureUri, String ownerId) {
         mOpenAdProgressBar.setVisibility(View.VISIBLE);
 
-        swipeAdapter = new CustomSwipeAdapter(this, pictureUri, displayHeight, displayWidth);
+        CustomSwipeAdapter swipeAdapter = new CustomSwipeAdapter(this, pictureUri, displayHeight, displayWidth);
         imagePager.setAdapter(swipeAdapter);
 
 
@@ -246,7 +244,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             }
         });
 
-        Log.e("CONAN", "id oder whatever: " + mAdId);
         presenter.increaseViewCount(mAdId);
 
         Log.d("CONAN", "request Picture: " + pictureUri);
@@ -273,16 +270,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                     .into(userPic);
         }
     }
-
-   /* private void showDefaultPic() {
-        int ratio = Math.round((float) displayWidth / (float) displayWidth);
-        Picasso.with(getApplicationContext())
-                .load(R.drawable.applogo)
-                .placeholder(R.drawable.empty_photo)
-                .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
-                .centerCrop()
-                .into(imgView);
-    }*/
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
