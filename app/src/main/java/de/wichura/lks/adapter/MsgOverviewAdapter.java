@@ -19,8 +19,8 @@ import de.wichura.lks.http.Urls;
 import de.wichura.lks.models.GroupedMsgItem;
 
 /**
- * Created by ich on 20.06.2016.
- * CamperApp
+ * Created by Bernd Wichura on 20.06.2016.
+ * Luftkraftsport
  */
 public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
 
@@ -59,11 +59,22 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
         final GroupedMsgItem rowItem = getItem(position);
 
         ImageView thumbNail = (ImageView) convertView.findViewById(R.id.ad_image);
-        Picasso.with(context).load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl() + "/thumbnail").into(thumbNail);
+        Picasso.with(context).load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + getMainImageId(rowItem) + "/thumbnail").into(thumbNail);
 
         holder.title.setText(rowItem.getMessage());
         holder.name.setText(rowItem.getName());
         holder.date.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
         return convertView;
+    }
+
+    private String getMainImageId(GroupedMsgItem rowItem) {
+        String id = "";
+        if (rowItem.getUrl() != null) {
+            String[] ids = rowItem.getUrl().split(",");
+            id = ids[0];
+        } else {
+            //TODO show default image
+        }
+        return id;
     }
 }

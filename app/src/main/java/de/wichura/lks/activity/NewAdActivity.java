@@ -190,6 +190,8 @@ public class NewAdActivity extends AppCompatActivity implements
                         }
                     });
 
+
+
             Log.d("CONAN", "edit: " + articleIdForEdit);
         }
 

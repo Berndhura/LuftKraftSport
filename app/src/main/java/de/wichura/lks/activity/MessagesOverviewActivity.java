@@ -24,8 +24,8 @@ import de.wichura.lks.presentation.MsgOverviewPresenter;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
- * Created by ich on 20.06.2016.
- * Camper App
+ * Created by Bernd Wichura on 20.06.2016.
+ * Luftkraftsport
  */
 public class MessagesOverviewActivity extends AppCompatActivity {
 
@@ -109,7 +109,8 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             intent.putExtra(Constants.CHAT_PARTNER, rowItem.getChatPartner());
             intent.putExtra(Constants.ID_TO, rowItem.getIdTo());
             intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
-            intent.putExtra(Constants.AD_URL, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl() + "/thumbnail");
+            //TODO weg nutzlos?
+            //intent.putExtra(Constants.AD_URL, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl() + "/thumbnail");
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);
         });
     }

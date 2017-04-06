@@ -46,11 +46,16 @@ public class CustomSwipeAdapter extends PagerAdapter {
         this.displayWidth = displayWidth;
         this.displayHeight = displayHeight;
 
-        String[] uris = pictureUri.split(",");
-        int size = uris.length;
-        for (int i = 0; i < size; i++) {
-            IMAGES.add(i, uris[i]);
+        if (pictureUri != null) {
+            String[] uris = pictureUri.split(",");
+            int size = uris.length;
+            for (int i = 0; i < size; i++) {
+                IMAGES.add(i, uris[i]);
+            }
+        } else {
+            IMAGES.add(0, "");
         }
+
         Log.d("CONAN", "all pictures from article: " + pictureUri);
     }
 

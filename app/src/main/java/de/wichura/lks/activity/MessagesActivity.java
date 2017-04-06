@@ -23,7 +23,6 @@ import java.util.List;
 
 import de.wichura.lks.R;
 import de.wichura.lks.adapter.MessageListViewAdapter;
-import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.ArticleDetails;
 import de.wichura.lks.models.MsgRowItem;
@@ -33,7 +32,7 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by ich on 22.05.2016.
- * Camper App
+ * Luftkraftsport
  */
 
 public class MessagesActivity extends AppCompatActivity {
@@ -176,14 +175,6 @@ public class MessagesActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
     }
 
-    /*public void enableProgress() {
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-    }
-
-    public void disableProgress() {
-        progressBar.setVisibility(ProgressBar.GONE);
-    }*/
-
     private String getUserId() {
         SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         return settings.getString(Constants.USER_ID, "");
@@ -208,7 +199,7 @@ public class MessagesActivity extends AppCompatActivity {
         double lng = rowItem.getLocation().getCoordinates()[1];
 
         final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-        intent.putExtra(Constants.URI, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrls());
+        intent.putExtra(Constants.URI_AS_LIST, rowItem.getUrls());
         intent.putExtra(Constants.ARTICLE_ID, rowItem.getId());
         intent.putExtra(Constants.ID, rowItem.getId());
         intent.putExtra(Constants.TITLE, rowItem.getTitle());

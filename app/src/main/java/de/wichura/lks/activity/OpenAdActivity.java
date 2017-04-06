@@ -44,7 +44,6 @@ import java.util.Arrays;
 import de.wichura.lks.R;
 import de.wichura.lks.adapter.CustomSwipeAdapter;
 import de.wichura.lks.http.Service;
-import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.mainactivity.MainActivity;
 import de.wichura.lks.models.ArticleDetails;
@@ -180,7 +179,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
         String pictureUri = "";
         if (articleDetails.getUrls() != null) {
-            pictureUri = Urls.MAIN_SERVER_URL_V3 + "pictures/" + articleDetails.getUrls();
+            pictureUri = articleDetails.getUrls();
         }
 
         mTitleText.setText(articleDetails.getTitle());
