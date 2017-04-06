@@ -167,14 +167,24 @@ public class NewAdActivity extends AppCompatActivity implements
             getSupportActionBar().setTitle("Bearbeiten");
             mTitle.setText(getIntent().getStringExtra(Constants.TITLE));
             mDescription.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
-            mPrice.setText(getIntent().getStringExtra(Constants.PRICE));
+            mPrice.setText(getIntent().getStringExtra(Constants.PRICE)); //TODO
             articleIdForEdit = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
 
-            //TODO: mehrere bilder anzeige umstellen
-            String pictureUri = Urls.MAIN_SERVER_URL_V3 + "pictures/" + (getIntent().getStringExtra(Constants.AD_URL));
+            String pictureUris =  getIntent().getStringExtra(Constants.AD_URL);
+            List<String> IMAGES = new ArrayList<>();
+            if (pictureUris != null) {
+                String[] uris = pictureUris.split(",");
+                int size = uris.length;
+                for (int i = 0; i < size; i++) {
+                    IMAGES.add(i, uris[i]);
+                }
+            } else {
+                IMAGES.add(0, "");
+            }
+
             showProgress();
             Picasso.with(getApplicationContext())
-                    .load(pictureUri)
+                    .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(0))
                     .placeholder(R.drawable.empty_photo)
                     .fit()
                     .into(mImgOne, new Callback() {
@@ -190,7 +200,24 @@ public class NewAdActivity extends AppCompatActivity implements
                         }
                     });
 
+            if (IMAGES.size() > 1) {
+                Picasso.with(getApplicationContext())
+                        .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(1))
+                        .placeholder(R.drawable.empty_photo)
+                        .fit()
+                        .into(mImgTwo, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                hideProgress();
+                            }
 
+                            @Override
+                            public void onError() {
+                                hideProgress();
+                                Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
 
             Log.d("CONAN", "edit: " + articleIdForEdit);
         }
