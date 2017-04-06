@@ -167,7 +167,7 @@ public class NewAdActivity extends AppCompatActivity implements
             getSupportActionBar().setTitle("Bearbeiten");
             mTitle.setText(getIntent().getStringExtra(Constants.TITLE));
             mDescription.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
-            mPrice.setText(getIntent().getStringExtra(Constants.PRICE)); //TODO
+            mPrice.setText(getIntent().getStringExtra(Constants.PRICE)); //TODO String vs Int, macht beim validieren probleme
             articleIdForEdit = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
 
             String pictureUris =  getIntent().getStringExtra(Constants.AD_URL);

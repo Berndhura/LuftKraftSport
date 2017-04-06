@@ -70,7 +70,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         view.hideProgress();
                         if (data.getStringExtra(Constants.FILENAME) != null) {
                             view.hideMainProgress();
-                            uploadPic(adId, data.getParcelableArrayListExtra(Constants.FILENAME));  //TODO so einfach ?
+                            uploadPic(adId, data.getParcelableArrayListExtra(Constants.FILENAME));  //TODO so einfach nope! muss angepasst werden konzept for n bilder fehlt
                         } else {
                             view.finish();
                         }
