@@ -15,8 +15,8 @@ import de.wichura.lks.models.SearchItem;
 import de.wichura.lks.util.Utility;
 
 /**
- * Created by bwichura on 07.02.2017.
- * deSurf
+ * Created by Bernd Wichura on 07.02.2017.
+ * Luftkraftsport
  */
 
 public class SearchesPresenter {

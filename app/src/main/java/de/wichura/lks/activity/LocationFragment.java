@@ -159,6 +159,11 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
                 //markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 mGoogleMap.addMarker(markerOptions);
+
+                //TODO zoom level auf umkreis automatisch anpassen
+                //double  meters_per_pixel = 156543.03392 * Math.cos(getLat() * Math.PI / 180) / Math.pow(2, 11);
+                //int zoom = 11;
+                //mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(getLat(), getLng()), zoom));
             }
 
             @Override
@@ -188,8 +193,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 666);
 
         } else {
-
-            Log.d("ssc", "asa");
+            //TODO Kamera position -> anpassen
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(54.0, 13.0), 9));
             mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
             mGoogleMap.getUiSettings().setScrollGesturesEnabled(true);

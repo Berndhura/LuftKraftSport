@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import de.wichura.lks.R;
+import de.wichura.lks.dialogs.ConfirmFollowSearchDialog;
 import de.wichura.lks.dialogs.SetPriceDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
@@ -68,8 +69,11 @@ public class SearchFragment extends Fragment {
 
         ImageView saveSearchButton = (ImageView) view.findViewById(R.id.save_search);
         saveSearchButton.setOnClickListener((v) -> {
-            //TODO: check if loged in before save
-            saveSearch();
+            if (!"".equals(getUserToken())) {
+                saveSearch();
+            } else {
+                Toast.makeText(getActivity(), "Bitte anmelden, um Suche zu folgen!", Toast.LENGTH_LONG).show();
+            }
         });
 
         keywords = (TextView) view.findViewById(R.id.keywords);
@@ -128,14 +132,14 @@ public class SearchFragment extends Fragment {
         String description = keywords.getText().toString();
         Service service = new Service();
 
-        //TODO: richtige werte bitte!
-        service.saveSearchObserv(description, 1, 5000, getLat(), getLng(), getDistance(), getUserToken())
+
+        service.saveSearchObserv(description, 0, Constants.MAX_PRICE, getLat(), getLng(), getDistance(), getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        Toast.makeText(getActivity(), "Suche abgespeichert!", Toast.LENGTH_SHORT).show();
+                        new ConfirmFollowSearchDialog().show(getActivity().getSupportFragmentManager(), null);
                     }
 
                     @Override

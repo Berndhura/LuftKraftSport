@@ -21,7 +21,7 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by Bernd Wichura on 05.04.2016.
- * CamperApp
+ * Luftkraftsport
  */
 
 public class SearchActivity extends AppCompatActivity implements

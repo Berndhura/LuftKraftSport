@@ -44,6 +44,8 @@
     <string name="zip_request">Postleitzahl oder Ort angeben!</string>
     <string name="price_range">Gib deine Preisspanne an!</string>
     <string name="empty_result">Keine Ergebnisse gefunden!</string>
+    <string name="confirm_save_search">Suche abgespeichert!</string>
+    <string name="save_search_info_text">Du bekommst eine Benachrichtigung, sobald es neue Artikel gibt, die deiner Suche entsprechen.</string>
 
     <!-- Empty Ads Database -->
     <string name="empty_ads_list">No Ads Information Available</string>

@@ -299,6 +299,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private void sendMessage(final Integer adId, final String receiverId) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(OpenAdActivity.this);
+        //edittext.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
         alert.setTitle("Sende eine Nachricht");
         alert.setView(edittext);
         alert.setPositiveButton("Senden", (dialog, whichButton) -> {
@@ -371,12 +372,10 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnectionSuspended(int i) {
-        Toast.makeText(this, "onConnectionSuspended", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(this, "onConnectionFailed", Toast.LENGTH_SHORT).show();
     }
 
     @Override

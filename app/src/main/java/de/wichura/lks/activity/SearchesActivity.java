@@ -19,7 +19,7 @@ import de.wichura.lks.models.SearchItem;
 import de.wichura.lks.presentation.SearchesPresenter;
 
 /**
- * Created by bwichura on 07.02.2017.
+ * Created by Bernd Wichura on 07.02.2017.
  * LuftKraftSport
  */
 
