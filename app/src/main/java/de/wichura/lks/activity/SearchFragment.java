@@ -24,7 +24,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 import static de.wichura.lks.mainactivity.Constants.DISTANCE_INFINITY;
+import static de.wichura.lks.mainactivity.Constants.PRICE;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.USER_PRICE_RANGE;
 
@@ -70,6 +72,9 @@ public class SearchFragment extends Fragment {
         ImageView saveSearchButton = (ImageView) view.findViewById(R.id.save_search);
         saveSearchButton.setOnClickListener((v) -> {
             if (!"".equals(getUserToken())) {
+                if (!isSaveSearchValid()) {
+                    return;
+                }
                 saveSearch();
             } else {
                 Toast.makeText(getActivity(), "Bitte anmelden, um Suche zu folgen!", Toast.LENGTH_LONG).show();
@@ -132,8 +137,7 @@ public class SearchFragment extends Fragment {
         String description = keywords.getText().toString();
         Service service = new Service();
 
-
-        service.saveSearchObserv(description, 0, Constants.MAX_PRICE, getLat(), getLng(), getDistance(), getUserToken())
+        service.saveSearchObserv(description, getMinPrice(), getMaxPrice(), getLat(), getLng(), getDistance(), getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -148,11 +152,18 @@ public class SearchFragment extends Fragment {
                     }
 
                     @Override
-                    public void onNext(String result) {
-
-                    }
+                    public void onNext(String result) {}
                 });
+    }
 
+    private int getMinPrice() {
+        String minPrice = getActivity().getSharedPreferences(Constants.USER_PRICE_RANGE, MODE_PRIVATE).getString(Constants.PRICE_FROM, "");
+        return (getString(R.string.price_does_not_matter).equals(minPrice))? 0 : Integer.parseInt(minPrice);
+    }
+
+    private int getMaxPrice() {
+        String maxPrice = getActivity().getSharedPreferences(Constants.USER_PRICE_RANGE, MODE_PRIVATE).getString(Constants.PRICE_TO, "");
+        return (getString(R.string.price_does_not_matter).equals(maxPrice))? Constants.MAX_PRICE : Integer.parseInt(maxPrice);
     }
 
     @Override
@@ -162,6 +173,21 @@ public class SearchFragment extends Fragment {
         if (requestCode == Constants.REQUEST_ID_FOR_LOCATION) {
             showLocation();
         }
+    }
+
+    public boolean isSaveSearchValid() {
+        boolean valid = true;
+
+        String text = keywords.getText().toString();
+
+        if (text.isEmpty()) {
+            keywords.setError("Für Sucheaufträge darf der Titel nicht leer sein!");
+            valid = false;
+        } else {
+            keywords.setError(null);
+        }
+
+        return valid;
     }
 
 

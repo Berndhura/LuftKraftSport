@@ -23,12 +23,15 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextColor="@android:color/white" />
 
-            <ProgressBar
+            <com.wang.avi.AVLoadingIndicatorView
                 android:id="@+id/searches_overview_ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp" />
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:visibility="visible"
+                app:indicator="LineScaleParty"
+                app:indicator_color="#FFFFFF" />
 
         </RelativeLayout>
 

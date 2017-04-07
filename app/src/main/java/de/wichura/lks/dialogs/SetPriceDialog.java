@@ -23,7 +23,7 @@ import de.wichura.lks.activity.SearchFragment;
 import de.wichura.lks.mainactivity.Constants;
 
 /**
- * Created by ich on 02.04.2017.
+ * Created by Bernd Wichura on 02.04.2017.
  * Luftkraftsport
  */
 

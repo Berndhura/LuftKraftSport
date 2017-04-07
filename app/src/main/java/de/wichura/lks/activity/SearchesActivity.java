@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ import de.wichura.lks.presentation.SearchesPresenter;
 public class SearchesActivity extends Fragment {
 
     private ListView listView;
-    private ProgressBar progressBar;
+    private AVLoadingIndicatorView progressBar;
 
 
     @Override
@@ -40,7 +42,7 @@ public class SearchesActivity extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        progressBar = (ProgressBar) view.findViewById(R.id.searches_overview_ProgressBar);
+        progressBar = (AVLoadingIndicatorView) view.findViewById(R.id.searches_overview_ProgressBar);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.searches_overview_toolbar);
         if (toolbar != null) {

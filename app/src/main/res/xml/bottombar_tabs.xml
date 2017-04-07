@@ -2,21 +2,18 @@
 <tabs>
 
     <tab
-        barColorWhenSelected="#FFFFFF"
         icon="@drawable/ic_search_white_24dp"
         id="@+id/tab_main_search"
         title="Suchen" />
 
     <tab
-        barColorWhenSelected="#FFFFFF"
-        icon="@drawable/ic_list_white_24dp"
+        icon="@drawable/ic_notifications_active_white_24dp"
         id="@+id/tab_list_saved_searches"
-        title="Übersicht" />
+        title="Suchaufträge" />
 
     <tab
-        barColorWhenSelected="#FFFFFF"
         icon="@drawable/ic_location_on_white_24dp"
         id="@+id/tab_location"
-        title="Location" />
+        title="Mein Standort" />
 
 </tabs>
