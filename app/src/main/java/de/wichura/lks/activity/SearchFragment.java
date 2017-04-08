@@ -26,7 +26,6 @@ import rx.schedulers.Schedulers;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static de.wichura.lks.mainactivity.Constants.DISTANCE_INFINITY;
-import static de.wichura.lks.mainactivity.Constants.PRICE;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.USER_PRICE_RANGE;
 
@@ -152,18 +151,19 @@ public class SearchFragment extends Fragment {
                     }
 
                     @Override
-                    public void onNext(String result) {}
+                    public void onNext(String result) {
+                    }
                 });
     }
 
     private int getMinPrice() {
         String minPrice = getActivity().getSharedPreferences(Constants.USER_PRICE_RANGE, MODE_PRIVATE).getString(Constants.PRICE_FROM, "");
-        return (getString(R.string.price_does_not_matter).equals(minPrice))? 0 : Integer.parseInt(minPrice);
+        return (getString(R.string.price_does_not_matter).equals(minPrice)) ? 0 : Integer.parseInt(minPrice); //TODO initial leer
     }
 
     private int getMaxPrice() {
         String maxPrice = getActivity().getSharedPreferences(Constants.USER_PRICE_RANGE, MODE_PRIVATE).getString(Constants.PRICE_TO, "");
-        return (getString(R.string.price_does_not_matter).equals(maxPrice))? Constants.MAX_PRICE : Integer.parseInt(maxPrice);
+        return (getString(R.string.price_does_not_matter).equals(maxPrice)) ? Constants.MAX_PRICE : Integer.parseInt(maxPrice);
     }
 
     @Override

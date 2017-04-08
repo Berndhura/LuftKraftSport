@@ -40,6 +40,9 @@ import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.FileNameParcelable;
 import de.wichura.lks.presentation.NewArticlePresenter;
+import jp.wasabeef.picasso.transformations.CropSquareTransformation;
+import jp.wasabeef.picasso.transformations.CropTransformation;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -61,6 +64,9 @@ public class NewAdActivity extends AppCompatActivity implements
 
     private ImageView mImgOne;
     private ImageView mImgTwo;
+    private ImageView mImgDrei;
+    private ImageView mImgVier;
+    private ImageView mImg5;
     private ImageView errorImage;
 
     public ProgressBar progress;
@@ -136,6 +142,10 @@ public class NewAdActivity extends AppCompatActivity implements
         mTitle = (EditText) findViewById(R.id.new_ad_title);
         mImgOne = (ImageView) findViewById(R.id.imageButton);
         mImgTwo = (ImageView) findViewById(R.id.imageButton2);
+        mImgDrei = (ImageView) findViewById(R.id.imageButton3);
+        mImgVier = (ImageView) findViewById(R.id.imageButton4);
+        mImg5 = (ImageView) findViewById(R.id.imageButton5);
+
         errorImage = (ImageView) findViewById(R.id.problem_during_upload);
         hideProblem();
         mPrice = (EditText) findViewById(R.id.new_ad_price);
@@ -170,7 +180,7 @@ public class NewAdActivity extends AppCompatActivity implements
             mPrice.setText(getIntent().getStringExtra(Constants.PRICE)); //TODO String vs Int, macht beim validieren probleme
             articleIdForEdit = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
 
-            String pictureUris =  getIntent().getStringExtra(Constants.AD_URL);
+            String pictureUris = getIntent().getStringExtra(Constants.AD_URL);
             List<String> IMAGES = new ArrayList<>();
             if (pictureUris != null) {
                 String[] uris = pictureUris.split(",");
@@ -186,7 +196,7 @@ public class NewAdActivity extends AppCompatActivity implements
             Picasso.with(getApplicationContext())
                     .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(0))
                     .placeholder(R.drawable.empty_photo)
-                    .fit()
+                    .transform(new CropSquareTransformation())
                     .into(mImgOne, new Callback() {
                         @Override
                         public void onSuccess() {
@@ -204,7 +214,7 @@ public class NewAdActivity extends AppCompatActivity implements
                 Picasso.with(getApplicationContext())
                         .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(1))
                         .placeholder(R.drawable.empty_photo)
-                        .fit()
+                        .transform(new CropSquareTransformation())
                         .into(mImgTwo, new Callback() {
                             @Override
                             public void onSuccess() {
@@ -359,7 +369,7 @@ public class NewAdActivity extends AppCompatActivity implements
                             Picasso
                                     .with(getApplicationContext())
                                     .load(selectedImage)
-                                    .fit()
+                                    .transform(new CropSquareTransformation())
                                     .into(mImgOne);
                             pictureCount++;
                             break;
@@ -375,9 +385,12 @@ public class NewAdActivity extends AppCompatActivity implements
                     Picasso
                             .with(getApplicationContext())
                             .load(selectedImage)
-                            .fit()
+                            .transform(new CropSquareTransformation())
                             .into(mImgTwo);
                     pictureCount++;
+                    mImgDrei.setVisibility(View.VISIBLE);
+                    mImgVier.setVisibility(View.VISIBLE);
+                    //mImg5.setVisibility(View.VISIBLE);
                     break;
                 }
                 break;
