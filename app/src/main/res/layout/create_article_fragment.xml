@@ -16,7 +16,7 @@
 
 
     <HorizontalScrollView
-        android:id="@+id/picture_ll"
+        android:id="@+id/horizontal_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="104dp"
         android:layout_gravity="start"
@@ -25,8 +25,6 @@
         android:scrollbars="none">
 
         <LinearLayout
-
-
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:adjustViewBounds="true"
@@ -90,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/picture_ll"
+        android:layout_below="@+id/horizontal_scroll_view"
         android:layout_marginTop="32dp"
         android:orientation="vertical"
         android:weightSum="1">
@@ -180,7 +178,9 @@
                 android:id="@+id/create_change_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+                android:src="@drawable/ic_location_on_white_24dp"
+                android:background="@color/app_blue"
+                android:layout_margin="5dp"/>
 
         </LinearLayout>
 

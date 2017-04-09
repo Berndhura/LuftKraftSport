@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -53,13 +54,8 @@ public class NewAdActivity extends AppCompatActivity implements
     private EditText mTitle;
     private EditText mPrice;
 
-
-    private static final int SELECT_PHOTO = 100;
-
     private ArrayList<FileNameParcelable> mImage;
-
-    private int pictureCount;
-
+    private FileNameParcelable[] mImageBuffer;
     private ArrayList<ImageView> imageView;
     private ImageView errorImage;
 
@@ -91,8 +87,7 @@ public class NewAdActivity extends AppCompatActivity implements
         isLocationSet = false;
         mImage = new ArrayList<>();
         imageView = new ArrayList<>();
-        pictureCount = 0;
-
+        mImageBuffer = new FileNameParcelable[5];
 
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
@@ -149,12 +144,12 @@ public class NewAdActivity extends AppCompatActivity implements
         mPrice = (EditText) findViewById(R.id.new_ad_price);
 
         for (int i = 0; i < 5; i++) {
-            final Integer counter = i;
+            final Integer COUNTER = i;
             imageView.get(i).setOnClickListener((v) -> {
                 final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
-                photoPickerIntent.putExtra("image" + counter, true);  //TODO intent anpassen in uplaod pictures -> egal?!
-                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                photoPickerIntent.putExtra("image", true);
+                startActivityForResult(photoPickerIntent, COUNTER);
             });
         }
         // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -210,6 +205,8 @@ public class NewAdActivity extends AppCompatActivity implements
         if (isEditMode) submitButton.setText("Speichern");
         submitButton.setOnClickListener((v) -> {
 
+            prepareImageList();
+
             final Intent data = new Intent();
             data.putExtra(Constants.TITLE, mTitle.getText().toString());
             data.putExtra(Constants.DESCRIPTION, mDescription.getText().toString());
@@ -237,26 +234,48 @@ public class NewAdActivity extends AppCompatActivity implements
         });
     }
 
+    private void prepareImageList() {
+        for (int i = 0; i < 5; i++) {
+            if (mImageBuffer[i] != null)
+                mImage.add(mImageBuffer[i]);
+            Log.d("CONAN", "bild: " + mImageBuffer[i]);
+        }
+    }
+
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        switch (requestCode) {
-            case SELECT_PHOTO:
-                if (resultCode == RESULT_OK && pictureCount < 5) {
-                    isImageChanged = true;
-                    final Uri selectedImage = imageReturnedIntent.getData();
-                    FileNameParcelable file = new FileNameParcelable(selectedImage.toString());
-                    mImage.add(file);
-                    Picasso
-                            .with(getApplicationContext())
-                            .load(selectedImage)
-                            .transform(new CropSquareTransformation())
-                            .into(imageView.get(pictureCount));
-                    pictureCount++;
-                    if (pictureCount < 5) imageView.get(pictureCount).setVisibility(View.VISIBLE);
-                }
-                break;
+        Log.d("CONAN", "requestCode: " + requestCode);
+        int pictureCount = requestCode;
+
+        if (resultCode == RESULT_OK) {
+            isImageChanged = true; //TODO zu allgemien, muss für 5 bilder unterschieden werden, oder alle fünf uploaden neu? server???
+            final Uri selectedImage = imageReturnedIntent.getData();
+            FileNameParcelable file = new FileNameParcelable(selectedImage.toString());
+            mImageBuffer[pictureCount] = file;
+            Picasso.with(getApplicationContext())
+                    .load(selectedImage)
+                    .transform(new CropSquareTransformation())
+                    .into(imageView.get(pictureCount), new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            //only show view for 5 images, after this no more new views!
+                            if (pictureCount < 4)
+                                imageView.get(pictureCount + 1).setVisibility(View.VISIBLE);
+
+                            HorizontalScrollView s = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
+                            s.postDelayed(new Runnable() {
+                                public void run() {
+                                    s.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                                }
+                            }, 500L);
+                        }
+
+                        @Override
+                        public void onError() {
+                        }
+                    });
         }
     }
 
