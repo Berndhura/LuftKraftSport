@@ -178,6 +178,8 @@ public class NewAdActivity extends AppCompatActivity implements
                     Picasso.with(getApplicationContext())
                             .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(i))
                             .placeholder(R.drawable.empty_photo)
+                            .skipMemoryCache()
+                            .fit()
                             .transform(new CropSquareTransformation())
                             .into(imageView.get(i), new Callback() {
                                 @Override
@@ -255,6 +257,8 @@ public class NewAdActivity extends AppCompatActivity implements
             Picasso.with(getApplicationContext())
                     .load(selectedImage)
                     .transform(new CropSquareTransformation())
+                    .skipMemoryCache()
+                    .fit()
                     .into(imageView.get(pictureCount), new Callback() {
                         @Override
                         public void onSuccess() {

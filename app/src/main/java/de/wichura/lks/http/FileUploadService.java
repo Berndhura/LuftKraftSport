@@ -190,7 +190,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     .subscribe(new Subscriber<String>() {
                         @Override
                         public void onCompleted() {
-                            view.hideProgress();
+                            //finish activity when last file uploaded
                             if (counter == imageFiles.size()-1) {
                                 Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
                                 view.finish();

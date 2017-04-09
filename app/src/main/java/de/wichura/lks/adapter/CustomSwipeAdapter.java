@@ -81,6 +81,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
                 .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(position))
                 .placeholder(R.drawable.empty_photo)
                 .transform(new CropSquareTransformation())
+                .fit()
                 .into(image_view, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -114,6 +115,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
                     .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(position))
                     .centerInside()
                     .resize(displayWidth, displayHeight)
+                    .fit()
                     .into(ivPreview, new Callback() {
                         @Override
                         public void onSuccess() {
@@ -149,6 +151,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
         Picasso.with(context)
                 .load(R.drawable.applogo)
                 .placeholder(R.drawable.empty_photo)
+                .fit()
                 .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
                 .centerCrop()
                 .into(image_view);
