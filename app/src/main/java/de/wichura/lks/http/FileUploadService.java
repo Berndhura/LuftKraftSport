@@ -26,8 +26,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by ich on 25.10.2016.
- * Camper App
+ * Created by Bernd Wichura on 25.10.2016.
+ * Luftkrafsport
  */
 
 public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
@@ -43,8 +43,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         this.service = new Service();
     }
 
-    public void
-    updateArticle(Intent data) {
+    public void updateArticle(Intent data) {
 
         RowItem item = new RowItem();
         item.setId(data.getIntExtra(Constants.ARTICLE_ID, 0));
@@ -61,6 +60,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         location.setType("Point");
         item.setLocation(location);
 
+        final ArrayList<FileNameParcelable> mImage = new ArrayList<>(data.getParcelableArrayListExtra(Constants.FILENAME));
+
         service.saveNewAdObserv(getUserToken(), item)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -70,7 +71,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         view.hideProgress();
                         if (data.getStringExtra(Constants.FILENAME) != null) {
                             view.hideMainProgress();
-                            uploadPic(adId, data.getParcelableArrayListExtra(Constants.FILENAME));  //TODO so einfach nope! muss angepasst werden konzept for n bilder fehlt
+                            uploadPic(adId, mImage);
                         } else {
                             view.finish();
                         }
@@ -154,13 +155,15 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
     private void uploadPic(Long adId, ArrayList<FileNameParcelable> imageFiles) {
 
-        view.showProgress();
-
         for (int i = 0; i < imageFiles.size(); i++) {
+
+            view.showProgress();
+
+            final int counter = i;
 
             String fileString = getRealPathFromUri(context, Uri.parse(imageFiles.get(i).getFileName()));
 
-            File file = new File(fileString.toString());
+            File file = new File(fileString);
 
             ExifInterface exif = null;
             try {
@@ -179,7 +182,6 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             //RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(Uri.parse(picture))), reducedPicture);
             ProgressRequestBody requestFile = new ProgressRequestBody(reducedPicture, this);
 
-
             MultipartBody.Part multiPartBody = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
             service.uploadPictureObserv(adId, getUserToken(), multiPartBody)
@@ -189,6 +191,10 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         @Override
                         public void onCompleted() {
                             view.hideProgress();
+                            if (counter == imageFiles.size()-1) {
+                                Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
+                                view.finish();
+                            }
                         }
 
                         @Override
@@ -208,18 +214,15 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
                         @Override
                         public void onNext(String status) {
+                            view.hideProgress();
                             Log.d("CONAN", "Picture uploaded");
                             //TODO unterscheiden ob new oder update -> Toast anpassen
-                            Toast.makeText(context, "Neue Anzeige erstellt PICTURE 1!", Toast.LENGTH_SHORT).show();
                             Boolean deleted = reducedPicture.delete();
                             if (!deleted)
                                 Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
-                            //view.finish();
                         }
                     });
         }
-        Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
-        view.finish();
     }
 
     private static String getRealPathFromUri(Context context, Uri contentUri) {

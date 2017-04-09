@@ -254,7 +254,7 @@ public class NewAdActivity extends AppCompatActivity implements
                             .transform(new CropSquareTransformation())
                             .into(imageView.get(pictureCount));
                     pictureCount++;
-                    imageView.get(pictureCount).setVisibility(View.VISIBLE);
+                    if (pictureCount < 5) imageView.get(pictureCount).setVisibility(View.VISIBLE);
                 }
                 break;
         }
