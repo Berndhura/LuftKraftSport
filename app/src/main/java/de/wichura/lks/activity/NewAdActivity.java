@@ -170,6 +170,7 @@ public class NewAdActivity extends AppCompatActivity implements
             if (pictureUris != null) {
                 String[] uris = pictureUris.split(",");
                 int size = uris.length;
+                Log.d("CONAN", "size: "+size);
 
                 for (int i = 0; i < size; i++) {
                     IMAGES.add(i, uris[i]);
@@ -236,6 +237,7 @@ public class NewAdActivity extends AppCompatActivity implements
     }
 
     private void prepareImageList() {
+        mImage.clear();
         for (int i = 0; i < 5; i++) {
             if (mImageBuffer[i] != null)
                 mImage.add(mImageBuffer[i]);
