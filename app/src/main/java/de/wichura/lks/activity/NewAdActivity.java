@@ -41,8 +41,6 @@ import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.FileNameParcelable;
 import de.wichura.lks.presentation.NewArticlePresenter;
 import jp.wasabeef.picasso.transformations.CropSquareTransformation;
-import jp.wasabeef.picasso.transformations.CropTransformation;
-import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -56,17 +54,13 @@ public class NewAdActivity extends AppCompatActivity implements
     private EditText mPrice;
 
 
-    private static final int SELECT_PHOTO_ONE = 100;
-    private static final int SELECT_PHOTO_TWO = 101;
+    private static final int SELECT_PHOTO = 100;
 
     private ArrayList<FileNameParcelable> mImage;
-    private int pictureCount = 0;
 
-    private ImageView mImgOne;
-    private ImageView mImgTwo;
-    private ImageView mImgDrei;
-    private ImageView mImgVier;
-    private ImageView mImg5;
+    private int pictureCount;
+
+    private ArrayList<ImageView> imageView;
     private ImageView errorImage;
 
     public ProgressBar progress;
@@ -96,6 +90,9 @@ public class NewAdActivity extends AppCompatActivity implements
 
         isLocationSet = false;
         mImage = new ArrayList<>();
+        imageView = new ArrayList<>();
+        pictureCount = 0;
+
 
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
@@ -140,35 +137,30 @@ public class NewAdActivity extends AppCompatActivity implements
 
         mDescription = (EditText) findViewById(R.id.new_ad_description);
         mTitle = (EditText) findViewById(R.id.new_ad_title);
-        mImgOne = (ImageView) findViewById(R.id.imageButton);
-        mImgTwo = (ImageView) findViewById(R.id.imageButton2);
-        mImgDrei = (ImageView) findViewById(R.id.imageButton3);
-        mImgVier = (ImageView) findViewById(R.id.imageButton4);
-        mImg5 = (ImageView) findViewById(R.id.imageButton5);
+
+        imageView.add((ImageView) findViewById(R.id.imageButton));
+        imageView.add((ImageView) findViewById(R.id.imageButton2));
+        imageView.add((ImageView) findViewById(R.id.imageButton3));
+        imageView.add((ImageView) findViewById(R.id.imageButton4));
+        imageView.add((ImageView) findViewById(R.id.imageButton5));
 
         errorImage = (ImageView) findViewById(R.id.problem_during_upload);
         hideProblem();
         mPrice = (EditText) findViewById(R.id.new_ad_price);
 
-        mImgOne.setOnClickListener((v) -> {
-            final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            photoPickerIntent.putExtra("imageOne", true);
-            startActivityForResult(photoPickerIntent, SELECT_PHOTO_ONE);
-
-
-            // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            //startActivityForResult(cameraIntent, SELECT_PHOTO_ONE);
-            //TODO camera plus photo picker
-            //http://stackoverflow.com/questions/5991319/capture-image-from-camera-and-display-in-activity
-        });
-
-        mImgTwo.setOnClickListener(v -> {
-            final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            photoPickerIntent.putExtra("imageTwo", true);
-            startActivityForResult(photoPickerIntent, SELECT_PHOTO_TWO);
-        });
+        for (int i = 0; i < 5; i++) {
+            final Integer counter = i;
+            imageView.get(i).setOnClickListener((v) -> {
+                final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                photoPickerIntent.putExtra("image" + counter, true);  //TODO intent anpassen in uplaod pictures -> egal?!
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+            });
+        }
+        // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        //startActivityForResult(cameraIntent, SELECT_PHOTO_ONE);
+        //TODO camera plus photo picker
+        //http://stackoverflow.com/questions/5991319/capture-image-from-camera-and-display-in-activity
 
 
         //edit my article:
@@ -185,50 +177,31 @@ public class NewAdActivity extends AppCompatActivity implements
             if (pictureUris != null) {
                 String[] uris = pictureUris.split(",");
                 int size = uris.length;
+
                 for (int i = 0; i < size; i++) {
                     IMAGES.add(i, uris[i]);
+                    imageView.get(i).setVisibility(View.VISIBLE);
+                    showProgress();
+                    Picasso.with(getApplicationContext())
+                            .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(i))
+                            .placeholder(R.drawable.empty_photo)
+                            .transform(new CropSquareTransformation())
+                            .into(imageView.get(i), new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    hideProgress();
+                                }
+
+                                @Override
+                                public void onError() {
+                                    hideProgress();
+                                    Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
             } else {
                 IMAGES.add(0, "");
             }
-
-            showProgress();
-            Picasso.with(getApplicationContext())
-                    .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(0))
-                    .placeholder(R.drawable.empty_photo)
-                    .transform(new CropSquareTransformation())
-                    .into(mImgOne, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onError() {
-                            hideProgress();
-                            Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-            if (IMAGES.size() > 1) {
-                Picasso.with(getApplicationContext())
-                        .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(1))
-                        .placeholder(R.drawable.empty_photo)
-                        .transform(new CropSquareTransformation())
-                        .into(mImgTwo, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                hideProgress();
-                            }
-
-                            @Override
-                            public void onError() {
-                                hideProgress();
-                                Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-
             Log.d("CONAN", "edit: " + articleIdForEdit);
         }
 
@@ -262,6 +235,29 @@ public class NewAdActivity extends AppCompatActivity implements
                 fileUploadService.updateArticle(data);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == RESULT_OK && pictureCount < 5) {
+                    isImageChanged = true;
+                    final Uri selectedImage = imageReturnedIntent.getData();
+                    FileNameParcelable file = new FileNameParcelable(selectedImage.toString());
+                    mImage.add(file);
+                    Picasso
+                            .with(getApplicationContext())
+                            .load(selectedImage)
+                            .transform(new CropSquareTransformation())
+                            .into(imageView.get(pictureCount));
+                    pictureCount++;
+                    imageView.get(pictureCount).setVisibility(View.VISIBLE);
+                }
+                break;
+        }
     }
 
     @Override
@@ -353,51 +349,6 @@ public class NewAdActivity extends AppCompatActivity implements
         mainLl.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
-        switch (requestCode) {
-            case SELECT_PHOTO_ONE:
-                if (resultCode == RESULT_OK && pictureCount < 4) {
-                    isImageChanged = true;
-                    final Uri selectedImage = imageReturnedIntent.getData();
-                    FileNameParcelable file = new FileNameParcelable(selectedImage.toString());
-                    mImage.add(file);
-                    switch (pictureCount) {
-                        case 0: {
-                            Picasso
-                                    .with(getApplicationContext())
-                                    .load(selectedImage)
-                                    .transform(new CropSquareTransformation())
-                                    .into(mImgOne);
-                            pictureCount++;
-                            break;
-                        }
-                    }
-                    break;
-                }
-            case SELECT_PHOTO_TWO: {
-                if (resultCode == RESULT_OK) {
-                    final Uri selectedImage = imageReturnedIntent.getData();
-                    FileNameParcelable file = new FileNameParcelable(selectedImage.toString());
-                    mImage.add(file);
-                    Picasso
-                            .with(getApplicationContext())
-                            .load(selectedImage)
-                            .transform(new CropSquareTransformation())
-                            .into(mImgTwo);
-                    pictureCount++;
-                    mImgDrei.setVisibility(View.VISIBLE);
-                    mImgVier.setVisibility(View.VISIBLE);
-                    //mImg5.setVisibility(View.VISIBLE);
-                    break;
-                }
-                break;
-            }
-        }
-    }
-
     public void getLatLngFromPlz(String zip) {
         final Geocoder geocoder = new Geocoder(this);
         try {
@@ -485,6 +436,3 @@ public class NewAdActivity extends AppCompatActivity implements
 
     }
 }
-
-
-
