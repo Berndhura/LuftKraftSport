@@ -67,7 +67,6 @@ public class NewAdActivity extends AppCompatActivity implements
 
     private Integer articleIdForEdit;
     private Boolean isEditMode;
-    private Boolean isImageChanged;
 
     private LinearLayout emptyBackgroundLl;
     private LinearLayout mainLl;
@@ -119,7 +118,6 @@ public class NewAdActivity extends AppCompatActivity implements
         }
 
         isEditMode = false;
-        isImageChanged = false;
         progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
         progress.setMax(100);
         hideProgress();
@@ -205,6 +203,7 @@ public class NewAdActivity extends AppCompatActivity implements
         if (isEditMode) submitButton.setText("Speichern");
         submitButton.setOnClickListener((v) -> {
 
+            //copy FileNameParcelable[] mImageBuffer; to ArrayList<FileNameParcelable> for intent
             prepareImageList();
 
             final Intent data = new Intent();
@@ -227,7 +226,7 @@ public class NewAdActivity extends AppCompatActivity implements
                 data.putExtra(Constants.LAT, lat);
                 data.putExtra(Constants.LNG, lng);
                 data.putExtra(Constants.DATE, getIntent().getLongExtra(Constants.DATE, 0));
-                if (isImageChanged) data.putExtra(Constants.FILENAME, mImage);
+                data.putExtra(Constants.FILENAME, mImage);
 
                 fileUploadService.updateArticle(data);
             }
@@ -250,7 +249,6 @@ public class NewAdActivity extends AppCompatActivity implements
         int pictureCount = requestCode;
 
         if (resultCode == RESULT_OK) {
-            isImageChanged = true; //TODO zu allgemien, muss für 5 bilder unterschieden werden, oder alle fünf uploaden neu? server???
             final Uri selectedImage = imageReturnedIntent.getData();
             FileNameParcelable file = new FileNameParcelable(selectedImage.toString());
             mImageBuffer[pictureCount] = file;
