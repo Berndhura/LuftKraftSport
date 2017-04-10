@@ -32,6 +32,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.wichura.lks.R;
@@ -47,16 +48,20 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 
 public class NewAdActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
         ZipDialogFragment.OnCompleteListener {
 
     private EditText mDescription;
     private EditText mTitle;
     private EditText mPrice;
 
-    private ArrayList<FileNameParcelable> mImage;
+    private ArrayList<FileNameParcelable> fileNameParcelables;
     private FileNameParcelable[] mImageBuffer;
     private ArrayList<ImageView> imageView;
+    private Boolean[] changedImages;
+    private List<String> IMAGES;
+    private HashMap<Integer, Long> deleteFilesList;
     private ImageView errorImage;
 
     public ProgressBar progress;
@@ -84,9 +89,13 @@ public class NewAdActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
 
         isLocationSet = false;
-        mImage = new ArrayList<>();
+        fileNameParcelables = new ArrayList<>();
+        IMAGES = new ArrayList<>();
+        deleteFilesList = new HashMap<>();
         imageView = new ArrayList<>();
         mImageBuffer = new FileNameParcelable[5];
+        changedImages = new Boolean[5];
+        for (int i = 0; i < 5; i++) changedImages[i] = false;
 
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
@@ -162,15 +171,16 @@ public class NewAdActivity extends AppCompatActivity implements
             getSupportActionBar().setTitle("Bearbeiten");
             mTitle.setText(getIntent().getStringExtra(Constants.TITLE));
             mDescription.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
-            mPrice.setText(getIntent().getStringExtra(Constants.PRICE)); //TODO String vs Int, macht beim validieren probleme
+            String price = getIntent().getStringExtra(Constants.PRICE);
+            int index = price.lastIndexOf('.');
+            mPrice.setText(price.substring(0, index));
             articleIdForEdit = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
 
             String pictureUris = getIntent().getStringExtra(Constants.AD_URL);
-            List<String> IMAGES = new ArrayList<>();
             if (pictureUris != null) {
                 String[] uris = pictureUris.split(",");
                 int size = uris.length;
-                Log.d("CONAN", "size: "+size);
+                Log.d("CONAN", "size: " + size);
 
                 for (int i = 0; i < size; i++) {
                     IMAGES.add(i, uris[i]);
@@ -195,6 +205,10 @@ public class NewAdActivity extends AppCompatActivity implements
                                 }
                             });
                 }
+
+                //show one more empty image view for user -> more images to add
+                if (size < 5) imageView.get(size).setVisibility(View.VISIBLE);
+
             } else {
                 IMAGES.add(0, "");
             }
@@ -206,13 +220,13 @@ public class NewAdActivity extends AppCompatActivity implements
         if (isEditMode) submitButton.setText("Speichern");
         submitButton.setOnClickListener((v) -> {
 
-            //copy FileNameParcelable[] mImageBuffer; to ArrayList<FileNameParcelable> for intent
+            //copy FileNameParcelable[] mImageBuffer to ArrayList<FileNameParcelable> for intent
             prepareImageList();
 
             final Intent data = new Intent();
             data.putExtra(Constants.TITLE, mTitle.getText().toString());
             data.putExtra(Constants.DESCRIPTION, mDescription.getText().toString());
-            data.putParcelableArrayListExtra(Constants.FILENAME, mImage);
+            data.putParcelableArrayListExtra(Constants.FILENAME, fileNameParcelables);
             data.putExtra(Constants.PRICE, mPrice.getText().toString());
             data.putExtra(Constants.DATE, System.currentTimeMillis());
             data.putExtra(Constants.LAT, lat);
@@ -224,23 +238,37 @@ public class NewAdActivity extends AppCompatActivity implements
             }
             if (validateInputs() && isEditMode) {
                 disableUploadButton();
+                prepareFilesToDelete(IMAGES);
                 data.putExtra(Constants.ARTICLE_ID, articleIdForEdit);
                 data.putExtra(Constants.AD_URL, getIntent().getStringExtra(Constants.AD_URL));
                 data.putExtra(Constants.LAT, lat);
                 data.putExtra(Constants.LNG, lng);
                 data.putExtra(Constants.DATE, getIntent().getLongExtra(Constants.DATE, 0));
-                data.putExtra(Constants.FILENAME, mImage);
+                data.putExtra(Constants.FILENAME, fileNameParcelables);
 
-                fileUploadService.updateArticle(data);
+                fileUploadService.updateArticle(data, deleteFilesList);
             }
         });
     }
 
+    private void prepareFilesToDelete(List<String> images) {
+        //TODO muss keine kommaseparierte liste sein!! wir nur an service übergeben!! parameter kein intent!! zu kompliziert?
+        //TODO wenn schonmal drinnen, nicht wieder mit rein nehmen!!
+        //TODO wenn original -> nüscht machen!! schwer
+        //TODO wenn nur ein bild war, zb 4 neue hinzugekommen sind -> delete 1-4 true aber list der images enthält nur ein (das alte einzige bild!) out of bound crash
+        deleteFilesList.clear();
+        for (int i = 0; i < 5; i++) {
+            if (changedImages[i]) {
+                deleteFilesList.put(i, Long.parseLong(images.get(i)));
+            }
+        }
+    }
+
     private void prepareImageList() {
-        mImage.clear();
+        fileNameParcelables.clear();
         for (int i = 0; i < 5; i++) {
             if (mImageBuffer[i] != null)
-                mImage.add(mImageBuffer[i]);
+                fileNameParcelables.add(mImageBuffer[i]);
             Log.d("CONAN", "bild: " + mImageBuffer[i]);
         }
     }
@@ -280,6 +308,10 @@ public class NewAdActivity extends AppCompatActivity implements
                         public void onError() {
                         }
                     });
+            //which image is changed
+            if (isEditMode) {
+                changedImages[pictureCount] = true;
+            }
         }
     }
 

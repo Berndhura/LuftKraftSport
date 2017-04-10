@@ -5,6 +5,14 @@ import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import de.wichura.lks.mainactivity.Constants;
+import de.wichura.lks.models.AdsAsPage;
+import de.wichura.lks.models.ArticleDetails;
+import de.wichura.lks.models.GroupedMsgItem;
+import de.wichura.lks.models.MsgRowItem;
+import de.wichura.lks.models.RowItem;
+import de.wichura.lks.models.SearchItem;
+import de.wichura.lks.models.User;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -20,18 +28,10 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
-import de.wichura.lks.mainactivity.Constants;
-import de.wichura.lks.models.AdsAsPage;
-import de.wichura.lks.models.ArticleDetails;
-import de.wichura.lks.models.GroupedMsgItem;
-import de.wichura.lks.models.MsgRowItem;
-import de.wichura.lks.models.RowItem;
-import de.wichura.lks.models.SearchItem;
-import de.wichura.lks.models.User;
 
 /**
- * Created by ich on 16.10.2016.
- * CamperApp
+ * Created by Bernd Wichura on 16.10.2016.
+ * Luftkraftsport
  */
 
 public class Service {
@@ -135,6 +135,10 @@ public class Service {
                                          @Query("token") String userToken,
                                          @Part MultipartBody.Part file);
 
+        @DELETE("pictures/{pictureId}")
+        Observable<String> deletePicture(@Path("pictureId") Long pictureId,
+                                         @Query("token") String userToken);
+
         @POST("articles")
         Observable<RowItem> saveNewAd(@Query("token") String userToken,
                                       @Body RowItem item);
@@ -187,6 +191,10 @@ public class Service {
                 @Query("token") String userToken,
                 @Query("url") String userPicUrl);
 
+    }
+
+    public Observable<String> deletePictureObserv(Long pictureId, String userToken) {
+        return mWebServiceV3.deletePicture(pictureId, userToken);
     }
 
     public Observable<String> saveUserPictureObserv(String token, String userPicUrl) {

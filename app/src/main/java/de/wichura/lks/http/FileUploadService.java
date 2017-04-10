@@ -13,6 +13,10 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import de.wichura.lks.activity.NewAdActivity;
 import de.wichura.lks.mainactivity.Constants;
@@ -43,7 +47,18 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         this.service = new Service();
     }
 
-    public void updateArticle(Intent data) {
+    public void updateArticle(Intent data, HashMap<Integer, Long> filesToDelete) {
+
+        //TODO erst alte files löschen -> neuer Endpoint
+        //TODO anderen an der anzeige selbst
+        //TODO upload der neuen files -> reihenfolge??? noch egal
+
+        Set filesToDeleteSet = filesToDelete.entrySet();
+        Iterator iterator = filesToDeleteSet.iterator();
+        while (iterator.hasNext()){
+            Map.Entry entry = (Map.Entry)iterator.next();
+            deletePicture((Long)entry.getValue());
+        }
 
         RowItem item = new RowItem();
         item.setId(data.getIntExtra(Constants.ARTICLE_ID, 0));
@@ -191,7 +206,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         @Override
                         public void onCompleted() {
                             //finish activity when last file uploaded
-                            if (counter == imageFiles.size()-1) {
+                            if (counter == imageFiles.size() - 1) {
                                 Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
                                 view.finish();
                             }
@@ -223,6 +238,34 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         }
                     });
         }
+    }
+
+   /* private Observable<Integer> getList() {
+        return Observable.just(1000);
+    }*/
+
+    private void deletePicture(Long pictureId) {
+
+        service.deletePictureObserv(pictureId, getUserToken())
+                // .flatMap(elm -> getList())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "Problems during picture delete: " + pictureId);
+                    }
+
+                    @Override
+                    public void onNext(String status) {
+                        Log.d("CONAN", "Picture deleted: " + pictureId);
+                    }
+                });
     }
 
     private static String getRealPathFromUri(Context context, Uri contentUri) {
