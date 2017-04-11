@@ -1,6 +1,7 @@
 package de.wichura.lks.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,12 +17,12 @@ import java.util.List;
 import de.wichura.lks.R;
 import de.wichura.lks.adapter.MsgOverviewAdapter;
 import de.wichura.lks.http.Service;
-import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.GroupedMsgItem;
 import de.wichura.lks.presentation.MsgOverviewPresenter;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
 
 /**
  * Created by Bernd Wichura on 20.06.2016.
@@ -101,6 +102,10 @@ public class MessagesOverviewActivity extends AppCompatActivity {
         listView.setSelectionAfterHeaderView();
         listView.setOnItemClickListener((adapterView, view, position, l) -> {
             final GroupedMsgItem rowItem = (GroupedMsgItem) listView.getItemAtPosition(position);
+
+            //first time read -> remove from unread stack
+            removeFromUnreadMessages(rowItem.getArticleId());
+
             //open message threat
             final Intent intent = new Intent(getApplicationContext(), MessagesActivity.class);
             intent.putExtra(Constants.ARTICLE_ID, rowItem.getArticleId());
@@ -109,10 +114,35 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             intent.putExtra(Constants.CHAT_PARTNER, rowItem.getChatPartner());
             intent.putExtra(Constants.ID_TO, rowItem.getIdTo());
             intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
-            //TODO weg nutzlos?
-            //intent.putExtra(Constants.AD_URL, Urls.MAIN_SERVER_URL_V3 + "pictures/" + rowItem.getUrl() + "/thumbnail");
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);
         });
+    }
+
+    private void removeFromUnreadMessages(Integer articleId) {
+        String stack = getSharedPreferences(UNREAD_MESSAGES, 0).getString(Constants.UNREAD_MESSAGES, "");
+        boolean removeId = false;
+        String[] ids = stack.split(",");
+        for (int i = 0; i < ids.length; i++) {
+            if (articleId.toString().equals(ids[i])) {
+                removeId = true;
+            }
+        }
+        if (removeId) {
+            String newStack = "";
+            for (int i = 0; i < ids.length; i++) {
+                if (!articleId.toString().equals(ids[i])) {
+                    if ("".equals(newStack)) {
+                        newStack = ids[i];
+                    } else {
+                        newStack = newStack + "," + ids[i];
+                    }
+                }
+            }
+            SharedPreferences settings = getSharedPreferences(UNREAD_MESSAGES, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(Constants.UNREAD_MESSAGES, newStack);
+            editor.apply();
+        }
     }
 
     @Override

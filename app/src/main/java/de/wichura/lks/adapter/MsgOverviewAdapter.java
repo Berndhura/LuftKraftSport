@@ -16,7 +16,10 @@ import java.util.List;
 
 import de.wichura.lks.R;
 import de.wichura.lks.http.Urls;
+import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.GroupedMsgItem;
+
+import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
 
 /**
  * Created by Bernd Wichura on 20.06.2016.
@@ -35,6 +38,7 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
         TextView title;
         TextView name;
         TextView date;
+        ImageView unreadMessages;
     }
 
     @Override
@@ -51,6 +55,7 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
             holder.title = (TextView) convertView.findViewById(R.id.ad_title);
             holder.name = (TextView) convertView.findViewById(R.id.user_name);
             holder.date = (TextView) convertView.findViewById(R.id.msg_date);
+            holder.unreadMessages = (ImageView) convertView.findViewById(R.id.unread_message);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -64,7 +69,21 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
         holder.title.setText(rowItem.getMessage());
         holder.name.setText(rowItem.getName());
         holder.date.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
+        if (isUnread(rowItem.getArticleId())) {
+            holder.unreadMessages.setVisibility(View.VISIBLE);
+        }
         return convertView;
+    }
+
+    private boolean isUnread(Integer articleId) {
+        String stack = context.getSharedPreferences(UNREAD_MESSAGES, 0).getString(Constants.UNREAD_MESSAGES, "");
+        String[] ids = stack.split(",");
+        for (int i = 0; i < ids.length; i++) {
+            if (articleId.toString().equals(ids[i])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String getMainImageId(GroupedMsgItem rowItem) {

@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import de.wichura.lks.mainactivity.Constants;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
 
 /**
  * Created by Bernd Wichura on 14.05.2016.
@@ -49,6 +51,8 @@ public class MyGcmListenerService extends GcmListenerService {
             Log.v(TAG, "Received: articleId: " + articleId);
             Log.v(TAG, "Received: name: " + name);
             Log.v(TAG, "data: " + data);
+
+            pushToUnreadMessages(articleId);
 
             if (from.startsWith("/topics/")) {
                 // message received from some topic.
@@ -86,6 +90,22 @@ public class MyGcmListenerService extends GcmListenerService {
             openArticle(message, Integer.parseInt(articleId), name);
         }
         // [END_EXCLUDE]
+    }
+
+    private void pushToUnreadMessages(String articleId) {
+
+        String stack = getSharedPreferences(UNREAD_MESSAGES, 0).getString(Constants.UNREAD_MESSAGES, "");
+
+        if ("".equals(stack)) {
+            stack = stack + articleId;
+        } else {
+            stack = stack + "," + articleId;
+        }
+
+        SharedPreferences settings = getSharedPreferences(UNREAD_MESSAGES, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(Constants.UNREAD_MESSAGES, stack);
+        editor.apply();
     }
     // [END receive_message]
 

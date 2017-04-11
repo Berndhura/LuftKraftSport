@@ -83,6 +83,7 @@ public class Constants {
     public static final String LOCATION_SERVICE_IS_ENABLED = "locationServiceIsEnabled";
     public static final String USER_PRICE_RANGE = "usersPriceRange";
     public static final String ACTIVATE_USER_STATUS = "usersActivate";
+    public static final String UNREAD_MESSAGES = "unreadMessages";
 
     public static final String ACTIVATE_USER = "isUserActivated";
     public static final String REGISTER_USER = "isUserRegistered";
