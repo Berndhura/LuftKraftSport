@@ -14,6 +14,8 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import java.util.HashMap;
+
 import de.wichura.lks.R;
 import de.wichura.lks.activity.MessagesActivity;
 import de.wichura.lks.activity.OpenAdActivity;
@@ -52,7 +54,7 @@ public class MyGcmListenerService extends GcmListenerService {
             Log.v(TAG, "Received: name: " + name);
             Log.v(TAG, "data: " + data);
 
-            pushToUnreadMessages(articleId);
+            pushToUnreadMessages(articleId, sender);
 
             if (from.startsWith("/topics/")) {
                 // message received from some topic.
@@ -92,19 +94,10 @@ public class MyGcmListenerService extends GcmListenerService {
         // [END_EXCLUDE]
     }
 
-    private void pushToUnreadMessages(String articleId) {
-
-        String stack = getSharedPreferences(UNREAD_MESSAGES, 0).getString(Constants.UNREAD_MESSAGES, "");
-
-        if ("".equals(stack)) {
-            stack = stack + articleId;
-        } else {
-            stack = stack + "," + articleId;
-        }
-
+    private void pushToUnreadMessages(String articleId, String sender) {
         SharedPreferences settings = getSharedPreferences(UNREAD_MESSAGES, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString(Constants.UNREAD_MESSAGES, stack);
+        editor.putBoolean(articleId + "," + sender, true);
         editor.apply();
     }
     // [END receive_message]

@@ -12,7 +12,9 @@ import android.widget.ProgressBar;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import de.wichura.lks.R;
 import de.wichura.lks.adapter.MsgOverviewAdapter;
@@ -104,7 +106,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             final GroupedMsgItem rowItem = (GroupedMsgItem) listView.getItemAtPosition(position);
 
             //first time read -> remove from unread stack
-            removeFromUnreadMessages(rowItem.getArticleId());
+            removeFromUnreadMessages(rowItem.getArticleId(), rowItem.getIdFrom());
 
             //open message threat
             final Intent intent = new Intent(getApplicationContext(), MessagesActivity.class);
@@ -118,30 +120,21 @@ public class MessagesOverviewActivity extends AppCompatActivity {
         });
     }
 
-    private void removeFromUnreadMessages(Integer articleId) {
-        String stack = getSharedPreferences(UNREAD_MESSAGES, 0).getString(Constants.UNREAD_MESSAGES, "");
-        boolean removeId = false;
-        String[] ids = stack.split(",");
-        for (int i = 0; i < ids.length; i++) {
-            if (articleId.toString().equals(ids[i])) {
-                removeId = true;
+    private void removeFromUnreadMessages(Integer articleId, String sender) {
+        SharedPreferences stackUnread = getSharedPreferences(UNREAD_MESSAGES, 0);
+        Map unreadMsgMap = stackUnread.getAll();
+
+        String key = articleId + "," + sender;
+
+        Iterator it = unreadMsgMap.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            if (key.equals(pair.getKey())) {
+                SharedPreferences.Editor editor = stackUnread.edit();
+                editor.remove(key);
+                editor.apply();
             }
-        }
-        if (removeId) {
-            String newStack = "";
-            for (int i = 0; i < ids.length; i++) {
-                if (!articleId.toString().equals(ids[i])) {
-                    if ("".equals(newStack)) {
-                        newStack = ids[i];
-                    } else {
-                        newStack = newStack + "," + ids[i];
-                    }
-                }
-            }
-            SharedPreferences settings = getSharedPreferences(UNREAD_MESSAGES, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(Constants.UNREAD_MESSAGES, newStack);
-            editor.apply();
         }
     }
 

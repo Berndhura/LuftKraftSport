@@ -2,6 +2,7 @@ package de.wichura.lks.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,10 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import de.wichura.lks.R;
 import de.wichura.lks.http.Urls;
@@ -69,21 +73,30 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
         holder.title.setText(rowItem.getMessage());
         holder.name.setText(rowItem.getName());
         holder.date.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
-        if (isUnread(rowItem.getArticleId())) {
+        if (isUnread(rowItem.getArticleId(), rowItem.getIdFrom())) {
             holder.unreadMessages.setVisibility(View.VISIBLE);
+        } else {
+            holder.unreadMessages.setVisibility(View.GONE);
         }
         return convertView;
     }
 
-    private boolean isUnread(Integer articleId) {
-        String stack = context.getSharedPreferences(UNREAD_MESSAGES, 0).getString(Constants.UNREAD_MESSAGES, "");
-        String[] ids = stack.split(",");
-        for (int i = 0; i < ids.length; i++) {
-            if (articleId.toString().equals(ids[i])) {
+    private boolean isUnread(Integer articleId, String sender) {
+        SharedPreferences stackUnread = context.getSharedPreferences(UNREAD_MESSAGES, 0);
+        Map unreadMsgMap = stackUnread.getAll();
+
+        String key = articleId + "," + sender;
+
+        Iterator it = unreadMsgMap.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            if (key.equals(pair.getKey())) {
                 return true;
             }
         }
         return false;
+        //return (Boolean) unreadMsgMap.getOrDefault(articleId + "," + sender, false);  API 24!
     }
 
     private String getMainImageId(GroupedMsgItem rowItem) {
