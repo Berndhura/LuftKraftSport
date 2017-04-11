@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -56,10 +57,10 @@ import de.wichura.lks.adapter.MainListViewAdapter;
 import de.wichura.lks.gcm.QuickstartPreferences;
 import de.wichura.lks.gcm.RegistrationIntentService;
 import de.wichura.lks.http.Service;
-import de.wichura.lks.http.Urls;
 import de.wichura.lks.models.AdsAndBookmarks;
 import de.wichura.lks.models.RowItem;
 import de.wichura.lks.presentation.MainPresenter;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.SHOW_MY_ADS;
@@ -79,17 +80,23 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final String TAG = "CONAN";
     private ImageView loginBtn;
+    private ImageView messagesBtn;
     private DrawerLayout drawer;
+
+    public AVLoadingIndicatorView progressBar;
 
     //Google Cloud Messages
     private BroadcastReceiver mGcmRegistrationBroadcastReceiver;
     private boolean isGcmReceiverRegistered;
 
-    public AVLoadingIndicatorView progressBar;
-
     //login
     private BroadcastReceiver mLoginBroadcastReceiver;
     private boolean isLoginReceiverRegistered;
+
+    //Messages
+    private BroadcastReceiver mMessageBroadcastReceiver;
+    private boolean isMessageBroadcastReceiver;
+
 
     private MainPresenter presenterLayer;
     private MainListViewAdapter adapter;
@@ -101,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements
     private GoogleApiClient mGoogleApiClient;
 
     //app navigation
-    private Boolean isBookmaks;
+    private Boolean isBookmarks;
     private Boolean isMyAds;
     private Boolean isSearch;
 
@@ -115,12 +122,14 @@ public class MainActivity extends AppCompatActivity implements
         pages = 0;
         total = 0;
 
-        isBookmaks = false;
+        isBookmarks = false;
         isMyAds = false;
         isSearch = false;
 
         Service service = new Service();
         presenterLayer = new MainPresenter(this, service, getApplicationContext());
+
+        checkLocationServiceEnabled();
 
         getLastLocation();
 
@@ -140,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements
 
         //ProgressBar
         progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
+        messagesBtn = (ImageView) findViewById(R.id.main_mail_button);
 
         //configure Flurry for analysis
         //configureFlurry();
@@ -228,6 +238,18 @@ public class MainActivity extends AppCompatActivity implements
             startService(intent);
         }
 
+        mMessageBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                messagesBtn.setVisibility(View.VISIBLE);
+
+                int badgeCount = 1;
+                ShortcutBadger.applyCount(context, badgeCount);
+            }
+        };
+
+        setupMessageBroadcastReceiver();
+
         mLoginBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -252,6 +274,28 @@ public class MainActivity extends AppCompatActivity implements
             getAds(Constants.TYPE_ALL);
         }
     }
+
+    private void setupMessageBroadcastReceiver() {
+
+        if (!isMessageBroadcastReceiver) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mMessageBroadcastReceiver,
+                    new IntentFilter("messageReceived"));
+            isMessageBroadcastReceiver = true;
+        }
+
+    }
+
+    public void checkLocationServiceEnabled() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            Toast.makeText(this, "Location Service ausgeschaltet", Toast.LENGTH_LONG).show();
+            saveLocationServiceStatus(false);
+        } else {
+            saveLocationServiceStatus(true);
+        }
+    }
+
 
     private void getLastLocation() {
         if (mGoogleApiClient == null) {
@@ -562,9 +606,9 @@ public class MainActivity extends AppCompatActivity implements
     public void onBackPressed() {
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (isBookmaks) {
+        } else if (isBookmarks) {
             setMyAdsFlag(false);
-            isBookmaks = false;
+            isBookmarks = false;
             getAds(Constants.TYPE_ALL);
         } else if (isMyAds) {
             setMyAdsFlag(false);
@@ -625,7 +669,7 @@ public class MainActivity extends AppCompatActivity implements
                     size = 10;
                     setMyAdsFlag(true);
                     isMyAds = true;
-                    isBookmaks = false;
+                    isBookmarks = false;
                     isSearch = false;
                     getAds(Constants.TYPE_USER);
                     if (drawer != null) drawer.closeDrawer(GravityCompat.START);
@@ -644,7 +688,7 @@ public class MainActivity extends AppCompatActivity implements
             }
             case R.id.search: {
                 isMyAds = false;
-                isBookmaks = false;
+                isBookmarks = false;
                 isSearch = true;
                 final Intent searchIntent = new Intent(this, SearchActivity.class);
                 startActivityForResult(searchIntent, Constants.REQUEST_ID_FOR_SEARCH);
@@ -658,7 +702,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.refresh: {
                 setMyAdsFlag(false);
                 isMyAds = false;
-                isBookmaks = false;
+                isBookmarks = false;
                 isSearch = false;
                 getAds(Constants.TYPE_ALL);
                 if (drawer != null) drawer.closeDrawer(GravityCompat.START);
@@ -670,7 +714,7 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
                 } else {
                     setMyAdsFlag(false);
-                    isBookmaks = true;
+                    isBookmarks = true;
                     isMyAds = false;
                     isSearch = false;
                     getAds(Constants.TYPE_BOOKMARK);
@@ -683,6 +727,8 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 } else {
+                    messagesBtn.setVisibility(View.GONE);
+                    ShortcutBadger.removeCount(getApplicationContext());
                     final Intent msgIntent = new Intent(this, MessagesOverviewActivity.class);
                     msgIntent.putExtra(Constants.USER_ID, userId);
                     startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES);
@@ -771,9 +817,19 @@ public class MainActivity extends AppCompatActivity implements
         if (mLastLocation != null) {
             double lat = mLastLocation.getLatitude();
             double lng = mLastLocation.getLongitude();
-
-            saveLastPosition(lat, lng);
+            if (lat == 0 && lng == 0) {
+                saveLocationServiceStatus(false);
+            } else {
+                saveLastPosition(lat, lng);
+            }
         }
+    }
+
+    private void saveLocationServiceStatus(Boolean isEnabled) {
+        SharedPreferences sp = getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean(Constants.LOCATION_SERVICE_IS_ENABLED, isEnabled);
+        ed.apply();
     }
 
     private void saveLastPosition(double lat, double lng) {

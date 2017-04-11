@@ -39,6 +39,13 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
+                <ImageView
+                    android:id="@+id/unread_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_email_white_24dp"
+                    android:visibility="gone"/>
+
                 <TextView
                     android:id="@+id/msg_date"
                     android:layout_width="match_parent"

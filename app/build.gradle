@@ -79,6 +79,8 @@ dependencies {
     //image zoom
     compile 'com.github.chrisbanes.photoview:library:1.2.2'
     compile 'jp.wasabeef:picasso-transformations:2.1.2'
+    //ShortcutBadger icon for incoming massages
+    compile "me.leolin:ShortcutBadger:1.1.14@aar"
 
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

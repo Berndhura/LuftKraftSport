@@ -17,6 +17,7 @@ import de.wichura.lks.R;
 import de.wichura.lks.activity.MessagesActivity;
 import de.wichura.lks.activity.OpenAdActivity;
 import de.wichura.lks.mainactivity.Constants;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -55,6 +56,9 @@ public class MyGcmListenerService extends GcmListenerService {
                 // normal downstream message.
             }
 
+            //TODO update counter for messages
+            updateMessageSymbol(1);
+
             // [START_EXCLUDE]
             /**
              * Production applications would usually process the message here.
@@ -90,6 +94,11 @@ public class MyGcmListenerService extends GcmListenerService {
         updateChat.putExtra(Constants.MESSAGE, message);
         updateChat.putExtra(Constants.CHAT_PARTNER, sender);
         LocalBroadcastManager.getInstance(this).sendBroadcast(updateChat);
+    }
+
+    private void updateMessageSymbol(int counter) {
+        Intent updateMsgCounter = new Intent("messageReceived");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(updateMsgCounter);
     }
 
     private void openArticle(String message, Integer articleId, String name) {

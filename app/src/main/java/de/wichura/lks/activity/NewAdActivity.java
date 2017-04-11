@@ -311,6 +311,8 @@ public class NewAdActivity extends AppCompatActivity implements
             //which image is changed
             if (isEditMode) {
                 changedImages[pictureCount] = true;
+                //TODO darf nur true werden wenn es das bild schon gab, also etwas geändert würde, das alte gelöscht werden muss,
+                //TODO falls es nur 1 bild gab und 2 neue hinzugekommen sind gibt es nichts zu löschen, weil vorher nichts da war! und nu?
             }
         }
     }

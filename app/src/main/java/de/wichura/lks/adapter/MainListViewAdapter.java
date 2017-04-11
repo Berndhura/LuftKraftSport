@@ -34,8 +34,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.IS_MY_ADS;
+import static de.wichura.lks.mainactivity.Constants.LOCATION_SERVICE_IS_ENABLED;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.SHOW_MY_ADS;
+import static de.wichura.lks.mainactivity.Constants.USERS_LOCATION;
 
 public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
@@ -121,6 +123,8 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
         if (isMyAdsRequest()) {
             holder.distance.setText("Meine");
+        } else if (!isLocationServiceEnabled()) {
+            holder.distance.setText("");  // TODO keine location -> keine km entfernung
         } else {
             holder.distance.setText(rowItem.getDistance() + " km");
         }
@@ -265,5 +269,9 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
     private String getUserToken() {
         return context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
+    }
+
+    private Boolean isLocationServiceEnabled() {
+        return context.getSharedPreferences(USERS_LOCATION, 0).getBoolean(Constants.LOCATION_SERVICE_IS_ENABLED, false);
     }
 }
