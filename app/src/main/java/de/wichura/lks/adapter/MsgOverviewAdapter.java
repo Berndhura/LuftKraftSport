@@ -87,12 +87,14 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
 
         String key = articleId + "," + sender;
 
-        Iterator it = unreadMsgMap.entrySet().iterator();
-
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            if (key.equals(pair.getKey())) {
-                return true;
+        //check only if unread stack not empty
+        if (unreadMsgMap.size() > 0) {
+            Iterator it = unreadMsgMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                if (key.equals(pair.getKey())) {
+                    return true;
+                }
             }
         }
         return false;
