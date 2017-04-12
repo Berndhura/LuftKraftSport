@@ -82,6 +82,7 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
     }
 
     private boolean isUnread(Integer articleId, String sender) {
+        //TODO stackUnread hier raus ziehen sonst wird es bei jedenm listelement gelesen
         SharedPreferences stackUnread = context.getSharedPreferences(UNREAD_MESSAGES, 0);
         Map unreadMsgMap = stackUnread.getAll();
 

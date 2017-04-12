@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements
                 //show unread messages over app icon
                 SharedPreferences stackUnread = getSharedPreferences(UNREAD_MESSAGES, 0);
                 Map unreadMsgMap = stackUnread.getAll();
-                ShortcutBadger.applyCount(context, unreadMsgMap.size());
+                ShortcutBadger.applyCount(getApplicationContext(), unreadMsgMap.size());
             }
         };
 
@@ -731,7 +731,7 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
                 } else {
                     messagesBtn.setVisibility(View.GONE);
-                    final Intent msgIntent = new Intent(this, MessagesOverviewActivity.class);
+                    final Intent msgIntent = new Intent(getApplicationContext(), MessagesOverviewActivity.class);
                     msgIntent.putExtra(Constants.USER_ID, userId);
                     startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES);
                     return true;

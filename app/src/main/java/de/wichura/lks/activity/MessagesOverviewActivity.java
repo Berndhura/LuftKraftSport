@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -96,7 +97,6 @@ public class MessagesOverviewActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Messages: " + rowItems.size());
         getSupportActionBar().setSubtitle(getUserName());
 
-
         MsgOverviewAdapter adapter = new MsgOverviewAdapter(
                 getApplicationContext(), R.layout.msg_overview_item, rowItems);
         listView.setAdapter(adapter);
@@ -129,14 +129,27 @@ public class MessagesOverviewActivity extends AppCompatActivity {
 
         Iterator it = unreadMsgMap.entrySet().iterator();
 
+        boolean removeKey = false;
+
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
+            Log.d("CONAN", "mASSEGE: " + pair.getKey());
             if (key.equals(pair.getKey())) {
+                //flag for remove from temporary list, not within while -> ConcurrentModificationException
+                removeKey = true;
+                //remove from shared prefs
                 SharedPreferences.Editor editor = stackUnread.edit();
                 editor.remove(key);
                 editor.apply();
             }
         }
+
+        if (removeKey) {
+            //remove from temporary list in case it was the last -> to remove badger
+            unreadMsgMap.remove(key);
+        }
+
+        Log.d("CONAN", "stack: " + unreadMsgMap.size());
         //adapt badger count
         if (unreadMsgMap.size() == 0) {
             ShortcutBadger.removeCount(getApplicationContext());
