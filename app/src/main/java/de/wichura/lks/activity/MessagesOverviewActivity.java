@@ -22,6 +22,7 @@ import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.GroupedMsgItem;
 import de.wichura.lks.presentation.MsgOverviewPresenter;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
@@ -129,12 +130,18 @@ public class MessagesOverviewActivity extends AppCompatActivity {
         Iterator it = unreadMsgMap.entrySet().iterator();
 
         while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
+            Map.Entry pair = (Map.Entry) it.next();
             if (key.equals(pair.getKey())) {
                 SharedPreferences.Editor editor = stackUnread.edit();
                 editor.remove(key);
                 editor.apply();
             }
+        }
+        //adapt badger count
+        if (unreadMsgMap.size() == 0) {
+            ShortcutBadger.removeCount(getApplicationContext());
+        } else {
+            ShortcutBadger.applyCount(getApplicationContext(), unreadMsgMap.size());
         }
     }
 

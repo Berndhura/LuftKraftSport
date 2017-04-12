@@ -77,11 +77,14 @@ public class CustomSwipeAdapter extends PagerAdapter {
         View item_view = layoutInflater.inflate(R.layout.swipe_layout, container, false);
         ImageView image_view = (ImageView) item_view.findViewById(R.id.imageView);
 
+        int ratio = Math.round((float) displayWidth / (float) displayWidth);
         Picasso.with(context)
                 .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(position))
                 .placeholder(R.drawable.empty_photo)
-                .transform(new CropSquareTransformation())
-                .fit()
+                .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
+                .centerInside()
+                //.transform(new CropSquareTransformation())
+                //.fit()
                 .into(image_view, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -114,6 +117,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
             Picasso.with(context)
                     .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(position))
                     .centerInside()
+                    .resize(displayWidth, displayHeight)
                     .fit()
                     .into(ivPreview, new Callback() {
                         @Override

@@ -62,8 +62,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 // normal downstream message.
             }
 
-            //TODO update counter for messages
-            updateMessageSymbol(1);
+            updateMessageSymbol();
 
             // [START_EXCLUDE]
             /**
@@ -109,7 +108,7 @@ public class MyGcmListenerService extends GcmListenerService {
         LocalBroadcastManager.getInstance(this).sendBroadcast(updateChat);
     }
 
-    private void updateMessageSymbol(int counter) {
+    private void updateMessageSymbol() {
         Intent updateMsgCounter = new Intent("messageReceived");
         LocalBroadcastManager.getInstance(this).sendBroadcast(updateMsgCounter);
     }

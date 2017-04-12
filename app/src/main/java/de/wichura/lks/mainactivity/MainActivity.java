@@ -45,6 +45,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import de.wichura.lks.R;
 import de.wichura.lks.activity.LoginActivity;
@@ -64,6 +65,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.SHOW_MY_ADS;
+import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -242,9 +244,10 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onReceive(Context context, Intent intent) {
                 messagesBtn.setVisibility(View.VISIBLE);
-
-                int badgeCount = 1;
-                ShortcutBadger.applyCount(context, badgeCount);
+                //show unread messages over app icon
+                SharedPreferences stackUnread = getSharedPreferences(UNREAD_MESSAGES, 0);
+                Map unreadMsgMap = stackUnread.getAll();
+                ShortcutBadger.applyCount(context, unreadMsgMap.size());
             }
         };
 
@@ -728,7 +731,6 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
                 } else {
                     messagesBtn.setVisibility(View.GONE);
-                    ShortcutBadger.removeCount(getApplicationContext());
                     final Intent msgIntent = new Intent(this, MessagesOverviewActivity.class);
                     msgIntent.putExtra(Constants.USER_ID, userId);
                     startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES);
