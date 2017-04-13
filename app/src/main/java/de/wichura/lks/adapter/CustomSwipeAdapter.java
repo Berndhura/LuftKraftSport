@@ -23,7 +23,6 @@ import java.util.List;
 import de.wichura.lks.R;
 import de.wichura.lks.activity.OpenAdActivity;
 import de.wichura.lks.http.Urls;
-import jp.wasabeef.picasso.transformations.CropSquareTransformation;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -118,7 +117,6 @@ public class CustomSwipeAdapter extends PagerAdapter {
                     .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(position))
                     .centerInside()
                     .resize(displayWidth, displayHeight)
-                    .fit()
                     .into(ivPreview, new Callback() {
                         @Override
                         public void onSuccess() {

@@ -53,11 +53,13 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         //TODO anderen an der anzeige selbst
         //TODO upload der neuen files -> reihenfolge??? noch egal
 
+        Integer articleId = data.getIntExtra(Constants.ARTICLE_ID, 0);
+
         Set filesToDeleteSet = filesToDelete.entrySet();
         Iterator iterator = filesToDeleteSet.iterator();
         while (iterator.hasNext()){
             Map.Entry entry = (Map.Entry)iterator.next();
-            deletePicture((Long)entry.getValue());
+            deletePicture(Long.parseLong(articleId.toString()), (Long)entry.getValue());
         }
 
         RowItem item = new RowItem();
@@ -244,9 +246,9 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         return Observable.just(1000);
     }*/
 
-    private void deletePicture(Long pictureId) {
+    private void deletePicture(Long articleId, Long pictureId) {
 
-        service.deletePictureObserv(pictureId, getUserToken())
+        service.deletePictureObserv(articleId, pictureId, getUserToken())
                 // .flatMap(elm -> getList())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

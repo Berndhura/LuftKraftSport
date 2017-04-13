@@ -135,8 +135,9 @@ public class Service {
                                          @Query("token") String userToken,
                                          @Part MultipartBody.Part file);
 
-        @DELETE("pictures/{pictureId}")
-        Observable<String> deletePicture(@Path("pictureId") Long pictureId,
+        @DELETE("articles/{articleId}/{pictureId}/deletePicture")
+        Observable<String> deletePicture(@Path("articleId") Long articleId,
+                                         @Path("pictureId") Long pictureId,
                                          @Query("token") String userToken);
 
         @POST("articles")
@@ -193,8 +194,8 @@ public class Service {
 
     }
 
-    public Observable<String> deletePictureObserv(Long pictureId, String userToken) {
-        return mWebServiceV3.deletePicture(pictureId, userToken);
+    public Observable<String> deletePictureObserv(Long articleId, Long pictureId, String userToken) {
+        return mWebServiceV3.deletePicture(articleId, pictureId, userToken);
     }
 
     public Observable<String> saveUserPictureObserv(String token, String userPicUrl) {
