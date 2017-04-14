@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import de.wichura.lks.models.Location;
 import de.wichura.lks.models.RowItem;
 import de.wichura.lks.util.BitmapHelper;
 import okhttp3.MultipartBody;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -47,29 +49,54 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         this.service = new Service();
     }
 
-    public void updateArticle(Intent data, HashMap<Integer, Long> filesToDelete) {
-
-        //TODO erst alte files löschen -> neuer Endpoint
-        //TODO anderen an der anzeige selbst
-        //TODO upload der neuen files -> reihenfolge??? noch egal
+    public void deleteOldImages(Intent data, HashMap<Integer, Long> filesToDelete) {
 
         Integer articleId = data.getIntExtra(Constants.ARTICLE_ID, 0);
 
+        //first delete old files
+        List<Long> ids = new ArrayList<>();
         Set filesToDeleteSet = filesToDelete.entrySet();
         Iterator iterator = filesToDeleteSet.iterator();
-        while (iterator.hasNext()){
-            Map.Entry entry = (Map.Entry)iterator.next();
-            deletePicture(Long.parseLong(articleId.toString()), (Long)entry.getValue());
+        while (iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            ids.add((Long) entry.getValue());
         }
+
+        Observable.from(ids)
+                .flatMap(imageId -> service.deletePictureObserv(Long.parseLong(articleId.toString()), imageId, getUserToken()))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("CONAN", "SUPERDRECK COMPLETE");
+                        updateArticle(data);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "SUPERDRECK ERROR" + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(String rowItem) {
+                        Log.d("CONAN", "SUPERDRECK ONNEXT " + rowItem);
+                    }
+                });
+    }
+
+    private void updateArticle(Intent data) {
+
+        //TODO anderen an der anzeige selbst
+
+        Integer articleId = data.getIntExtra(Constants.ARTICLE_ID, 0);
 
         RowItem item = new RowItem();
         item.setId(data.getIntExtra(Constants.ARTICLE_ID, 0));
         item.setTitle(data.getStringExtra(Constants.TITLE));
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
-        //TODO mist oder
         item.setPrice(Float.parseFloat(data.getStringExtra(Constants.PRICE)));
         item.setDate(data.getLongExtra(Constants.DATE, 0));
-        item.setUrl(data.getStringExtra(Constants.AD_URL));
 
         double[] latlng = {data.getDoubleExtra(Constants.LAT, 0), data.getDoubleExtra(Constants.LNG, 0)};
         Location location = new Location();
@@ -86,9 +113,9 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onCompleted() {
                         view.hideProgress();
-                        if (data.getStringExtra(Constants.FILENAME) != null) {
+                        if (mImage.size() > 0) {
                             view.hideMainProgress();
-                            uploadPic(adId, mImage);
+                            uploadPic(Long.parseLong(articleId.toString()), mImage);
                         } else {
                             view.finish();
                         }
@@ -112,9 +139,9 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onNext(RowItem rowItem) {
                         adId = Long.parseLong(rowItem.getId().toString());
+                        Log.d("CONAN", "OnNExt in updating Article");
                     }
                 });
-
     }
 
     public void uploadNewArticle(Intent data) {
@@ -127,7 +154,6 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         RowItem item = new RowItem();
         item.setTitle(data.getStringExtra(Constants.TITLE));
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
-        //TODO Mist oder float.parse(...)
         item.setPrice(Float.parseFloat(data.getStringExtra(Constants.PRICE)));
         item.setDate(data.getLongExtra(Constants.DATE, 0));
 
@@ -175,11 +201,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         for (int i = 0; i < imageFiles.size(); i++) {
 
             view.showProgress();
-
             final int counter = i;
-
             String fileString = getRealPathFromUri(context, Uri.parse(imageFiles.get(i).getFileName()));
-
             File file = new File(fileString);
 
             ExifInterface exif = null;
@@ -240,34 +263,6 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         }
                     });
         }
-    }
-
-   /* private Observable<Integer> getList() {
-        return Observable.just(1000);
-    }*/
-
-    private void deletePicture(Long articleId, Long pictureId) {
-
-        service.deletePictureObserv(articleId, pictureId, getUserToken())
-                // .flatMap(elm -> getList())
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("CONAN", "Problems during picture delete: " + pictureId);
-                    }
-
-                    @Override
-                    public void onNext(String status) {
-                        Log.d("CONAN", "Picture deleted: " + pictureId);
-                    }
-                });
     }
 
     private static String getRealPathFromUri(Context context, Uri contentUri) {

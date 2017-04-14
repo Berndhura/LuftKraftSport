@@ -240,13 +240,13 @@ public class NewAdActivity extends AppCompatActivity implements
                 disableUploadButton();
                 prepareFilesToDelete(IMAGES);
                 data.putExtra(Constants.ARTICLE_ID, articleIdForEdit);
-                data.putExtra(Constants.AD_URL, getIntent().getStringExtra(Constants.AD_URL));
                 data.putExtra(Constants.LAT, lat);
                 data.putExtra(Constants.LNG, lng);
                 data.putExtra(Constants.DATE, getIntent().getLongExtra(Constants.DATE, 0));
-                data.putExtra(Constants.FILENAME, fileNameParcelables);
+                //TODO sind das alle geänderten und evetl hinzugekommen bilder?
+                data.putParcelableArrayListExtra(Constants.FILENAME, fileNameParcelables);
 
-                fileUploadService.updateArticle(data, deleteFilesList);
+                fileUploadService.deleteOldImages(data, deleteFilesList);
             }
         });
     }
