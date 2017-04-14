@@ -49,45 +49,50 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         this.service = new Service();
     }
 
-    public void deleteOldImages(Intent data, HashMap<Integer, Long> filesToDelete) {
+    public void updateArticle(Intent data, HashMap<Integer, Long> filesToDelete) {
 
         Integer articleId = data.getIntExtra(Constants.ARTICLE_ID, 0);
 
-        //first delete old files
-        List<Long> ids = new ArrayList<>();
-        Set filesToDeleteSet = filesToDelete.entrySet();
-        Iterator iterator = filesToDeleteSet.iterator();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            ids.add((Long) entry.getValue());
+        if (filesToDelete.size() > 0) {
+            //first delete old files
+            List<Long> ids = new ArrayList<>();
+            Set filesToDeleteSet = filesToDelete.entrySet();
+            Iterator iterator = filesToDeleteSet.iterator();
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
+                ids.add((Long) entry.getValue());
+            }
+
+            Observable.from(ids)
+                    .flatMap(imageId -> service.deletePictureObserv(Long.parseLong(articleId.toString()), imageId, getUserToken()))
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+                            Log.d("CONAN", "SUPERDRECK COMPLETE");
+                            updateTextAndNewImages(data);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("CONAN", "SUPERDRECK ERROR" + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(String rowItem) {
+                            Log.d("CONAN", "SUPERDRECK ONNEXT " + rowItem);
+                        }
+                    });
+        } else {
+            updateTextAndNewImages(data);
         }
-
-        Observable.from(ids)
-                .flatMap(imageId -> service.deletePictureObserv(Long.parseLong(articleId.toString()), imageId, getUserToken()))
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d("CONAN", "SUPERDRECK COMPLETE");
-                        updateArticle(data);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("CONAN", "SUPERDRECK ERROR" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(String rowItem) {
-                        Log.d("CONAN", "SUPERDRECK ONNEXT " + rowItem);
-                    }
-                });
     }
 
-    private void updateArticle(Intent data) {
+    private void updateTextAndNewImages(Intent data) {
 
         //TODO anderen an der anzeige selbst
+
 
         Integer articleId = data.getIntExtra(Constants.ARTICLE_ID, 0);
 
@@ -105,6 +110,13 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         item.setLocation(location);
 
         final ArrayList<FileNameParcelable> mImage = new ArrayList<>(data.getParcelableArrayListExtra(Constants.FILENAME));
+
+        //alte URLS setzen wenn nicht geändert, sonst NULL
+        //TODO: was wenn nur ein teil angefasst wurde: eins gelöscht, zwei nue hinzu?
+        //no image changes/edits/delete -> only use old ones
+        if (mImage.size() == 0) {
+            item.setUrl(data.getStringExtra(Constants.AD_URL));
+        }
 
         service.saveNewAdObserv(getUserToken(), item)
                 .subscribeOn(Schedulers.newThread())

@@ -243,16 +243,17 @@ public class NewAdActivity extends AppCompatActivity implements
                 data.putExtra(Constants.LAT, lat);
                 data.putExtra(Constants.LNG, lng);
                 data.putExtra(Constants.DATE, getIntent().getLongExtra(Constants.DATE, 0));
+                data.putExtra(Constants.AD_URL, getIntent().getStringExtra(Constants.AD_URL));
                 //TODO sind das alle geänderten und evetl hinzugekommen bilder?
                 data.putParcelableArrayListExtra(Constants.FILENAME, fileNameParcelables);
 
-                fileUploadService.deleteOldImages(data, deleteFilesList);
+                fileUploadService.updateArticle(data, deleteFilesList);
             }
         });
     }
 
     private void prepareFilesToDelete(List<String> images) {
-        //TODO muss keine kommaseparierte liste sein!! wir nur an service übergeben!! parameter kein intent!! zu kompliziert?
+
         //TODO wenn schonmal drinnen, nicht wieder mit rein nehmen!!
         //TODO wenn original -> nüscht machen!! schwer
         //TODO wenn nur ein bild war, zb 4 neue hinzugekommen sind -> delete 1-4 true aber list der images enthält nur ein (das alte einzige bild!) out of bound crash
