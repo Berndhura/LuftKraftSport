@@ -2,13 +2,14 @@ package de.wichura.lks.mainactivity;
 
 /**
  * Created by Bernd Wichura on 22.01.2016.
- * CamperApp
+ * Luftkraftsport
  */
 public class Constants {
 
 
-
     private Constants() {}
+
+    public static int MAX_IMAGE_SIZE = 5;
 
     public static final int REQUEST_ID_FOR_NEW_AD = 1;
     public static final int REQUEST_ID_FOR_LOGIN = 2;

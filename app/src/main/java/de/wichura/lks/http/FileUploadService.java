@@ -49,6 +49,41 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         this.service = new Service();
     }
 
+    private void removeIdFromImageList(Intent data, Long imageId) {
+
+        String[] imageArray = new String[Constants.MAX_IMAGE_SIZE];
+        String imageList = data.getStringExtra(Constants.AD_URL);
+
+        if (!"".equals(imageList)) {
+            imageArray = imageList.split(",");
+        } else {
+            //nothing to remove
+            return;
+        }
+
+        //remove image id
+        for (int i = 0; i < imageArray.length; i++) {
+            if (imageId.toString().equals(imageArray[i])) {
+                imageArray[i] = null;
+            }
+        }
+
+        //store new imageList to data
+        String newImageList ="";
+        for (int i = 0; i < imageArray.length; i++) {
+            if (imageArray[i] != null) {
+                if (!"".equals(newImageList)) {
+                    newImageList = newImageList + "," + imageArray[i];
+                } else {
+                    newImageList = imageArray[i];
+                }
+            }
+        }
+
+        Log.d("CONAN", "new imageList: " +data.getStringExtra(Constants.AD_URL));
+        data.putExtra(Constants.AD_URL, newImageList);
+    }
+
     public void updateArticle(Intent data, HashMap<Integer, Long> filesToDelete) {
 
         Integer articleId = data.getIntExtra(Constants.ARTICLE_ID, 0);
@@ -61,6 +96,9 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             while (iterator.hasNext()) {
                 Map.Entry entry = (Map.Entry) iterator.next();
                 ids.add((Long) entry.getValue());
+
+                //remove imageIds from list -> important for updating the article itself
+                removeIdFromImageList(data, (Long)entry.getValue());
             }
 
             Observable.from(ids)
@@ -93,6 +131,9 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
         //TODO anderen an der anzeige selbst
 
+        String oldImageList = data.getStringExtra(Constants.AD_URL);
+        final ArrayList<FileNameParcelable> newFilesForUpload = new ArrayList<>(data.getParcelableArrayListExtra(Constants.FILENAME));
+
 
         Integer articleId = data.getIntExtra(Constants.ARTICLE_ID, 0);
 
@@ -109,14 +150,14 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         location.setType("Point");
         item.setLocation(location);
 
-        final ArrayList<FileNameParcelable> mImage = new ArrayList<>(data.getParcelableArrayListExtra(Constants.FILENAME));
+
 
         //alte URLS setzen wenn nicht geändert, sonst NULL
         //TODO: was wenn nur ein teil angefasst wurde: eins gelöscht, zwei nue hinzu?
         //no image changes/edits/delete -> only use old ones
-        if (mImage.size() == 0) {
-            item.setUrl(data.getStringExtra(Constants.AD_URL));
-        }
+        //muss immer gesetzt werden, angepasst ist schon
+        item.setUrl(data.getStringExtra(Constants.AD_URL));
+
 
         service.saveNewAdObserv(getUserToken(), item)
                 .subscribeOn(Schedulers.newThread())
@@ -125,9 +166,9 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onCompleted() {
                         view.hideProgress();
-                        if (mImage.size() > 0) {
+                        if (newFilesForUpload.size() > 0) {
                             view.hideMainProgress();
-                            uploadPic(Long.parseLong(articleId.toString()), mImage);
+                            uploadPic(Long.parseLong(articleId.toString()), newFilesForUpload);
                         } else {
                             view.finish();
                         }
