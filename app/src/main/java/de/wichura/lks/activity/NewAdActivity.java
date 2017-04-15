@@ -256,11 +256,13 @@ public class NewAdActivity extends AppCompatActivity implements
 
         //TODO wenn schonmal drinnen, nicht wieder mit rein nehmen!!
         //TODO wenn original -> nüscht machen!! schwer
-        //TODO wenn nur ein bild war, zb 4 neue hinzugekommen sind -> delete 1-4 true aber list der images enthält nur ein (das alte einzige bild!) out of bound crash
         deleteFilesList.clear();
         for (int i = 0; i < 5; i++) {
             if (changedImages[i]) {
-                deleteFilesList.put(i, Long.parseLong(images.get(i)));
+                //if image.size() is smaller than i -> new picture was added, nothing old to delete
+                if (images.size() > i) {
+                    deleteFilesList.put(i, Long.parseLong(images.get(i)));
+                }
             }
         }
     }

@@ -69,7 +69,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         }
 
         //store new imageList to data
-        String newImageList ="";
+        String newImageList = "";
         for (int i = 0; i < imageArray.length; i++) {
             if (imageArray[i] != null) {
                 if (!"".equals(newImageList)) {
@@ -80,7 +80,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             }
         }
 
-        Log.d("CONAN", "new imageList: " +data.getStringExtra(Constants.AD_URL));
+        Log.d("CONAN", "new imageList: " + data.getStringExtra(Constants.AD_URL));
         data.putExtra(Constants.AD_URL, newImageList);
     }
 
@@ -98,9 +98,10 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                 ids.add((Long) entry.getValue());
 
                 //remove imageIds from list -> important for updating the article itself
-                removeIdFromImageList(data, (Long)entry.getValue());
+                removeIdFromImageList(data, (Long) entry.getValue());
             }
 
+            //delete removed images
             Observable.from(ids)
                     .flatMap(imageId -> service.deletePictureObserv(Long.parseLong(articleId.toString()), imageId, getUserToken()))
                     .subscribeOn(Schedulers.newThread())
@@ -108,21 +109,22 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     .subscribe(new Subscriber<String>() {
                         @Override
                         public void onCompleted() {
-                            Log.d("CONAN", "SUPERDRECK COMPLETE");
+                            Log.d("CONAN", "delete images COMPLETE");
                             updateTextAndNewImages(data);
                         }
 
                         @Override
                         public void onError(Throwable e) {
-                            Log.d("CONAN", "SUPERDRECK ERROR" + e.toString());
+                            Log.d("CONAN", "delete images ERROR" + e.toString());
                         }
 
                         @Override
                         public void onNext(String rowItem) {
-                            Log.d("CONAN", "SUPERDRECK ONNEXT " + rowItem);
+                            Log.d("CONAN", "delete images ONNEXT " + rowItem);
                         }
                     });
         } else {
+            //AD_URL adapted, images deleted -> now update article itself, upload possible new images
             updateTextAndNewImages(data);
         }
     }
@@ -131,9 +133,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
         //TODO anderen an der anzeige selbst
 
-        String oldImageList = data.getStringExtra(Constants.AD_URL);
         final ArrayList<FileNameParcelable> newFilesForUpload = new ArrayList<>(data.getParcelableArrayListExtra(Constants.FILENAME));
-
 
         Integer articleId = data.getIntExtra(Constants.ARTICLE_ID, 0);
 
@@ -149,7 +149,6 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         location.setCoordinates(latlng);
         location.setType("Point");
         item.setLocation(location);
-
 
 
         //alte URLS setzen wenn nicht geändert, sonst NULL
