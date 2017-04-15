@@ -51,7 +51,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
     private void removeIdFromImageList(Intent data, Long imageId) {
 
-        String[] imageArray = new String[Constants.MAX_IMAGE_SIZE];
+        String[] imageArray;
         String imageList = data.getStringExtra(Constants.AD_URL);
 
         if (!"".equals(imageList)) {
@@ -59,6 +59,14 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         } else {
             //nothing to remove
             return;
+        }
+
+        Log.d("CONAN", "vor array: "+imageList);
+
+        for (int i = 0; i < imageArray.length; i++) {
+
+            Log.d("CONAN", "array:  "+imageArray[i] );
+
         }
 
         //remove image id
@@ -72,15 +80,17 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         String newImageList = "";
         for (int i = 0; i < imageArray.length; i++) {
             if (imageArray[i] != null) {
-                if (!"".equals(newImageList)) {
-                    newImageList = newImageList + "," + imageArray[i];
-                } else {
+                if ("".equals(newImageList)) {
                     newImageList = imageArray[i];
+                    Log.d("CONAN", "new imageList in else: " + imageArray[i]);
+                } else {
+                    newImageList = newImageList + "," + imageArray[i];
+                    Log.d("CONAN", "new imageList in if: " + imageArray[i]);
                 }
             }
         }
 
-        Log.d("CONAN", "new imageList: " + data.getStringExtra(Constants.AD_URL));
+        Log.d("CONAN", "array new imageList: " + newImageList);
         data.putExtra(Constants.AD_URL, newImageList);
     }
 
@@ -154,9 +164,11 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         //alte URLS setzen wenn nicht geändert, sonst NULL
         //TODO: was wenn nur ein teil angefasst wurde: eins gelöscht, zwei nue hinzu?
         //no image changes/edits/delete -> only use old ones
-        //muss immer gesetzt werden, angepasst ist schon
-        item.setUrl(data.getStringExtra(Constants.AD_URL));
-
+        //muss immer gesetzt werden, angepasst ist schon, ausser wenn leer, dann nicht
+        Log.d("CONAN", "array vor abschicken: "+data.getStringExtra(Constants.AD_URL));
+        if (!"".equals(data.getStringExtra(Constants.AD_URL))) {
+            item.setUrl(data.getStringExtra(Constants.AD_URL));
+        }
 
         service.saveNewAdObserv(getUserToken(), item)
                 .subscribeOn(Schedulers.newThread())
