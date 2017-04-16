@@ -295,7 +295,6 @@ public class NewAdActivity extends AppCompatActivity implements
         for (int i = 0; i < 5; i++) {
             if (mImageBuffer[i] != null)
                 fileNameParcelables.add(mImageBuffer[i]);
-            Log.d("CONAN", "bild: " + mImageBuffer[i]);
         }
     }
 

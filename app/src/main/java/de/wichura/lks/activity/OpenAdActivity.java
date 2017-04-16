@@ -232,14 +232,14 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         mBookmarkButton.setOnClickListener((view) -> {
             if (isOwnAd()) {
                 Intent i = new Intent(this, NewAdActivity.class);
-                i.putExtra(Constants.ARTICLE_ID, getIntent().getLongExtra(Constants.ARTICLE_ID, 0));
+                i.putExtra(Constants.ARTICLE_ID, mAdId);
                 i.putExtra(Constants.TITLE, getIntent().getStringExtra(Constants.TITLE));
                 i.putExtra(Constants.DESCRIPTION, getIntent().getStringExtra(Constants.DESCRIPTION));
                 i.putExtra(Constants.PRICE, String.valueOf(getIntent().getFloatExtra(Constants.PRICE, 0)));
                 i.putExtra(Constants.AD_URL, getIntent().getStringExtra(Constants.AD_URL));
                 i.putExtra(Constants.LAT, getIntent().getDoubleExtra(Constants.LAT, 0));
                 i.putExtra(Constants.LNG, getIntent().getDoubleExtra(Constants.LNG, 0));
-                i.putExtra(Constants.DATE, getIntent().getDoubleExtra(Constants.DATE, 0));
+                i.putExtra(Constants.DATE, getIntent().getLongExtra(Constants.DATE, 0));
                 startActivityForResult(i, Constants.REQUEST_ID_FOR_NEW_AD);
             } else {
 
