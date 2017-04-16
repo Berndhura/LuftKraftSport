@@ -64,6 +64,8 @@ public class NewAdActivity extends AppCompatActivity implements
     private HashMap<Integer, Long> deleteFilesList;
     private ImageView errorImage;
 
+    private ArrayList<ImageView> removeImgButton;
+
     public ProgressBar progress;
 
     private NewArticlePresenter presenter;
@@ -93,6 +95,7 @@ public class NewAdActivity extends AppCompatActivity implements
         IMAGES = new ArrayList<>();
         deleteFilesList = new HashMap<>();
         imageView = new ArrayList<>();
+        removeImgButton = new ArrayList<>();
         mImageBuffer = new FileNameParcelable[5];
         changedImages = new Boolean[5];
         for (int i = 0; i < 5; i++) changedImages[i] = false;
@@ -139,30 +142,13 @@ public class NewAdActivity extends AppCompatActivity implements
 
         mDescription = (EditText) findViewById(R.id.new_ad_description);
         mTitle = (EditText) findViewById(R.id.new_ad_title);
-
-        imageView.add((ImageView) findViewById(R.id.imageButton));
-        imageView.add((ImageView) findViewById(R.id.imageButton2));
-        imageView.add((ImageView) findViewById(R.id.imageButton3));
-        imageView.add((ImageView) findViewById(R.id.imageButton4));
-        imageView.add((ImageView) findViewById(R.id.imageButton5));
-
         errorImage = (ImageView) findViewById(R.id.problem_during_upload);
         hideProblem();
         mPrice = (EditText) findViewById(R.id.new_ad_price);
 
-        for (int i = 0; i < 5; i++) {
-            final Integer COUNTER = i;
-            imageView.get(i).setOnClickListener((v) -> {
-                final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                photoPickerIntent.putExtra("image", true);
-                startActivityForResult(photoPickerIntent, COUNTER);
-            });
-        }
-        // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        //startActivityForResult(cameraIntent, SELECT_PHOTO_ONE);
-        //TODO camera plus photo picker
-        //http://stackoverflow.com/questions/5991319/capture-image-from-camera-and-display-in-activity
+        initImageViews();
+
+        initRemoveImgButtons();
 
 
         //edit my article:
@@ -185,6 +171,7 @@ public class NewAdActivity extends AppCompatActivity implements
                 for (int i = 0; i < size; i++) {
                     IMAGES.add(i, uris[i]);
                     imageView.get(i).setVisibility(View.VISIBLE);
+                    removeImgButton.get(i).setVisibility(View.VISIBLE);
                     showProgress();
                     Picasso.with(getApplicationContext())
                             .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(i))
@@ -206,7 +193,7 @@ public class NewAdActivity extends AppCompatActivity implements
                             });
                 }
 
-                //show one more empty image view for user -> more images to add
+                //show one more empty image view for user -> more images to add but no remove button
                 if (size < 5) imageView.get(size).setVisibility(View.VISIBLE);
 
             } else {
@@ -250,6 +237,45 @@ public class NewAdActivity extends AppCompatActivity implements
                 fileUploadService.updateArticle(data, deleteFilesList);
             }
         });
+    }
+
+    private void initImageViews() {
+        imageView.add((ImageView) findViewById(R.id.imageButton));
+        imageView.add((ImageView) findViewById(R.id.imageButton2));
+        imageView.add((ImageView) findViewById(R.id.imageButton3));
+        imageView.add((ImageView) findViewById(R.id.imageButton4));
+        imageView.add((ImageView) findViewById(R.id.imageButton5));
+
+        for (int i = 0; i < 5; i++) {
+            final Integer COUNTER = i;
+            imageView.get(i).setOnClickListener((v) -> {
+                final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                photoPickerIntent.putExtra("image", true);
+                startActivityForResult(photoPickerIntent, COUNTER);
+            });
+        }
+    }
+
+    private void initRemoveImgButtons() {
+        removeImgButton.add((ImageView) findViewById(R.id.removeImage1));
+        removeImgButton.add((ImageView) findViewById(R.id.removeImage2));
+        removeImgButton.add((ImageView) findViewById(R.id.removeImage3));
+        removeImgButton.add((ImageView) findViewById(R.id.removeImage4));
+        removeImgButton.add((ImageView) findViewById(R.id.removeImage5));
+
+        for (int i = 0; i < 5; i++) {
+            final Integer COUNTER = i;
+            removeImgButton.get(i).setOnClickListener(v -> {
+                removeImageAndUpdate(COUNTER);
+            });
+        }
+    }
+
+    private void removeImageAndUpdate(Integer counter) {
+        //TODO remove images sofort ? oder alles zusammen?
+        //imageView.get(counter).setImageDrawable(null);
+       // removeImgButton.get(counter).setVisibility(View.GONE);
     }
 
     private void prepareFilesToDelete(List<String> images) {
@@ -296,8 +322,11 @@ public class NewAdActivity extends AppCompatActivity implements
                         @Override
                         public void onSuccess() {
                             //only show view for 5 images, after this no more new views!
-                            if (pictureCount < 4)
+                            if (pictureCount < 4) {
                                 imageView.get(pictureCount + 1).setVisibility(View.VISIBLE);
+                            }
+                            //show remove image view when new image is shown
+                            removeImgButton.get(pictureCount).setVisibility(View.VISIBLE);
 
                             HorizontalScrollView s = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
                             s.postDelayed(new Runnable() {
@@ -314,8 +343,6 @@ public class NewAdActivity extends AppCompatActivity implements
             //which image is changed
             if (isEditMode) {
                 changedImages[pictureCount] = true;
-                //TODO darf nur true werden wenn es das bild schon gab, also etwas geändert würde, das alte gelöscht werden muss,
-                //TODO falls es nur 1 bild gab und 2 neue hinzugekommen sind gibt es nichts zu löschen, weil vorher nichts da war! und nu?
             }
         }
     }
