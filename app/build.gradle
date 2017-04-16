@@ -11,8 +11,8 @@ android {
         applicationId "de.wichura.lks"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 28
-        versionName "0.4.5"
+        versionCode 29
+        versionName "0.4.6"
         //multiDexEnabled true
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
