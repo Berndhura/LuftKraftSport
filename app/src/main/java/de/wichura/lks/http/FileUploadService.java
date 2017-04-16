@@ -61,14 +61,6 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             return;
         }
 
-        Log.d("CONAN", "vor array: "+imageList);
-
-        for (int i = 0; i < imageArray.length; i++) {
-
-            Log.d("CONAN", "array:  "+imageArray[i] );
-
-        }
-
         //remove image id
         for (int i = 0; i < imageArray.length; i++) {
             if (imageId.toString().equals(imageArray[i])) {
@@ -82,15 +74,12 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             if (imageArray[i] != null) {
                 if ("".equals(newImageList)) {
                     newImageList = imageArray[i];
-                    Log.d("CONAN", "new imageList in else: " + imageArray[i]);
                 } else {
                     newImageList = newImageList + "," + imageArray[i];
-                    Log.d("CONAN", "new imageList in if: " + imageArray[i]);
                 }
             }
         }
 
-        Log.d("CONAN", "array new imageList: " + newImageList);
         data.putExtra(Constants.AD_URL, newImageList);
     }
 
@@ -161,11 +150,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         item.setLocation(location);
 
 
-        //alte URLS setzen wenn nicht geändert, sonst NULL
-        //TODO: was wenn nur ein teil angefasst wurde: eins gelöscht, zwei nue hinzu?
         //no image changes/edits/delete -> only use old ones
-        //muss immer gesetzt werden, angepasst ist schon, ausser wenn leer, dann nicht
-        Log.d("CONAN", "array vor abschicken: "+data.getStringExtra(Constants.AD_URL));
+        //if URLs string is empty do not set URLS -> URLs are NULL
         if (!"".equals(data.getStringExtra(Constants.AD_URL))) {
             item.setUrl(data.getStringExtra(Constants.AD_URL));
         }
@@ -181,6 +167,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                             view.hideMainProgress();
                             uploadPic(Long.parseLong(articleId.toString()), newFilesForUpload);
                         } else {
+                            Toast.makeText(view, "Anzeige geändert!", Toast.LENGTH_SHORT).show();
                             view.finish();
                         }
                     }
@@ -296,7 +283,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         public void onCompleted() {
                             //finish activity when last file uploaded
                             if (counter == imageFiles.size() - 1) {
-                                Toast.makeText(context, "Neue Anzeige erstellt!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Neue Anzeige erstellt/geändert!", Toast.LENGTH_SHORT).show();
                                 view.finish();
                             }
                         }

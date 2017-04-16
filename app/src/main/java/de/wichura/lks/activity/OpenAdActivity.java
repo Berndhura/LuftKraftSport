@@ -126,8 +126,6 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         //get data from Intent from mainActivity
         if (!"article".equals(getIntent().getStringExtra(Constants.NOTIFICATION_TYPE))) {
             //intent comes from article overview
-            //TODO more images
-            //String pictureUri = getIntent().getStringExtra(Constants.URI);
             String pictureUri = getIntent().getStringExtra(Constants.URI_AS_LIST);
             mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
             Float price = getIntent().getFloatExtra(Constants.PRICE, 0);
@@ -232,14 +230,28 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         presenter.loadBookmarksForUser();
 
         mBookmarkButton.setOnClickListener((view) -> {
-            if (!"".equals(getUserId())) {
-                if (isBookmarked) {
-                    presenter.deleteBookmark(mAdId, utils.getUserToken());
-                } else {
-                    presenter.bookmarkAd(mAdId, utils.getUserToken());
-                }
+            if (isOwnAd()) {
+                Intent i = new Intent(this, NewAdActivity.class);
+                i.putExtra(Constants.ARTICLE_ID, getIntent().getLongExtra(Constants.ARTICLE_ID, 0));
+                i.putExtra(Constants.TITLE, getIntent().getStringExtra(Constants.TITLE));
+                i.putExtra(Constants.DESCRIPTION, getIntent().getStringExtra(Constants.DESCRIPTION));
+                i.putExtra(Constants.PRICE, String.valueOf(getIntent().getFloatExtra(Constants.PRICE, 0)));
+                i.putExtra(Constants.AD_URL, getIntent().getStringExtra(Constants.AD_URL));
+                i.putExtra(Constants.LAT, getIntent().getDoubleExtra(Constants.LAT, 0));
+                i.putExtra(Constants.LNG, getIntent().getDoubleExtra(Constants.LNG, 0));
+                i.putExtra(Constants.DATE, getIntent().getDoubleExtra(Constants.DATE, 0));
+                startActivityForResult(i, Constants.REQUEST_ID_FOR_NEW_AD);
             } else {
-                Toast.makeText(this, "Bitte anmelden!", Toast.LENGTH_LONG).show();
+
+                if (!"".equals(getUserId())) {
+                    if (isBookmarked) {
+                        presenter.deleteBookmark(mAdId, utils.getUserToken());
+                    } else {
+                        presenter.bookmarkAd(mAdId, utils.getUserToken());
+                    }
+                } else {
+                    Toast.makeText(this, "Bitte anmelden!", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -284,14 +296,19 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     public void updateBookmarkButton(Long[] bookmark) {
-        isBookmarked = false;
-        ArrayList<Long> bookmarkList = new ArrayList<>(Arrays.asList(bookmark));
-        if (bookmarkList.contains(Long.parseLong(mAdId.toString()))) {
-            mBookmarkButton.setText("Vergessen");
-            mBookmarkButton.setClickable(true);
-            isBookmarked = true;
+        if (!isOwnAd()) {
+            isBookmarked = false;
+            ArrayList<Long> bookmarkList = new ArrayList<>(Arrays.asList(bookmark));
+            if (bookmarkList.contains(Long.parseLong(mAdId.toString()))) {
+                mBookmarkButton.setText("Vergessen");
+                mBookmarkButton.setClickable(true);
+                isBookmarked = true;
+            } else {
+                mBookmarkButton.setText("Merken");
+                mBookmarkButton.setClickable(true);
+            }
         } else {
-            mBookmarkButton.setText("Merken");
+            mBookmarkButton.setText("Bearbeiten");
             mBookmarkButton.setClickable(true);
         }
     }

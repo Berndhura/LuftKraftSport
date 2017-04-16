@@ -192,7 +192,6 @@ public class NewAdActivity extends AppCompatActivity implements
                                 }
                             });
                 }
-
                 //show one more empty image view for user -> more images to add but no remove button
                 if (size < 5) imageView.get(size).setVisibility(View.VISIBLE);
 
@@ -273,15 +272,13 @@ public class NewAdActivity extends AppCompatActivity implements
     }
 
     private void removeImageAndUpdate(Integer counter) {
-        //TODO remove images sofort ? oder alles zusammen?
-        //imageView.get(counter).setImageDrawable(null);
-       // removeImgButton.get(counter).setVisibility(View.GONE);
+        imageView.get(counter).setImageResource(R.drawable.empty_photo);
+        removeImgButton.get(counter).setVisibility(View.GONE);
+        //wenn altes bild -> add to remove list
+        changedImages[counter] = true;
     }
 
     private void prepareFilesToDelete(List<String> images) {
-
-        //TODO wenn schonmal drinnen, nicht wieder mit rein nehmen!!
-        //TODO wenn original -> nüscht machen!! schwer
         deleteFilesList.clear();
         for (int i = 0; i < 5; i++) {
             if (changedImages[i]) {
