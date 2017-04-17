@@ -26,11 +26,11 @@
                 android:id="@+id/open_Ad_ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:indicator="LineScaleParty"
-                app:indicator_color="#FFFFFF"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="10dp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                app:indicator="LineScaleParty"
+                app:indicator_color="#FFFFFF" />
 
         </RelativeLayout>
 
@@ -48,52 +48,42 @@
             android:orientation="vertical">
 
             <de.wichura.lks.activity.HeightWrappingViewPager
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/view_pager"
-                android:adjustViewBounds="true"
-                android:layout_marginLeft="20sp"
-                android:layout_marginRight="20sp"/>
-
-            <!--de.wichura.lks.util.ProportionalImageView
-                android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20sp"
                 android:layout_marginRight="20sp"
-                android:adjustViewBounds="true" /-->
+                android:adjustViewBounds="true" />
 
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="0.7"
-                    android:gravity="start"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_corner_for_tv"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:maxLines="1"
+                android:paddingBottom="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="0.3"
-                    android:gravity="center_horizontal"
-                    android:paddingBottom="10dp"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/description"
