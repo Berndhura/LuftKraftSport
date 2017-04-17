@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,13 +151,13 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 Integer id = rowItem.getId();
                 if (bookmarks != null && bookmarks.contains(Long.parseLong(id.toString()))) {
                     LinearLayout vwParentRow = (LinearLayout) view.getParent();
-                    ((ImageView) vwParentRow.getChildAt(1)).setImageResource(R.drawable.bockmark_star_empty);
+                    ((ImageView) vwParentRow.getChildAt(2)).setImageResource(R.drawable.bockmark_star_empty);
                     vwParentRow.refreshDrawableState();
                     removeFromBookmark(id);
                     presenter.deleteBookmark(id);
                 } else {
                     LinearLayout vwParentRow = (LinearLayout) view.getParent();
-                    ((ImageView) vwParentRow.getChildAt(1)).setImageResource(R.drawable.bockmark_star_full);
+                    ((ImageView) vwParentRow.getChildAt(2)).setImageResource(R.drawable.bockmark_star_full);
                     vwParentRow.refreshDrawableState();
                     bookmarks.add(Long.parseLong(id.toString()));
                     presenter.bookmarkAd(id);

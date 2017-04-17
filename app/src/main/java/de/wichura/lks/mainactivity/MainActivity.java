@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -113,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements
     private Boolean isBookmarks;
     private Boolean isMyAds;
     private Boolean isSearch;
+
+    //search again
+    private Button searchAgainButton;
 
 
     @Override
@@ -262,6 +266,8 @@ public class MainActivity extends AppCompatActivity implements
 
         registerLoginReceiver();
 
+        initSearchAginButton();
+
         if (getIntent().getStringExtra(Constants.USER_ID_FROM_AD) != null) {
             String userId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
             setMyAdsFlag(false);
@@ -276,6 +282,18 @@ public class MainActivity extends AppCompatActivity implements
             setMyAdsFlag(false);
             getAds(Constants.TYPE_ALL);
         }
+    }
+
+    private void initSearchAginButton() {
+        searchAgainButton = (Button) findViewById(R.id.search_again);
+        searchAgainButton.setOnClickListener(v -> {
+            final Intent searchIntent = new Intent(this, SearchActivity.class);
+            searchIntent.putExtra(Constants.TITLE, "maulfresse");
+            searchIntent.putExtra(Constants.PRICE_FROM, 1);
+            searchIntent.putExtra(Constants.PRICE_TO, 99);
+            //TODO alten werte mitgeben für neue suche siehe zeile 600
+            startActivityForResult(searchIntent, Constants.REQUEST_ID_FOR_SEARCH);
+        });
     }
 
     private void setupMessageBroadcastReceiver() {
@@ -590,6 +608,9 @@ public class MainActivity extends AppCompatActivity implements
                             keyword,
                             null); //userId
                     drawer.closeDrawer(GravityCompat.START);
+                    searchAgainButton.setVisibility(View.VISIBLE);
+
+                    //TODO aktuelle suchparameter speichern for "serach again" button
                 }
                 break;
             }
@@ -621,6 +642,7 @@ public class MainActivity extends AppCompatActivity implements
             setMyAdsFlag(false);
             isSearch = false;
             getAds(Constants.TYPE_ALL);
+
         } else {
             if (isTaskRoot()) {
                 new ExitDialogFragment().show(getSupportFragmentManager(), null);
@@ -693,6 +715,8 @@ public class MainActivity extends AppCompatActivity implements
                 isMyAds = false;
                 isBookmarks = false;
                 isSearch = true;
+                searchAgainButton.setVisibility(View.GONE);
+                //TODO alten search parameter mitgeben!
                 final Intent searchIntent = new Intent(this, SearchActivity.class);
                 startActivityForResult(searchIntent, Constants.REQUEST_ID_FOR_SEARCH);
                 return true;

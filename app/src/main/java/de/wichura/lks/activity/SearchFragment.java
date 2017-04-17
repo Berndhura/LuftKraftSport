@@ -82,13 +82,17 @@ public class SearchFragment extends Fragment {
 
         keywords = (TextView) view.findViewById(R.id.keywords);
 
+        //in case we come back from main activity for search again -> use old search parameter
+        if (getActivity().getIntent().getStringExtra(Constants.TITLE) != null) {
+            keywords.setText(getActivity().getIntent().getStringExtra(Constants.TITLE));
+        }
+
         price = (TextView) view.findViewById(R.id.price_from);
         price.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
 
         ImageView changePriceBtn = (ImageView) view.findViewById(R.id.changePrice);
 
         Button searchButton = (Button) view.findViewById(R.id.search_button);
-
         searchButton.setOnClickListener(v -> {
 
             priceFrom = getPrice(Constants.PRICE_FROM);
@@ -116,7 +120,7 @@ public class SearchFragment extends Fragment {
             }
 
             data.putExtra(Constants.DISTANCE, getDistance());
-
+            data.putExtra(Constants.TITLE, keywords.getText());
             getActivity().setResult(RESULT_OK, data);
             getActivity().finish();
         });

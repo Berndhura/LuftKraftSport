@@ -92,12 +92,12 @@ public class SetPriceDialog extends DialogFragment {
 
         View view = inflater.inflate(R.layout.set_price_activity, null);
 
-        ((TextView)view.findViewById(R.id.priceFrom)).setOnTouchListener((v,  event) -> {
+        view.findViewById(R.id.priceFrom).setOnTouchListener((v, event) -> {
             ((TextView)view.findViewById(R.id.priceFrom)).setText("");
             return false;
         });
 
-        ((TextView)view.findViewById(R.id.priceFrom)).setOnClickListener(v ->  ((TextView)view.findViewById(R.id.priceFrom)).setText(""));
+        view.findViewById(R.id.priceFrom).setOnClickListener(v ->  ((TextView)view.findViewById(R.id.priceFrom)).setText(""));
         return dialog;
     }
 

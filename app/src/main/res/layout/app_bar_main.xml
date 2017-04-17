@@ -43,6 +43,17 @@
                 android:src="@drawable/ic_email_white_24dp"
                 android:visibility="gone" />
 
+            <Button
+                android:id="@+id/search_again"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="8dp"
+                android:background="@drawable/rounded_corners"
+                android:text="Suche anpassen"
+                android:textColor="@color/app_blue"
+                android:visibility="gone" />
+
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
