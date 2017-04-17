@@ -117,6 +117,9 @@ public class MainActivity extends AppCompatActivity implements
 
     //search again
     private Button searchAgainButton;
+    private String searchKeyword;
+    private String searchPriceFrom;
+    private String searchPriceTo;
 
 
     @Override
@@ -266,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements
 
         registerLoginReceiver();
 
-        initSearchAginButton();
+        initSearchAgainButton();
 
         if (getIntent().getStringExtra(Constants.USER_ID_FROM_AD) != null) {
             String userId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
@@ -284,14 +287,13 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void initSearchAginButton() {
+    private void initSearchAgainButton() {
         searchAgainButton = (Button) findViewById(R.id.search_again);
         searchAgainButton.setOnClickListener(v -> {
             final Intent searchIntent = new Intent(this, SearchActivity.class);
-            searchIntent.putExtra(Constants.TITLE, "maulfresse");
-            searchIntent.putExtra(Constants.PRICE_FROM, 1);
-            searchIntent.putExtra(Constants.PRICE_TO, 99);
-            //TODO alten werte mitgeben für neue suche siehe zeile 600
+            searchIntent.putExtra(Constants.TITLE, searchKeyword);
+            searchIntent.putExtra(Constants.PRICE_FROM, searchPriceFrom);
+            searchIntent.putExtra(Constants.PRICE_TO, searchPriceTo);
             startActivityForResult(searchIntent, Constants.REQUEST_ID_FOR_SEARCH);
         });
     }
@@ -595,22 +597,20 @@ public class MainActivity extends AppCompatActivity implements
             }
             case Constants.REQUEST_ID_FOR_SEARCH: {
                 if (data != null) {
-                    String keyword = data.getStringExtra(Constants.KEYWORDS);
-                    String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
-                    String priceTo = data.getStringExtra(Constants.PRICE_TO);
+                    searchKeyword = data.getStringExtra(Constants.KEYWORDS);
+                    searchPriceFrom = data.getStringExtra(Constants.PRICE_FROM);
+                    searchPriceTo = data.getStringExtra(Constants.PRICE_TO);
                     int distance = data.getIntExtra(Constants.DISTANCE, Constants.DISTANCE_INFINITY);
                     setMyAdsFlag(false);
 
                     presenterLayer.searchForArticles(0, size,
-                            priceFrom.equals("") ? null : Integer.parseInt(priceFrom),
-                            priceTo.equals("") ? null : Integer.parseInt(priceTo),
+                            searchPriceFrom.equals("") ? null : Integer.parseInt(searchPriceFrom),
+                            searchPriceTo.equals("") ? null : Integer.parseInt(searchPriceTo),
                             distance,
-                            keyword,
+                            searchKeyword,
                             null); //userId
                     drawer.closeDrawer(GravityCompat.START);
                     searchAgainButton.setVisibility(View.VISIBLE);
-
-                    //TODO aktuelle suchparameter speichern for "serach again" button
                 }
                 break;
             }

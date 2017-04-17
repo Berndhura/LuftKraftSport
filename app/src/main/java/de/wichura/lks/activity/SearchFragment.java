@@ -81,14 +81,16 @@ public class SearchFragment extends Fragment {
         });
 
         keywords = (TextView) view.findViewById(R.id.keywords);
+        price = (TextView) view.findViewById(R.id.price_from);
+        price.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
+
 
         //in case we come back from main activity for search again -> use old search parameter
         if (getActivity().getIntent().getStringExtra(Constants.TITLE) != null) {
             keywords.setText(getActivity().getIntent().getStringExtra(Constants.TITLE));
+            //TODO price wieder setzen wie keywords
         }
 
-        price = (TextView) view.findViewById(R.id.price_from);
-        price.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
 
         ImageView changePriceBtn = (ImageView) view.findViewById(R.id.changePrice);
 

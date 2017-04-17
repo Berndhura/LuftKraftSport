@@ -130,8 +130,6 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
     private void updateTextAndNewImages(Intent data) {
 
-        //TODO anderen an der anzeige selbst
-
         final ArrayList<FileNameParcelable> newFilesForUpload = new ArrayList<>(data.getParcelableArrayListExtra(Constants.FILENAME));
 
         Integer articleId = data.getIntExtra(Constants.ARTICLE_ID, 0);
