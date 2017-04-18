@@ -8,18 +8,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import de.wichura.lks.R;
-import de.wichura.lks.activity.SearchFragment;
 import de.wichura.lks.mainactivity.Constants;
 
 /**
@@ -30,7 +23,7 @@ import de.wichura.lks.mainactivity.Constants;
 public class SetPriceDialog extends DialogFragment {
 
     private TextView priceFromTv;
-    private TextView  priceToTv;
+    private TextView priceToTv;
 
     public interface OnCompleteListener {
         void onPriceRangeComplete(String priceFrom, String priceTo);
@@ -42,9 +35,8 @@ public class SetPriceDialog extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            this.mListener = (SetPriceDialog.OnCompleteListener)activity;
-        }
-        catch (final ClassCastException e) {
+            this.mListener = (SetPriceDialog.OnCompleteListener) activity;
+        } catch (final ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnCompleteListener");
         }
     }
@@ -93,11 +85,11 @@ public class SetPriceDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.set_price_activity, null);
 
         view.findViewById(R.id.priceFrom).setOnTouchListener((v, event) -> {
-            ((TextView)view.findViewById(R.id.priceFrom)).setText("");
+            ((TextView) view.findViewById(R.id.priceFrom)).setText("");
             return false;
         });
 
-        view.findViewById(R.id.priceFrom).setOnClickListener(v ->  ((TextView)view.findViewById(R.id.priceFrom)).setText(""));
+        view.findViewById(R.id.priceFrom).setOnClickListener(v -> ((TextView) view.findViewById(R.id.priceFrom)).setText(""));
         return dialog;
     }
 
