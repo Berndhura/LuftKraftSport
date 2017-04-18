@@ -290,6 +290,7 @@ public class MainActivity extends AppCompatActivity implements
     private void initSearchAgainButton() {
         searchAgainButton = (Button) findViewById(R.id.search_again);
         searchAgainButton.setOnClickListener(v -> {
+            searchAgainButton.setVisibility(View.GONE);
             final Intent searchIntent = new Intent(this, SearchActivity.class);
             searchIntent.putExtra(Constants.TITLE, searchKeyword);
             searchIntent.putExtra(Constants.PRICE_FROM, searchPriceFrom);
@@ -628,6 +629,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+        //in case we are back from search and do not care to adapt search
+        searchAgainButton.setVisibility(View.GONE);
+
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (isBookmarks) {
@@ -683,6 +687,9 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         final String userId = getUserId();
+
+        //in case we are back from search and do not care to adapt search
+        searchAgainButton.setVisibility(View.GONE);
 
         switch (item.getItemId()) {
             case R.id.myads: {

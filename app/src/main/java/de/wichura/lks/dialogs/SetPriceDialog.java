@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import de.wichura.lks.R;
@@ -40,29 +42,14 @@ public class SetPriceDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        return new AlertDialog.Builder(getActivity())
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.price_range)
                 .setView(R.layout.set_price_activity)
                 .setCancelable(false)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        priceFromTv = (TextView) getDialog().findViewById(R.id.priceFrom);
-                        priceToTv = (TextView) getDialog().findViewById(R.id.priceTo);
-
-                       /* priceFromTv.setOnClickListener(view -> priceFromTv.setText(""));
-                        priceFromTv.setOnTouchListener((view, event) -> {
-                            priceFromTv.setText("");
-                            return false;
-                        });
-
-                        priceToTv.setOnClickListener(view -> priceToTv.setText(""));
-                        priceToTv.setOnTouchListener((view, event) -> {
-                            priceToTv.setText("");
-                            return false;
-                        });*/
-
-                        getPrices();
+                        //nothing here
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -70,8 +57,63 @@ public class SetPriceDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         getDialog().cancel();
                     }
-                })
-                .create();
+                });
+
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        Button theButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        theButton.setOnClickListener(new CustomListener(alertDialog));
+
+
+        return alertDialog;
+    }
+
+    private class CustomListener implements View.OnClickListener {
+        private final Dialog dialog;
+
+        private CustomListener(Dialog dialog) {
+            this.dialog = dialog;
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            priceFromTv = (TextView) getDialog().findViewById(R.id.priceFrom);
+            priceToTv = (TextView) getDialog().findViewById(R.id.priceTo);
+
+            if (validatePriceRange()) {
+                getPrices();
+                dismiss();
+            } else {
+                return;
+            }
+        }
+    }
+
+    private boolean validatePriceRange() {
+        boolean valid = true;
+
+        String priceMin = priceFromTv.getText().toString();
+        if (priceMin.isEmpty()) {
+            priceFromTv.setError("Richtigen Wert angeben!");
+            valid = false;
+        } else {
+            priceFromTv.setError(null);
+        }
+
+        String priceMax = priceToTv.getText().toString();
+        if (priceMax.isEmpty()) {
+            priceToTv.setError("Richtigen Wert angeben!");
+            valid = false;
+        } else if (Integer.parseInt(priceMin) > Integer.parseInt(priceMax)) {
+            priceToTv.setError("Maximum ist kleiner als das Minimum -> Quatsch!");
+            valid = false;
+        } else {
+            priceToTv.setError(null);
+        }
+
+        return valid;
     }
 
     private void getPrices() {

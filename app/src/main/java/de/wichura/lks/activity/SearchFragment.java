@@ -88,7 +88,7 @@ public class SearchFragment extends Fragment {
         //in case we come back from main activity for search again -> use old search parameter
         if (getActivity().getIntent().getStringExtra(Constants.TITLE) != null) {
             keywords.setText(getActivity().getIntent().getStringExtra(Constants.TITLE));
-            //TODO price wieder setzen wie keywords
+            adaptLayoutForPrice(getActivity().getIntent().getStringExtra(Constants.PRICE_FROM), getActivity().getIntent().getStringExtra(Constants.PRICE_TO));
         }
 
 
