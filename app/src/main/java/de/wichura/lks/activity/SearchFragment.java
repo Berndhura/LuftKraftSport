@@ -164,12 +164,20 @@ public class SearchFragment extends Fragment {
 
     private int getMinPrice() {
         String minPrice = getActivity().getSharedPreferences(Constants.USER_PRICE_RANGE, MODE_PRIVATE).getString(Constants.PRICE_FROM, "");
-        return (getString(R.string.price_does_not_matter).equals(minPrice)) ? 0 : Integer.parseInt(minPrice); //TODO initial leer
+        if ("".equals(minPrice)) {
+            return 0;
+        } else {
+            return (getString(R.string.price_does_not_matter).equals(minPrice)) ? 0 : Integer.parseInt(minPrice);
+        }
     }
 
     private int getMaxPrice() {
         String maxPrice = getActivity().getSharedPreferences(Constants.USER_PRICE_RANGE, MODE_PRIVATE).getString(Constants.PRICE_TO, "");
-        return (getString(R.string.price_does_not_matter).equals(maxPrice)) ? Constants.MAX_PRICE : Integer.parseInt(maxPrice);
+        if ("".equals(maxPrice)) {
+            return Constants.MAX_PRICE;
+        } else {
+            return (getString(R.string.price_does_not_matter).equals(maxPrice)) ? Constants.MAX_PRICE : Integer.parseInt(maxPrice);
+        }
     }
 
     @Override

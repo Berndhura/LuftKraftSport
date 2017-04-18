@@ -5,11 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.TextView;
 
 import de.wichura.lks.R;
@@ -44,8 +40,7 @@ public class SetPriceDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-
-        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.price_range)
                 .setView(R.layout.set_price_activity)
                 .setCancelable(false)
@@ -77,28 +72,6 @@ public class SetPriceDialog extends DialogFragment {
                     }
                 })
                 .create();
-
-        Fragment f = getCurrentFragment();
-
-        LayoutInflater inflater = f.getLayoutInflater(savedInstanceState);
-
-        View view = inflater.inflate(R.layout.set_price_activity, null);
-
-        view.findViewById(R.id.priceFrom).setOnTouchListener((v, event) -> {
-            ((TextView) view.findViewById(R.id.priceFrom)).setText("");
-            return false;
-        });
-
-        view.findViewById(R.id.priceFrom).setOnClickListener(v -> ((TextView) view.findViewById(R.id.priceFrom)).setText(""));
-        return dialog;
-    }
-
-    private Fragment getCurrentFragment() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        int stackCount = fragmentManager.getBackStackEntryCount();
-        if (fragmentManager.getFragments() != null)
-            return fragmentManager.getFragments().get(stackCount > 0 ? stackCount - 1 : stackCount);
-        else return null;
     }
 
     private void getPrices() {
@@ -111,7 +84,6 @@ public class SetPriceDialog extends DialogFragment {
 
         String priceTo = priceToTv.getText().toString();
         if ("Beliebig".equals(priceTo)) {
-            //TODO: hoechstgrenze unklar
             priceTo = Constants.MAX_PRICE.toString();
         } else {
             priceTo = priceToTv.getText().toString();
