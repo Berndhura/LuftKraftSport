@@ -52,6 +52,7 @@
     <string name="empty_Ads_list_no_network">No Ads information available. The network is not available to fetch data.</string>
     <string name="search_for_keyword">Suche:</string>
     <string name="search_price">Preis:</string>
+    <string name="search_location">Ort:</string>
 
     <string name="crash_dialog_text">Senden der crashinformationen. ok!!</string>
     <string name="crash_notification_text">öffne mich!!!</string>

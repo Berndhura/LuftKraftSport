@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +39,8 @@ public class SearchFragment extends Fragment {
 
     private TextView keywords;
     private TextView price;
+    private TextView location;
+    private ImageView changeLocation;
     private String priceTo;
     private String priceFrom;
 
@@ -82,6 +85,25 @@ public class SearchFragment extends Fragment {
 
         keywords = (TextView) view.findViewById(R.id.keywords);
         price = (TextView) view.findViewById(R.id.price_from);
+
+        changeLocation = (ImageView) view.findViewById(R.id.search_change_location);
+        changeLocation.setOnClickListener(v -> {
+            // Create fragment and give it an argument specifying the article it should show
+            LocationFragment newFragment = new LocationFragment();
+            Bundle args = new Bundle();
+            //args.putInt(LocationFragment.ARG_POSITION, position);
+            newFragment.setArguments(args);
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.layout, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        });
+
+        location = (TextView) view.findViewById(R.id.search_location_zip_and_location);
+        location.setText(getLocationString());
+
         price.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
 
 
@@ -211,6 +233,12 @@ public class SearchFragment extends Fragment {
         if (((SearchActivity) getActivity()).getSupportActionBar() != null)
             ((SearchActivity) getActivity()).getSupportActionBar()
                     .setSubtitle("in " + location.getString(Constants.LOCATION, "") + ((distance == DISTANCE_INFINITY) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)")));
+    }
+
+    private String getLocationString() {
+        SharedPreferences location = getActivity().getSharedPreferences(Constants.USERS_LOCATION, 0);
+        int distance = location.getInt(Constants.DISTANCE, DISTANCE_INFINITY);
+        return location.getString(Constants.LOCATION, "") + ((distance == DISTANCE_INFINITY) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)"));
     }
 
     public String getUserToken() {
