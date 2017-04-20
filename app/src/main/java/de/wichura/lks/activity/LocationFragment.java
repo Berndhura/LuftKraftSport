@@ -135,7 +135,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
             transaction.addToBackStack(null);
             transaction.commit();
         });
-        saveSearchButton.setVisibility(View.VISIBLE);
+        saveSearchButton.setVisibility(View.VISIBLE );
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();

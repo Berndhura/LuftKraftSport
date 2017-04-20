@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import butterknife.InjectView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.wichura.lks.R;
 import de.wichura.lks.dialogs.ConfirmFollowSearchDialog;
 import de.wichura.lks.dialogs.SetPriceDialog;
@@ -38,27 +38,31 @@ import static de.wichura.lks.mainactivity.Constants.USER_PRICE_RANGE;
 
 public class SearchFragment extends Fragment {
 
-    @InjectView(R.id.keywords)
-    private TextView keywords;
+    @BindView(R.id.keywords)
+    TextView keywords;
 
-    @InjectView(R.id.price_from)
-    private TextView price;
+    @BindView(R.id.price_from)
+    TextView price;
 
-    @InjectView(R.id.search_location_zip_and_location)
-    private TextView location;
+    @BindView(R.id.search_location_zip_and_location)
+    TextView location;
 
-    @InjectView(R.id.search_change_location)
-    private ImageView changeLocation;
+    @BindView(R.id.search_change_location)
+    ImageView changeLocation;
 
-    private String priceTo;
+    String priceTo;
 
-    private String priceFrom;
+    String priceFrom;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.search_activity, container, false);
+        View view = inflater.inflate(R.layout.search_activity, container, false);
+
+        ButterKnife.bind(this, view);
+
+        return view;
     }
 
     @Override

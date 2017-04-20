@@ -82,7 +82,8 @@ dependencies {
     //ShortcutBadger icon for incoming massages
     compile "me.leolin:ShortcutBadger:1.1.14@aar"
     //Butterknife
-    compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
 
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
