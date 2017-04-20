@@ -284,7 +284,9 @@ public class NewAdActivity extends AppCompatActivity implements
             if (changedImages[i]) {
                 //if image.size() is smaller than i -> new picture was added, nothing old to delete
                 if (images.size() > i) {
-                    deleteFilesList.put(i, Long.parseLong(images.get(i)));
+                    if (!"".equals(images.get(i))) {
+                        deleteFilesList.put(i, Long.parseLong(images.get(i)));
+                    }
                 }
             }
         }

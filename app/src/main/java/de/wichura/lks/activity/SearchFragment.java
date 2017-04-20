@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.InjectView;
 import de.wichura.lks.R;
 import de.wichura.lks.dialogs.ConfirmFollowSearchDialog;
 import de.wichura.lks.dialogs.SetPriceDialog;
@@ -37,11 +38,20 @@ import static de.wichura.lks.mainactivity.Constants.USER_PRICE_RANGE;
 
 public class SearchFragment extends Fragment {
 
+    @InjectView(R.id.keywords)
     private TextView keywords;
+
+    @InjectView(R.id.price_from)
     private TextView price;
+
+    @InjectView(R.id.search_location_zip_and_location)
     private TextView location;
+
+    @InjectView(R.id.search_change_location)
     private ImageView changeLocation;
+
     private String priceTo;
+
     private String priceFrom;
 
     @Override
@@ -83,10 +93,6 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        keywords = (TextView) view.findViewById(R.id.keywords);
-        price = (TextView) view.findViewById(R.id.price_from);
-
-        changeLocation = (ImageView) view.findViewById(R.id.search_change_location);
         changeLocation.setOnClickListener(v -> {
             // Create fragment and give it an argument specifying the article it should show
             LocationFragment newFragment = new LocationFragment();
@@ -101,7 +107,6 @@ public class SearchFragment extends Fragment {
             transaction.commit();
         });
 
-        location = (TextView) view.findViewById(R.id.search_location_zip_and_location);
         location.setText(getLocationString());
 
         price.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
@@ -226,13 +231,13 @@ public class SearchFragment extends Fragment {
         return valid;
     }
 
-
     private void showLocation() {
         SharedPreferences location = getActivity().getSharedPreferences(Constants.USERS_LOCATION, 0);
         int distance = location.getInt(Constants.DISTANCE, DISTANCE_INFINITY);
-        if (((SearchActivity) getActivity()).getSupportActionBar() != null)
+        if (((SearchActivity) getActivity()).getSupportActionBar() != null) {
             ((SearchActivity) getActivity()).getSupportActionBar()
                     .setSubtitle("in " + location.getString(Constants.LOCATION, "") + ((distance == DISTANCE_INFINITY) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)")));
+        }
     }
 
     private String getLocationString() {
@@ -258,7 +263,6 @@ public class SearchFragment extends Fragment {
         SharedPreferences settings = getActivity().getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
         return settings.getInt(Constants.DISTANCE, Constants.DISTANCE_INFINITY);
     }
-
 
     public Double getLat() {
         SharedPreferences settings = getActivity().getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
