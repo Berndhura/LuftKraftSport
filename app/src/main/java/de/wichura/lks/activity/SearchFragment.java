@@ -81,7 +81,8 @@ public class SearchFragment extends Fragment {
             toolbar.setNavigationOnClickListener((v) -> getActivity().finish());
         }
 
-        ImageView saveSearchButton = (ImageView) view.findViewById(R.id.save_search);
+        //TODO: save search move to tab bar
+       /* ImageView saveSearchButton = (ImageView) view.findViewById(R.id.save_search);
         saveSearchButton.setOnClickListener((v) -> {
             if (!"".equals(getUserToken())) {
                 if (!isSaveSearchValid()) {
@@ -91,7 +92,7 @@ public class SearchFragment extends Fragment {
             } else {
                 Toast.makeText(getActivity(), "Bitte anmelden, um Suche zu folgen!", Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
 
         changeLocation.setOnClickListener(v -> {
             // Create fragment and give it an argument specifying the article it should show

@@ -9,15 +9,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -118,6 +121,22 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
             ((SearchActivity) getActivity()).setSupportActionBar(toolbar);
         }
 
+        ImageView saveSearchButton = (ImageView) view.findViewById(R.id.close_location_map);
+        saveSearchButton.setOnClickListener((v) -> {
+            // Create fragment and give it an argument specifying the article it should show
+            SearchFragment newFragment = new SearchFragment();
+            Bundle args = new Bundle();
+            //args.putInt(LocationFragment.ARG_POSITION, position);
+            newFragment.setArguments(args);
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.layout, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        });
+        saveSearchButton.setVisibility(View.VISIBLE);
+
         buildGoogleApiClient();
         mGoogleApiClient.connect();
     }
@@ -177,6 +196,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
 
     private void adaptToolbar(int progress) {
         ((SearchActivity) getActivity()).getSupportActionBar().setSubtitle(((progress == 500) ? "Unbegrenzt" : ("Im Umkreis: " + String.valueOf(progress)) + " km"));
+        ((SearchActivity) getActivity()).getSupportActionBar();
     }
 
     @Override

@@ -23,14 +23,14 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextColor="@android:color/white" />
 
-            <ImageView
+            <!--ImageView
                 android:id="@+id/save_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="20dp"
-                app:srcCompat="@drawable/ic_add_alert_white_24dp" />
+                app:srcCompat="@drawable/ic_add_alert_white_24dp" /-->
 
         </RelativeLayout>
 
