@@ -8,11 +8,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +47,9 @@ public class SearchFragment extends Fragment {
 
     @BindView(R.id.search_location_zip_and_location)
     TextView location;
+
+    @BindView(R.id.follow_search)
+    TextView followSearch;
 
     String priceTo;
 
@@ -82,9 +86,7 @@ public class SearchFragment extends Fragment {
             toolbar.setNavigationOnClickListener((v) -> getActivity().finish());
         }
 
-        //TODO: save search move to tab bar
-       /* ImageView saveSearchButton = (ImageView) view.findViewById(R.id.save_search);
-        saveSearchButton.setOnClickListener((v) -> {
+        followSearch.setOnClickListener(v -> {
             if (!"".equals(getUserToken())) {
                 if (!isSaveSearchValid()) {
                     return;
@@ -93,7 +95,51 @@ public class SearchFragment extends Fragment {
             } else {
                 Toast.makeText(getActivity(), "Bitte anmelden, um Suche zu folgen!", Toast.LENGTH_LONG).show();
             }
-        });*/
+        });
+
+        keywords.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (keywords.getRight() - keywords.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        priceFrom = getPrice(Constants.PRICE_FROM);
+                        priceTo = getPrice(Constants.PRICE_TO);
+
+                        final Intent data = new Intent();
+                        data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
+
+                        if (getString(R.string.price_does_not_matter).equals(price.getText().toString())) {
+                            data.putExtra(Constants.PRICE_FROM, "");
+                            data.putExtra(Constants.PRICE_TO, "");
+                        } else {
+
+                            if (getString(R.string.price_does_not_matter).equals(priceFrom)) {
+                                data.putExtra(Constants.PRICE_FROM, "");
+                            } else {
+                                data.putExtra(Constants.PRICE_FROM, priceFrom);
+                            }
+
+                            if (getString(R.string.price_does_not_matter).equals(priceTo)) {
+                                data.putExtra(Constants.PRICE_TO, "");
+                            } else {
+                                data.putExtra(Constants.PRICE_TO, priceTo);
+                            }
+                        }
+                        data.putExtra(Constants.DISTANCE, getDistance());
+                        data.putExtra(Constants.TITLE, keywords.getText());
+                        getActivity().setResult(RESULT_OK, data);
+                        getActivity().finish();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
         location.setOnClickListener(v -> {
             // Create fragment and give it an argument specifying the article it should show
@@ -120,43 +166,12 @@ public class SearchFragment extends Fragment {
             adaptLayoutForPrice(getActivity().getIntent().getStringExtra(Constants.PRICE_FROM), getActivity().getIntent().getStringExtra(Constants.PRICE_TO));
         }
 
-            //TODO search anpassen
-       // ImageView changePriceBtn = (ImageView) view.findViewById(R.id.changePrice);
 
-        Button searchButton = (Button) view.findViewById(R.id.search_button);
+        /*Button searchButton = (Button) view.findViewById(R.id.search_button);
         searchButton.setOnClickListener(v -> {
 
-            priceFrom = getPrice(Constants.PRICE_FROM);
-            priceTo = getPrice(Constants.PRICE_TO);
 
-            final Intent data = new Intent();
-            data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
-
-            if (getString(R.string.price_does_not_matter).equals(price.getText().toString())) {
-                data.putExtra(Constants.PRICE_FROM, "");
-                data.putExtra(Constants.PRICE_TO, "");
-            } else {
-
-                if (getString(R.string.price_does_not_matter).equals(priceFrom)) {
-                    data.putExtra(Constants.PRICE_FROM, "");
-                } else {
-                    data.putExtra(Constants.PRICE_FROM, priceFrom);
-                }
-
-                if (getString(R.string.price_does_not_matter).equals(priceTo)) {
-                    data.putExtra(Constants.PRICE_TO, "");
-                } else {
-                    data.putExtra(Constants.PRICE_TO, priceTo);
-                }
-            }
-
-            data.putExtra(Constants.DISTANCE, getDistance());
-            data.putExtra(Constants.TITLE, keywords.getText());
-            getActivity().setResult(RESULT_OK, data);
-            getActivity().finish();
-        });
-//TODO search anpassen
-        //changePriceBtn.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
+        });*/
     }
 
     public void adaptLayoutForPrice(String from, String to) {

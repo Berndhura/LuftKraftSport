@@ -11,9 +11,9 @@
         id="@+id/tab_list_saved_searches"
         title="Suchaufträge" />
 
-    <tab
+    <!--tab
         icon="@drawable/ic_location_on_white_24dp"
         id="@+id/tab_location"
-        title="Mein Standort" />
+        title="Mein Standort" /-->
 
 </tabs>

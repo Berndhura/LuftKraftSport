@@ -39,12 +39,14 @@ public class SearchActivity extends AppCompatActivity implements
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.tab_location) {
+
+                //TODO kein eigener tab mehr, wird in der search hauptseite befummelt
+                /* if (tabId == R.id.tab_location) {
 
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.layout, new LocationFragment());
                     fragmentTransaction.commit();
-                }
+                }*/
 
                 if (tabId == R.id.tab_list_saved_searches) {
                     if ("".equals(getUserToken())) {
@@ -68,9 +70,14 @@ public class SearchActivity extends AppCompatActivity implements
 
     @Override
     public void onPriceRangeComplete(String priceFrom, String priceTo) {
-        storePriceRange(priceFrom, priceTo );
+        storePriceRange(priceFrom, priceTo);
         Fragment f = getCurrentFragment();
+        //TODO  java.lang.ClassCastException: de.wichura.lks.activity.LocationFragment cannot be cast to de.wichura.lks.activity.SearchFragment
+        //if (f instanceof LocationFragment) {
+        //((LocationFragment) f).adaptLayoutForPrice(priceFrom, priceTo);
+        // } else {
         ((SearchFragment) f).adaptLayoutForPrice(priceFrom, priceTo);
+        // }
     }
 
     private Fragment getCurrentFragment() {

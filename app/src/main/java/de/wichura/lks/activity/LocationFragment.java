@@ -121,10 +121,12 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
             ((SearchActivity) getActivity()).setSupportActionBar(toolbar);
         }
 
-        ImageView saveSearchButton = (ImageView) view.findViewById(R.id.close_location_map);
-        saveSearchButton.setOnClickListener((v) -> {
+        ImageView closeLocation = (ImageView) view.findViewById(R.id.close_location_map);
+        closeLocation.setOnClickListener((v) -> {
+            //TODO zurück stimmt hier irgendwie noch nicht richtig
+            getFragmentManager().popBackStackImmediate();
             // Create fragment and give it an argument specifying the article it should show
-            SearchFragment newFragment = new SearchFragment();
+           /* SearchFragment newFragment = new SearchFragment();
             Bundle args = new Bundle();
             //args.putInt(LocationFragment.ARG_POSITION, position);
             newFragment.setArguments(args);
@@ -133,9 +135,9 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
             // and add the transaction to the back stack so the user can navigate back
             transaction.replace(R.id.layout, newFragment);
             transaction.addToBackStack(null);
-            transaction.commit();
+            transaction.commit();*/
         });
-        saveSearchButton.setVisibility(View.VISIBLE );
+        closeLocation.setVisibility(View.VISIBLE );
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();

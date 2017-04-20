@@ -12,6 +12,7 @@
         android:background="@drawable/round_corner_for_tv"
         android:drawableEnd="@drawable/ic_search_white_24dp"
         android:hint="Was suchst du?"
+        android:cursorVisible="false"
         android:textColorHint="@color/app_blue" />
 
     <EditText
@@ -38,7 +39,19 @@
         android:focusable="false"
         android:inputType="none" />
 
-    <Button
+    <EditText
+        android:id="@+id/follow_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/round_corner_for_tv"
+        android:drawableEnd="@drawable/ic_add_alert_white_24dp"
+        android:hint="Diese Suche speichern und folgen!"
+        android:cursorVisible="false"
+        android:textColorHint="@color/app_blue"
+        android:visibility="gone"/>
+
+    <!--Button
         android:id="@+id/search_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +61,6 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="32dp"
         android:background="@color/colorPrimary"
-        android:text="SUCHE STARTEN" />
-    <!--android:layout_alignParentBottom="true"/-->
+        android:text="SUCHE STARTEN" /-->
 
 </LinearLayout>
