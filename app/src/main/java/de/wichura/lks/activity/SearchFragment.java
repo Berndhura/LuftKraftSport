@@ -47,9 +47,6 @@ public class SearchFragment extends Fragment {
     @BindView(R.id.search_location_zip_and_location)
     TextView location;
 
-    @BindView(R.id.search_change_location)
-    ImageView changeLocation;
-
     String priceTo;
 
     String priceFrom;
@@ -98,7 +95,7 @@ public class SearchFragment extends Fragment {
             }
         });*/
 
-        changeLocation.setOnClickListener(v -> {
+        location.setOnClickListener(v -> {
             // Create fragment and give it an argument specifying the article it should show
             LocationFragment newFragment = new LocationFragment();
             Bundle args = new Bundle();
@@ -123,8 +120,8 @@ public class SearchFragment extends Fragment {
             adaptLayoutForPrice(getActivity().getIntent().getStringExtra(Constants.PRICE_FROM), getActivity().getIntent().getStringExtra(Constants.PRICE_TO));
         }
 
-
-        ImageView changePriceBtn = (ImageView) view.findViewById(R.id.changePrice);
+            //TODO search anpassen
+       // ImageView changePriceBtn = (ImageView) view.findViewById(R.id.changePrice);
 
         Button searchButton = (Button) view.findViewById(R.id.search_button);
         searchButton.setOnClickListener(v -> {
@@ -158,8 +155,8 @@ public class SearchFragment extends Fragment {
             getActivity().setResult(RESULT_OK, data);
             getActivity().finish();
         });
-
-        changePriceBtn.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
+//TODO search anpassen
+        //changePriceBtn.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
     }
 
     public void adaptLayoutForPrice(String from, String to) {
