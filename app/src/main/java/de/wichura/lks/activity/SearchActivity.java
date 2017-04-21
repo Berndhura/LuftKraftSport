@@ -72,12 +72,7 @@ public class SearchActivity extends AppCompatActivity implements
     public void onPriceRangeComplete(String priceFrom, String priceTo) {
         storePriceRange(priceFrom, priceTo);
         Fragment f = getCurrentFragment();
-        //TODO  java.lang.ClassCastException: de.wichura.lks.activity.LocationFragment cannot be cast to de.wichura.lks.activity.SearchFragment
-        //if (f instanceof LocationFragment) {
-        //((LocationFragment) f).adaptLayoutForPrice(priceFrom, priceTo);
-        // } else {
         ((SearchFragment) f).adaptLayoutForPrice(priceFrom, priceTo);
-        // }
     }
 
     private Fragment getCurrentFragment() {

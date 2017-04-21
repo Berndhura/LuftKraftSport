@@ -44,7 +44,7 @@ public class NewArticlePresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error in getting city name from google maps api: " + e.toString());
+                        Log.d("CONAN", "new Article Presenter: error in getting city name from google maps api: " + e.toString());
                     }
 
                     @Override

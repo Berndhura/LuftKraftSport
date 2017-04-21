@@ -142,17 +142,9 @@ public class SearchFragment extends Fragment {
         });
 
         location.setOnClickListener(v -> {
-            // Create fragment and give it an argument specifying the article it should show
-            LocationFragment newFragment = new LocationFragment();
-            Bundle args = new Bundle();
-            //args.putInt(LocationFragment.ARG_POSITION, position);
-            newFragment.setArguments(args);
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            // Replace whatever is in the fragment_container view with this fragment,
-            // and add the transaction to the back stack so the user can navigate back
-            transaction.replace(R.id.layout, newFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.layout, new LocationFragment());
+            fragmentTransaction.commit();
         });
 
         location.setText(getLocationString());
@@ -228,7 +220,9 @@ public class SearchFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //TODO return from location fragment -> this will never reached!
         if (requestCode == Constants.REQUEST_ID_FOR_LOCATION) {
+            Log.d("CONAN", "back from LOCATION");
             showLocation();
         }
     }

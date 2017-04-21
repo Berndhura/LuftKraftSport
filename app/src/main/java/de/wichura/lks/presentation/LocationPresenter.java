@@ -9,21 +9,21 @@ import android.util.Log;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import de.wichura.lks.activity.LocationFragment;
+import de.wichura.lks.activity.SearchActivity;
+import de.wichura.lks.http.GoogleService;
+import de.wichura.lks.mainactivity.Constants;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import de.wichura.lks.activity.LocationFragment;
-import de.wichura.lks.activity.SearchActivity;
-import de.wichura.lks.http.GoogleService;
-import de.wichura.lks.mainactivity.Constants;
 
 import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by ich on 18.02.2017.
- * deSurf
+ * Luftkrafsport
  */
 
 public class LocationPresenter {
@@ -53,7 +53,7 @@ public class LocationPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error in getting city name from google maps api: " + e.toString());
+                        Log.d("CONAN", "LocationPresenter: error in getting city name from google maps api: " + e.toString());
                     }
 
                     @Override

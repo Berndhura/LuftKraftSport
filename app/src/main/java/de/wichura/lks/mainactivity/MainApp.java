@@ -2,6 +2,7 @@ package de.wichura.lks.mainactivity;
 
 import android.app.Application;
 
+import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
@@ -40,7 +41,7 @@ public class MainApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //ACRA.init(this);
+        ACRA.init(this);
        /* if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.

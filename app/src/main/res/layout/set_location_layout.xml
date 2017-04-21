@@ -28,9 +28,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:padding="8dp"
                 app:srcCompat="@drawable/ic_done_white_24dp"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
         </RelativeLayout>
 

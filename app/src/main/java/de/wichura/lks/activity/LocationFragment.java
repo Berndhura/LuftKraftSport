@@ -123,19 +123,10 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
 
         ImageView closeLocation = (ImageView) view.findViewById(R.id.close_location_map);
         closeLocation.setOnClickListener((v) -> {
-            //TODO zurück stimmt hier irgendwie noch nicht richtig
-            getFragmentManager().popBackStackImmediate();
-            // Create fragment and give it an argument specifying the article it should show
-           /* SearchFragment newFragment = new SearchFragment();
-            Bundle args = new Bundle();
-            //args.putInt(LocationFragment.ARG_POSITION, position);
-            newFragment.setArguments(args);
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            // Replace whatever is in the fragment_container view with this fragment,
-            // and add the transaction to the back stack so the user can navigate back
-            transaction.replace(R.id.layout, newFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();*/
+            //getFragmentManager().popBackStackImmediate();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.layout, new SearchFragment());
+            fragmentTransaction.commit();
         });
         closeLocation.setVisibility(View.VISIBLE );
 
@@ -310,7 +301,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     }
 
     private void storeDistance(int distance) {
-
+        Log.d("CONAN", "store search distance: "+distance);
         SharedPreferences sp = getActivity().getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putInt(Constants.DISTANCE, distance);
