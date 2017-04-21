@@ -10,9 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@drawable/round_corner_for_tv"
+        android:cursorVisible="false"
         android:drawableEnd="@drawable/ic_search_white_24dp"
         android:hint="Was suchst du?"
-        android:cursorVisible="false"
         android:textColorHint="@color/app_blue" />
 
     <EditText
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@drawable/round_corner_for_tv"
-        android:drawableEnd="@drawable/ic_mode_edit_blue_grey_600_24dp"
+        android:drawableEnd="@drawable/ic_mode_edit_white_24dp"
         android:editable="false"
         android:focusable="false"
         android:hint="Preis: Beliebig"
@@ -39,28 +39,16 @@
         android:focusable="false"
         android:inputType="none" />
 
-    <EditText
+    <Button
         android:id="@+id/follow_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="@drawable/round_corner_for_tv"
-        android:drawableEnd="@drawable/ic_add_alert_white_24dp"
-        android:hint="Diese Suche speichern und folgen!"
-        android:cursorVisible="false"
-        android:textColorHint="@color/app_blue"
-        android:visibility="gone"/>
-
-    <!--Button
-        android:id="@+id/search_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="32dp"
-        android:background="@color/colorPrimary"
-        android:text="SUCHE STARTEN" /-->
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_corners_background_grey"
+        android:drawablePadding="20dp"
+        android:text="Dieser Suche folgen" />
 
 </LinearLayout>
