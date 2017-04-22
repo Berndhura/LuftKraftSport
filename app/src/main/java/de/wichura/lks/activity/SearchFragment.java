@@ -1,5 +1,6 @@
 package de.wichura.lks.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -157,10 +159,14 @@ public class SearchFragment extends Fragment {
             keywords.setText(getActivity().getIntent().getStringExtra(Constants.TITLE));
             adaptLayoutForPrice(getActivity().getIntent().getStringExtra(Constants.PRICE_FROM), getActivity().getIntent().getStringExtra(Constants.PRICE_TO));
         }
+
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(keywords.getWindowToken(), 0);
     }
 
     public void adaptLayoutForPrice(String from, String to) {
         if (getString(R.string.price_does_not_matter).equals(from)) {
+            price.setText("");
             price.setHint(R.string.hint_for_price);
         } else if ("".equals(from) && "" .equals(to)) {
             price.setHint(R.string.hint_for_price);
