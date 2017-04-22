@@ -157,20 +157,16 @@ public class SearchFragment extends Fragment {
             keywords.setText(getActivity().getIntent().getStringExtra(Constants.TITLE));
             adaptLayoutForPrice(getActivity().getIntent().getStringExtra(Constants.PRICE_FROM), getActivity().getIntent().getStringExtra(Constants.PRICE_TO));
         }
-
-
-        /*Button searchButton = (Button) view.findViewById(R.id.search_button);
-        searchButton.setOnClickListener(v -> {
-
-
-        });*/
     }
 
     public void adaptLayoutForPrice(String from, String to) {
-        if (getString(R.string.price_does_not_matter).equals(priceFrom)) {
-            price.setText(R.string.price_does_not_matter);
-        } else {
-            price.setText(from + " bis " + to);
+        if (getString(R.string.price_does_not_matter).equals(from)) {
+            price.setHint(R.string.hint_for_price);
+        } else if ("".equals(from) && "" .equals(to)) {
+            price.setHint(R.string.hint_for_price);
+        }
+        else {
+            price.setText(from + "€" + " bis " + to + "€");
         }
     }
 

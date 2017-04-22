@@ -62,5 +62,6 @@
     <string name="user_is_registered">"Neues Konto wurde angelegt!" Ein Aktivierungscode wurde dir an deine Email gesendet. Bitte gib diesen ein, um deine Kontoaktivierung abzuschliessen!"</string>
 
     <string name="user_is_registered_problem">"Es gab ein Problem das Konto anzulegen. Versuche es nochmal. "</string>
+    <string name="hint_for_price">Preis: Beliebig</string>
 
 </resources>

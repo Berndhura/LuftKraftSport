@@ -72,7 +72,11 @@ public class SearchActivity extends AppCompatActivity implements
     public void onPriceRangeComplete(String priceFrom, String priceTo) {
         storePriceRange(priceFrom, priceTo);
         Fragment f = getCurrentFragment();
-        ((SearchFragment) f).adaptLayoutForPrice(priceFrom, priceTo);
+        if (getString(R.string.price_does_not_matter).equals(priceFrom) && getString(R.string.price_does_not_matter).equals(priceFrom)) {
+            ((SearchFragment) f).adaptLayoutForPrice(priceFrom, priceTo);
+        } else {
+            ((SearchFragment) f).adaptLayoutForPrice(priceFrom, priceTo);
+        }
     }
 
     private Fragment getCurrentFragment() {
