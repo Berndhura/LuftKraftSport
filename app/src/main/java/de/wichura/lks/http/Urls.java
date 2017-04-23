@@ -10,7 +10,7 @@ public class Urls {
     }
 
 
-    public static final String UPLOAD_ERROR_URL = "http://luftkraftsport.de:9876/api/V3/appError";
+    public static final String UPLOAD_ERROR_URL = "http://luftkraftsport.de:9876/api/V3/errors/android/";
     public static final String MAIN_SERVER_URL_V3 = "http://luftkraftsport.de:9876/api/V3/";
     public static final String GOOGLE_MAPS_URL = "http://maps.googleapis.com/maps/api/";
 
