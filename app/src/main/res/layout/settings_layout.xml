@@ -84,9 +84,6 @@
             android:text="0.5.1 version 34"
             android:layout_marginTop="10sp" />
 
-
     </LinearLayout>
-
-
 
 </LinearLayout>

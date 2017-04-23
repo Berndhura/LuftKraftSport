@@ -195,13 +195,11 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-        int accessFineLoc = ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION);
+        //int accessFineLoc = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
 
-        int accessCoarseLoc = ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_COARSE_LOCATION);
+        int accessCoarseLoc = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
 
-        if (accessCoarseLoc == PackageManager.PERMISSION_DENIED && accessFineLoc == PackageManager.PERMISSION_DENIED) {
+        if (accessCoarseLoc == PackageManager.PERMISSION_DENIED) { //&& accessFineLoc == PackageManager.PERMISSION_DENIED) {
 
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 666);
 
