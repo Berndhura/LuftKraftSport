@@ -121,6 +121,9 @@ public class MainActivity extends AppCompatActivity implements
     private String searchPriceFrom;
     private String searchPriceTo;
 
+    //empty view for network problems
+    private View noResultsView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements
         //load main layout
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.main_list);
+        noResultsView = findViewById(R.id.empty_list_view);
 
         //ProgressBar
         progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
@@ -464,9 +468,6 @@ public class MainActivity extends AppCompatActivity implements
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
         });
 
-        View empty = findViewById(R.id.empty_list_view);
-        listView.setEmptyView(empty);
-
         listView.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
@@ -477,6 +478,23 @@ public class MainActivity extends AppCompatActivity implements
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
         });
+    }
+
+    //TODO wird nur gezeigt bei GetAll ->  und search braucht das auch noch!!
+    public void showProblem(String type) {
+        listView.setEmptyView(noResultsView);
+        noResultsView.setVisibility(View.VISIBLE);
+
+        Button reload = (Button) findViewById(R.id.reload_list);
+        reload.setOnClickListener(v -> {
+            noResultsView.setVisibility(View.GONE);
+            presenterLayer.loadAdDataPage(page, size, type);
+        });
+    }
+
+    public void hideEmptyView() {
+        listView.setEmptyView(null);
+        noResultsView.setVisibility(View.GONE);
     }
 
     // Append the next page of data into the adapter
@@ -697,6 +715,7 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 } else {
+                    hideEmptyView();
                     page = 0;
                     size = 10;
                     setMyAdsFlag(true);
@@ -734,6 +753,7 @@ public class MainActivity extends AppCompatActivity implements
                 return true;
             }
             case R.id.refresh: {
+                hideEmptyView();
                 setMyAdsFlag(false);
                 isMyAds = false;
                 isBookmarks = false;
@@ -747,6 +767,7 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 } else {
+                    hideEmptyView();
                     setMyAdsFlag(false);
                     isBookmarks = true;
                     isMyAds = false;

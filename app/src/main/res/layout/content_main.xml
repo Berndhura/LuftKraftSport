@@ -21,12 +21,32 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="15sp" />
 
-    <TextView
+    <RelativeLayout
         android:id="@+id/empty_list_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="center"
-        android:text="@string/empty_result" />
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/empty_result_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/reload_list"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="17dp"
+            android:gravity="center"
+            android:text="@string/empty_result" />
+
+        <Button
+            android:id="@+id/reload_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Neu Laden" />
+
+    </RelativeLayout>
 
     <include layout="@layout/load_indicator" />
 

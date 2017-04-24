@@ -20,17 +20,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import de.wichura.lks.http.Service;
+import de.wichura.lks.mainactivity.Constants;
+import de.wichura.lks.mainactivity.MainActivity;
+import de.wichura.lks.models.AdsAndBookmarks;
+import de.wichura.lks.models.AdsAsPage;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import de.wichura.lks.http.Service;
-import de.wichura.lks.mainactivity.Constants;
-import de.wichura.lks.mainactivity.MainActivity;
-import de.wichura.lks.models.AdsAndBookmarks;
-import de.wichura.lks.models.AdsAsPage;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -270,6 +270,7 @@ public class MainPresenter {
                     public void onError(Throwable e) {
                         Log.d("CONAN", "Error in getting bookmarked ads: " + e.toString());
                         view.progressBar.setVisibility(ProgressBar.GONE);
+                        view.showProblem(type);
                     }
 
                     @Override
@@ -326,6 +327,7 @@ public class MainPresenter {
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
                             view.progressBar.setVisibility(ProgressBar.GONE);
+                            view.showProblem(type);
                         }
 
                         @Override
@@ -415,6 +417,7 @@ public class MainPresenter {
                     public void onError(Throwable e) {
                         Log.d("CONAN", "Error in getting user's ads: " + e.toString());
                         view.progressBar.setVisibility(ProgressBar.GONE);
+                        view.showProblem(type);
                     }
 
                     @Override
