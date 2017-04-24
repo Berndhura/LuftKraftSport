@@ -86,6 +86,30 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:paddingLeft="15dp"
+                android:text="Ort: "
+                android:textColor="#444444"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/location_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textColor="#444444"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:paddingLeft="15dp"
                 android:text="Im Umkreis von: "
                 android:textColor="#444444"
                 android:textSize="16sp" />

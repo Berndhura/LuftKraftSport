@@ -10,8 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.util.List;
 
+import de.wichura.lks.http.GoogleService;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -24,18 +29,20 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by ich on 07.02.2017.
- * desurf
+ * Luftkrafsport
  */
 
 public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
 
     private Context context;
     private Service service;
+    private GoogleService locationService;
 
     public SearchesListAdapter(final Context context, final int resourceId, final List<SearchItem> items) {
         super(context, resourceId, items);
         this.context = context;
         service = new Service();
+        locationService = new GoogleService();
     }
 
     private class ViewHolder {
@@ -43,6 +50,7 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         TextView priceFrom;
         TextView priceTo;
         TextView distance;
+        TextView location;
         ImageView deleteSearch;
     }
 
@@ -63,6 +71,7 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
             holder.priceTo = (TextView) convertView.findViewById(R.id.search_price_to);
             holder.distance = (TextView) convertView.findViewById(R.id.search_distance);
             holder.deleteSearch = (ImageView) convertView.findViewById(R.id.delete_search);
+            holder.location = (TextView) convertView.findViewById(R.id.location_name);
             convertView.setTag(holder);
         } else
             holder = (SearchesListAdapter.ViewHolder) convertView.getTag();
@@ -75,6 +84,9 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         holder.priceTo.setText(searchItem.getPriceTo().toString());
         holder.distance.setText(searchItem.getDistance().toString());
 
+        //TODO beim scrollen werden staendig requests gestartet?! nicht gut
+        getLocationName(searchItem, position);
+
         // holder.date.setText(DateFormat.getDateInstance().format(searchItem.getDate()));
 
         holder.deleteSearch.setOnClickListener((view) -> {
@@ -84,6 +96,37 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
 
         return convertView;
     }
+
+    private void getLocationName(SearchItem item, int position) {
+
+        Observable<JsonObject> getCityNameFromLatLng = locationService.getCityNameFrimLatLngObserv(item.getLat(), item.getLng(), false);
+
+        getCityNameFromLatLng
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JsonObject>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "new Article Presenter: error in getting city name from google maps api: " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(JsonObject location) {
+                        JsonElement city = location.get("results").getAsJsonArray()
+                                .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
+                                .get(2).getAsJsonObject().get("long_name");
+
+                        Log.d("CONAN", "city name from google maps api: " + city);
+
+                        //holder.location.setText(city.getAsString());
+                    }
+                });
+    }
+
 
     private void deleteSearch(Long id, View view) {
         //view.enableProgress();
