@@ -3,18 +3,22 @@ package de.wichura.lks.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import de.wichura.lks.R;
 import de.wichura.lks.dialogs.SetPriceDialog;
+import de.wichura.lks.dialogs.ZipDialogFragment;
 import de.wichura.lks.mainactivity.Constants;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -25,7 +29,8 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
  */
 
 public class SearchActivity extends AppCompatActivity implements
-        SetPriceDialog.OnCompleteListener {
+        SetPriceDialog.OnCompleteListener,
+        ZipDialogFragment.OnCompleteListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,33 @@ public class SearchActivity extends AppCompatActivity implements
         });
     }
 
+    //permission request from location fragment
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 666: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(this, "Granted", Toast.LENGTH_LONG).show();
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    new ZipDialogFragment().show(getSupportFragmentManager(), null);
+
+                    Toast.makeText(this, "nix Granted", Toast.LENGTH_LONG).show();
+                }
+                Toast.makeText(this, "in666", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
     @Override
     public void onPriceRangeComplete(String priceFrom, String priceTo) {
         storePriceRange(priceFrom, priceTo);
@@ -77,6 +109,12 @@ public class SearchActivity extends AppCompatActivity implements
         } else {
             ((SearchFragment) f).adaptLayoutForPrice(priceFrom, priceTo);
         }
+    }
+
+    @Override
+    public void onZipCodeComplete(String zipCode) {
+        Log.d("CONAN", "Zipcode from dialog: " + zipCode);
+       // getLatLngFromPlz(zipCode);
     }
 
     private Fragment getCurrentFragment() {

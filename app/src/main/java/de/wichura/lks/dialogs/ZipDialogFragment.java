@@ -27,9 +27,8 @@ public class ZipDialogFragment extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            this.mListener = (OnCompleteListener)activity;
-        }
-        catch (final ClassCastException e) {
+            this.mListener = (OnCompleteListener) activity;
+        } catch (final ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnCompleteListener");
         }
     }
@@ -42,7 +41,7 @@ public class ZipDialogFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String zipCode = ((EditText)getDialog().findViewById(R.id.new_article_zip_code)).getText().toString();
+                        String zipCode = ((EditText) getDialog().findViewById(R.id.new_article_zip_code)).getText().toString();
                         mListener.onZipCodeComplete(zipCode);
                     }
                 })

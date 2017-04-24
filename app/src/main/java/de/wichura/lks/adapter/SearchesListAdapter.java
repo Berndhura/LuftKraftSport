@@ -85,9 +85,7 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         holder.distance.setText(searchItem.getDistance().toString());
 
         //TODO beim scrollen werden staendig requests gestartet?! nicht gut
-        getLocationName(searchItem, position);
-
-        // holder.date.setText(DateFormat.getDateInstance().format(searchItem.getDate()));
+        getLocationName(searchItem, holder);
 
         holder.deleteSearch.setOnClickListener((view) -> {
             deleteSearch(searchItem.getId(), view);
@@ -97,7 +95,7 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         return convertView;
     }
 
-    private void getLocationName(SearchItem item, int position) {
+    private void getLocationName(SearchItem item, ViewHolder holder) {
 
         Observable<JsonObject> getCityNameFromLatLng = locationService.getCityNameFrimLatLngObserv(item.getLat(), item.getLng(), false);
 
@@ -122,7 +120,8 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
 
                         Log.d("CONAN", "city name from google maps api: " + city);
 
-                        //holder.location.setText(city.getAsString());
+                        //TODO werden die richtigen row items gesetzt??? wo ist de position??
+                        holder.location.setText(city.getAsString());
                     }
                 });
     }

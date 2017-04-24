@@ -35,7 +35,7 @@ public class SearchesPresenter {
     }
 
     public void loadSearchesForUser() {
-        //view.enableProgress();
+        view.enableProgressBar();
         service.findSearchesObserv(utils.getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -47,7 +47,9 @@ public class SearchesPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error loading searches: " + e.getMessage());
+                        Log.d("CONAN", "error loading saved searches: " + e.getMessage());
+                        view.disableProgressbar();
+                        view.showProblem();
                     }
 
                     @Override

@@ -73,7 +73,10 @@ public class SearchFragment extends Fragment {
 
         createGui(view);
 
-        showLocation();
+        InputMethodManager imm = (InputMethodManager)  getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(keywords.getWindowToken(), 0);
+
+        //showLocation();
     }
 
     private void createGui(View view) {
@@ -159,9 +162,19 @@ public class SearchFragment extends Fragment {
             keywords.setText(getActivity().getIntent().getStringExtra(Constants.TITLE));
             adaptLayoutForPrice(getActivity().getIntent().getStringExtra(Constants.PRICE_FROM), getActivity().getIntent().getStringExtra(Constants.PRICE_TO));
         }
+    }
 
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(keywords.getWindowToken(), 0);
+    public void hideSoftKeyboard() {
+        if(getActivity().getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    public void showSoftKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        view.requestFocus();
+        inputMethodManager.showSoftInput(view, 0);
     }
 
     public void adaptLayoutForPrice(String from, String to) {
@@ -215,17 +228,6 @@ public class SearchFragment extends Fragment {
             return Constants.MAX_PRICE;
         } else {
             return (getString(R.string.price_does_not_matter).equals(maxPrice)) ? Constants.MAX_PRICE : Integer.parseInt(maxPrice);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //TODO return from location fragment -> this will never reached!
-        if (requestCode == Constants.REQUEST_ID_FOR_LOCATION) {
-            Log.d("CONAN", "back from LOCATION");
-            showLocation();
         }
     }
 

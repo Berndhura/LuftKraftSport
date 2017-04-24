@@ -24,6 +24,7 @@ public class Constants {
     public static final int REQUEST_ID_FOR_REGISTER_USER = 12;
     public static final int REQUEST_ID_FOR_ACTIVATE_USER = 13;
     public static final int REQUEST_ID_FOR_MAINACTIVITY = 14;
+    public static final int REQUEST_ID_FOR_FOLLOW_SEARCH = 15;
 
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 

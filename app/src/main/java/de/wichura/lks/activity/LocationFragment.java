@@ -201,6 +201,8 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
 
         if (accessCoarseLoc == PackageManager.PERMISSION_DENIED) { //&& accessFineLoc == PackageManager.PERMISSION_DENIED) {
 
+            Toast.makeText(getActivity(), "frage nach permission", Toast.LENGTH_LONG).show();
+
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 666);
 
         } else {
@@ -228,31 +230,6 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
                     initDistanceSeekBar();
                 }
             });
-        }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 666: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
