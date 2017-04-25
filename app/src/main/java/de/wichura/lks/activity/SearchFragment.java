@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +16,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.wichura.lks.R;
 import de.wichura.lks.dialogs.ConfirmFollowSearchDialog;
 import de.wichura.lks.dialogs.SetPriceDialog;
+import de.wichura.lks.dialogs.ShowErrorDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import rx.Subscriber;
@@ -51,7 +53,10 @@ public class SearchFragment extends Fragment {
     TextView location;
 
     @BindView(R.id.follow_search)
-    TextView followSearch;
+    Button followSearch;
+
+    @BindView(R.id.follow_search_ProgressBar)
+    AVLoadingIndicatorView progressBar;
 
     String priceTo;
 
@@ -73,7 +78,7 @@ public class SearchFragment extends Fragment {
 
         createGui(view);
 
-        InputMethodManager imm = (InputMethodManager)  getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(keywords.getWindowToken(), 0);
 
         //showLocation();
@@ -165,7 +170,7 @@ public class SearchFragment extends Fragment {
     }
 
     public void hideSoftKeyboard() {
-        if(getActivity().getCurrentFocus()!=null) {
+        if (getActivity().getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         }
@@ -181,15 +186,17 @@ public class SearchFragment extends Fragment {
         if (getString(R.string.price_does_not_matter).equals(from)) {
             price.setText("");
             price.setHint(R.string.hint_for_price);
-        } else if ("".equals(from) && "" .equals(to)) {
+        } else if ("".equals(from) && "".equals(to)) {
             price.setHint(R.string.hint_for_price);
-        }
-        else {
+        } else {
             price.setText(from + "€" + " bis " + to + "€");
         }
     }
 
     private void saveSearch() {
+        followSearch.setClickable(false);
+        showProgress();
+
         String description = keywords.getText().toString();
         Service service = new Service();
 
@@ -199,11 +206,16 @@ public class SearchFragment extends Fragment {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
+                        followSearch.setClickable(true);
+                        disableProgress();
                         new ConfirmFollowSearchDialog().show(getActivity().getSupportFragmentManager(), null);
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        followSearch.setClickable(true);
+                        disableProgress();
+                        new ShowErrorDialog().show(getActivity().getSupportFragmentManager(), null);
                         Log.d("CONAN", "error saving searches: " + e.getMessage());
                     }
 
@@ -211,6 +223,14 @@ public class SearchFragment extends Fragment {
                     public void onNext(String result) {
                     }
                 });
+    }
+
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void disableProgress() {
+        progressBar.setVisibility(View.GONE);
     }
 
     private int getMinPrice() {

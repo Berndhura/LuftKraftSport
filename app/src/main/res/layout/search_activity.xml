@@ -23,14 +23,15 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextColor="@android:color/white" />
 
-            <!--ImageView
-                android:id="@+id/save_search"
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/follow_search_ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
-                app:srcCompat="@drawable/ic_add_alert_white_24dp" /-->
+                android:layout_margin="10dp"
+                android:visibility="gone"
+                app:indicator="LineScaleParty"
+                app:indicator_color="#FFFFFF" />
 
         </RelativeLayout>
 
