@@ -40,7 +40,7 @@ public class SearchActivity extends AppCompatActivity implements
 
         setContentView(R.layout.basic_search_layout);
 
-        RelativeLayout fraglayout = (RelativeLayout) findViewById(R.id.rl_Container);
+        RelativeLayout fraglayout = (RelativeLayout) findViewById(R.id.rl_Containe);
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
