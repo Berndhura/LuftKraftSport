@@ -1,7 +1,6 @@
 package de.wichura.lks.activity;
 
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -39,6 +38,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -53,7 +53,7 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by Bernd Wichura on 28.07.2015.
- * Camper App
+ * Luftkraftsport
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
 
     private LoginPresenter presenter;
-    private ProgressBar progressBar;
+    private AVLoadingIndicatorView progressBar;
 
     private ImageView errorImage;
 
@@ -183,8 +183,7 @@ public class LoginActivity extends AppCompatActivity {
 
         errorImage = (ImageView) findViewById(R.id.problem_during_login);
         errorImage.setVisibility(View.GONE);
-        progressBar = (ProgressBar) findViewById(R.id.login_ProgressBar);
-        progressBar.setMax(100);
+        progressBar = (AVLoadingIndicatorView) findViewById(R.id.login_ProgressBar);
     }
 
     private void adaptFacebookButton(LoginButton loginButton) {

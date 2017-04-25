@@ -22,6 +22,16 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextColor="@android:color/white" />
 
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/login_ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:visibility="gone"
+                app:indicator="LineScaleParty"
+                app:indicator_color="#FFFFFF" />
+
             <ImageView
                 android:id="@+id/problem_during_login"
                 android:layout_width="wrap_content"
@@ -34,24 +44,6 @@
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
-
-    <FrameLayout
-        android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@android:color/transparent">
-
-        <ProgressBar
-            android:id="@+id/login_ProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="13dp"
-            android:layout_gravity="top"
-            android:layout_marginTop="-3dp"
-            android:background="@android:color/transparent"
-            android:progressDrawable="@drawable/custom_progress"/>
-
-    </FrameLayout>
 
     <include layout="@layout/login_view" />
 

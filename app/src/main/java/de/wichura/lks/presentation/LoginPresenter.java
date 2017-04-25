@@ -13,8 +13,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by ich on 05.12.2016.
- * Camper App
+ * Created by Bernd Wichura on 05.12.2016.
+ * Luftkraftsport
  */
 
 public class LoginPresenter {
@@ -23,17 +23,17 @@ public class LoginPresenter {
     private Context context;
     private LoginActivity view;
 
-    public LoginPresenter(LoginActivity acitivity, Service service, Context applicationContext) {
+    public LoginPresenter(LoginActivity activity, Service service, Context applicationContext) {
         this.service = service;
         this.context = applicationContext;
-        this.view = acitivity;
+        this.view = activity;
     }
 
     public void sendLoginReq(String email, String password) {
         view.showProgressDialog();
         view.hideInfo();
         service.loginUserObserv(email, password)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<User>() {
                     @Override
@@ -43,7 +43,7 @@ public class LoginPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "error sending login email user " + e.getMessage());
+                        Log.d("CONAN", "error sending login email user ");
                         view.hideProgressDialog();
                         //"The user does not exist, or wrong password"
                         //TODO throwable richtig hier? von holger kommt string denke ich
