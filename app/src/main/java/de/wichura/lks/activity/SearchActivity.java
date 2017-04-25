@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -71,6 +73,27 @@ public class SearchActivity extends AppCompatActivity implements
                 }
             }
         });
+
+        //TODO messen der bottombar und anpassen der layouts!!!
+        //TODO http://stackoverflow.com/questions/4936553/android-how-can-you-align-a-button-at-the-bottom-and-listview-above
+        bottomBar.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                // viewToMeasure is now measured and laid out, and displayed dimensions are known.
+                logComputedViewDimensions(bottomBar.getWidth(), bottomBar.getHeight());
+
+                // Remove this listener, as we have now successfully calculated the desired dimensions.
+                bottomBar.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                // Always return true to continue drawing.
+                return true;
+            }
+        });
+    }
+
+    private void logComputedViewDimensions(final int width, final int height) {
+        Log.d("CONAN", "viewToMeasure has width " + width);
+        Log.d("CONAN", "viewToMeasure has height " + height);
     }
 
     //permission request from location fragment
