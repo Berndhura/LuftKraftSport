@@ -48,6 +48,8 @@
     <string name="save_search_info_text">Du bekommst eine Benachrichtigung, sobald es neue Artikel gibt, die deiner Suche entsprechen.</string>
     <string name="confirm_network_error">Problem!</string>
     <string name="confirm_network_error_text">Es gab ein Problem mit der Netzwerkverbindung! Versuche es bitte nochmal.</string>
+    <string name="confirm_wrong_login">Login fehlgeschlagen</string>
+    <string name="confirm_wrong_login_text">Der Benutzername oder das Passwort war falsch! Versuche es bitte nochmal.</string>
 
     <!-- Empty Ads Database -->
     <string name="empty_ads_list">No Ads Information Available</string>

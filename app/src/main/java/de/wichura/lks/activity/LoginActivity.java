@@ -44,6 +44,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import de.wichura.lks.R;
+import de.wichura.lks.dialogs.ConfirmFollowSearchDialog;
+import de.wichura.lks.dialogs.ConfirmWrongLoginDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.presentation.LoginPresenter;
@@ -69,8 +71,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginPresenter presenter;
     private AVLoadingIndicatorView progressBar;
-
-    private ImageView errorImage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -181,8 +181,6 @@ public class LoginActivity extends AppCompatActivity {
         adaptFacebookButton(fbLoginButton);
         setFbButton(fbLoginButton, "Anmelden mit Facebook");
 
-        errorImage = (ImageView) findViewById(R.id.problem_during_login);
-        errorImage.setVisibility(View.GONE);
         progressBar = (AVLoadingIndicatorView) findViewById(R.id.login_ProgressBar);
     }
 
@@ -362,15 +360,7 @@ public class LoginActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
     }
 
-    public void hideInfo() {
-        errorImage.setVisibility(View.GONE);
-    }
-
     public void showInfo(String info) {
-        errorImage.setVisibility(View.VISIBLE);
-        errorImage.setOnClickListener(v -> {
-            Toast.makeText(this, info, Toast.LENGTH_LONG).show();
-        });
-
+        new ConfirmWrongLoginDialog().show(getSupportFragmentManager(), null);
     }
 }

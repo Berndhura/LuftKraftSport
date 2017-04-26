@@ -32,15 +32,6 @@
                 app:indicator="LineScaleParty"
                 app:indicator_color="#FFFFFF" />
 
-            <ImageView
-                android:id="@+id/problem_during_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_error_outline_red_600_24dp" />
-
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>

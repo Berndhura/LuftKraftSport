@@ -20,6 +20,7 @@ public class ConfirmFollowSearchDialog extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.confirm_save_search)
                 .setMessage(R.string.save_search_info_text)
+                .setIcon(R.drawable.ic_add_alert_blue_grey_700_24dp)
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> getDialog().dismiss())
                 .create();
     }

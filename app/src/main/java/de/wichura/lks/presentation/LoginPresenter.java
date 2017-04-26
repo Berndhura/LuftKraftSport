@@ -31,7 +31,6 @@ public class LoginPresenter {
 
     public void sendLoginReq(String email, String password) {
         view.showProgressDialog();
-        view.hideInfo();
         service.loginUserObserv(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -64,32 +63,5 @@ public class LoginPresenter {
                         view.finish();
                     }
                 });
-    }
-
-    public String registerUser(String email, String password) {
-        view.showProgressDialog();
-        service.registerUserObserv(email, password, "john joop")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("CONAN", "error sending login email user " + e.getMessage());
-                        view.finish();
-                    }
-
-                    @Override
-                    public void onNext(String info) {
-                        view.hideProgressDialog();
-                        view.finish();
-
-                    }
-                });
-        return "ok";
     }
 }
