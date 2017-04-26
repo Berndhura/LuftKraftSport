@@ -200,15 +200,17 @@
                 <EditText
                     android:id="@+id/new_ad_title"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:layout_weight="0.1"
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:gravity="start"
                     android:hint="@string/keywords"
-                    android:inputType="textPersonName|textMultiLine"
-                    android:maxLength="70"/>
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:maxLength="70" />
 
                 <View
                     android:id="@+id/divider1"
@@ -227,8 +229,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:background="@android:color/transparent"
+                        android:ems="10"
+                        android:focusable="true"
                         android:gravity="start"
                         android:hint="@string/description"
+                        android:imeOptions="actionDone"
                         android:inputType="textPersonName|textMultiLine"
                         android:maxLength="500" />
 
@@ -244,13 +249,15 @@
                 <EditText
                     android:id="@+id/new_ad_price"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:layout_weight="0.1"
                     android:background="@android:color/transparent"
                     android:ems="10"
+                    android:focusable="true"
                     android:gravity="start"
                     android:hint="@string/preis"
+                    android:imeOptions="actionNext"
                     android:inputType="number" />
 
                 <View
@@ -261,7 +268,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:layout_weight="0.1"
                     android:orientation="horizontal">

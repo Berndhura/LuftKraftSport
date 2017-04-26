@@ -4,13 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -117,38 +120,23 @@ public class SearchFragment extends Fragment {
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (event.getRawX() >= (keywords.getRight() - keywords.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        priceFrom = getPrice(Constants.PRICE_FROM);
-                        priceTo = getPrice(Constants.PRICE_TO);
-
-                        final Intent data = new Intent();
-                        data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
-
-                        if (getString(R.string.price_does_not_matter).equals(price.getText().toString())) {
-                            data.putExtra(Constants.PRICE_FROM, "");
-                            data.putExtra(Constants.PRICE_TO, "");
-                        } else {
-
-                            if (getString(R.string.price_does_not_matter).equals(priceFrom)) {
-                                data.putExtra(Constants.PRICE_FROM, "");
-                            } else {
-                                data.putExtra(Constants.PRICE_FROM, priceFrom);
-                            }
-
-                            if (getString(R.string.price_does_not_matter).equals(priceTo)) {
-                                data.putExtra(Constants.PRICE_TO, "");
-                            } else {
-                                data.putExtra(Constants.PRICE_TO, priceTo);
-                            }
-                        }
-                        data.putExtra(Constants.DISTANCE, getDistance());
-                        data.putExtra(Constants.TITLE, keywords.getText());
-                        getActivity().setResult(RESULT_OK, data);
-                        getActivity().finish();
+                        performSearch();
                         return true;
                     }
                 }
                 return false;
             }
+        });
+
+        keywords.setOnEditorActionListener((tv, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                keywords.clearFocus();
+                InputMethodManager in = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(keywords.getWindowToken(), 0);
+                performSearch();
+                return true;
+            }
+            return false;
         });
 
         location.setOnClickListener(v -> {
@@ -167,6 +155,49 @@ public class SearchFragment extends Fragment {
             keywords.setText(getActivity().getIntent().getStringExtra(Constants.TITLE));
             adaptLayoutForPrice(getActivity().getIntent().getStringExtra(Constants.PRICE_FROM), getActivity().getIntent().getStringExtra(Constants.PRICE_TO));
         }
+
+    }
+
+    public static void closeKeyboard(Context c, IBinder windowToken) {
+        InputMethodManager mgr = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(windowToken, 0);
+    }
+
+    //TODO soft pad schließt nicht!!!!!
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        closeKeyboard(getActivity(), keywords.getWindowToken());
+    }
+
+    private void performSearch() {
+        priceFrom = getPrice(Constants.PRICE_FROM);
+        priceTo = getPrice(Constants.PRICE_TO);
+
+        final Intent data = new Intent();
+        data.putExtra(Constants.KEYWORDS, keywords.getText().toString());
+
+        if (getString(R.string.price_does_not_matter).equals(price.getText().toString())) {
+            data.putExtra(Constants.PRICE_FROM, "");
+            data.putExtra(Constants.PRICE_TO, "");
+        } else {
+
+            if (getString(R.string.price_does_not_matter).equals(priceFrom)) {
+                data.putExtra(Constants.PRICE_FROM, "");
+            } else {
+                data.putExtra(Constants.PRICE_FROM, priceFrom);
+            }
+
+            if (getString(R.string.price_does_not_matter).equals(priceTo)) {
+                data.putExtra(Constants.PRICE_TO, "");
+            } else {
+                data.putExtra(Constants.PRICE_TO, priceTo);
+            }
+        }
+        data.putExtra(Constants.DISTANCE, getDistance());
+        data.putExtra(Constants.TITLE, keywords.getText());
+        getActivity().setResult(RESULT_OK, data);
+        getActivity().finish();
     }
 
     public void hideSoftKeyboard() {
@@ -251,6 +282,15 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    public String getPrice(String price) {
+        //TODO hier stimmt noch was nicht, wenn der wert für MIn und MAX price initial noch nicht gesetzt ist
+        if (getActivity().getSharedPreferences(USER_PRICE_RANGE, 0).getString(price, "") != null) {
+            return getActivity().getSharedPreferences(USER_PRICE_RANGE, 0).getString(price, "");
+        } else {
+            return getString(R.string.price_does_not_matter);
+        }
+    }
+
     public boolean isSaveSearchValid() {
         boolean valid = true;
 
@@ -283,10 +323,6 @@ public class SearchFragment extends Fragment {
 
     public String getUserToken() {
         return getActivity().getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
-    }
-
-    public String getPrice(String price) {
-        return getActivity().getSharedPreferences(USER_PRICE_RANGE, 0).getString(price, "");
     }
 
     public Double getLng() {
