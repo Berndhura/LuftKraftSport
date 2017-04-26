@@ -480,7 +480,7 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
-    //TODO wird nur gezeigt bei GetAll ->  und search braucht das auch noch!!
+
     public void showProblem(String type) {
         listView.setEmptyView(noResultsView);
         noResultsView.setVisibility(View.VISIBLE);
@@ -488,7 +488,12 @@ public class MainActivity extends AppCompatActivity implements
         Button reload = (Button) findViewById(R.id.reload_list);
         reload.setOnClickListener(v -> {
             noResultsView.setVisibility(View.GONE);
-            presenterLayer.loadAdDataPage(page, size, type);
+            if (type.equals(Constants.TYPE_SEARCH)) {
+                //TODO search again aber nach was?? werte woher?
+                //presenterLayer.searchForArticles(page, size, priceFrom, priceTo, distance, description, userId);
+            } else {
+                presenterLayer.loadAdDataPage(page, size, type);
+            }
         });
     }
 
@@ -597,7 +602,7 @@ public class MainActivity extends AppCompatActivity implements
                 Log.d("CONAN", "Return from login, userid: " + getUserId());
 
                 setMyAdsFlag(false);
-
+                hideEmptyView();
                 getAds(Constants.TYPE_ALL);
 
                 break;

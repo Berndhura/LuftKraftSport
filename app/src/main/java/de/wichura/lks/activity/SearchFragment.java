@@ -8,7 +8,6 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,7 +25,7 @@ import butterknife.ButterKnife;
 import de.wichura.lks.R;
 import de.wichura.lks.dialogs.ConfirmFollowSearchDialog;
 import de.wichura.lks.dialogs.SetPriceDialog;
-import de.wichura.lks.dialogs.ShowErrorDialog;
+import de.wichura.lks.dialogs.ShowNetworkProblemDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import rx.Subscriber;
@@ -246,7 +245,7 @@ public class SearchFragment extends Fragment {
                     public void onError(Throwable e) {
                         followSearch.setClickable(true);
                         disableProgress();
-                        new ShowErrorDialog().show(getActivity().getSupportFragmentManager(), null);
+                        new ShowNetworkProblemDialog().show(getActivity().getSupportFragmentManager(), null);
                         Log.d("CONAN", "error saving searches: " + e.getMessage());
                     }
 

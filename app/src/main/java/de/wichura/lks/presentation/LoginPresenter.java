@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import de.wichura.lks.activity.LoginActivity;
+import de.wichura.lks.dialogs.ShowNetworkProblemDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.User;
@@ -45,11 +46,11 @@ public class LoginPresenter {
                         Log.d("CONAN", "error sending login email user ");
                         view.hideProgressDialog();
                         //"The user does not exist, or wrong password"
-                        //TODO throwable richtig hier? von holger kommt string denke ich
-                        if ("HTTP 401 Unauthorized".equals(e.getMessage().toString())) {
-
-                            String info = "Dieser Nutzer ist nicht vorhanden oder es wurde ein falsches Passwort angegeben.";
-                            view.showInfo(info);
+                        if ("HTTP 401 Unauthorized".equals(e.getMessage())) {
+                            view.showInfo();
+                        } else {
+                            view.hideProgressDialog();
+                            new ShowNetworkProblemDialog().show(view.getSupportFragmentManager(), null);
                         }
                     }
 
@@ -59,7 +60,7 @@ public class LoginPresenter {
                         Toast.makeText(context, "Benutzer " + user.getName() + " angemeldet!", Toast.LENGTH_SHORT).show();
                         Log.d("CONAN", "login email user " + user.getId());
                         //String name, String userId, Uri userPic, String userType, String userToken
-                        view.setUserPreferences(user.getName(), user.getId().toString(), null, Constants.EMAIL_USER, user.getToken());
+                        view.setUserPreferences(user.getName(), user.getId(), null, Constants.EMAIL_USER, user.getToken());
                         view.finish();
                     }
                 });

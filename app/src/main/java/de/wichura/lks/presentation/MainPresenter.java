@@ -177,6 +177,7 @@ public class MainPresenter {
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
                             view.progressBar.setVisibility(ProgressBar.GONE);
+                            view.showProblem(Constants.TYPE_SEARCH);
                         }
 
                         @Override
@@ -208,6 +209,7 @@ public class MainPresenter {
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
                             view.progressBar.setVisibility(ProgressBar.GONE);
+                            view.showProblem(Constants.TYPE_SEARCH);
                         }
 
                         @Override
@@ -359,6 +361,7 @@ public class MainPresenter {
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
                             view.progressBar.setVisibility(ProgressBar.GONE);
+                            view.showProblem(type);
                         }
 
                         @Override

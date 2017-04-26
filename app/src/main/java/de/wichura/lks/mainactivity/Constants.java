@@ -97,6 +97,7 @@ public class Constants {
     public static final String TYPE_BOOKMARK = "getBookmarks";
     public static final String TYPE_ALL = "getAll";
     public static final String TYPE_USER = "getUser";
+    public static final String TYPE_SEARCH = "getSearch";
     public static final String TYPE_USER_WITH_ID = "getUserWithId";
 
     public static final int DISTANCE_INFINITY = 10000000;

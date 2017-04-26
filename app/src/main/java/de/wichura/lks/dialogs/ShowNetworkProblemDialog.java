@@ -12,7 +12,7 @@ import de.wichura.lks.R;
  * Luftkraftsport
  */
 
-public class ShowErrorDialog extends DialogFragment {
+public class ShowNetworkProblemDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
