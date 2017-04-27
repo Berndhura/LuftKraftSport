@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.wichura.lks.activity.NewAdActivity;
+import de.wichura.lks.dialogs.ShowNetworkProblemDialog;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.FileNameParcelable;
 import de.wichura.lks.models.Location;
@@ -115,6 +116,12 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         @Override
                         public void onError(Throwable e) {
                             Log.d("CONAN", "delete images ERROR" + e.toString());
+                            //show problem
+                            new ShowNetworkProblemDialog().show(view.getSupportFragmentManager(), null);
+                            //remove white scree
+                            view.hideMainProgress();
+                            //enable upload button
+                            view.enableUploadButton();
                         }
 
                         @Override
@@ -174,21 +181,18 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     public void onError(Throwable e) {
                         view.hideProgress();
                         Log.d("CONAN", "error in updating Article" + e.toString());
-                        Toast.makeText(view, "Problem beim Senden der Daten!" + e, Toast.LENGTH_SHORT).show();
-                        String error;
-                        if (e.toString().contains("SocketTimeoutException")) {
-                            error = "Probleme mit der Verbindung";
-                        } else {
-                            error = e.toString();
-                        }
-                        view.showProblem(error);
+                        //show problem
+                        new ShowNetworkProblemDialog().show(view.getSupportFragmentManager(), null);
+                        //remove white scree
+                        view.hideMainProgress();
+                        //enable upload button
                         view.enableUploadButton();
                     }
 
                     @Override
                     public void onNext(RowItem rowItem) {
                         adId = Long.parseLong(rowItem.getId().toString());
-                        Log.d("CONAN", "OnNExt in updating Article");
+                        Log.d("CONAN", "onNext in updating Article");
                     }
                 });
     }
@@ -196,7 +200,6 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
     public void uploadNewArticle(Intent data) {
 
         view.showMainProgress();
-        view.hideProblem();
 
         final ArrayList<FileNameParcelable> mImage = new ArrayList<>(data.getParcelableArrayListExtra(Constants.FILENAME));
 
@@ -226,14 +229,11 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     public void onError(Throwable e) {
                         view.hideProgress();
                         Log.d("CONAN", "error in upload new Article" + e.toString());
-                        Toast.makeText(view, "Problem beim Senden der Daten!" + e, Toast.LENGTH_SHORT).show();
-                        String error;
-                        if (e.toString().contains("SocketTimeoutException")) {
-                            error = "Timeout im Netzwerk";
-                        } else {
-                            error = e.toString();
-                        }
-                        view.showProblem(error);
+                        //show problem
+                        new ShowNetworkProblemDialog().show(view.getSupportFragmentManager(), null);
+                        //remove white scree
+                        view.hideMainProgress();
+                        //enable upload button
                         view.enableUploadButton();
                     }
 
@@ -290,14 +290,11 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         public void onError(Throwable e) {
                             view.hideProgress();
                             Log.d("CONAN", "error in upload" + e.toString());
-                            Toast.makeText(view, "Problem beim Senden der Daten!", Toast.LENGTH_SHORT).show();
-                            String error;
-                            if (e.toString().contains("SocketTimeoutException")) {
-                                error = "Timeout im Netzwerk";
-                            } else {
-                                error = e.toString();
-                            }
-                            view.showProblem(error);
+                            //show problem
+                            new ShowNetworkProblemDialog().show(view.getSupportFragmentManager(), null);
+                            //remove white scree
+                            view.hideMainProgress();
+                            //enable upload button
                             view.enableUploadButton();
                         }
 

@@ -62,7 +62,6 @@ public class NewAdActivity extends AppCompatActivity implements
     private Boolean[] changedImages;
     private List<String> IMAGES;
     private HashMap<Integer, Long> deleteFilesList;
-    private ImageView errorImage;
 
     private ArrayList<ImageView> removeImgButton;
 
@@ -142,14 +141,11 @@ public class NewAdActivity extends AppCompatActivity implements
 
         mDescription = (EditText) findViewById(R.id.new_ad_description);
         mTitle = (EditText) findViewById(R.id.new_ad_title);
-        errorImage = (ImageView) findViewById(R.id.problem_during_upload);
-        hideProblem();
         mPrice = (EditText) findViewById(R.id.new_ad_price);
 
         initImageViews();
 
         initRemoveImgButtons();
-
 
         //edit my article:
         if (getIntent().getStringExtra(Constants.TITLE) != null) {
@@ -397,18 +393,7 @@ public class NewAdActivity extends AppCompatActivity implements
         locationName.setText(city);
     }
 
-    public void showProblem(String error) {
-        errorImage.setVisibility(View.VISIBLE);
-        errorImage.setOnClickListener(v -> {
-            Toast.makeText(this, "Problem beim Anlegen: " + error, Toast.LENGTH_LONG).show();
-        });
-    }
-
-    public void hideProblem() {
-        errorImage.setVisibility(View.GONE);
-    }
-
-    private void disableUploadButton() {
+    public void disableUploadButton() {
         submitButton.setEnabled(false);
     }
 
