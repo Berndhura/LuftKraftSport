@@ -41,7 +41,7 @@ public class LocationPresenter {
 
     public void saveUsersLocation(Double lat, Double lng) {
 
-        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFrimLatLngObserv(lat, lng, false);
+        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFromLatLngObserable(lat, lng, false);
 
         subscription = getCityNameFromLatLng
                 .subscribeOn(Schedulers.io())

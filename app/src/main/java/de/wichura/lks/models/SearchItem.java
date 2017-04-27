@@ -1,8 +1,8 @@
 package de.wichura.lks.models;
 
 /**
- * Created by bwichura on 07.02.2017.
- *
+ * Created by bernd wichura on 07.02.2017.
+ * Luftkraftsport
  */
 
 public class SearchItem {
@@ -23,6 +23,14 @@ public class SearchItem {
     private Integer priceTo;
 
     private Integer resultCount;
+
+    private String locationName;
+
+    public String getLocationName() {return "dummyLocation";}
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
 
     public Long getId() {
         return id;

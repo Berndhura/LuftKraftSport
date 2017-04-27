@@ -1,6 +1,7 @@
 package de.wichura.lks.activity;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -46,17 +48,9 @@ public class SearchActivity extends AppCompatActivity implements
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
-
-                //TODO kein eigener tab mehr, wird in der search hauptseite befummelt
-                /* if (tabId == R.id.tab_location) {
-
-                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.layout, new LocationFragment());
-                    fragmentTransaction.commit();
-                }*/
-
                 if (tabId == R.id.tab_list_saved_searches) {
                     if ("".equals(getUserToken())) {
+                        //TODO softpad hier schließen -> liegt aber im fragment!!! wie
                         final Intent facebookIntent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
                     } else {

@@ -10,20 +10,22 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
 import java.util.List;
 
-import de.wichura.lks.http.GoogleService;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import de.wichura.lks.R;
+import de.wichura.lks.http.GoogleService;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.SearchItem;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -36,13 +38,11 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
 
     private Context context;
     private Service service;
-    private GoogleService locationService;
 
     public SearchesListAdapter(final Context context, final int resourceId, final List<SearchItem> items) {
         super(context, resourceId, items);
         this.context = context;
         service = new Service();
-        locationService = new GoogleService();
     }
 
     private class ViewHolder {
@@ -83,51 +83,13 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         holder.priceFrom.setText(searchItem.getPriceFrom().toString());
         holder.priceTo.setText(searchItem.getPriceTo().toString());
         holder.distance.setText(searchItem.getDistance().toString());
+        holder.location.setText(searchItem.getLocationName());
 
-        //TODO beim scrollen werden staendig requests gestartet?! nicht gut
-        getLocationName(searchItem, holder, convertView);
-
-        holder.deleteSearch.setOnClickListener((view) -> {
-            deleteSearch(searchItem.getId(), view);
-        });
+        holder.deleteSearch.setOnClickListener((view) -> deleteSearch(searchItem.getId(), view));
         holder.deleteSearch.setTag(position);
 
         return convertView;
     }
-
-    private void getLocationName(SearchItem item, ViewHolder holder, View v) {
-
-        Observable<JsonObject> getCityNameFromLatLng = locationService.getCityNameFrimLatLngObserv(item.getLat(), item.getLng(), false);
-
-        getCityNameFromLatLng
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<JsonObject>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("CONAN", "new Article Presenter: error in getting city name from google maps api: " + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(JsonObject location) {
-                        JsonElement city = location.get("results").getAsJsonArray()
-                                .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
-                                .get(2).getAsJsonObject().get("long_name");
-
-                        Log.d("CONAN", "city name from google maps api: " + city);
-
-                        //TODO werden die richtigen row items gesetzt??? wo ist de position??
-
-                        holder.location.setText(city.getAsString());
-                        notifyDataSetChanged();
-                    }
-                });
-    }
-
 
     private void deleteSearch(Long id, View view) {
         //view.enableProgress();

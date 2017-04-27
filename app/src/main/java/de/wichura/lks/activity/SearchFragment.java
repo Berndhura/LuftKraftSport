@@ -139,6 +139,7 @@ public class SearchFragment extends Fragment {
         });
 
         location.setOnClickListener(v -> {
+            closeKeyboard(getActivity(), keywords.getWindowToken());
             android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.layout, new LocationFragment());
             fragmentTransaction.commit();

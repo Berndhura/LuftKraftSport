@@ -32,7 +32,7 @@ public class NewArticlePresenter {
 
     public void getCityNameFromLatLng(Double lat, Double lng) {
 
-        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFrimLatLngObserv(lat, lng, false);
+        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFromLatLngObserable(lat, lng, false);
 
         getCityNameFromLatLng
                 .subscribeOn(Schedulers.io())

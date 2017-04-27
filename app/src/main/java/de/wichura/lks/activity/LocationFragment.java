@@ -46,8 +46,8 @@ import de.wichura.lks.presentation.LocationPresenter;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by ich on 11.03.2017.
- * LKS
+ * Created by Bernd Wichura on 11.03.2017.
+ * Luftkraftsport
  */
 
 public class LocationFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,

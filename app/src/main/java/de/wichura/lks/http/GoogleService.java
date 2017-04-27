@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -14,8 +15,8 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 /**
- * Created by ich on 18.02.2017.
- * deSurf
+ * Created by Bernd Wichura on 18.02.2017.
+ * Luftkraftsport
  */
 
 public class GoogleService {
@@ -51,12 +52,21 @@ public class GoogleService {
     private interface WebService {
 
         @GET("geocode/json")
-        Observable<JsonObject> getCityNameFrimLatLng(@Query("latlng") String latlng,
+        Observable<JsonObject> getCityNameFromLatLng(@Query("latlng") String latlng,
                                                      @Query("sensor") Boolean sensor);
+
+        @GET("geocode/json")
+        Call<JsonObject> getCityNameFromLatLngCall(@Query("latlng") String latlng,
+                                                   @Query("sensor") Boolean sensor);
     }
 
-    public Observable<JsonObject> getCityNameFrimLatLngObserv(Double lat, Double lng, Boolean sensor) {
+    public Observable<JsonObject> getCityNameFromLatLngObserable(Double lat, Double lng, Boolean sensor) {
         String latlng = lat + "," + lng;
-        return mGoogleWebService.getCityNameFrimLatLng(latlng, sensor);
+        return mGoogleWebService.getCityNameFromLatLng(latlng, sensor);
+    }
+
+    public Call<JsonObject> getCityNameFrimLatLng(Double lat, Double lng, Boolean sensor) {
+        String latlng = lat + "," + lng;
+        return mGoogleWebService.getCityNameFromLatLngCall(latlng, sensor);
     }
 }
