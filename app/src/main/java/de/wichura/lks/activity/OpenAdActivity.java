@@ -277,7 +277,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         } else {
             userName.setText("Keine Benutzer Infos vorhanden!");
             Picasso.with(getContext())
-                    .load(R.drawable.applogo)
+                    .load(R.drawable.logo_martin_zweiter)
                     .into(userPic);
         }
     }
