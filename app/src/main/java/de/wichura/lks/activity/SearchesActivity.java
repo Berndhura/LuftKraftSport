@@ -7,10 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -21,8 +20,6 @@ import de.wichura.lks.R;
 import de.wichura.lks.adapter.SearchesListAdapter;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
-import de.wichura.lks.mainactivity.MainActivity;
-import de.wichura.lks.models.GroupedMsgItem;
 import de.wichura.lks.models.SearchItem;
 import de.wichura.lks.presentation.SearchesPresenter;
 
@@ -110,7 +107,7 @@ public class SearchesActivity extends Fragment {
         empty.setVisibility(View.VISIBLE);
 
 
-        Button reload = (Button) mainView.findViewById(R.id.reload_follow_searches_button);
+        ImageView reload = (ImageView) mainView.findViewById(R.id.reload_follow_searches_button);
         reload.setOnClickListener(v -> {
             empty.setVisibility(View.GONE);
             presenter.loadSearchesForUser();

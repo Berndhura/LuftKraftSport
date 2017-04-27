@@ -38,14 +38,13 @@
             android:gravity="center"
             android:text="@string/empty_result" />
 
-        <Button
+        <ImageView
             android:id="@+id/reload_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/rounded_corners_background_grey"
-            android:text="Neu Laden" />
+            android:src="@drawable/ic_refresh_blue_grey_600_48dp" />
 
     </RelativeLayout>
 

@@ -485,7 +485,7 @@ public class MainActivity extends AppCompatActivity implements
         listView.setEmptyView(noResultsView);
         noResultsView.setVisibility(View.VISIBLE);
 
-        Button reload = (Button) findViewById(R.id.reload_list);
+        ImageView reload = (ImageView) findViewById(R.id.reload_list);
         reload.setOnClickListener(v -> {
             noResultsView.setVisibility(View.GONE);
             if (type.equals(Constants.TYPE_SEARCH)) {
