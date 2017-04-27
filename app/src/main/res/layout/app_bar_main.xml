@@ -47,18 +47,6 @@
                 android:src="@drawable/ic_email_white_24dp"
                 android:visibility="gone" />
 
-            <Button
-                android:id="@+id/search_again"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/main_login_button"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="32dp"
-                android:background="@color/transparent"
-                android:gravity="center_vertical"
-                android:text="Suche anpassen"
-                android:visibility="gone" />
-
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
