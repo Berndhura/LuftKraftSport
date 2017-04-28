@@ -222,7 +222,12 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     @Override
                     public void onCompleted() {
                         view.hideMainProgress();
-                        uploadPic(adId, mImage);
+                        if (mImage.size() > 0) {
+                            uploadPic(adId, mImage);
+                        } else {
+                            Toast.makeText(context, "Neue Anzeige erstellt/geändert!", Toast.LENGTH_SHORT).show();
+                            view.finish();
+                        }
                     }
 
                     @Override
