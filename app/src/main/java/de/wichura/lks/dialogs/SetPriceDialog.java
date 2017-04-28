@@ -105,6 +105,9 @@ public class SetPriceDialog extends DialogFragment {
         if (priceMin.isEmpty()) {
             priceFromTv.setError("Richtigen Wert angeben!");
             valid = false;
+        } else if (Integer.parseInt(priceMin) >= Integer.MAX_VALUE) {
+            priceFromTv.setError("Komm schon, etwas teuer oder?");
+            valid = false;
         } else {
             priceFromTv.setError(null);
         }
@@ -113,7 +116,10 @@ public class SetPriceDialog extends DialogFragment {
         if (priceMax.isEmpty()) {
             priceToTv.setError("Richtigen Wert angeben!");
             valid = false;
-        } else if (Integer.parseInt(priceMin) > Integer.parseInt(priceMax)) {
+        } else if (Integer.parseInt(priceMin) >= Integer.MAX_VALUE) {
+            priceToTv.setError("Komm schon, etwas teuer oder?");
+            valid = false;
+        } else if (Integer.parseInt(priceMax) > Integer.parseInt(priceMax)) {
             priceToTv.setError("Maximum ist kleiner als das Minimum -> Quatsch!");
             valid = false;
         } else {

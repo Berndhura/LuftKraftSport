@@ -208,9 +208,9 @@
                     android:gravity="start"
                     android:hint="@string/keywords"
                     android:imeOptions="actionNext"
-                    android:maxLines="1"
                     android:inputType="text"
-                    android:maxLength="70" />
+                    android:maxLength="70"
+                    android:maxLines="1" />
 
                 <View
                     android:id="@+id/divider1"
@@ -258,7 +258,8 @@
                     android:gravity="start"
                     android:hint="@string/preis"
                     android:imeOptions="actionNext"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="8" />
 
                 <View
                     android:id="@+id/divider3"
