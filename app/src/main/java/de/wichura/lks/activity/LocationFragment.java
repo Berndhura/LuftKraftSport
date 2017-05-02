@@ -203,7 +203,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
 
             Toast.makeText(getActivity(), "frage nach permission", Toast.LENGTH_LONG).show();
 
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 666);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.REQUEST_ID_FOR_LOCATION_PERMISSION);
 
         } else {
             //TODO Kamera position -> anpassen

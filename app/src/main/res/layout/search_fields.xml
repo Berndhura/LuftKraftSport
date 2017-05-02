@@ -27,7 +27,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:background="@drawable/round_corner_for_tv"
-                    android:cursorVisible="false"
+                    android:cursorVisible="true"
                     android:imeOptions="actionSearch"
                     android:drawableEnd="@drawable/ic_search_white_24dp"
                     android:hint="Was suchst du?"

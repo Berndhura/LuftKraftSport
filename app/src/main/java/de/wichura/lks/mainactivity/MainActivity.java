@@ -913,11 +913,12 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.d("CONAN", "onConnectionSuspended: "+i);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("CONAN", "onConnectionFailed: "+connectionResult.toString());
 
     }
 }

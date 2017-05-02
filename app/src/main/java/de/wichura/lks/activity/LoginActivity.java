@@ -281,8 +281,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void handleSignInResult(GoogleSignInResult result, Intent data) {
-        Log.d("CONAN", "handleSignInResult:" + result.isSuccess());
-        Log.d("CONAN", "handleSignInResult status:" + result.getStatus());
+        Log.d("CONAN", "handleSignInResult from Google:" + result.isSuccess());
+        Log.d("CONAN", "handleSignInResult status from google:" + result.getStatus());
 
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.

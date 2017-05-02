@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -92,20 +93,27 @@ public class MessagesActivity extends AppCompatActivity {
 
         presenter.loadMessages(getUserToken(), chatPartner, articleId);
 
-        ImageView newMsgBtn = (ImageView) findViewById(R.id.send_msg_button);
-        if (newMsgBtn != null) {
-            newMsgBtn.setOnClickListener((v) -> {
-                sendMessage(text.getText().toString(), articleId, chatPartner);
-                //add new message to list
-                MsgRowItem it = new MsgRowItem(text.getText().toString());
-                rowItems.add(it);
-                adapter.notifyDataSetChanged();
-                text.setText(null);
-                listView.setSelection(listView.getCount() - 1);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-            });
-        }
+        text.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (text.getRight() - text.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        sendMessage(text.getText().toString(), articleId, chatPartner);
+                        //add new message to list
+                        MsgRowItem it = new MsgRowItem(text.getText().toString());
+                        rowItems.add(it);
+                        adapter.notifyDataSetChanged();
+                        text.setText(null);
+                        listView.setSelection(listView.getCount() - 1);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override

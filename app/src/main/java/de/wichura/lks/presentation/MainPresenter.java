@@ -114,8 +114,12 @@ public class MainPresenter {
                     Profile profile = Profile.getCurrentProfile();
                     if (profile != null) {
                         Uri uri = profile.getProfilePictureUri(200, 200);
-                        view.setProfilePicture(uri);
-                        sendUserPicToServer(uri.toString());
+                        if (uri != null) {
+                            view.setProfilePicture(uri);
+                            sendUserPicToServer(uri.toString());
+                        } else {
+                            view.setProfilePicture(null);
+                        }
                     }
                     setUserPreferences(json.getString("name"), json.getString("id"), token);
                 }

@@ -1,10 +1,12 @@
 package de.wichura.lks.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -140,9 +142,11 @@ public class SearchFragment extends Fragment {
 
         location.setOnClickListener(v -> {
             closeKeyboard(getActivity(), keywords.getWindowToken());
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            //TODO location service ausgeschaltet: frag nach permission
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.REQUEST_ID_FOR_LOCATION_PERMISSION);
+            /*android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.layout, new LocationFragment());
-            fragmentTransaction.commit();
+            fragmentTransaction.commit();*/
         });
 
         location.setText(getLocationString());

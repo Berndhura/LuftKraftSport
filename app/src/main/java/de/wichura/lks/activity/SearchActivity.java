@@ -1,10 +1,11 @@
 package de.wichura.lks.activity;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -12,18 +13,27 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import java.io.IOException;
+import java.util.List;
 
 import de.wichura.lks.R;
 import de.wichura.lks.dialogs.SetPriceDialog;
 import de.wichura.lks.dialogs.ZipDialogFragment;
+import de.wichura.lks.http.GoogleService;
 import de.wichura.lks.mainactivity.Constants;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -94,26 +104,27 @@ public class SearchActivity extends AppCompatActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case 666: {
+            case Constants.REQUEST_ID_FOR_LOCATION_PERMISSION: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     Toast.makeText(this, "Granted", Toast.LENGTH_LONG).show();
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
+                    //TODO mache google map auf, ergebnis merken?!
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.layout, new LocationFragment());
+                    fragmentTransaction.commit();
 
                 } else {
+                    //TODO from api level 23 nur wie mache ich das mit den alten versionen?
+
+                   // boolean showRationale = shouldShowRequestPermissionRationale( permissions[0] );
                     new ZipDialogFragment().show(getSupportFragmentManager(), null);
 
                     Toast.makeText(this, "nix Granted", Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(this, "in666", Toast.LENGTH_LONG).show();
-                return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
@@ -131,7 +142,79 @@ public class SearchActivity extends AppCompatActivity implements
     @Override
     public void onZipCodeComplete(String zipCode) {
         Log.d("CONAN", "Zipcode from dialog: " + zipCode);
-       // getLatLngFromPlz(zipCode);
+        getLatLngFromPlz(zipCode);
+    }
+
+    public void getLatLngFromPlz(String zip) {
+        final Geocoder geocoder = new Geocoder(this);
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(zip, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+
+                //TODO lat lng sind nicht gspeichert, nur für den namen benutzt
+                //store lat lng for article
+                double lat = address.getLatitude();
+                double lng = address.getLongitude();
+
+                //show city name
+                getCityNameFromLatLng(address.getLatitude(), address.getLongitude());
+            } else {
+                // Display appropriate message when Geocoder services are not available
+                Toast.makeText(getApplicationContext(), "Hat leider nicht geklappt mit deiner PLZ, versuche nochmal!", Toast.LENGTH_LONG).show();
+            }
+        } catch (IOException e) {
+            // handle exception
+        }
+    }
+
+    private void getCityNameFromLatLng(Double lat, Double lng) {
+
+        GoogleService googleService = new GoogleService();
+
+        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFromLatLngObserable(lat, lng, false);
+
+        getCityNameFromLatLng
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JsonObject>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "serach anctivity: error in getting city name from google maps api: " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(JsonObject location) {
+                        JsonElement city = location.get("results").getAsJsonArray()
+                                .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
+                                .get(2).getAsJsonObject().get("long_name");
+
+                        Log.d("CONAN", "city name from google maps api: " + city);
+                        //set location name in searchFragment and store lat lng in shared prefs
+                        storeLocation(lat, lng, city.getAsString());
+                    }
+                });
+    }
+
+    private void storeLocation(Double lat, Double lng, String location) {
+
+        SharedPreferences sp = getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putLong(Constants.LAT, Double.doubleToRawLongBits(lat));
+        ed.putLong(Constants.LNG, Double.doubleToRawLongBits(lng));
+        ed.putString(Constants.LOCATION, location);
+        ed.apply();
+
+        ((TextView) getCurrentFragment().getView().findViewById(R.id.search_location_zip_and_location)).setText(location);
+
+        //TODO initDistanceSeekBar -> fehlt hier noch
+
+        //Fragment f = getCurrentFragment();
+        //((LocationFragment) f).updateCity(location);
     }
 
     private Fragment getCurrentFragment() {

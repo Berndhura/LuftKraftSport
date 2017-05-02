@@ -18,7 +18,7 @@ public class Constants {
     public static final int REQUEST_ID_FOR_MESSAGES = 6;
     public static final int REQUEST_ID_FOR_SETTINGS = 7;
     public static final int REQUEST_ID_FOR_SEARCHES = 8;
-    public static final int REQUEST_ID_FOR_LOCATION = 9;
+    public static final int REQUEST_ID_FOR_LOCATION_PERMISSION = 9;
     public static final int REQUEST_ID_FOR_PRICE = 10;
     public static final int RC_SIGN_IN = 11;
     public static final int REQUEST_ID_FOR_REGISTER_USER = 12;
