@@ -22,7 +22,7 @@
     <application
         android:name="de.wichura.lks.mainactivity.MainApp"
         android:allowBackup="true"
-        android:icon="@drawable/lks_icon_3"
+        android:icon="@mipmap/ic_launcher3"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

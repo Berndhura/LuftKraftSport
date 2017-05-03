@@ -1,5 +1,6 @@
 package de.wichura.lks.http;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.database.Cursor;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -259,7 +261,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             String fileString = getRealPathFromUri(context, Uri.parse(imageFiles.get(i).getFileName()));
             File file = new File(fileString);
 
-            ExifInterface exif = null;
+            /*ExifInterface exif = null;
             try {
                 exif = new ExifInterface(file.getAbsolutePath());
             } catch (IOException e) {
@@ -268,7 +270,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                     ExifInterface.ORIENTATION_UNDEFINED);
 
-            Log.d("CONAN", "picture orientation: " + orientation);
+            Log.d("CONAN", "picture orientation: " + orientation);*/
 
             BitmapHelper bitmapHelper = new BitmapHelper(context);
             final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
@@ -294,7 +296,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         @Override
                         public void onError(Throwable e) {
                             view.hideProgress();
-                            Log.d("CONAN", "error in upload" + e.toString());
+                            Log.d("CONAN", "error in upload: " + e.toString());
                             //show problem
                             new ShowNetworkProblemDialog().show(view.getSupportFragmentManager(), null);
                             //remove white scree

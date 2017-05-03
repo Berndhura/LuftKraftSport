@@ -3,6 +3,7 @@ package de.wichura.lks.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,8 +11,8 @@ import java.io.FileOutputStream;
 
 
 /**
- * Created by ich on 01.09.2015.
- * Camper App
+ * Created by Bernd Wichura on 01.09.2015.
+ * Luftkraftsport
  */
 public class BitmapHelper {
 
@@ -68,6 +69,7 @@ public class BitmapHelper {
 
             return outputFile;
         } catch (Exception e) {
+            Log.d("CONAN", "in picture reducer: "+e.getMessage());
             return null;
         }
     }

@@ -177,6 +177,7 @@ public class SearchFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         closeKeyboard(getActivity(), keywords.getWindowToken());
+
     }
 
     private void performSearch() {

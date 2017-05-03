@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -88,6 +89,10 @@ public class NewAdActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.REQUEST_ID_FOR_FILE_PERMISSION);
 
         isLocationSet = false;
         fileNameParcelables = new ArrayList<>();
@@ -197,7 +202,6 @@ public class NewAdActivity extends AppCompatActivity implements
             Log.d("CONAN", "edit: " + articleIdForEdit);
         }
 
-
         submitButton = (Button) findViewById(R.id.uploadButton);
         if (isEditMode) submitButton.setText("Speichern");
         submitButton.setOnClickListener((v) -> {
@@ -232,6 +236,22 @@ public class NewAdActivity extends AppCompatActivity implements
                 fileUploadService.updateArticle(data, deleteFilesList);
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case Constants.REQUEST_ID_FOR_FILE_PERMISSION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Du kannst nun Anzeigen erstellen", Toast.LENGTH_LONG).show();
+                } else {
+                    //TODO was wenn der user nicht will -> aufklären
+                    Toast.makeText(this, "Ohne Zustimmung können leider keine eigenen Anzeigen erstellt werden!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        }
     }
 
     private void initImageViews() {
