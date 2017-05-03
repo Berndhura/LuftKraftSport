@@ -41,7 +41,7 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.USER_PRICE_RANGE;
 
 /**
- * Created by ich on 12.03.2017.
+ * Created by Bernd Wichura on 12.03.2017.
  * LuftKraftSport
  */
 
@@ -55,6 +55,9 @@ public class SearchFragment extends Fragment {
 
     @BindView(R.id.search_location_zip_and_location)
     TextView location;
+
+    @BindView(R.id.start_search)
+    Button startSearch;
 
     @BindView(R.id.follow_search)
     Button followSearch;
@@ -152,6 +155,8 @@ public class SearchFragment extends Fragment {
         location.setText(getLocationString());
 
         price.setOnClickListener(v -> new SetPriceDialog().show(getActivity().getSupportFragmentManager(), null));
+
+        startSearch.setOnClickListener(v -> performSearch());
 
 
         //in case we come back from main activity for search again -> use old search parameter
@@ -315,14 +320,14 @@ public class SearchFragment extends Fragment {
         int distance = location.getInt(Constants.DISTANCE, DISTANCE_INFINITY);
         if (((SearchActivity) getActivity()).getSupportActionBar() != null) {
             ((SearchActivity) getActivity()).getSupportActionBar()
-                    .setSubtitle("in " + location.getString(Constants.LOCATION, "") + ((distance == DISTANCE_INFINITY) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)")));
+                    .setSubtitle("in " + location.getString(Constants.LOCATION, "") + ((DISTANCE_INFINITY.equals(distance)) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)")));
         }
     }
 
     private String getLocationString() {
         SharedPreferences location = getActivity().getSharedPreferences(Constants.USERS_LOCATION, 0);
         int distance = location.getInt(Constants.DISTANCE, DISTANCE_INFINITY);
-        return location.getString(Constants.LOCATION, "") + ((distance == DISTANCE_INFINITY) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)"));
+        return location.getString(Constants.LOCATION, "") + ((DISTANCE_INFINITY.equals(distance)) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)"));
     }
 
     public String getUserToken() {

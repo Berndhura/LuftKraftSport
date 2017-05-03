@@ -59,6 +59,18 @@
                     android:focusable="false"
                     android:inputType="none" />
 
+                <Button
+                    android:id="@+id/start_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_corners_background_grey"
+                    android:drawablePadding="20dp"
+                    android:text="Suche starten" />
+
 
             </LinearLayout>
 
@@ -83,7 +95,6 @@
                 android:inputType="none"
                 android:text="Diese Suche Abspeichern, um eine Benachrichtigung zu erhalten, falls eine passende Anzeige dazu erstellt wird." />
 
-
             <Button
                 android:id="@+id/follow_search"
                 android:layout_width="match_parent"
@@ -95,7 +106,6 @@
                 android:background="@drawable/rounded_corners_background_grey"
                 android:drawablePadding="20dp"
                 android:text="Dieser Suche folgen" />
-
 
         </LinearLayout>
 
