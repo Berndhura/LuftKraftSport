@@ -4,19 +4,17 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-
     <ImageView
         android:id="@+id/delete_search"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_delete_forever_red_800_24dp" />
 
     <View
         android:layout_width="0.5dp"
         android:layout_height="fill_parent"
-        android:layout_toRightOf="@+id/delete_search"
         android:background="@android:color/darker_gray" />
 
     <LinearLayout
@@ -29,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:paddingLeft="15dp"
+            android:paddingStart="15dp"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -40,37 +38,11 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/search_price_range"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:paddingLeft="15dp"
-                android:text="Von: "
-                android:textColor="#444444"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/search_price_from"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:paddingLeft="15dp"
-                android:textColor="#444444"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:paddingLeft="15dp"
-                android:text="Bis: "
-                android:textColor="#444444"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/search_price_to"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
                 android:textColor="#444444"
                 android:textSize="16sp" />
 
@@ -80,21 +52,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:paddingLeft="15dp"
-                android:text="Ort: "
-                android:textColor="#444444"
-                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/location_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:paddingLeft="15dp"
                 android:textColor="#444444"
                 android:textSize="16sp" />
 
@@ -109,8 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:paddingLeft="15dp"
-                android:text="Im Umkreis von: "
+                android:paddingStart="15dp"
                 android:textColor="#444444"
                 android:textSize="16sp" />
 

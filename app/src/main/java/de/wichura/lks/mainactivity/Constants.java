@@ -100,6 +100,6 @@ public class Constants {
     public static final String TYPE_SEARCH = "getSearch";
     public static final String TYPE_USER_WITH_ID = "getUserWithId";
 
-    public static final int DISTANCE_INFINITY = 10000000;
+    public static final Integer DISTANCE_INFINITY = 10000000;
     public static final Integer MAX_PRICE = 10000000;
 }

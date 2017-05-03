@@ -3,20 +3,17 @@ package de.wichura.lks.presentation;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.JsonObject;
-
 import java.util.List;
 
+import de.wichura.lks.activity.SearchesActivity;
 import de.wichura.lks.http.GoogleService;
-import rx.Observable;
+import de.wichura.lks.http.Service;
+import de.wichura.lks.models.SearchItem;
+import de.wichura.lks.util.Utility;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import de.wichura.lks.activity.SearchesActivity;
-import de.wichura.lks.http.Service;
-import de.wichura.lks.models.SearchItem;
-import de.wichura.lks.util.Utility;
 
 /**
  * Created by Bernd Wichura on 07.02.2017.
@@ -48,7 +45,7 @@ public class SearchesPresenter {
                 .subscribe(new Subscriber<List<SearchItem>>() {
                     @Override
                     public void onCompleted() {
-                        // view.disableProgress();
+                        view.disableProgressbar();
                     }
 
                     @Override
@@ -56,18 +53,16 @@ public class SearchesPresenter {
                         Log.d("CONAN", "error loading saved searches: " + e.getMessage());
                         view.disableProgressbar();
                         view.showProblem();
-
                     }
 
                     @Override
                     public void onNext(List<SearchItem> searchItem) {
-                        getLocationNames(searchItem);
+                        view.updateSearches(searchItem);
                     }
                 });
     }
 
-    private void getLocationNames(List<SearchItem> searchItem) {
-
+   /* private void getLocationNames(List<SearchItem> searchItem) {
 
        Observable.from(searchItem)
                 .flatMap(item -> googleService.getCityNameFromLatLngObserable(item.getLat(), item.getLng(), null)
@@ -96,5 +91,5 @@ public class SearchesPresenter {
                         }
                     }
                 });
-    }
+    }*/
 }

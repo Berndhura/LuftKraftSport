@@ -48,9 +48,7 @@ public class SearchItem {
         this.description = description;
     }
 
-    public Integer getDistance() {
-        return distance;
-    }
+    public Integer getDistance() {return distance;}
 
     public void setDistance(Integer distance) {
         this.distance = distance;
@@ -80,9 +78,7 @@ public class SearchItem {
         this.priceFrom = priceFrom;
     }
 
-    public Integer getPriceTo() {
-        return priceTo;
-    }
+    public Integer getPriceTo() {return priceTo;}
 
     public void setPriceTo(Integer priceTo) {
         this.priceTo = priceTo;

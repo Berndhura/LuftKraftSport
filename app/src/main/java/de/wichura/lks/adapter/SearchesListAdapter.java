@@ -10,19 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
-
-import java.io.IOException;
 import java.util.List;
 
 import de.wichura.lks.R;
-import de.wichura.lks.http.GoogleService;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.SearchItem;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -30,7 +23,7 @@ import rx.schedulers.Schedulers;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
- * Created by ich on 07.02.2017.
+ * Created by Bernd Wichura on 07.02.2017.
  * Luftkrafsport
  */
 
@@ -47,13 +40,11 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
 
     private class ViewHolder {
         TextView title;
-        TextView priceFrom;
-        TextView priceTo;
+        TextView priceRange;
         TextView distance;
         TextView location;
         ImageView deleteSearch;
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -67,8 +58,7 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
 
             holder = new SearchesListAdapter.ViewHolder();
             holder.title = (TextView) convertView.findViewById(R.id.search_title);
-            holder.priceFrom = (TextView) convertView.findViewById(R.id.search_price_from);
-            holder.priceTo = (TextView) convertView.findViewById(R.id.search_price_to);
+            holder.priceRange = (TextView) convertView.findViewById(R.id.search_price_range);
             holder.distance = (TextView) convertView.findViewById(R.id.search_distance);
             holder.deleteSearch = (ImageView) convertView.findViewById(R.id.delete_search);
             holder.location = (TextView) convertView.findViewById(R.id.location_name);
@@ -76,14 +66,12 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         } else
             holder = (SearchesListAdapter.ViewHolder) convertView.getTag();
 
-        // getting ad data for the row
         final SearchItem searchItem = getItem(position);
 
-        holder.title.setText(searchItem.getDescription());
-        holder.priceFrom.setText(searchItem.getPriceFrom().toString());
-        holder.priceTo.setText(searchItem.getPriceTo().toString());
-        holder.distance.setText(searchItem.getDistance().toString());
-        holder.location.setText(searchItem.getLocationName());
+        holder.title.setText(showTitle(searchItem));
+        holder.priceRange.setText(showPriceRange(searchItem));
+        holder.distance.setText(showDistance(searchItem));
+        holder.location.setText(showLocation(searchItem));
 
         holder.deleteSearch.setOnClickListener((view) -> deleteSearch(searchItem.getId(), view));
         holder.deleteSearch.setTag(position);
@@ -91,8 +79,37 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         return convertView;
     }
 
+    private String showTitle(SearchItem item) {
+        return "Was: " + item.getDescription();
+    }
+
+    private String showPriceRange(SearchItem item) {
+        if (Constants.MAX_PRICE.equals(item.getPriceTo())) {
+            return "Preis: Beliebig";
+        } else {
+            return "Von: " + item.getPriceFrom() + "€ Bis: " + item.getPriceTo() + "€";
+        }
+    }
+
+
+    private String showLocation(SearchItem item) {
+        return "Wo: " + item.getLocationName();
+    }
+
+    private String showDistance(SearchItem item) {
+        if (item.getDistance() != null) {
+            if (Constants.DISTANCE_INFINITY.equals(item.getDistance())) {
+                return "Entfernung egal";
+            } else {
+                Integer distanceInKm = item.getDistance() / 1000;
+                return "Im Umkreis von: " + distanceInKm + " km";
+            }
+        } else {
+            return "Entfernung egal";
+        }
+    }
+
     private void deleteSearch(Long id, View view) {
-        //view.enableProgress();
         service.deleteSearchesObserv(id, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
