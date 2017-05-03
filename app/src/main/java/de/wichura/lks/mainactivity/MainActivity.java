@@ -178,6 +178,13 @@ public class MainActivity extends AppCompatActivity implements
         progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
         messagesBtn = (ImageView) findViewById(R.id.main_mail_button);
 
+        messagesBtn.setOnClickListener(v -> {
+            messagesBtn.setVisibility(View.GONE);
+            final Intent msgIntent = new Intent(getApplicationContext(), MessagesOverviewActivity.class);
+            msgIntent.putExtra(Constants.USER_ID, getUserId());
+            startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES);
+        });
+
         //configure Flurry for analysis
         //configureFlurry();
 

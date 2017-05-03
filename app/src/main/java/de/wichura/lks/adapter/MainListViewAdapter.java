@@ -114,6 +114,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         //TODO: (rowItem.getPictureIds().length > 0)? rowItem.getPictureIds()[0]: ""  -> im else zweig ?
         Picasso.with(context)
                 .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + ((rowItem.getPictureIds().length > 0) ? rowItem.getPictureIds()[0] : "") + "/thumbnail")
+                .placeholder(R.drawable.logo_martin_zweiter)
                 .resize(100, 100)
                 .centerCrop()
                 .into(holder.thumbNail);

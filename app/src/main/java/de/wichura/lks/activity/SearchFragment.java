@@ -135,7 +135,7 @@ public class SearchFragment extends Fragment {
         keywords.setOnEditorActionListener((tv, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 keywords.clearFocus();
-                InputMethodManager in = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 in.hideSoftInputFromWindow(keywords.getWindowToken(), 0);
                 performSearch();
                 return true;
@@ -223,10 +223,14 @@ public class SearchFragment extends Fragment {
     }
 
     public void adaptLayoutForPrice(String from, String to) {
+        Log.d("CONAN", "priceTo: "+to);
         if (getString(R.string.price_does_not_matter).equals(from)) {
             price.setText("");
             price.setHint(R.string.hint_for_price);
         } else if ("".equals(from) && "".equals(to)) {
+            price.setHint(R.string.hint_for_price);
+        } else if (to.equals(Constants.MAX_PRICE.toString())) {
+            price.setText("");
             price.setHint(R.string.hint_for_price);
         } else {
             price.setText(from + "€" + " bis " + to + "€");
