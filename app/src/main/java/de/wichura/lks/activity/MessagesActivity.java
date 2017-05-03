@@ -11,10 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.wang.avi.AVLoadingIndicatorView;
@@ -99,21 +99,40 @@ public class MessagesActivity extends AppCompatActivity {
                 final int DRAWABLE_RIGHT = 2;
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (event.getRawX() >= (text.getRight() - text.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        sendMessage(text.getText().toString(), articleId, chatPartner);
-                        //add new message to list
-                        MsgRowItem it = new MsgRowItem(text.getText().toString());
-                        rowItems.add(it);
-                        adapter.notifyDataSetChanged();
-                        text.setText(null);
-                        listView.setSelection(listView.getCount() - 1);
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                        return true;
+                        if (!"".equals(text.getText())) {
+                            sendMessageAndUpdateChat(articleId, chatPartner);
+                        } else {
+                            return false;
+                        }
                     }
                 }
                 return false;
             }
         });
+
+        text.setOnEditorActionListener((tv, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                text.clearFocus();
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(text.getWindowToken(), 0);
+                sendMessageAndUpdateChat(articleId, chatPartner);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private boolean sendMessageAndUpdateChat(final int articleId, final String chatPartner) {
+        sendMessage(text.getText().toString(), articleId, chatPartner);
+        //add new message to list
+        MsgRowItem it = new MsgRowItem(text.getText().toString());
+        rowItems.add(it);
+        adapter.notifyDataSetChanged();
+        text.setText(null);
+        listView.setSelection(listView.getCount() - 1);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+        return true;
     }
 
     @Override

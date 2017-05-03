@@ -17,10 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/message_toolbar"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
@@ -77,9 +76,9 @@
             android:layout_margin="8dp"
             android:background="@drawable/round_corner_for_tv"
             android:cursorVisible="true"
-            android:imeOptions="actionSearch"
             android:drawableEnd="@drawable/ic_send_blue_grey_600_24dp"
             android:hint="Nachricht..."
+            android:imeOptions="actionSend"
             android:inputType="text"
             android:textColorHint="@color/app_blue" />
 
