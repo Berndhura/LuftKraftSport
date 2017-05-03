@@ -22,7 +22,7 @@
     <application
         android:name="de.wichura.lks.mainactivity.MainApp"
         android:allowBackup="true"
-        android:icon="@drawable/logo_martin_zweiter"
+        android:icon="@drawable/lks_icon_3"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

@@ -67,7 +67,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/rounded_corners_background_grey"
+                    android:background="@drawable/rounded_corners_background_grey_white_frame"
                     android:drawablePadding="20dp"
                     android:text="Suche starten" />
 
