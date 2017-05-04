@@ -1,12 +1,14 @@
 package de.wichura.lks.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -90,9 +92,7 @@ public class NewAdActivity extends AppCompatActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.REQUEST_ID_FOR_FILE_PERMISSION);
+        checkReadWritePermission();
 
         isLocationSet = false;
         fileNameParcelables = new ArrayList<>();
@@ -238,15 +238,33 @@ public class NewAdActivity extends AppCompatActivity implements
         });
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkReadWritePermission() {
+
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            //permission granted, just go on
+        } else {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, "Die App benötigt Lese- und Schreiberechtigungen, um Anzeigen erstellen zu können!", Toast.LENGTH_LONG).show();
+            }
+            //ask for permission
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.REQUEST_ID_FOR_FILE_PERMISSION);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
+
             case Constants.REQUEST_ID_FOR_FILE_PERMISSION: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Du kannst nun Anzeigen erstellen", Toast.LENGTH_LONG).show();
+                    //permission granted, just go on
                 } else {
-                    //TODO was wenn der user nicht will -> aufklären
+                    //permission not granted -> go back
                     Toast.makeText(this, "Ohne Zustimmung können leider keine eigenen Anzeigen erstellt werden!", Toast.LENGTH_LONG).show();
                     finish();
                 }

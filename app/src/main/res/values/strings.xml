@@ -50,6 +50,9 @@
     <string name="confirm_network_error_text">Es gab ein Problem mit der Netzwerkverbindung! Versuche es bitte nochmal.</string>
     <string name="confirm_wrong_login">Login fehlgeschlagen</string>
     <string name="confirm_wrong_login_text">Der Benutzername oder das Passwort war falsch! Versuche es bitte nochmal.</string>
+    <string name="confirm_read_write_permission">Lese-/Schreibberechtigung abgelehnt </string>
+    <string name="confirm_read_write_permission_text">Ohne Lese- und Schreiberechtigung kannst Du keine Anzeige erstellen. Willst Du dir es nochmal überlegen?</string>
+
 
     <!-- Empty Ads Database -->
     <string name="empty_ads_list">No Ads Information Available</string>

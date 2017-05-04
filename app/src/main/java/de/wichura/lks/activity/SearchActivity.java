@@ -1,11 +1,13 @@
 package de.wichura.lks.activity;
 
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -100,7 +102,9 @@ public class SearchActivity extends AppCompatActivity implements
         Log.d("CONAN", "viewToMeasure has height " + height);
     }
 
+
     //permission request from location fragment
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -119,7 +123,7 @@ public class SearchActivity extends AppCompatActivity implements
                 } else {
                     //TODO from api level 23 nur wie mache ich das mit den alten versionen?
 
-                   // boolean showRationale = shouldShowRequestPermissionRationale( permissions[0] );
+                    boolean showRationale = shouldShowRequestPermissionRationale( permissions[0] );
                     new ZipDialogFragment().show(getSupportFragmentManager(), null);
 
                     Toast.makeText(this, "nix Granted", Toast.LENGTH_LONG).show();
