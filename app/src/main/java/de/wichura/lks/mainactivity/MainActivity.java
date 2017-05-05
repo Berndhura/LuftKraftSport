@@ -570,21 +570,7 @@ public class MainActivity extends AppCompatActivity implements
                     if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
                         drawer.closeDrawer(GravityCompat.START);
                     }
-                    Snackbar.make(findViewById(R.id.snackbarPosition), "Permissions bearbeiten?",
-                            Snackbar.LENGTH_LONG).setAction("Los!",
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent i = new Intent();
-                                    i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
-                                    i.addCategory(Intent.CATEGORY_DEFAULT);
-                                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                    i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                                    startActivity(i);
-                                }
-                            }).show();
+                    showRequestForPermission();
                 }
                 //just show all
                 setMyAdsFlag(false);
@@ -680,6 +666,22 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             }
         }
+    }
+
+    private void showRequestForPermission() {
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.snackbarPosition), "Permissions bearbeiten?",
+                Snackbar.LENGTH_LONG).setAction("Los!", view -> {
+            Intent i = new Intent();
+            i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+            i.addCategory(Intent.CATEGORY_DEFAULT);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            startActivity(i);
+        });
+        snackbar.setActionTextColor(getResources().getColor(R.color.white_smoke));
+        snackbar.show();
     }
 
     @Override

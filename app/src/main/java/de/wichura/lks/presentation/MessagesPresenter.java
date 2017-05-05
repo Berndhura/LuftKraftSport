@@ -5,19 +5,19 @@ import android.view.View;
 
 import java.util.List;
 
+import de.wichura.lks.activity.MessagesActivity;
+import de.wichura.lks.http.Service;
+import de.wichura.lks.models.ArticleDetails;
+import de.wichura.lks.models.MsgRowItem;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import de.wichura.lks.activity.MessagesActivity;
-import de.wichura.lks.http.Service;
-import de.wichura.lks.models.ArticleDetails;
-import de.wichura.lks.models.MsgRowItem;
 
 /**
- * Created by ich on 01.11.2016.
- * CamperApp
+ * Created by Bernd Wichura on 01.11.2016.
+ * Luftkraftsport
  */
 
 public class MessagesPresenter {

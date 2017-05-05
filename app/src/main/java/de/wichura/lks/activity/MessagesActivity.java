@@ -32,7 +32,7 @@ import de.wichura.lks.presentation.MessagesPresenter;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
- * Created by ich on 22.05.2016.
+ * Created by Bernd Wichura on 22.05.2016.
  * Luftkraftsport
  */
 
@@ -52,6 +52,11 @@ public class MessagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         presenter = new MessagesPresenter(this);
+
+        // init rowItems List and adapter in case loadMessages has a problem, avoid null if user sends msg
+        rowItems = new ArrayList<>();
+        adapter = new MessageListViewAdapter(getApplicationContext(), R.layout.list_item, rowItems);
+
 
         //in case MessageActivity is open, new message will be added to list
         BroadcastReceiver appendChatScreenMsgReceiver = new BroadcastReceiver() {
@@ -190,7 +195,7 @@ public class MessagesActivity extends AppCompatActivity {
     }
 
     public void showMessages(List<MsgRowItem> msgRowItems) {
-        rowItems = new ArrayList<>();
+
         rowItems.addAll(msgRowItems);
 
         adapter = new MessageListViewAdapter(getApplicationContext(), R.layout.list_item, rowItems);

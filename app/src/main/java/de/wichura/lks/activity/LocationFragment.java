@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,7 +31,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -128,7 +126,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
             fragmentTransaction.replace(R.id.layout, new SearchFragment());
             fragmentTransaction.commit();
         });
-        closeLocation.setVisibility(View.VISIBLE );
+        closeLocation.setVisibility(View.VISIBLE);
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
@@ -195,13 +193,9 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-        //int accessFineLoc = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
-
         int accessCoarseLoc = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
 
-        if (accessCoarseLoc == PackageManager.PERMISSION_DENIED) { //&& accessFineLoc == PackageManager.PERMISSION_DENIED) {
-
-            Toast.makeText(getActivity(), "frage nach permission", Toast.LENGTH_LONG).show();
+        if (accessCoarseLoc == PackageManager.PERMISSION_DENIED) {
 
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.REQUEST_ID_FOR_LOCATION_PERMISSION);
 
@@ -276,7 +270,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     }
 
     private void storeDistance(int distance) {
-        Log.d("CONAN", "store search distance: "+distance);
+        Log.d("CONAN", "store search distance: " + distance);
         SharedPreferences sp = getActivity().getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
         ed.putInt(Constants.DISTANCE, distance);
