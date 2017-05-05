@@ -43,6 +43,7 @@ public class Constants {
     public static final String URI = "uri";
     public static final String URI_AS_LIST = "uri_as_list";
     public static final String TITLE = "title";
+    public static final String LOCATION_NAME = "locationName";
     public static final String IMAGE = "image";
     public static final String DESCRIPTION = "description";
     public static final String LOCATION = "location";

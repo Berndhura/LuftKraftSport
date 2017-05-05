@@ -29,6 +29,9 @@ public class RowItem {
     private String[] pictureIds;
     @Expose
     private Integer distance;
+    @Expose
+    private String locationName;
+
 
     public RowItem() {
     }
@@ -145,5 +148,13 @@ public class RowItem {
 
     public void setPictureIds(String[] pictureIds) {
         this.pictureIds = pictureIds;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 }

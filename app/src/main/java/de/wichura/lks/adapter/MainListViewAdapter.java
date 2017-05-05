@@ -123,12 +123,13 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         String formatedPrice = rowItem.getPrice().split("\\.")[0] + " €";
         holder.txtPrice.setText(formatedPrice);
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
+
         if (isMyAdsRequest()) {
             holder.distance.setText("Meine");
         } else if (!isLocationServiceEnabled()) {
             holder.distance.setText("");  // TODO keine location -> keine km entfernung
         } else {
-            holder.distance.setText(rowItem.getDistance() + " km");
+            holder.distance.setText(getDistAndLocation(rowItem));
         }
 
         //bookmark star full for bookmarked ad
@@ -210,6 +211,10 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         }
 
         return convertView;
+    }
+
+    private String getDistAndLocation(RowItem item) {
+        return item.getDistance() + " km";
     }
 
     private void removeFromBookmark(Integer id) {

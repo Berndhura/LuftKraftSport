@@ -86,6 +86,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private TextView mDescText;
     private TextView mDateText;
     private Integer mAdId;
+    private TextView locationName;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -120,6 +121,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         userName = (TextView) findViewById(R.id.user_name);
         userNumberOfArticles = (TextView) findViewById(R.id.user_number_of_articles);
         userPic = (ImageView) findViewById(R.id.user_image);
+        locationName = (TextView) findViewById(R.id.open_ad_location_name);
 
         getDisplayDimensions();
 
@@ -128,6 +130,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             //intent comes from article overview
             String pictureUri = getIntent().getStringExtra(Constants.URI_AS_LIST);
             mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
+            locationName.setText(getIntent().getStringExtra(Constants.LOCATION_NAME));
             Float price = getIntent().getFloatExtra(Constants.PRICE, 0);
             String formatedPrice = price.toString().split("\\.")[0] + " €";
             mPrice.setText(formatedPrice);
@@ -181,6 +184,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         }
 
         mTitleText.setText(articleDetails.getTitle());
+        locationName.setText(articleDetails.getLocationName());
         Integer price = articleDetails.getPrice();
         String formatedPrice = price.toString().split("\\.")[0] + " €";
         mPrice.setText(formatedPrice);
@@ -267,6 +271,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             userNumberOfArticles.setText("Anzeigen: " + user.getNumberOfArticles().toString());
             Picasso.with(getContext())
                     .load(user.getProfilePictureUrl())
+                    .placeholder(R.drawable.ic_person_outline_blue_grey_600_24dp)
                     .into(userPic);
 
             userPic.setOnClickListener(v -> {
@@ -277,7 +282,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         } else {
             userName.setText("Keine Benutzer Infos vorhanden!");
             Picasso.with(getContext())
-                    .load(R.drawable.logo_martin_zweiter)
+                    .load(R.drawable.ic_person_outline_blue_grey_600_24dp)
                     .into(userPic);
         }
     }

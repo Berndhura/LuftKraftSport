@@ -10,8 +10,10 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -87,13 +89,26 @@ public class NewAdActivity extends AppCompatActivity implements
     private double lat;
     private double lng;
 
+    private LinearLayout main;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        checkReadWritePermission();
+        setContentView(R.layout.new_ad_acivity);
+        main = (LinearLayout) findViewById(R.id.main_create_layout);
+        main.setVisibility(View.GONE);
 
+        //Android 6 and higher: request permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkReadWritePermission();
+        } else {
+            main.setVisibility(View.VISIBLE);
+            initGui();
+        }
+    }
+
+    private void initGui() {
         isLocationSet = false;
         fileNameParcelables = new ArrayList<>();
         IMAGES = new ArrayList<>();
@@ -112,8 +127,6 @@ public class NewAdActivity extends AppCompatActivity implements
                     .addApi(LocationServices.API)
                     .build();
         }
-
-        setContentView(R.layout.new_ad_acivity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.new_ad_toolbar);
         if (toolbar != null) {
@@ -244,6 +257,8 @@ public class NewAdActivity extends AppCompatActivity implements
         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             //permission granted, just go on
+            main.setVisibility(View.VISIBLE);
+            initGui();
         } else {
             if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 Toast.makeText(this, "Die App benötigt Lese- und Schreiberechtigungen, um Anzeigen erstellen zu können!", Toast.LENGTH_LONG).show();
@@ -260,13 +275,32 @@ public class NewAdActivity extends AppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
 
+            //TODO der ablauf ist mir noch nicht ganz klar...
             case Constants.REQUEST_ID_FOR_FILE_PERMISSION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted, just go on
+                    main.setVisibility(View.VISIBLE);
+                    initGui();
                 } else {
                     //permission not granted -> go back
-                    Toast.makeText(this, "Ohne Zustimmung können leider keine eigenen Anzeigen erstellt werden!", Toast.LENGTH_LONG).show();
-                    finish();
+                    //Toast.makeText(this, "Ohne Zustimmung können leider keine eigenen Anzeigen erstellt werden!", Toast.LENGTH_LONG).show();
+
+                    Snackbar.make(findViewById(R.id.snackbarPosition), "Permissions bearbeiten?",
+                            Snackbar.LENGTH_INDEFINITE).setAction("Los!",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent i = new Intent();
+                                    i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                                    i.addCategory(Intent.CATEGORY_DEFAULT);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                    startActivity(i);
+                                }
+                            }).show();
+                    //finish();
                 }
             }
         }
@@ -381,13 +415,17 @@ public class NewAdActivity extends AppCompatActivity implements
 
     @Override
     protected void onStart() {
-        mGoogleApiClient.connect();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
         super.onStop();
     }
 

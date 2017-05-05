@@ -1,12 +1,11 @@
 package de.wichura.lks.models;
 
 /**
- * Created by ich on 18.11.2016.
- * CamperApp
+ * Created by Bernd Wichura on 18.11.2016.
+ * Luftkraftsport
  */
 
 public class ArticleDetails {
-
 
     private Integer id;
     private String title;
@@ -18,6 +17,7 @@ public class ArticleDetails {
     private Integer views;
     private Location location;
     private Integer bookmarks;
+    private String locationName;
 
 
     public Integer getId() {
@@ -99,4 +99,8 @@ public class ArticleDetails {
     public void setBookmarks(Integer bookmarks) {
         this.bookmarks = bookmarks;
     }
+
+    public String getLocationName() {return locationName;}
+
+    public void setLocationName(String locationName) {this.locationName = locationName;}
 }

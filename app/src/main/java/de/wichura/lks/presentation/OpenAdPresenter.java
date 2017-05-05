@@ -17,8 +17,8 @@ import de.wichura.lks.models.User;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
- * Created by ich on 13.11.2016.
- * CamperApp
+ * Created by Bernd Wichura on 13.11.2016.
+ * Luftkraftsport
  */
 
 public class OpenAdPresenter {
@@ -175,9 +175,7 @@ public class OpenAdPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ArticleDetails>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
+                    public void onCompleted() {}
 
                     @Override
                     public void onError(Throwable e) {
@@ -197,9 +195,7 @@ public class OpenAdPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<User>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
+                    public void onCompleted() {}
 
                     @Override
                     public void onError(Throwable e) {

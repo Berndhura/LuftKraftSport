@@ -472,6 +472,7 @@ public class MainActivity extends AppCompatActivity implements
             final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
             //TODO more images anzeigen...
             intent.putExtra(Constants.URI_AS_LIST, rowItem.getUrl());
+            intent.putExtra(Constants.LOCATION_NAME, rowItem.getLocationName());
             intent.putExtra(Constants.ID, rowItem.getId());
             intent.putExtra(Constants.TITLE, rowItem.getTitle());
             intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
