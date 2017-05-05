@@ -29,7 +29,7 @@
         <ListView
             android:id="@+id/main_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="15sp"
             android:layout_marginRight="15sp"
             android:divider="@android:color/transparent"
@@ -63,6 +63,13 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/snackbarPosition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"/>
 
     <include layout="@layout/load_indicator" />
 

@@ -65,6 +65,7 @@ public class Constants {
     public static final String ID = "id";
     public static final String POSITION_IN_LIST = "positionInList";
     public static final String IS_EDIT_MODE = "isEditMode";
+    public static final String PERMISSION_DENIED = "permissionDenied";
 
     //Broadcast messages
     public static final String LOGIN_COMPLETE = "loginComplete";

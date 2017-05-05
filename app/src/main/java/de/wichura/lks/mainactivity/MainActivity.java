@@ -9,13 +9,14 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -38,9 +39,6 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -48,10 +46,6 @@ import com.google.android.gms.location.LocationServices;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,16 +65,10 @@ import de.wichura.lks.models.AdsAndBookmarks;
 import de.wichura.lks.models.RowItem;
 import de.wichura.lks.presentation.MainPresenter;
 import me.leolin.shortcutbadger.ShortcutBadger;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.SHOW_MY_ADS;
 import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
-import static org.acra.ACRA.LOG_TAG;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -338,7 +326,8 @@ public class MainActivity extends AppCompatActivity implements
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            Toast.makeText(this, "Location Service ausgeschaltet", Toast.LENGTH_LONG).show();
+            //TODO was macht das hier?? hab ich vergessen
+            //Toast.makeText(this, "Location Service ausgeschaltet", Toast.LENGTH_LONG).show();
             saveLocationServiceStatus(false);
         } else {
             saveLocationServiceStatus(true);
@@ -575,6 +564,27 @@ public class MainActivity extends AppCompatActivity implements
                     setMyAdsFlag(true);
                     getAds(Constants.TYPE_USER);
                     break;
+                }
+                //Android M permission for Read/Write -> ask user again
+                if (data != null && data.getStringExtra(Constants.PERMISSION_DENIED) != null) {
+                    if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                    Snackbar.make(findViewById(R.id.snackbarPosition), "Permissions bearbeiten?",
+                            Snackbar.LENGTH_LONG).setAction("Los!",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent i = new Intent();
+                                    i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                                    i.addCategory(Intent.CATEGORY_DEFAULT);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                    startActivity(i);
+                                }
+                            }).show();
                 }
                 //just show all
                 setMyAdsFlag(false);
@@ -932,7 +942,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
 
-        Log.d("CONAN", " in on Connected: "+bundle);
+        Log.d("CONAN", " in on Connected: " + bundle);
 
         /*OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new FormEncodingBuilder()
@@ -967,12 +977,12 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d("CONAN", "onConnectionSuspended: "+i);
+        Log.d("CONAN", "onConnectionSuspended: " + i);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d("CONAN", "onConnectionFailed: "+connectionResult.toString());
+        Log.d("CONAN", "onConnectionFailed: " + connectionResult.toString());
 
     }
 }

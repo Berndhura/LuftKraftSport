@@ -10,10 +10,8 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -262,6 +260,12 @@ public class NewAdActivity extends AppCompatActivity implements
         } else {
             if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 Toast.makeText(this, "Die App benötigt Lese- und Schreiberechtigungen, um Anzeigen erstellen zu können!", Toast.LENGTH_LONG).show();
+                Intent i = new Intent();
+                i.putExtra(Constants.PERMISSION_DENIED, "permission");
+                setResult(RESULT_OK, i);
+                finish();
+            } else {
+                //nothing to do here -> user wants to use upload first time
             }
             //ask for permission
             ActivityCompat.requestPermissions(this, new String[]{
@@ -283,24 +287,8 @@ public class NewAdActivity extends AppCompatActivity implements
                     initGui();
                 } else {
                     //permission not granted -> go back
+                    finish();
                     //Toast.makeText(this, "Ohne Zustimmung können leider keine eigenen Anzeigen erstellt werden!", Toast.LENGTH_LONG).show();
-
-                    Snackbar.make(findViewById(R.id.snackbarPosition), "Permissions bearbeiten?",
-                            Snackbar.LENGTH_INDEFINITE).setAction("Los!",
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent i = new Intent();
-                                    i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
-                                    i.addCategory(Intent.CATEGORY_DEFAULT);
-                                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                    i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                                    startActivity(i);
-                                }
-                            }).show();
-                    //finish();
                 }
             }
         }
