@@ -38,6 +38,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static de.wichura.lks.mainactivity.Constants.DISTANCE_INFINITY;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
@@ -142,9 +143,11 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDistanceComplete(Integer distance) {
-        Log.d("CONAN", "Distance from dialog: " + distance);
-        //storeDistance(distance);
+    public void onDistanceComplete(Integer dist) {
+        Log.d("CONAN", "Distance from dialog: " + dist);
+
+        Integer distance = (dist==100)? Constants.DISTANCE_INFINITY : dist * 5;
+        storeDistance(distance);
     }
 
     public void getLatLngFromPlz(String zip) {
@@ -214,11 +217,22 @@ public class SearchActivity extends AppCompatActivity implements
         ed.apply();
 
         ((TextView) getCurrentFragment().getView().findViewById(R.id.search_location_zip_and_location)).setText(location);
+    }
 
-        //TODO initDistanceSeekBar -> fehlt hier noch
+    private void storeDistance(Integer distance) {
 
-        //Fragment f = getCurrentFragment();
-        //((LocationFragment) f).updateCity(location);
+        SharedPreferences sp = getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putInt(Constants.DISTANCE, distance);
+        ed.apply();
+
+        ((TextView) getCurrentFragment().getView().findViewById(R.id.search_location_zip_and_location)).setText(getLocationString());
+    }
+
+    private String getLocationString() {
+        SharedPreferences location = getSharedPreferences(Constants.USERS_LOCATION, 0);
+        int distance = location.getInt(Constants.DISTANCE, DISTANCE_INFINITY);
+        return location.getString(Constants.LOCATION, "") + ((DISTANCE_INFINITY.equals(distance)) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) + " km)"));
     }
 
     private Fragment getCurrentFragment() {
