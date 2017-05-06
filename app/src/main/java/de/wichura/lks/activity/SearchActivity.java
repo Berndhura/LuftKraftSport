@@ -146,8 +146,7 @@ public class SearchActivity extends AppCompatActivity implements
     public void onDistanceComplete(Integer dist) {
         Log.d("CONAN", "Distance from dialog: " + dist);
 
-        Integer distance = (dist==100)? Constants.DISTANCE_INFINITY : dist * 5;
-        storeDistance(distance);
+        storeDistance((dist == 100) ? Constants.DISTANCE_INFINITY : dist * 5000);
     }
 
     public void getLatLngFromPlz(String zip) {
@@ -232,7 +231,7 @@ public class SearchActivity extends AppCompatActivity implements
     private String getLocationString() {
         SharedPreferences location = getSharedPreferences(Constants.USERS_LOCATION, 0);
         int distance = location.getInt(Constants.DISTANCE, DISTANCE_INFINITY);
-        return location.getString(Constants.LOCATION, "") + ((DISTANCE_INFINITY.equals(distance)) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) + " km)"));
+        return location.getString(Constants.LOCATION, "") + ((DISTANCE_INFINITY.equals(distance)) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) /1000 + " km)"));
     }
 
     private Fragment getCurrentFragment() {
