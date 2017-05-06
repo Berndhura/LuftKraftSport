@@ -218,27 +218,19 @@
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray" />
 
-                <ScrollView
+                <EditText
+                    android:id="@+id/new_ad_description"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.7">
-
-                    <EditText
-                        android:id="@+id/new_ad_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:background="@android:color/transparent"
-                        android:ems="10"
-                        android:focusable="true"
-                        android:gravity="start"
-                        android:hint="@string/description"
-                        android:imeOptions="actionDone"
-                        android:inputType="textPersonName|textMultiLine"
-                        android:maxLength="500" />
-
-                </ScrollView>
-
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:focusable="true"
+                    android:gravity="start"
+                    android:hint="@string/description"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName|textMultiLine"
+                    android:maxLength="500" />
 
                 <View
                     android:id="@+id/divider2"
@@ -253,6 +245,7 @@
                     android:layout_margin="16dp"
                     android:layout_weight="0.1"
                     android:background="@android:color/transparent"
+                    android:drawableEnd="@drawable/ic_euro_symbol_grey_600_24dp"
                     android:ems="10"
                     android:focusable="true"
                     android:gravity="start"

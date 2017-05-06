@@ -1,9 +1,12 @@
 package de.wichura.lks.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
@@ -42,7 +45,7 @@ import static de.wichura.lks.mainactivity.Constants.USER_PRICE_RANGE;
 
 /**
  * Created by Bernd Wichura on 12.03.2017.
- * LuftKraftSport
+ * Luftkraftsport
  */
 
 public class SearchFragment extends Fragment {
@@ -117,11 +120,7 @@ public class SearchFragment extends Fragment {
         keywords.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1;
                 final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_BOTTOM = 3;
-
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (event.getRawX() >= (keywords.getRight() - keywords.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         performSearch();
@@ -145,11 +144,12 @@ public class SearchFragment extends Fragment {
 
         location.setOnClickListener(v -> {
             closeKeyboard(getActivity(), keywords.getWindowToken());
-            //TODO location service ausgeschaltet: frag nach permission
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.REQUEST_ID_FOR_LOCATION_PERMISSION);
-            /*android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.layout, new LocationFragment());
-            fragmentTransaction.commit();*/
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                checkLocationPermission();
+            } else {
+                openLocationFragment();
+            }
         });
 
         location.setText(getLocationString());
@@ -158,13 +158,38 @@ public class SearchFragment extends Fragment {
 
         startSearch.setOnClickListener(v -> performSearch());
 
-
         //in case we come back from main activity for search again -> use old search parameter
         if (getActivity().getIntent().getStringExtra(Constants.TITLE) != null) {
             keywords.setText(getActivity().getIntent().getStringExtra(Constants.TITLE));
             adaptLayoutForPrice(getActivity().getIntent().getStringExtra(Constants.PRICE_FROM), getActivity().getIntent().getStringExtra(Constants.PRICE_TO));
         }
+    }
 
+    private void openLocationFragment() {
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.layout, new LocationFragment());
+        fragmentTransaction.commit();
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkLocationPermission() {
+
+        if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //permission granted, just go on
+            openLocationFragment();
+        } else {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Toast.makeText(getActivity(), "Zum Anzeigen einer Karte wird diese Berechtigung benötigt!", Toast.LENGTH_LONG).show();
+                //Intent i = new Intent();
+                //i.putExtra(Constants.PERMISSION_DENIED, "permission");
+                //setResult(RESULT_OK, i);
+                //finish();
+            } else {
+                //nothing to do here -> user wants to use upload first time
+            }
+            //ask for permission
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.REQUEST_ID_FOR_LOCATION_PERMISSION);
+        }
     }
 
     public static void closeKeyboard(Context c, IBinder windowToken) {
@@ -224,7 +249,7 @@ public class SearchFragment extends Fragment {
     }
 
     public void adaptLayoutForPrice(String from, String to) {
-        Log.d("CONAN", "priceTo: "+to);
+        Log.d("CONAN", "priceTo: " + to);
         if (getString(R.string.price_does_not_matter).equals(from)) {
             price.setText("");
             price.setHint(R.string.hint_for_price);

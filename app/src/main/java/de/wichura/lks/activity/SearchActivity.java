@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.List;
 
 import de.wichura.lks.R;
+import de.wichura.lks.dialogs.DistanceDialogFragment;
 import de.wichura.lks.dialogs.SetPriceDialog;
 import de.wichura.lks.dialogs.ZipDialogFragment;
 import de.wichura.lks.http.GoogleService;
@@ -46,7 +47,8 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 public class SearchActivity extends AppCompatActivity implements
         SetPriceDialog.OnCompleteListener,
-        ZipDialogFragment.OnCompleteListener {
+        ZipDialogFragment.OnCompleteListener,
+        DistanceDialogFragment.OnCompleteDistanceListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,24 +111,14 @@ public class SearchActivity extends AppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case Constants.REQUEST_ID_FOR_LOCATION_PERMISSION: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    Toast.makeText(this, "Granted", Toast.LENGTH_LONG).show();
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    //TODO mache google map auf, ergebnis merken?!
+                    // permission was granted
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.layout, new LocationFragment());
                     fragmentTransaction.commit();
-
                 } else {
-                    //TODO from api level 23 nur wie mache ich das mit den alten versionen?
-
-                    boolean showRationale = shouldShowRequestPermissionRationale( permissions[0] );
+                    //boolean showRationale = shouldShowRequestPermissionRationale( permissions[0] );
                     new ZipDialogFragment().show(getSupportFragmentManager(), null);
-
-                    Toast.makeText(this, "nix Granted", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -147,6 +139,12 @@ public class SearchActivity extends AppCompatActivity implements
     public void onZipCodeComplete(String zipCode) {
         Log.d("CONAN", "Zipcode from dialog: " + zipCode);
         getLatLngFromPlz(zipCode);
+    }
+
+    @Override
+    public void onDistanceComplete(Integer distance) {
+        Log.d("CONAN", "Distance from dialog: " + distance);
+        //storeDistance(distance);
     }
 
     public void getLatLngFromPlz(String zip) {
@@ -189,6 +187,7 @@ public class SearchActivity extends AppCompatActivity implements
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "serach anctivity: error in getting city name from google maps api: " + e.toString());
+                        new DistanceDialogFragment().show(getSupportFragmentManager(), null);
                     }
 
                     @Override
@@ -200,6 +199,7 @@ public class SearchActivity extends AppCompatActivity implements
                         Log.d("CONAN", "city name from google maps api: " + city);
                         //set location name in searchFragment and store lat lng in shared prefs
                         storeLocation(lat, lng, city.getAsString());
+                        new DistanceDialogFragment().show(getSupportFragmentManager(), null);
                     }
                 });
     }

@@ -11,7 +11,7 @@ import android.widget.EditText;
 import de.wichura.lks.R;
 
 /**
- * Created by ich on 31.03.2017.
+ * Created by Bernd Wichura on 31.03.2017.
  * Luftkraftsport
  */
 
