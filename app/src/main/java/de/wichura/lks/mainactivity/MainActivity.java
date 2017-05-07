@@ -32,16 +32,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationServices;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -69,7 +74,6 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.SHOW_MY_ADS;
 import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
-
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -102,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements
     private BroadcastReceiver mMessageBroadcastReceiver;
     private boolean isMessageBroadcastReceiver;
 
-
     private MainPresenter presenterLayer;
     private MainListViewAdapter adapter;
     private List<RowItem> rowItems;
@@ -125,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements
 
     //empty view for network problems
     private View noResultsView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,7 +278,8 @@ public class MainActivity extends AppCompatActivity implements
         mLoginBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Toast.makeText(MainActivity.this, "BROADCAST LOGIN RECEIVED", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "BROADCAST LOGIN RECEIVED", Toast.LENGTH_SHORT).show();
+                //TODO was hier??
             }
         };
 
@@ -319,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements
                     new IntentFilter("messageReceived"));
             isMessageBroadcastReceiver = true;
         }
-
     }
 
     public void checkLocationServiceEnabled() {
@@ -334,25 +336,65 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-
     private void getLastLocation() {
         if (mGoogleApiClient == null) {
+
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.server_client_id))
+                    .requestEmail()
+                    .build();
+
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
+                    .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                     .addApi(LocationServices.API)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
         }
     }
 
     protected void onStart() {
-        mGoogleApiClient.connect();
         super.onStart();
+        mGoogleApiClient.connect();
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (opr.isDone()) {
+            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+            // and the GoogleSignInResult will be available instantly.
+            Log.d(TAG, "Got cached sign-in");
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        } else {
+            // If the user has not previously signed in on this device or the sign-in has expired,
+            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+            // single sign-on will occur in this branch.
+            Log.d(TAG, "cache sign-in leer, hole user token from google");
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(GoogleSignInResult googleSignInResult) {
+                    //hideProgressDialog();
+                    handleSignInResult(googleSignInResult);
+                }
+            });
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            Log.d(TAG, "neues Token von Google: " + acct.getIdToken());
+            if (acct.getIdToken() != null) {
+                setUserPreferences(null, null, acct.getIdToken());
+            }
+        } else {
+            Log.d(TAG, "handleSignIn:  result ist nicht success!!!");
+        }
     }
 
     protected void onStop() {
-        mGoogleApiClient.disconnect();
         super.onStop();
+        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -370,7 +412,6 @@ public class MainActivity extends AppCompatActivity implements
         registerLoginReceiver();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.registerOnSharedPreferenceChangeListener(this);
-
         if (mListState != null) listView.onRestoreInstanceState(mListState);
     }
 
@@ -491,7 +532,6 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
-
     public void showProblem(String type) {
         listView.setEmptyView(noResultsView);
         noResultsView.setVisibility(View.VISIBLE);
@@ -610,7 +650,7 @@ public class MainActivity extends AppCompatActivity implements
                 updateLoginButton();
                 setProfileName(getUserName());
                 if (!isUserLoggedIn()) {
-                    setProfileName("Please login...");
+                    setProfileName("Bitte anmelden...");
                 }
                 if (!"".equals(getUserProfilePic())) {
                     setProfilePicture(Uri.parse(getUserProfilePic()));
@@ -634,7 +674,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 //in case article is bookmarked -> show blue star
                 // if (data.getIntExtra(Constants.POSITION_IN_LIST, 0) != 0 && data.getStringExtra(Constants.BOOKMARKED_FLAG == true)) {
-
                 break;
             }
             case Constants.REQUEST_ID_FOR_SEARCH: {
@@ -660,7 +699,7 @@ public class MainActivity extends AppCompatActivity implements
                 updateLoginButton();
                 setProfileName(getUserName());
                 if (!isUserLoggedIn()) {
-                    setProfileName("Please login...");
+                    setProfileName("Bitte anmelden...");
                 }
                 setProfilePicture(Uri.parse(getUserProfilePic()));
                 break;
@@ -669,7 +708,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void showRequestForPermission() {
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.snackbarPosition), "Permissions bearbeiten?",
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.snackbarPosition), "Berechtigungen bearbeiten?",
                 Snackbar.LENGTH_LONG).setAction("Los!", view -> {
             Intent i = new Intent();
             i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -713,12 +752,11 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         setProfileName(getUserName());
         if (!isUserLoggedIn()) {
-            setProfileName("Please login...");
+            setProfileName("Bitte anmelden...");
         }
         setProfilePicture(Uri.parse(getUserProfilePic()));
         return true;
@@ -940,41 +978,10 @@ public class MainActivity extends AppCompatActivity implements
             if (lat == 0 && lng == 0) {
                 saveLocationServiceStatus(false);
             } else {
+                Log.d("CONAN", "last position in onConnected: " + lat + " : " + lng);
                 saveLastPosition(lat, lng);
             }
         }
-
-        Log.d("CONAN", " in on Connected: " + bundle);
-
-        /*OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = new FormEncodingBuilder()
-                .add("grant_type", "authorization_code")
-                .add("client_id", "812741506391-h38jh0j4fv0ce1krdkiq0hfvt6n5amrf.apps.googleusercontent.com")
-                .add("client_secret", "{clientSecret}")
-                .add("redirect_uri","")
-                .add("code", "4/4-GMMhmHCXhWEzkobqIHGG_EnNYYsAkukHspeYUk9E8")
-                .build();
-        final Request request = new Request.Builder()
-                .url("https://www.googleapis.com/oauth2/v4/token")
-                .post(requestBody)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(final Request request, final IOException e) {
-                Log.e(LOG_TAG, e.toString());
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                try {
-                    JSONObject jsonObject = new JSONObject(response.body().string());
-                    final String message = jsonObject.toString(5);
-                    Log.i(LOG_TAG, message);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
     }
 
     @Override

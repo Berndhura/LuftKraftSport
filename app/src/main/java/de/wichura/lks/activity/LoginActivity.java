@@ -280,7 +280,7 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private void handleSignInResult(GoogleSignInResult result, Intent data) {
+        private void handleSignInResult(GoogleSignInResult result, Intent data) {
         Log.d("CONAN", "handleSignInResult from Google:" + result.isSuccess());
         Log.d("CONAN", "handleSignInResult status from google:" + result.getStatus());
 
