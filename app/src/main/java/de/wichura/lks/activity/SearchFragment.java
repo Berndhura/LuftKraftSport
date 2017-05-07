@@ -86,7 +86,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        createGui(view);
+        createGui(view, savedInstanceState);
 
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(keywords.getWindowToken(), 0);
@@ -94,7 +94,7 @@ public class SearchFragment extends Fragment {
         //showLocation();
     }
 
-    private void createGui(View view) {
+    private void createGui(View view, Bundle savedInstanceState) {
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.search_toolbar);
         if (toolbar != null) {
@@ -113,7 +113,7 @@ public class SearchFragment extends Fragment {
                 }
                 saveSearch();
             } else {
-                Toast.makeText(getActivity(), "Bitte anmelden, um Suche zu folgen!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Bitte anmelden, um einer Suche zu folgen!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -142,6 +142,12 @@ public class SearchFragment extends Fragment {
             return false;
         });
 
+        //TODO dadurch bleibt keywords auch nicht belegt nach wechsel zur location
+        if (savedInstanceState != null) {
+            Log.d("CONAN", "restore keywords");
+            keywords.setText(savedInstanceState.getString("keywords", ""));
+        }
+
         location.setOnClickListener(v -> {
             closeKeyboard(getActivity(), keywords.getWindowToken());
 
@@ -163,6 +169,15 @@ public class SearchFragment extends Fragment {
             keywords.setText(getActivity().getIntent().getStringExtra(Constants.TITLE));
             adaptLayoutForPrice(getActivity().getIntent().getStringExtra(Constants.PRICE_FROM), getActivity().getIntent().getStringExtra(Constants.PRICE_TO));
         }
+    }
+
+
+    //TODO dadurch bleibt keywords auch nicht belegt nach wechsel zur location
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onCreate(outState);
+        Log.d("CONAN", "outState");
+        outState.putString("keyword", keywords.getText().toString());
     }
 
     private void openLocationFragment() {
