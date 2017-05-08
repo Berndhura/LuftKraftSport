@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +34,10 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static de.wichura.lks.mainactivity.Constants.IS_BOOKMARKS;
 import static de.wichura.lks.mainactivity.Constants.IS_MY_ADS;
-import static de.wichura.lks.mainactivity.Constants.LOCATION_SERVICE_IS_ENABLED;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+import static de.wichura.lks.mainactivity.Constants.SHOW_BOOKMARKS;
 import static de.wichura.lks.mainactivity.Constants.SHOW_MY_ADS;
 import static de.wichura.lks.mainactivity.Constants.USERS_LOCATION;
 
@@ -158,6 +158,11 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                     vwParentRow.refreshDrawableState();
                     removeFromBookmark(id);
                     presenter.deleteBookmark(id);
+                    //remove from list if bookmark list is open
+                    if (isBookmarksRequest()) {
+                        remove(getItem(position));
+                        notifyDataSetChanged();
+                    }
                 } else {
                     LinearLayout vwParentRow = (LinearLayout) view.getParent();
                     ((ImageView) vwParentRow.getChildAt(2)).setImageResource(R.drawable.bockmark_star_full);
@@ -273,6 +278,10 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
     private boolean isMyAdsRequest() {
         return context.getSharedPreferences(SHOW_MY_ADS, 0).getBoolean(IS_MY_ADS, false);
+    }
+
+    private boolean isBookmarksRequest() {
+        return context.getSharedPreferences(SHOW_BOOKMARKS, 0).getBoolean(IS_BOOKMARKS, false);
     }
 
     private String getUserToken() {

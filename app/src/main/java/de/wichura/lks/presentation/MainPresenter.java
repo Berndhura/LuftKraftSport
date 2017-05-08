@@ -81,7 +81,7 @@ public class MainPresenter {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        Toast.makeText(context, "Zu der Favoritenliste hinzugefügt!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Zu den Favoriten hinzugefügt!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

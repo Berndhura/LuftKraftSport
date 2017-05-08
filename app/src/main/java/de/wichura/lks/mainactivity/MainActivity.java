@@ -72,6 +72,7 @@ import de.wichura.lks.presentation.MainPresenter;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+import static de.wichura.lks.mainactivity.Constants.SHOW_BOOKMARKS;
 import static de.wichura.lks.mainactivity.Constants.SHOW_MY_ADS;
 import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
 
@@ -290,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements
         if (getIntent().getStringExtra(Constants.USER_ID_FROM_AD) != null) {
             String userId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
             setMyAdsFlag(false);
+            setBookmarksFlag(false);
             presenterLayer.searchForArticles(0, size,
                     null,
                     null,
@@ -299,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements
         } else {
 
             setMyAdsFlag(false);
+            setBookmarksFlag(false);
             getAds(Constants.TYPE_ALL);
         }
     }
@@ -612,6 +615,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 //just show all
                 setMyAdsFlag(false);
+                setBookmarksFlag(false);
                 getAds(Constants.TYPE_ALL);
                 break;
             }
@@ -658,6 +662,7 @@ public class MainActivity extends AppCompatActivity implements
                 Log.d("CONAN", "Return from login, userid: " + getUserId());
 
                 setMyAdsFlag(false);
+                setBookmarksFlag(false);
                 hideEmptyView();
                 getAds(Constants.TYPE_ALL);
 
@@ -681,6 +686,7 @@ public class MainActivity extends AppCompatActivity implements
                     searchPriceTo = data.getStringExtra(Constants.PRICE_TO);
                     int distance = data.getIntExtra(Constants.DISTANCE, Constants.DISTANCE_INFINITY);
                     setMyAdsFlag(false);
+                    setBookmarksFlag(false);
 
                     presenterLayer.searchForArticles(0, size,
                             searchPriceFrom.equals("") ? null : Integer.parseInt(searchPriceFrom),
@@ -729,15 +735,18 @@ public class MainActivity extends AppCompatActivity implements
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (isBookmarks) {
+            setBookmarksFlag(false);
             setMyAdsFlag(false);
             isBookmarks = false;
             getAds(Constants.TYPE_ALL);
         } else if (isMyAds) {
             setMyAdsFlag(false);
+            setBookmarksFlag(false);
             isMyAds = false;
             getAds(Constants.TYPE_ALL);
         } else if (isSearch) {
             setMyAdsFlag(false);
+            setBookmarksFlag(false);
             isSearch = false;
             getAds(Constants.TYPE_ALL);
 
@@ -794,6 +803,7 @@ public class MainActivity extends AppCompatActivity implements
                     page = 0;
                     size = 10;
                     setMyAdsFlag(true);
+                    setBookmarksFlag(false);
                     isMyAds = true;
                     isBookmarks = false;
                     isSearch = false;
@@ -807,12 +817,14 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 }
+                setBookmarksFlag(false);
                 final Intent intent = new Intent(this, NewAdActivity.class);
                 intent.putExtra(Constants.USER_ID, userId);
                 startActivityForResult(intent, Constants.REQUEST_ID_FOR_NEW_AD);
                 return true;
             }
             case R.id.search: {
+                setBookmarksFlag(false);
                 isMyAds = false;
                 isBookmarks = false;
                 isSearch = true;
@@ -823,6 +835,7 @@ public class MainActivity extends AppCompatActivity implements
                 return true;
             }
             case R.id.settings: {
+                setBookmarksFlag(false);
                 final Intent i = new Intent(this, SettingsActivity.class);
                 startActivityForResult(i, Constants.REQUEST_ID_FOR_SETTINGS);
                 return true;
@@ -830,6 +843,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.refresh: {
                 hideEmptyView();
                 setMyAdsFlag(false);
+                setBookmarksFlag(false);
                 isMyAds = false;
                 isBookmarks = false;
                 isSearch = false;
@@ -844,6 +858,7 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     hideEmptyView();
                     setMyAdsFlag(false);
+                    setBookmarksFlag(true);
                     isBookmarks = true;
                     isMyAds = false;
                     isSearch = false;
@@ -857,6 +872,7 @@ public class MainActivity extends AppCompatActivity implements
                     startLoginActivity();
                     return true;
                 } else {
+                    setBookmarksFlag(false);
                     messagesBtn.setVisibility(View.GONE);
                     final Intent msgIntent = new Intent(getApplicationContext(), MessagesOverviewActivity.class);
                     msgIntent.putExtra(Constants.USER_ID, userId);
@@ -874,6 +890,13 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences settings = getSharedPreferences(SHOW_MY_ADS, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(Constants.IS_MY_ADS, isMyAds);
+        editor.apply();
+    }
+
+    private void setBookmarksFlag(boolean isBookmarks) {
+        SharedPreferences settings = getSharedPreferences(SHOW_BOOKMARKS, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(Constants.IS_BOOKMARKS, isBookmarks);
         editor.apply();
     }
 

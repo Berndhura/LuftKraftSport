@@ -70,6 +70,7 @@ public class Constants {
     //Broadcast messages
     public static final String LOGIN_COMPLETE = "loginComplete";
     public static final String IS_MY_ADS ="isMyAds";
+    public static final String IS_BOOKMARKS ="isBookmarks";
     public static final String SENDER_ID = "sender";
     public static final String SENDER_NAME = "senderName";
     public static final String ID_FROM = "idFrom";
@@ -82,6 +83,7 @@ public class Constants {
     //Shared Preferences
     public static final String MESSAGE_ACTIVITY = "messageActivity";
     public static final String SHOW_MY_ADS = "showMyAds";
+    public static final String SHOW_BOOKMARKS = "showBookmarks";
     public static final String SHARED_PREFS_USER_INFO = "UserInfo";
     public static final String USERS_LOCATION = "usersLocation";
     public static final String LOCATION_SERVICE_IS_ENABLED = "locationServiceIsEnabled";
