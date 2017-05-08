@@ -12,7 +12,7 @@ public class ArticleDetails {
     private String description;
     private String urls;
     private String userId;
-    private Integer price;
+    private Float price;
     private Long date;
     private Integer views;
     private Location location;
@@ -60,11 +60,9 @@ public class ArticleDetails {
         this.userId = userId;
     }
 
-    public Integer getPrice() {
-        return price;
-    }
+    public Float getPrice() {return price;}
 
-    public void setPrice(Integer price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 

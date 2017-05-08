@@ -500,7 +500,6 @@ public class MainActivity extends AppCompatActivity implements
         listView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
             final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
             final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-            //TODO more images anzeigen...
             intent.putExtra(Constants.URI_AS_LIST, rowItem.getUrl());
             intent.putExtra(Constants.LOCATION_NAME, rowItem.getLocationName());
             intent.putExtra(Constants.ID, rowItem.getId());
@@ -509,8 +508,7 @@ public class MainActivity extends AppCompatActivity implements
             intent.putExtra(Constants.LAT, rowItem.getLocation().getCoordinates()[0]);
             intent.putExtra(Constants.LNG, rowItem.getLocation().getCoordinates()[1]);
             intent.putExtra(Constants.PHONE, rowItem.getPhone());
-            //TODO DRECK!!!! Float.parse(String)
-            intent.putExtra(Constants.PRICE, Float.parseFloat(rowItem.getPrice()));
+            intent.putExtra(Constants.PRICE, rowItem.getPrice());
             intent.putExtra(Constants.DATE, rowItem.getDate());
             intent.putExtra(Constants.VIEWS, rowItem.getViews());
             intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());

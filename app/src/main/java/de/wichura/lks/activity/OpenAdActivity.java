@@ -131,9 +131,10 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             String pictureUri = getIntent().getStringExtra(Constants.URI_AS_LIST);
             mTitleText.setText(getIntent().getStringExtra(Constants.TITLE));
             locationName.setText(getIntent().getStringExtra(Constants.LOCATION_NAME));
+
             Float price = getIntent().getFloatExtra(Constants.PRICE, 0);
-            String formatedPrice = price.toString().split("\\.")[0] + " €";
-            mPrice.setText(formatedPrice);
+            mPrice.setText(Utility.getPriceString(price));
+
             mDescText.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
             mDateText.setText("Erstellt am: " + DateFormat.getDateInstance().format(getIntent().getLongExtra(Constants.DATE, 0)));
             mAdId = getIntent().getIntExtra(Constants.ID, 0);
@@ -185,9 +186,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
         mTitleText.setText(articleDetails.getTitle());
         locationName.setText(articleDetails.getLocationName());
-        Integer price = articleDetails.getPrice();
-        String formatedPrice = price.toString().split("\\.")[0] + " €";
-        mPrice.setText(formatedPrice);
+        mPrice.setText(Utility.getPriceString(articleDetails.getPrice()));
         mDescText.setText(articleDetails.getDescription());
         mDateText.setText(DateFormat.getDateInstance().format(articleDetails.getDate()));
         mAdId = articleDetails.getId();
@@ -239,7 +238,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 i.putExtra(Constants.ARTICLE_ID, mAdId);
                 i.putExtra(Constants.TITLE, getIntent().getStringExtra(Constants.TITLE));
                 i.putExtra(Constants.DESCRIPTION, getIntent().getStringExtra(Constants.DESCRIPTION));
-                i.putExtra(Constants.PRICE, String.valueOf(getIntent().getFloatExtra(Constants.PRICE, 0)));
+                i.putExtra(Constants.PRICE, getIntent().getFloatExtra(Constants.PRICE, 0));
                 i.putExtra(Constants.AD_URL, getIntent().getStringExtra(Constants.AD_URL));
                 i.putExtra(Constants.LAT, getIntent().getDoubleExtra(Constants.LAT, 0));
                 i.putExtra(Constants.LNG, getIntent().getDoubleExtra(Constants.LNG, 0));

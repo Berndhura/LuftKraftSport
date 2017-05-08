@@ -30,6 +30,7 @@ import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.mainactivity.MainActivity;
 import de.wichura.lks.models.RowItem;
 import de.wichura.lks.presentation.MainPresenter;
+import de.wichura.lks.util.Utility;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -120,8 +121,8 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 .into(holder.thumbNail);
 
         holder.txtTitle.setText(rowItem.getTitle());
-        String formatedPrice = rowItem.getPrice().split("\\.")[0] + " €";
-        holder.txtPrice.setText(formatedPrice);
+
+        holder.txtPrice.setText(Utility.getPriceString(rowItem.getPrice()));
         holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
 
         if (isMyAdsRequest()) {

@@ -10,8 +10,8 @@ import de.wichura.lks.mainactivity.Constants;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
- * Created by ich on 06.11.2016.
- * Camper App
+ * Created by Bernd Wichura on 06.11.2016.
+ * Luftkraftsport
  */
 
 public class Utility {
@@ -37,11 +37,12 @@ public class Utility {
                 activeNetwork.isConnectedOrConnecting();
     }
 
-    //TODO: cent nicht beachtet
-    public static String getFormatedPrice(String price) {
-        String [] buffer = price.split(".");
-        return buffer[0]+"."+"00 "+ "€";
+    public static String getPriceString(Float price) {
+        return price.toString().split("\\.")[0] + " €";
+    }
 
+    public static String getPriceWithoutEuro(Float price) {
+        return price.toString().split("\\.")[0];
     }
 
     public String getUserToken() {

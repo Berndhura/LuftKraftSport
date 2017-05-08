@@ -147,7 +147,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         item.setId(data.getIntExtra(Constants.ARTICLE_ID, 0));
         item.setTitle(data.getStringExtra(Constants.TITLE));
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
-        item.setPrice(Float.parseFloat(data.getStringExtra(Constants.PRICE)));
+        item.setPrice(Float.parseFloat(data.getStringExtra(Constants.PRICE))); // is String from TextView
         item.setDate(data.getLongExtra(Constants.DATE, 0));
 
         double[] latlng = {data.getDoubleExtra(Constants.LAT, 0), data.getDoubleExtra(Constants.LNG, 0)};
@@ -208,7 +208,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         RowItem item = new RowItem();
         item.setTitle(data.getStringExtra(Constants.TITLE));
         item.setDescription(data.getStringExtra(Constants.DESCRIPTION));
-        item.setPrice(Float.parseFloat(data.getStringExtra(Constants.PRICE)));
+        item.setPrice(Float.parseFloat(data.getStringExtra(Constants.PRICE))); //get only string from EditText
         item.setDate(data.getLongExtra(Constants.DATE, 0));
 
         double[] latlng = {data.getDoubleExtra(Constants.LAT, 0), data.getDoubleExtra(Constants.LNG, 0)};

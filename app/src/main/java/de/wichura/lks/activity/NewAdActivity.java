@@ -45,6 +45,7 @@ import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.FileNameParcelable;
 import de.wichura.lks.presentation.NewArticlePresenter;
+import de.wichura.lks.util.Utility;
 import jp.wasabeef.picasso.transformations.CropSquareTransformation;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -169,9 +170,10 @@ public class NewAdActivity extends AppCompatActivity implements
             getSupportActionBar().setTitle("Bearbeiten");
             mTitle.setText(getIntent().getStringExtra(Constants.TITLE));
             mDescription.setText(getIntent().getStringExtra(Constants.DESCRIPTION));
-            String price = getIntent().getStringExtra(Constants.PRICE);
-            int index = price.lastIndexOf('.');
-            mPrice.setText(price.substring(0, index));
+
+            Float price = getIntent().getFloatExtra(Constants.PRICE, 0);
+            mPrice.setText(Utility.getPriceWithoutEuro(price));
+
             articleIdForEdit = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
 
             String pictureUris = getIntent().getStringExtra(Constants.AD_URL);
@@ -224,7 +226,7 @@ public class NewAdActivity extends AppCompatActivity implements
             data.putExtra(Constants.TITLE, mTitle.getText().toString());
             data.putExtra(Constants.DESCRIPTION, mDescription.getText().toString());
             data.putParcelableArrayListExtra(Constants.FILENAME, fileNameParcelables);
-            data.putExtra(Constants.PRICE, mPrice.getText().toString());
+            data.putExtra(Constants.PRICE, mPrice.getText().toString());  //is Float in fileUploadService!!!
             data.putExtra(Constants.DATE, System.currentTimeMillis());
             data.putExtra(Constants.LAT, lat);
             data.putExtra(Constants.LNG, lng);

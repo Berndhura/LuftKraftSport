@@ -3,6 +3,10 @@ package de.wichura.lks.presentation;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
 import java.util.List;
 
 import de.wichura.lks.activity.SearchesActivity;
@@ -10,6 +14,7 @@ import de.wichura.lks.http.GoogleService;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.models.SearchItem;
 import de.wichura.lks.util.Utility;
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -62,34 +67,43 @@ public class SearchesPresenter {
                 });
     }
 
-   /* private void getLocationNames(List<SearchItem> searchItem) {
+    /*private void getLocationNames(List<SearchItem> searchItem) {
 
-       Observable.from(searchItem)
+        Observable.from(searchItem)
                 .flatMap(item -> googleService.getCityNameFromLatLngObserable(item.getLat(), item.getLng(), null)
-                .subscribeOn(Schedulers.io()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<JsonObject>() {
-                    @Override
-                    public void onCompleted() {
-                        view.updateSearches(searchItem);
-                    }
+                        .map(jsonObject -> createWithLocation(item, getLocation(jsonObject)))
+                        .subscribeOn(Schedulers.io()))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<JsonObject>() {
+                            @Override
+                            public void onCompleted() {
+                                view.updateSearches(searchItem);
+                            }
 
-                    @Override
-                    public void onError(Throwable e) {
+                            @Override
+                            public void onError(Throwable e) {
 
-                    }
+                            }
 
-                    @Override
-                    public void onNext(JsonObject response) {
-                        if (response.get("results").getAsJsonArray().size() > 0) {
-                            String loc = response.get("results").getAsJsonArray()
-                                    .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
-                                    .get(2).getAsJsonObject().get("long_name").toString();
-                            Log.d("CONAN", "City: "+loc);
+                            @Override
+                            public void onNext(SearchItem item) {
 
-                            //item.setLocation(loc); //does not work
-                        }
-                    }
-                });
+                            }
+                        });
+    }
+
+    private void createWithLocation(SearchItem item, String loc) {
+
+    }
+
+    private String getLocation(JsonObject response) {
+        if (response.get("results").getAsJsonArray().size() > 0) {
+            String loc = response.get("results").getAsJsonArray()
+                    .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
+                    .get(2).getAsJsonObject().get("long_name").toString();
+            Log.d("CONAN", "City: " + loc);
+            return loc;
+        }
+        return "nix!";
     }*/
 }

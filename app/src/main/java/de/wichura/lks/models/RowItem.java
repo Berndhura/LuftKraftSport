@@ -98,13 +98,9 @@ public class RowItem {
         this.date = date;
     }
 
-    public String getPrice() {
-        return price.toString();
-    }
+    public Float getPrice() {return price;}
 
-    public void setPrice(Float price) {
-        this.price = price;
-    }
+    public void setPrice(Float price) {this.price = price;}
 
     public String getPhone() {
         return phone;
