@@ -70,6 +70,7 @@ public class MessagesActivity extends AppCompatActivity {
                     rowItems.add(it);
                     adapter.notifyDataSetChanged();
                     listView.setSelection(listView.getCount() - 1);
+                    //removeFromUnreadMessages(getIntent().getIntExtra(Constants.ARTICLE_ID, 0), getIntent().getStringExtra(Constants.SENDER_ID));
                 }
             }
         };

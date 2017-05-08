@@ -133,7 +133,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
 
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-            Log.d("CONAN", "mASSEGE: " + pair.getKey());
+            Log.d("CONAN", "message: " + pair.getKey());
             if (key.equals(pair.getKey())) {
                 //flag for remove from temporary list, not within while -> ConcurrentModificationException
                 removeKey = true;

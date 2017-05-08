@@ -56,6 +56,7 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
     private GoogleApiClient mGoogleApiClient;
     private LinearLayout distanceView;
     private LocationPresenter presenter;
+    private MapView mapView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,16 +80,23 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
         }
     }
 
-    @Override
     public void onSaveInstanceState(Bundle outState) {
+        //This MUST be done before saving any of your own or your base class's variables
+        final Bundle mapViewSaveState = new Bundle(outState);
+        mapView.onSaveInstanceState(mapViewSaveState);
+        outState.putBundle("mapViewSaveState", mapViewSaveState);
+        //Add any other variables here.
         super.onSaveInstanceState(outState);
-        Log.d("CONAN", "save.....");
-        //Save the fragment's state here
-
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        mapView = (MapView) view.findViewById(R.id.location_google_map);
+
+        final Bundle mapViewSavedInstanceState = savedInstanceState != null ? savedInstanceState.getBundle("mapViewSaveState") : null;
+        if (mapView != null)
+            mapView.onCreate(mapViewSavedInstanceState);
 
         distanceView = (LinearLayout) view.findViewById(R.id.location_distance_view);
         distanceView.setVisibility(View.GONE);
@@ -99,7 +107,6 @@ public class LocationFragment extends Fragment implements GoogleApiClient.Connec
 
         switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
             case ConnectionResult.SUCCESS: {
-                MapView mapView = (MapView) view.findViewById(R.id.location_google_map);
                 mapView.onCreate(savedInstanceState);
                 mapView.onResume();
                 mapView.getMapAsync(this);

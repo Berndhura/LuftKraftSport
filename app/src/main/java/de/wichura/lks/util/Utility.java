@@ -18,7 +18,7 @@ public class Utility {
 
     private Activity activity;
 
-    public Utility (Activity activity) {
+    public Utility(Activity activity) {
         this.activity = activity;
     }
 
@@ -30,7 +30,7 @@ public class Utility {
      */
     static public boolean isNetworkAvailable(Context c) {
         ConnectivityManager cm =
-                (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
