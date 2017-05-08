@@ -45,6 +45,7 @@ public class Utility {
         return price.toString().split("\\.")[0];
     }
 
+    //todo activity ist nicht gesetzt, funktioniert das hier, wo wird das genutzt
     public String getUserToken() {
         return activity.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
     }
