@@ -3,9 +3,10 @@ package de.wichura.lks.presentation;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.OptionalPendingResult;
 
 import java.util.List;
 
@@ -14,11 +15,11 @@ import de.wichura.lks.http.GoogleService;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.models.SearchItem;
 import de.wichura.lks.util.Utility;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
 
 /**
  * Created by Bernd Wichura on 07.02.2017.
@@ -30,41 +31,73 @@ public class SearchesPresenter {
     private Service service;
     private GoogleService googleService;
     private Context context;
-    private SearchesActivity view;
+    private SearchesActivity activity;
     private Subscription subscription;
     private Utility utils;
 
     public SearchesPresenter(SearchesActivity searchesActivity, Service service, Context applicationContext) {
         this.service = service;
         this.context = applicationContext;
-        this.view = searchesActivity;
+        this.activity = searchesActivity;
         this.utils = new Utility(searchesActivity.getActivity());
         this.googleService = new GoogleService();
     }
 
     public void loadSearchesForUser() {
-        view.enableProgressBar();
+        activity.enableProgressBar();
         service.findSearchesObserv(utils.getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<SearchItem>>() {
                     @Override
                     public void onCompleted() {
-                        view.disableProgressbar();
+                        activity.disableProgressbar();
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        if ("HTTP 401 Unauthorized".equals(e.getMessage())) {
+                            //refresh userToken
+                            refreshUserIdToken();
+                        }
                         Log.d("CONAN", "error loading saved searches: " + e.getMessage());
-                        view.disableProgressbar();
-                        view.showProblem();
+                        activity.disableProgressbar();
+                        activity.showProblem();
                     }
 
                     @Override
                     public void onNext(List<SearchItem> searchItem) {
-                        view.updateSearches(searchItem);
+                        activity.updateSearches(searchItem);
                     }
                 });
+    }
+
+    private void refreshUserIdToken() {
+
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(activity.getGoogleApiClient());
+        if (opr.isDone()) {
+            Log.d("CONAN", "Got cached sign-in in follow search!");
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        } else {
+            Log.d("CONAN", "cache sign-in leer, get user token from google in follow search!");
+            opr.setResultCallback(googleSignInResult -> handleSignInResult(googleSignInResult));
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d("CONAN", "handleSignInResult in follow search: " + result.isSuccess());
+        if (result.isSuccess()) {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            Log.d("CONAN", "neues Token von Google: " + acct.getIdToken());
+            if (acct.getIdToken() != null) {
+                utils.setUserPreferences(null, null, acct.getIdToken());
+                //TODO request data again -> todesschleife?
+                loadSearchesForUser();
+            }
+        } else {
+            Log.d("CONAN", "handleSignIn:  result ist nicht success!!!");
+        }
     }
 
     /*private void getLocationNames(List<SearchItem> searchItem) {
@@ -77,7 +110,7 @@ public class SearchesPresenter {
                         .subscribe(new Subscriber<JsonObject>() {
                             @Override
                             public void onCompleted() {
-                                view.updateSearches(searchItem);
+                                activity.updateSearches(searchItem);
                             }
 
                             @Override

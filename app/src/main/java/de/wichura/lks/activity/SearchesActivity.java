@@ -2,8 +2,11 @@ package de.wichura.lks.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -30,19 +37,25 @@ import static android.app.Activity.RESULT_OK;
  * LuftKraftSport
  */
 
-public class SearchesActivity extends Fragment {
+public class SearchesActivity extends Fragment implements
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks {
 
     private ListView listView;
     private AVLoadingIndicatorView progressBar;
     private View mainView;
     private SearchesPresenter presenter;
+    private GoogleApiClient mGoogleApiClient;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
+        //Google Api client
+        initGoogleApiClient();
+
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.searches_overview_layout, container, false);
     }
 
@@ -87,6 +100,26 @@ public class SearchesActivity extends Fragment {
     }
 
 
+    private void initGoogleApiClient() {
+
+        if (mGoogleApiClient == null) {
+
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.server_client_id))
+                    .build();
+
+            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        }
+
+        mGoogleApiClient.connect();
+    }
+
+
     public void updateSearches(List<SearchItem> searchItem) {
         List<SearchItem> rowItems = new ArrayList<>();
         rowItems.addAll(searchItem);
@@ -120,5 +153,25 @@ public class SearchesActivity extends Fragment {
 
     public void disableProgressbar() {
         progressBar.setVisibility(ProgressBar.GONE);
+    }
+
+    public GoogleApiClient getGoogleApiClient() {
+        return mGoogleApiClient;
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("CONAN", "onConnectionFailed");
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.d("CONAN", "onConnected");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d("CONAN", "onConnectionSuspended");
+
     }
 }

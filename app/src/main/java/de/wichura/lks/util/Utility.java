@@ -2,6 +2,7 @@ package de.wichura.lks.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -45,8 +46,16 @@ public class Utility {
         return price.toString().split("\\.")[0];
     }
 
-    //todo activity ist nicht gesetzt, funktioniert das hier, wo wird das genutzt
     public String getUserToken() {
         return activity.getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
+    }
+
+    public void setUserPreferences(String name, String userId, String userToken) {
+        SharedPreferences settings = activity.getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        if (name != null) editor.putString(Constants.USER_NAME, name);
+        if (userId != null) editor.putString(Constants.USER_ID, userId);
+        if (userToken != null) editor.putString(Constants.USER_TOKEN, userToken);
+        editor.apply();
     }
 }
