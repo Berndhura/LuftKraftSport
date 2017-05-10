@@ -27,6 +27,7 @@ import de.wichura.lks.R;
 import de.wichura.lks.adapter.SearchesListAdapter;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
+import de.wichura.lks.mainactivity.MainApp;
 import de.wichura.lks.models.SearchItem;
 import de.wichura.lks.presentation.SearchesPresenter;
 
@@ -53,7 +54,13 @@ public class SearchesActivity extends Fragment implements
                              Bundle savedInstanceState) {
 
         //Google Api client
-        initGoogleApiClient();
+        //initGoogleApiClient();
+        if(MainApp.getGoogleApiHelper().isConnected())
+        {
+            //Get google api client
+            mGoogleApiClient = MainApp.getGoogleApiHelper().getGoogleApiClient();
+            Log.d("CONAN", "google client connected!");
+        }
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.searches_overview_layout, container, false);
@@ -98,6 +105,14 @@ public class SearchesActivity extends Fragment implements
 
         presenter.loadSearchesForUser();
     }
+
+   /* @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
+        Log.d("CONAN", "mGoogleApiClient.disconnect()");
+    }*/
 
 
     private void initGoogleApiClient() {

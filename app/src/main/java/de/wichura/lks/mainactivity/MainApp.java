@@ -1,6 +1,7 @@
 package de.wichura.lks.mainactivity;
 
 import android.app.Application;
+import android.util.Log;
 
 import org.acra.ACRA;
 import org.acra.ReportField;
@@ -10,9 +11,10 @@ import org.acra.sender.HttpSender;
 
 import de.wichura.lks.R;
 import de.wichura.lks.http.Urls;
+import de.wichura.lks.util.GoogleApiHelper;
 
 /**
- * Created by ich on 25.02.2017.
+ * Created by Bernd Wichura on 25.02.2017.
  * Luftkraftsport
  */
 
@@ -38,9 +40,17 @@ import de.wichura.lks.http.Urls;
 )
 public class MainApp extends Application {
 
+    private GoogleApiHelper googleApiHelper;
+    private static MainApp mInstance;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d("CONAN", "onCreate in MainApp");
+
+        mInstance = this;
+        googleApiHelper = new GoogleApiHelper(mInstance);
+
         //ACRA.init(this);
        /* if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
@@ -48,5 +58,16 @@ public class MainApp extends Application {
             return;
         }
         LeakCanary.install(this);*/
+    }
+
+    public static synchronized MainApp getInstance() {
+        return mInstance;
+    }
+
+    public GoogleApiHelper getGoogleApiHelperInstance() {
+        return this.googleApiHelper;
+    }
+    public static GoogleApiHelper getGoogleApiHelper() {
+        return getInstance().getGoogleApiHelperInstance();
     }
 }
