@@ -18,7 +18,10 @@ import de.wichura.lks.R;
  */
 
 //TODO http://stackoverflow.com/questions/33398473/accessing-googleapiclient-object-in-all-activities
-public class GoogleApiHelper implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+public class GoogleApiHelper implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "CONAN";
     private Context context;
@@ -64,7 +67,7 @@ public class GoogleApiHelper implements GoogleApiClient.ConnectionCallbacks, Goo
         mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                //.enableAutoManage(activity /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                //.enableAutoManage(context  /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }

@@ -13,6 +13,10 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.GraphRequest;
 import com.facebook.Profile;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.OptionalPendingResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,21 +37,22 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+import static de.wichura.lks.mainactivity.Constants.TYPE_ALL;
 
 /**
- * Created by ich on 20.10.2016.
+ * Created by Bernd Wichura on 20.10.2016.
  * LuftKraftSport
  */
 
 public class MainPresenter {
 
-    private MainActivity view;
+    private MainActivity activity;
     private Service service;
     private Context context;
     public Subscription subscription;
 
-    public MainPresenter(MainActivity view, Service service, Context context) {
-        this.view = view;
+    public MainPresenter(MainActivity activity, Service service, Context context) {
+        this.activity = activity;
         this.service = service;
         this.context = context;
     }
@@ -110,15 +115,15 @@ public class MainPresenter {
                     if (userToken != null) token = userToken.getToken();
                     Log.d("CONAN", "Facebook user token: " + token);
 
-                    view.setProfileName(json.getString("name"));
+                    activity.setProfileName(json.getString("name"));
                     Profile profile = Profile.getCurrentProfile();
                     if (profile != null) {
                         Uri uri = profile.getProfilePictureUri(200, 200);
                         if (uri != null) {
-                            view.setProfilePicture(uri);
+                            activity.setProfilePicture(uri);
                             sendUserPicToServer(uri.toString());
                         } else {
-                            view.setProfilePicture(null);
+                            activity.setProfilePicture(null);
                         }
                     }
                     setUserPreferences(json.getString("name"), json.getString("id"), token);
@@ -146,14 +151,14 @@ public class MainPresenter {
     }
 
     public void searchForArticles(int page, int size, Integer priceFrom, Integer priceTo, int distance, String description, String userId) {
-        view.setMainTitle("Suche");
+        activity.setMainTitle("Suche");
         if (page == 0) {
-            if (view.listView != null) {
-                view.listView.setVisibility(View.INVISIBLE);
+            if (activity.listView != null) {
+                activity.listView.setVisibility(View.INVISIBLE);
             }
-            view.showNumberOfAds(0);
+            activity.showNumberOfAds(0);
         }
-        view.progressBar.setVisibility(ProgressBar.VISIBLE);
+        activity.progressBar.setVisibility(ProgressBar.VISIBLE);
 
         if (!getUserToken().equals("")) {
             Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
@@ -180,20 +185,20 @@ public class MainPresenter {
                         @Override
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
-                            view.progressBar.setVisibility(ProgressBar.GONE);
-                            view.showProblem(Constants.TYPE_SEARCH);
+                            activity.progressBar.setVisibility(ProgressBar.GONE);
+                            activity.showProblem(Constants.TYPE_SEARCH);
                         }
 
                         @Override
                         public void onNext(AdsAndBookmarks element) {
-                            view.progressBar.setVisibility(ProgressBar.GONE);
+                            activity.progressBar.setVisibility(ProgressBar.GONE);
                             if (page == 0) {
-                                if (view.listView != null) {
-                                    view.listView.setVisibility(View.VISIBLE);
+                                if (activity.listView != null) {
+                                    activity.listView.setVisibility(View.VISIBLE);
                                 }
-                                view.updateAds(element, null, priceFrom, priceTo, distance, description, userId);
+                                activity.updateAds(element, null, priceFrom, priceTo, distance, description, userId);
                             } else {
-                                view.addMoreAdsToList(element);
+                                activity.addMoreAdsToList(element);
                             }
                         }
                     });
@@ -212,24 +217,24 @@ public class MainPresenter {
                         @Override
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
-                            view.progressBar.setVisibility(ProgressBar.GONE);
-                            view.showProblem(Constants.TYPE_SEARCH);
+                            activity.progressBar.setVisibility(ProgressBar.GONE);
+                            activity.showProblem(Constants.TYPE_SEARCH);
                         }
 
                         @Override
                         public void onNext(AdsAsPage adsAsPage) {
-                            view.progressBar.setVisibility(ProgressBar.GONE);
+                            activity.progressBar.setVisibility(ProgressBar.GONE);
                             AdsAndBookmarks adsAndBookmarks = new AdsAndBookmarks();
                             adsAndBookmarks.setAds(adsAsPage);
                             //no user -> empty bookmarklist
                             adsAndBookmarks.setBookmarks(new ArrayList<>());
                             if (page == 0) {
-                                if (view.listView != null) {
-                                    view.listView.setVisibility(View.VISIBLE);
+                                if (activity.listView != null) {
+                                    activity.listView.setVisibility(View.VISIBLE);
                                 }
-                                view.updateAds(adsAndBookmarks, null, priceFrom, priceTo, distance, description, userId);
+                                activity.updateAds(adsAndBookmarks, null, priceFrom, priceTo, distance, description, userId);
                             } else {
-                                view.addMoreAdsToList(adsAndBookmarks);
+                                activity.addMoreAdsToList(adsAndBookmarks);
                             }
                         }
                     });
@@ -237,19 +242,19 @@ public class MainPresenter {
     }
 
     private void loadBookmarkedAds(int page, int size, String type) {
-        view.setMainTitle("Meine Favoriten");
+        activity.setMainTitle("Meine Favoriten");
 
         if (page == 0) {
-            if (view.listView != null) {
-                view.listView.setVisibility(View.INVISIBLE);
+            if (activity.listView != null) {
+                activity.listView.setVisibility(View.INVISIBLE);
             }
-            view.showNumberOfAds(0);
+            activity.showNumberOfAds(0);
         }
 
         Double lat = getLat();
         Double lng = getLng();
 
-        view.progressBar.setVisibility(ProgressBar.VISIBLE);
+        activity.progressBar.setVisibility(ProgressBar.VISIBLE);
 
         Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
         Observable<AdsAsPage> getBookmarkedAdsObserv = service.getMyBookmarkedAdsObserv(lat, lng, page, size, getUserToken());
@@ -275,37 +280,38 @@ public class MainPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "Error in getting bookmarked ads: " + e.toString());
-                        view.progressBar.setVisibility(ProgressBar.GONE);
-                        view.showProblem(type);
+                        activity.progressBar.setVisibility(ProgressBar.GONE);
+                        activity.showProblem(type);
                     }
 
                     @Override
                     public void onNext(AdsAndBookmarks element) {
-                        view.progressBar.setVisibility(ProgressBar.GONE);
+                        activity.progressBar.setVisibility(ProgressBar.GONE);
                         if (page == 0) {
-                            if (view.listView != null) {
-                                view.listView.setVisibility(View.VISIBLE);
+                            if (activity.listView != null) {
+                                activity.listView.setVisibility(View.VISIBLE);
                             }
-                            view.updateAds(element, type, null, null, null, null, null);
+                            activity.updateAds(element, type, null, null, null, null, null);
                         } else {
-                            view.addMoreAdsToList(element);
+                            activity.addMoreAdsToList(element);
                         }
                     }
                 });
     }
 
     private void loadAllAd(int page, int size, String type) {
-        view.setMainTitle("Luftkraftsport");
+
+        activity.setMainTitle("Luftkraftsport");
         Double lat = getLat();
         Double lng = getLng();
 
         if (page == 0) {
-            if (view.listView != null) {
-                view.listView.setVisibility(View.INVISIBLE);
+            if (activity.listView != null) {
+                activity.listView.setVisibility(View.INVISIBLE);
             }
-            view.showNumberOfAds(0);
+            activity.showNumberOfAds(0);
         }
-        view.progressBar.setVisibility(ProgressBar.VISIBLE);
+        activity.progressBar.setVisibility(ProgressBar.VISIBLE);
 
         if (!getUserToken().equals("")) {
             Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(getUserToken());
@@ -331,21 +337,25 @@ public class MainPresenter {
 
                         @Override
                         public void onError(Throwable e) {
+                            if ("HTTP 401 Unauthorized".equals(e.getMessage())) {
+                                //refresh userToken
+                                refreshUserIdToken();
+                            }
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
-                            view.progressBar.setVisibility(ProgressBar.GONE);
-                            view.showProblem(type);
+                            activity.progressBar.setVisibility(ProgressBar.GONE);
+                            activity.showProblem(type);
                         }
 
                         @Override
                         public void onNext(AdsAndBookmarks element) {
-                            view.progressBar.setVisibility(ProgressBar.GONE);
+                            activity.progressBar.setVisibility(ProgressBar.GONE);
                             if (page == 0) {
-                                if (view.listView != null) {
-                                    view.listView.setVisibility(View.VISIBLE);
+                                if (activity.listView != null) {
+                                    activity.listView.setVisibility(View.VISIBLE);
                                 }
-                                view.updateAds(element, type, null, null, null, null, null);
+                                activity.updateAds(element, type, null, null, null, null, null);
                             } else {
-                                view.addMoreAdsToList(element);
+                                activity.addMoreAdsToList(element);
                             }
                         }
                     });
@@ -364,24 +374,24 @@ public class MainPresenter {
                         @Override
                         public void onError(Throwable e) {
                             Log.d("CONAN", "Error in getting all ads: " + e.toString());
-                            view.progressBar.setVisibility(ProgressBar.GONE);
-                            view.showProblem(type);
+                            activity.progressBar.setVisibility(ProgressBar.GONE);
+                            activity.showProblem(type);
                         }
 
                         @Override
                         public void onNext(AdsAsPage adsAsPage) {
-                            view.progressBar.setVisibility(ProgressBar.GONE);
+                            activity.progressBar.setVisibility(ProgressBar.GONE);
                             AdsAndBookmarks adsAndBookmarks = new AdsAndBookmarks();
                             adsAndBookmarks.setAds(adsAsPage);
                             //no user -> empty bookmarklist
                             adsAndBookmarks.setBookmarks(new ArrayList<>());
                             if (page == 0) {
-                                if (view.listView != null) {
-                                    view.listView.setVisibility(View.VISIBLE);
+                                if (activity.listView != null) {
+                                    activity.listView.setVisibility(View.VISIBLE);
                                 }
-                                view.updateAds(adsAndBookmarks, type, null, null, null, null, null);
+                                activity.updateAds(adsAndBookmarks, type, null, null, null, null, null);
                             } else {
-                                view.addMoreAdsToList(adsAndBookmarks);
+                                activity.addMoreAdsToList(adsAndBookmarks);
                             }
                         }
                     });
@@ -389,14 +399,14 @@ public class MainPresenter {
     }
 
     private void getAdsForUser(int page, int size, String type, String token) {
-        view.setMainTitle("Meine Anzeigen");
+        activity.setMainTitle("Meine Anzeigen");
         if (page == 0) {
-            if (view.listView != null) {
-                view.listView.setVisibility(View.INVISIBLE);
+            if (activity.listView != null) {
+                activity.listView.setVisibility(View.INVISIBLE);
             }
-            view.showNumberOfAds(0);
+            activity.showNumberOfAds(0);
         }
-        view.progressBar.setVisibility(ProgressBar.VISIBLE);
+        activity.progressBar.setVisibility(ProgressBar.VISIBLE);
 
         //use user Token here
         Observable<Long[]> getBookmarksObserv = service.getBookmarksForUserObserv(token);
@@ -423,23 +433,51 @@ public class MainPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.d("CONAN", "Error in getting user's ads: " + e.toString());
-                        view.progressBar.setVisibility(ProgressBar.GONE);
-                        view.showProblem(type);
+                        activity.progressBar.setVisibility(ProgressBar.GONE);
+                        activity.showProblem(type);
                     }
 
                     @Override
                     public void onNext(AdsAndBookmarks element) {
-                        view.progressBar.setVisibility(ProgressBar.GONE);
+                        activity.progressBar.setVisibility(ProgressBar.GONE);
                         if (page == 0) {
-                            if (view.listView != null) {
-                                view.listView.setVisibility(View.VISIBLE);
+                            if (activity.listView != null) {
+                                activity.listView.setVisibility(View.VISIBLE);
                             }
-                            view.updateAds(element, type, null, null, null, null, null);
+                            activity.updateAds(element, type, null, null, null, null, null);
                         } else {
-                            view.addMoreAdsToList(element);
+                            activity.addMoreAdsToList(element);
                         }
                     }
                 });
+    }
+
+    private void refreshUserIdToken() {
+
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(activity.getGoogleApiClient());
+        if (opr.isDone()) {
+            Log.d("CONAN", "Got cached sign-in in GET ALL ADS!");
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        } else {
+            Log.d("CONAN", "cache sign-in leer, get user token from google in GET ALL ADS!");
+            opr.setResultCallback(googleSignInResult -> handleSignInResult(googleSignInResult));
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d("CONAN", "handleSignInResult in follow search: " + result.isSuccess());
+        if (result.isSuccess()) {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            Log.d("CONAN", "neues Token von Google: " + acct.getIdToken());
+            if (acct.getIdToken() != null) {
+                setUserPreferences(null, null, acct.getIdToken());
+                //TODO request data again -> todesschleife? was ist mit den anderen suchen -> in onError, wie die refreshen? Type??
+                loadAllAd(0, 10, TYPE_ALL);
+            }
+        } else {
+            Log.d("CONAN", "handleSignIn:  result ist nicht success!!!");
+        }
     }
 
     private void setUserPreferences(String name, String userId, String userToken) {

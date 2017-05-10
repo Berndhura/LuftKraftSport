@@ -357,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
@@ -380,6 +381,10 @@ public class MainActivity extends AppCompatActivity implements
                 }
             });
         }
+    }
+
+    public GoogleApiClient getGoogleApiClient() {
+        return mGoogleApiClient;
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
