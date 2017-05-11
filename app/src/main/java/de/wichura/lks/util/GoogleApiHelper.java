@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import de.wichura.lks.R;
 
@@ -62,6 +63,7 @@ public class GoogleApiHelper implements
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(context.getString(R.string.server_client_id))
+                .requestEmail()
                 .build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(context)
@@ -69,6 +71,7 @@ public class GoogleApiHelper implements
                 .addOnConnectionFailedListener(this)
                 //.enableAutoManage(context  /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(LocationServices.API)
                 .build();
     }
 

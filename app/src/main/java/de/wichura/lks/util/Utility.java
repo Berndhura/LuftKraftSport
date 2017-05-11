@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Base64;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import de.wichura.lks.mainactivity.Constants;
 
@@ -57,5 +61,35 @@ public class Utility {
         if (userId != null) editor.putString(Constants.USER_ID, userId);
         if (userToken != null) editor.putString(Constants.USER_TOKEN, userToken);
         editor.apply();
+    }
+
+    public static final String hashStringMd5(final String s) {
+
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static String getHashBase64(String s) {
+        return Base64.encodeToString(s.getBytes(), 0);
     }
 }

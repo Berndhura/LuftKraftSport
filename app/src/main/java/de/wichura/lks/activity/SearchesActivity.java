@@ -59,7 +59,7 @@ public class SearchesActivity extends Fragment implements
         {
             //Get google api client
             mGoogleApiClient = MainApp.getGoogleApiHelper().getGoogleApiClient();
-            Log.d("CONAN", "google client connected!");
+            Log.d("CONAN", "google client connected in Searches Activity!");
         }
 
         // Inflate the layout for this fragment
@@ -105,35 +105,6 @@ public class SearchesActivity extends Fragment implements
 
         presenter.loadSearchesForUser();
     }
-
-   /* @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mGoogleApiClient.stopAutoManage(getActivity());
-        mGoogleApiClient.disconnect();
-        Log.d("CONAN", "mGoogleApiClient.disconnect()");
-    }*/
-
-
-    private void initGoogleApiClient() {
-
-        if (mGoogleApiClient == null) {
-
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.server_client_id))
-                    .build();
-
-            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
-        }
-
-        mGoogleApiClient.connect();
-    }
-
 
     public void updateSearches(List<SearchItem> searchItem) {
         List<SearchItem> rowItems = new ArrayList<>();

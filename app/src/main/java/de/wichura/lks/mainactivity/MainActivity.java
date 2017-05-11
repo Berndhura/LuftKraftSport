@@ -146,9 +146,20 @@ public class MainActivity extends AppCompatActivity implements
         Service service = new Service();
         presenterLayer = new MainPresenter(this, service, getApplicationContext());
 
+        //Google Api client
+        //initGoogleApiClient();
+        if(MainApp.getGoogleApiHelper().isConnected())
+        {
+            //Get google api client
+            mGoogleApiClient = MainApp.getGoogleApiHelper().getGoogleApiClient();
+            Log.d("CONAN", "google client connected in MainActivity!");
+            mGoogleApiClient.connect();
+        }
+
         checkLocationServiceEnabled();
 
-        getLastLocation();
+        //TODO googleApiClient wird schon global angelegt!
+        //getLastLocation();
 
         //TODO: set active false in messageActivity in onDestroy, onStop, on???  BUT NOT HERE
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
@@ -339,49 +350,12 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void getLastLocation() {
-        if (mGoogleApiClient == null) {
-
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.server_client_id))
-                    .requestEmail()
-                    .build();
-
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(LocationServices.API)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
-        }
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
-        //TODO nicht bei jedem start prüfen, nur im 401 fall und wenn google user am start, sonst bei FB zb wird der token überschrieben!!!
-        // TODO und die anzeigen der FB user angezeigt!
-        mGoogleApiClient.connect();
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-        if (opr.isDone()) {
-            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-            // and the GoogleSignInResult will be available instantly.
-            Log.d(TAG, "Got cached sign-in");
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
-        } else {
-            // If the user has not previously signed in on this device or the sign-in has expired,
-            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-            // single sign-on will occur in this branch.
-            Log.d(TAG, "cache sign-in leer, hole user token from google");
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
-                    //hideProgressDialog();
-                    handleSignInResult(googleSignInResult);
-                }
-            });
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
         }
     }
 
@@ -389,22 +363,11 @@ public class MainActivity extends AppCompatActivity implements
         return mGoogleApiClient;
     }
 
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
-        if (result.isSuccess()) {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            Log.d(TAG, "neues Token von Google: " + acct.getIdToken());
-            if (acct.getIdToken() != null) {
-                setUserPreferences(null, null, acct.getIdToken());
-            }
-        } else {
-            Log.d(TAG, "handleSignIn:  result ist nicht success!!!");
-        }
-    }
-
     protected void onStop() {
         super.onStop();
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
     }
 
     @Override
@@ -1005,6 +968,7 @@ public class MainActivity extends AppCompatActivity implements
             double lng = mLastLocation.getLongitude();
             if (lat == 0 && lng == 0) {
                 saveLocationServiceStatus(false);
+                Log.d("CONAN", "last position in onConnected: " + lat + " : " + lng);
             } else {
                 Log.d("CONAN", "last position in onConnected: " + lat + " : " + lng);
                 saveLastPosition(lat, lng);
