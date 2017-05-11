@@ -360,6 +360,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        //TODO nicht bei jedem start prüfen, nur im 401 fall und wenn google user am start, sonst bei FB zb wird der token überschrieben!!!
+        // TODO und die anzeigen der FB user angezeigt!
         mGoogleApiClient.connect();
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         if (opr.isDone()) {
