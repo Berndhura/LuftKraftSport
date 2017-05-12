@@ -36,7 +36,7 @@ public class LoginPresenter {
 
     public void sendLoginReq(String email, String password) {
 
-        String hashedPassword = utils.getHashBase64(password);
+        String hashedPassword = utils.hashStringMd5(password);
 
         loginActivity.showProgressDialog();
         service.loginUserObserv(email, hashedPassword)
@@ -50,6 +50,15 @@ public class LoginPresenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.d("CONAN", "messsafe: "+e.getMessage() + " : " +e);
+
+                    /*"timestamp" : "2017-05-12T12:57:33.272+0000",
+                            05-12 14:54:39.403 12730-31552/de.wichura.lks D/OkHttp:   "status" : 401,
+                            05-12 14:54:39.403 12730-31552/de.wichura.lks D/OkHttp:   "error" : "Unauthorized",
+                            05-12 14:54:39.403 12730-31552/de.wichura.lks D/OkHttp:   "exception" : "com.bernd.maul.web.types.UserNotActivatedException",
+                            05-12 14:54:39.403 12730-31552/de.wichura.lks D/OkHttp:   "message" : "This user is not activated",
+                            05-12 14:54:39.403 12730-31552/de.wichura.lks D/OkHttp:   "path" : "/api/V3/users/login"*/
+
                         Log.d("CONAN", "error sending login email user ");
                         loginActivity.hideProgressDialog();
                         //"The user does not exist, or wrong password"

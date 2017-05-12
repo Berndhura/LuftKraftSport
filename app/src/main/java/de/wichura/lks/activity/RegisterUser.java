@@ -14,6 +14,7 @@ import android.widget.TextView;
 import de.wichura.lks.R;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
+import de.wichura.lks.util.Utility;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -31,10 +32,13 @@ public class RegisterUser extends AppCompatActivity {
     private EditText email;
     private EditText name;
     private EditText password;
+    private Utility utils;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        utils = new Utility(this);
 
         setContentView(R.layout.register_user_activity);
 
@@ -52,9 +56,11 @@ public class RegisterUser extends AppCompatActivity {
         email = (EditText) findViewById(R.id.register_user_email);
         password = (EditText) findViewById(R.id.register_user_password);
 
+        String hashedPw = utils.hashStringMd5(password.getText().toString());
+
         if (validate()) {
             ((TextView) findViewById(R.id.register_user_info_box)).setText("Registriere Konto...");
-            service.registerUserObserv(name.getText().toString(), email.getText().toString(), password.getText().toString())
+            service.registerUserObserv(name.getText().toString(), email.getText().toString(), hashedPw)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<String>() {
