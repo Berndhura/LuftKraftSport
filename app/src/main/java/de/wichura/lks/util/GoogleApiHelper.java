@@ -42,12 +42,14 @@ public class GoogleApiHelper implements
     public void connect() {
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
+            Log.d("CONAN", "mGoogleApiClient Helper CONNECT");
         }
     }
 
     public void disconnect() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
+            Log.d("CONAN", "mGoogleApiClient Helper DISCONNECT");
         }
     }
 

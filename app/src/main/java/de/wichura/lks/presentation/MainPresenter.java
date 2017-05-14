@@ -454,14 +454,19 @@ public class MainPresenter {
 
     private void refreshUserIdToken() {
 
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(activity.getGoogleApiClient());
-        if (opr.isDone()) {
-            Log.d("CONAN", "Got cached sign-in in GET ALL ADS!");
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
+        if (activity.getGoogleApiClient() != null) {
+
+            OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(activity.getGoogleApiClient());
+            if (opr.isDone()) {
+                Log.d("CONAN", "Got cached sign-in in GET ALL ADS!");
+                GoogleSignInResult result = opr.get();
+                handleSignInResult(result);
+            } else {
+                Log.d("CONAN", "cache sign-in leer, get user token from google in GET ALL ADS!");
+                opr.setResultCallback(googleSignInResult -> handleSignInResult(googleSignInResult));
+            }
         } else {
-            Log.d("CONAN", "cache sign-in leer, get user token from google in GET ALL ADS!");
-            opr.setResultCallback(googleSignInResult -> handleSignInResult(googleSignInResult));
+            Log.d("CONAN", "Google client NULL GET ALL ADS!");
         }
     }
 
