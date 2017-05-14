@@ -359,8 +359,4 @@ public class LoginActivity extends AppCompatActivity {
     public void hideProgressDialog() {
         progressBar.setVisibility(View.GONE);
     }
-
-    public void showInfo() {
-        new ConfirmWrongLoginDialog().show(getSupportFragmentManager(), null);
-    }
 }

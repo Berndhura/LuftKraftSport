@@ -3,10 +3,12 @@ package de.wichura.lks.http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.AdsAsPage;
+import de.wichura.lks.models.ApiError;
 import de.wichura.lks.models.ArticleDetails;
 import de.wichura.lks.models.GroupedMsgItem;
 import de.wichura.lks.models.MsgRowItem;
@@ -15,7 +17,9 @@ import de.wichura.lks.models.SearchItem;
 import de.wichura.lks.models.User;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -39,6 +43,8 @@ public class Service {
     private static final String WEB_SERVICE_BASE_URL_V3 = Urls.MAIN_SERVER_URL_V3;
 
     private final WebService mWebServiceV3;
+    private final Retrofit.Builder builder;
+    private final Retrofit restAdapterV2;
 
     public Service() {
 
@@ -54,15 +60,21 @@ public class Service {
                 .setLenient()
                 .create();
 
-        Retrofit restAdapterV2 = new Retrofit.Builder()
+        builder = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(WEB_SERVICE_BASE_URL_V3)
-                .client(httpClientV3.build())
-                .build();
+                .client(httpClientV3.build());
+
+        restAdapterV2 = builder.build();
 
         mWebServiceV3 = restAdapterV2.create(WebService.class);
     }
+
+    public Converter<ResponseBody, ApiError> getErrorConverter() {
+        return restAdapterV2.responseBodyConverter(ApiError.class, new Annotation[0]);
+    }
+
 
     private interface WebService {
 

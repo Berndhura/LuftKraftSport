@@ -1,16 +1,24 @@
 package de.wichura.lks.presentation;
 
 import android.content.Context;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 import de.wichura.lks.activity.LoginActivity;
+import de.wichura.lks.dialogs.ConfirmWrongLoginDialog;
 import de.wichura.lks.dialogs.ShowNetworkProblemDialog;
+import de.wichura.lks.dialogs.ShowUserNotActivatedDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
+import de.wichura.lks.models.ApiError;
 import de.wichura.lks.models.User;
 import de.wichura.lks.util.Utility;
+import okhttp3.ResponseBody;
+import retrofit2.Converter;
+import retrofit2.Response;
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -45,29 +53,39 @@ public class LoginPresenter {
                 .subscribe(new Subscriber<User>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "messsafe: "+e.getMessage() + " : " +e);
+                        String errorMessage = "";
 
-                    /*"timestamp" : "2017-05-12T12:57:33.272+0000",
-                            05-12 14:54:39.403 12730-31552/de.wichura.lks D/OkHttp:   "status" : 401,
-                            05-12 14:54:39.403 12730-31552/de.wichura.lks D/OkHttp:   "error" : "Unauthorized",
-                            05-12 14:54:39.403 12730-31552/de.wichura.lks D/OkHttp:   "exception" : "com.bernd.maul.web.types.UserNotActivatedException",
-                            05-12 14:54:39.403 12730-31552/de.wichura.lks D/OkHttp:   "message" : "This user is not activated",
-                            05-12 14:54:39.403 12730-31552/de.wichura.lks D/OkHttp:   "path" : "/api/V3/users/login"*/
+                        if (e instanceof HttpException) {
+                            HttpException exception = (HttpException) e;
+                            Response response = exception.response();
 
-                        Log.d("CONAN", "error sending login email user ");
-                        loginActivity.hideProgressDialog();
-                        //"The user does not exist, or wrong password"
-                        if ("HTTP 401 Unauthorized".equals(e.getMessage())) {
-                            loginActivity.showInfo();
-                        } else {
-                            loginActivity.hideProgressDialog();
-                            new ShowNetworkProblemDialog().show(loginActivity.getSupportFragmentManager(), null);
+                            Converter<ResponseBody, ApiError> errorConverter = service.getErrorConverter();
+                            // Convert the error body into our Error type.
+                            try {
+                                ApiError error = errorConverter.convert(response.errorBody());
+                                if ("This user is not activated".equals(error.getMessage())) {
+                                    errorMessage = error.getMessage();
+                                    new ShowUserNotActivatedDialog().show(loginActivity.getSupportFragmentManager(), null);
+                                }
+                                //"The user does not exist, or wrong password"
+                                else if ("The user does not exist, or wrong password".equals(error.getMessage())) {
+                                    errorMessage = error.getMessage();
+                                    new ConfirmWrongLoginDialog().show(loginActivity.getSupportFragmentManager(), null);
+                                } else {
+                                    loginActivity.hideProgressDialog();
+                                    new ShowNetworkProblemDialog().show(loginActivity.getSupportFragmentManager(), null);
+                                }
+
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
                         }
+                        Log.d("CONAN", "error sending login email user: " + errorMessage);
+                        loginActivity.hideProgressDialog();
                     }
 
                     @Override
