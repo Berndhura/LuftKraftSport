@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Base64;
+import android.util.Log;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -22,6 +25,7 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 public class Utility {
 
     private Activity activity;
+
 
     public Utility(Activity activity) {
         this.activity = activity;
@@ -89,7 +93,39 @@ public class Utility {
         return "";
     }
 
-    public static String getHashBase64(String s) {
-        return Base64.encodeToString(s.getBytes(), 0);
+    public String computeSHAHash(String password) {
+
+        String sha1Hash="";
+
+        MessageDigest mdSha1 = null;
+        try {
+            mdSha1 = MessageDigest.getInstance("SHA-1");
+        } catch (NoSuchAlgorithmException e1) {
+            Log.e("CONAN", "Error initializing SHA1 message digest");
+        }
+        try {
+            mdSha1.update(password.getBytes("ASCII"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        byte[] data = mdSha1.digest();
+        try {
+            sha1Hash = convertToHex(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return sha1Hash;
+    }
+
+    private static String convertToHex(byte[] data) throws java.io.IOException {
+
+        int NO_OPTIONS = 0;
+
+        StringBuffer sb = new StringBuffer();
+        String hex;
+        hex = Base64.encodeToString(data, 0, data.length, NO_OPTIONS);
+        sb.append(hex);
+        return sb.toString();
     }
 }

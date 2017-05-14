@@ -56,7 +56,7 @@ public class RegisterUser extends AppCompatActivity {
         email = (EditText) findViewById(R.id.register_user_email);
         password = (EditText) findViewById(R.id.register_user_password);
 
-        String hashedPw = utils.hashStringMd5(password.getText().toString());
+        String hashedPw = utils.computeSHAHash(password.getText().toString());
 
         if (validate()) {
             ((TextView) findViewById(R.id.register_user_info_box)).setText("Registriere Konto...");

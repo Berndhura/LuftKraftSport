@@ -364,10 +364,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     protected void onStop() {
-        super.onStop();
+
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
+        super.onStop();
     }
 
     @Override

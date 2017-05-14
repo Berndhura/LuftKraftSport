@@ -36,7 +36,7 @@ public class LoginPresenter {
 
     public void sendLoginReq(String email, String password) {
 
-        String hashedPassword = utils.hashStringMd5(password);
+        String hashedPassword = utils.computeSHAHash(password);
 
         loginActivity.showProgressDialog();
         service.loginUserObserv(email, hashedPassword)
