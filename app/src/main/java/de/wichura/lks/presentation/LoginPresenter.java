@@ -1,6 +1,7 @@
 package de.wichura.lks.presentation;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -69,7 +70,14 @@ public class LoginPresenter {
                                 ApiError error = errorConverter.convert(response.errorBody());
                                 if ("This user is not activated".equals(error.getMessage())) {
                                     errorMessage = error.getMessage();
-                                    new ShowUserNotActivatedDialog().show(loginActivity.getSupportFragmentManager(), null);
+                                    Bundle credentials = new Bundle();
+                                    credentials.putString("email", email);
+                                    //use not hashed password
+                                    // -> after activation password gets hashed again here in login
+                                    credentials.putString("password", password);
+                                    ShowUserNotActivatedDialog dialog = new ShowUserNotActivatedDialog();
+                                    dialog.setArguments(credentials);
+                                    dialog.show(loginActivity.getSupportFragmentManager(), null);
                                 }
                                 //"The user does not exist, or wrong password"
                                 else if ("The user does not exist, or wrong password".equals(error.getMessage())) {
@@ -96,6 +104,35 @@ public class LoginPresenter {
                         //String name, String userId, Uri userPic, String userType, String userToken
                         loginActivity.setUserPreferences(user.getName(), user.getId(), null, Constants.EMAIL_USER, user.getToken());
                         loginActivity.finish();
+                    }
+                });
+    }
+
+    public void sendActivationCode(String email, String password, String code) {
+
+        loginActivity.showProgressDialog();
+
+        service.activateUserObserv(code, email)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("CONAN", "error activating email user " + e.getMessage());
+                        loginActivity.hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(String info) {
+                        loginActivity.hideProgressDialog();
+                        Log.d("CONAN", "activating email user " + info);
+                        //activated, now login with credentials
+                        sendLoginReq(email, password);
                     }
                 });
     }

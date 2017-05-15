@@ -18,8 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,8 +42,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import de.wichura.lks.R;
-import de.wichura.lks.dialogs.ConfirmFollowSearchDialog;
-import de.wichura.lks.dialogs.ConfirmWrongLoginDialog;
+import de.wichura.lks.dialogs.ShowUserNotActivatedDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.presentation.LoginPresenter;
@@ -57,7 +54,8 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
  * Created by Bernd Wichura on 28.07.2015.
  * Luftkraftsport
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements
+        ShowUserNotActivatedDialog.OnCompleteActivationCodeListener {
 
     private AccessToken token;
     private Profile profile;
@@ -280,7 +278,7 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-        private void handleSignInResult(GoogleSignInResult result, Intent data) {
+    private void handleSignInResult(GoogleSignInResult result, Intent data) {
         Log.d("CONAN", "handleSignInResult from Google:" + result.isSuccess());
         Log.d("CONAN", "handleSignInResult status from google:" + result.getStatus());
 
@@ -350,6 +348,12 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    @Override
+    public void onActivationCodeComplete(String email, String password, String code) {
+        Log.d("CONAN", "ActivationCode from dialog: " + code);
+        presenter.sendActivationCode(email, password, code);
     }
 
     public void showProgressDialog() {

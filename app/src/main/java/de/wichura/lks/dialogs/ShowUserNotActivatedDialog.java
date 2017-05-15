@@ -1,10 +1,12 @@
 package de.wichura.lks.dialogs;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.EditText;
 
 import de.wichura.lks.R;
 
@@ -15,17 +17,51 @@ import de.wichura.lks.R;
 
 public class ShowUserNotActivatedDialog extends DialogFragment {
 
+    private String email;
+    private String password;
+
+    public interface OnCompleteActivationCodeListener {
+        void onActivationCodeComplete(String email, String password, String code);
+    }
+
+    private ShowUserNotActivatedDialog.OnCompleteActivationCodeListener mListener;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            this.mListener = (ShowUserNotActivatedDialog.OnCompleteActivationCodeListener) activity;
+        } catch (final ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnCompleteActivationCodeListener");
+        }
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        return new AlertDialog.Builder(getActivity())
+        Bundle bundle = getArguments();
+        email = bundle.getString("email");
+        password = bundle.getString("password");
+
+        EditText code = new EditText(getActivity());
+        code.setVisibility(View.VISIBLE);
+        code.setPadding(50, 50, 50, 50);
+        code.setHint("code...");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.confirm_user_not_activated_error)
                 .setMessage(R.string.confirm_user_not_activated_error_text)
                 .setIcon(R.drawable.ic_error_outline_red_600_24dp)
-                .setPositiveButton(android.R.string.yes, (dialog, which) -> getDialog().dismiss())
-                .setNegativeButton("Aktivieren", (dialog, which) -> {
-                    Toast.makeText(getActivity(), "Aktivieren!!!!!!!!", Toast.LENGTH_SHORT).show();
-                })
-                .create();
+                .setView(code)
+                .setNegativeButton("Später", (dialog, which) -> getDialog().dismiss())
+                .setPositiveButton("Aktivieren", (dialog, which) -> {
+                    getDialog().dismiss();
+                    mListener.onActivationCodeComplete(email, password, code.getText().toString());
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        return alertDialog;
     }
 }
