@@ -73,7 +73,7 @@ public class LoginPresenter {
                                     Bundle credentials = new Bundle();
                                     credentials.putString("email", email);
                                     //use not hashed password
-                                    // -> after activation password gets hashed again here in login
+                                    //after activation password gets hashed again here in login
                                     credentials.putString("password", password);
                                     ShowUserNotActivatedDialog dialog = new ShowUserNotActivatedDialog();
                                     dialog.setArguments(credentials);
@@ -131,6 +131,7 @@ public class LoginPresenter {
                     public void onNext(String info) {
                         loginActivity.hideProgressDialog();
                         Log.d("CONAN", "activating email user " + info);
+                        //TODO falls activating email user invalid ->"info == invalid"
                         //activated, now login with credentials
                         sendLoginReq(email, password);
                     }

@@ -159,6 +159,7 @@ public class RegisterUser extends AppCompatActivity {
                         public void onNext(String info) {
                             ((TextView) findViewById(R.id.register_user_info_box)).setText("Neues Konto wurde aktiviert! Du kannst dich mit deiner Email und Passwort anmelden.");
                             Log.d("CONAN", "activating email user " + info);
+                            //TODO falls activating email user invalid ->"info == invalid"
                             adaptViewForExitActivation();
                         }
                     });
