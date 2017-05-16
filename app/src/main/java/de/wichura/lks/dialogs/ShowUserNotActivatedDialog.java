@@ -40,8 +40,10 @@ public class ShowUserNotActivatedDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Bundle bundle = getArguments();
-        email = bundle.getString("email");
-        password = bundle.getString("password");
+        if (bundle.getString("password") != null) {
+            email = bundle.getString("email");
+            password = bundle.getString("password");
+        }
 
         EditText code = new EditText(getActivity());
         code.setVisibility(View.VISIBLE);
@@ -55,8 +57,12 @@ public class ShowUserNotActivatedDialog extends DialogFragment {
                 .setView(code)
                 .setNegativeButton("Später", (dialog, which) -> getDialog().dismiss())
                 .setPositiveButton("Aktivieren", (dialog, which) -> {
-                    getDialog().dismiss();
-                    mListener.onActivationCodeComplete(email, password, code.getText().toString());
+                    if ("".equals(code.getText().toString())) {
+                        //nothing here
+                    } else {
+                        getDialog().dismiss();
+                        mListener.onActivationCodeComplete(email, password, code.getText().toString());
+                    }
                 });
 
         AlertDialog alertDialog = builder.create();

@@ -167,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements
 
         Button register = (Button) findViewById(R.id.register);
         register.setOnClickListener(view -> {
-            Intent i = new Intent(getApplicationContext(), RegisterUser.class);
+            Intent i = new Intent(getApplicationContext(), RegisterUserActivity.class);
             startActivityForResult(i, Constants.REQUEST_ID_FOR_REGISTER_USER);
         });
 

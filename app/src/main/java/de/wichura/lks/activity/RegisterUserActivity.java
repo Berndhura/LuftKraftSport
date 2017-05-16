@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import de.wichura.lks.R;
+import de.wichura.lks.dialogs.ShowUserNotActivatedDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.util.Utility;
@@ -27,7 +28,8 @@ import static de.wichura.lks.mainactivity.Constants.ACTIVATE_USER_STATUS;
  */
 
 
-public class RegisterUser extends AppCompatActivity {
+public class RegisterUserActivity extends AppCompatActivity implements
+        ShowUserNotActivatedDialog.OnCompleteActivationCodeListener {
 
     private EditText email;
     private EditText name;
@@ -52,7 +54,7 @@ public class RegisterUser extends AppCompatActivity {
 
         Service service = new Service();
 
-        name =  (EditText) findViewById(R.id.register_user_name);
+        name = (EditText) findViewById(R.id.register_user_name);
         email = (EditText) findViewById(R.id.register_user_email);
         password = (EditText) findViewById(R.id.register_user_password);
 
@@ -132,6 +134,7 @@ public class RegisterUser extends AppCompatActivity {
     }
 
     private void activateUser() {
+
         ((TextView) findViewById(R.id.register_user_info_box)).setText("Aktiviere Konto...");
 
         Service service = new Service();
@@ -159,11 +162,29 @@ public class RegisterUser extends AppCompatActivity {
                         public void onNext(String info) {
                             ((TextView) findViewById(R.id.register_user_info_box)).setText("Neues Konto wurde aktiviert! Du kannst dich mit deiner Email und Passwort anmelden.");
                             Log.d("CONAN", "activating email user " + info);
-                            //TODO falls activating email user invalid ->"info == invalid"
-                            adaptViewForExitActivation();
+
+                            if ("invalid".equals(info)) {
+                                openActivationDialog(email, null);
+                            } else {
+                                adaptViewForExitActivation();
+                            }
                         }
                     });
         }
+    }
+
+    private void openActivationDialog(String email, String password) {
+
+        Bundle credentials = new Bundle();
+        credentials.putString("email", email);
+        //use not hashed password
+        //after activation password gets hashed again here in login
+        if (password != null)
+            credentials.putString("password", password);
+
+        ShowUserNotActivatedDialog dialog = new ShowUserNotActivatedDialog();
+        dialog.setArguments(credentials);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
     public boolean validateActivationCode() {
@@ -213,5 +234,12 @@ public class RegisterUser extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    @Override
+    public void onActivationCodeComplete(String email, String password, String code) {
+        Log.d("CONAN", "ActivationCode from dialog: " + code);
+        ((TextView) findViewById(R.id.register_user_name)).setText(code);
+        activateUser();
     }
 }

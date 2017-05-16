@@ -108,7 +108,7 @@
             android:label="@string/title_settings_page" />
 
         <activity
-            android:name="de.wichura.lks.activity.RegisterUser"
+            android:name="de.wichura.lks.activity.RegisterUserActivity"
             android:label="@string/title_register_user" />
 
 

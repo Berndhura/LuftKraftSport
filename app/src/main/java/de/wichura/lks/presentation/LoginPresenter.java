@@ -70,14 +70,7 @@ public class LoginPresenter {
                                 ApiError error = errorConverter.convert(response.errorBody());
                                 if ("This user is not activated".equals(error.getMessage())) {
                                     errorMessage = error.getMessage();
-                                    Bundle credentials = new Bundle();
-                                    credentials.putString("email", email);
-                                    //use not hashed password
-                                    //after activation password gets hashed again here in login
-                                    credentials.putString("password", password);
-                                    ShowUserNotActivatedDialog dialog = new ShowUserNotActivatedDialog();
-                                    dialog.setArguments(credentials);
-                                    dialog.show(loginActivity.getSupportFragmentManager(), null);
+                                    openActivationDialog(email, password);
                                 }
                                 //"The user does not exist, or wrong password"
                                 else if ("The user does not exist, or wrong password".equals(error.getMessage())) {
@@ -108,6 +101,19 @@ public class LoginPresenter {
                 });
     }
 
+    private void openActivationDialog(String email, String password) {
+
+        Bundle credentials = new Bundle();
+        credentials.putString("email", email);
+        //use not hashed password
+        //after activation password gets hashed again here in login
+        credentials.putString("password", password);
+
+        ShowUserNotActivatedDialog dialog = new ShowUserNotActivatedDialog();
+        dialog.setArguments(credentials);
+        dialog.show(loginActivity.getSupportFragmentManager(), null);
+    }
+
     public void sendActivationCode(String email, String password, String code) {
 
         loginActivity.showProgressDialog();
@@ -131,9 +137,12 @@ public class LoginPresenter {
                     public void onNext(String info) {
                         loginActivity.hideProgressDialog();
                         Log.d("CONAN", "activating email user " + info);
-                        //TODO falls activating email user invalid ->"info == invalid"
-                        //activated, now login with credentials
-                        sendLoginReq(email, password);
+                        if ("invalid".equals(info)) {
+                            openActivationDialog(email, password);
+                        } else {
+                            //activated, now login with credentials
+                            sendLoginReq(email, password);
+                        }
                     }
                 });
     }
