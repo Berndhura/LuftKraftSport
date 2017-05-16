@@ -2,8 +2,11 @@ package de.wichura.lks.presentation;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -17,6 +20,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +40,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static android.content.Context.MODE_PRIVATE;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.TYPE_ALL;
 
@@ -529,5 +534,28 @@ public class MainPresenter {
                         Log.d("CONAN", "pictureUri send: " + s);
                     }
                 });
+    }
+
+    public void getLastKnownLocation() {
+        //get last location
+        if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(activity.getGoogleApiClient());
+
+            if (lastLocation != null) {
+                Double lat = lastLocation.getLatitude();
+                Double lng = lastLocation.getLongitude();
+                //store in Shared prefs
+                storeLocation(lat, lng);
+            }
+        }
+    }
+
+    private void storeLocation(Double lat, Double lng) {
+        SharedPreferences sp = context.getSharedPreferences(Constants.USERS_LOCATION, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putLong(Constants.LAT, Double.doubleToRawLongBits(lat));
+        ed.putLong(Constants.LNG, Double.doubleToRawLongBits(lng));
+        ed.apply();
     }
 }

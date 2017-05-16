@@ -158,8 +158,8 @@ public class MainActivity extends AppCompatActivity implements
 
         checkLocationServiceEnabled();
 
-        //TODO googleApiClient wird schon global angelegt!
-        //getLastLocation();
+        //TODO last location hier holen oder in onConnect nutzen?
+        //presenterLayer.getLastKnownLocation();
 
         //TODO: set active false in messageActivity in onDestroy, onStop, on???  BUT NOT HERE
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
@@ -961,6 +961,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.d("CONAN", "in mainActivity in onConnected");
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
