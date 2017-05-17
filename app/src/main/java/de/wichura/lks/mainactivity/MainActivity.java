@@ -21,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -124,6 +125,10 @@ public class MainActivity extends AppCompatActivity implements
 
     //empty view for network problems
     private View noResultsView;
+
+    //pull down to refresh
+    public SwipeRefreshLayout swipeContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,7 +316,30 @@ public class MainActivity extends AppCompatActivity implements
             getAds(Constants.TYPE_ALL);
         }
 
+        initRefreshSwipeDown();
+
         showWelcomeDialog();
+    }
+
+    private void initRefreshSwipeDown() {
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                setMyAdsFlag(false);
+                setBookmarksFlag(false);
+                getAds(Constants.TYPE_ALL);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
     }
 
     private void showWelcomeDialog() {
@@ -494,6 +522,8 @@ public class MainActivity extends AppCompatActivity implements
             intent.putExtra(Constants.AD_URL, rowItem.getUrl());  //TODO einmal hier getURL dann oben nochmal.... aufräumen
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
         });
+
+        swipeContainer.setRefreshing(false);
 
         listView.setOnScrollListener(new EndlessScrollListener() {
             @Override

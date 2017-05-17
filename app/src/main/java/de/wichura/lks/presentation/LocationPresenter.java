@@ -22,7 +22,7 @@ import rx.schedulers.Schedulers;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by ich on 18.02.2017.
+ * Created by Bernd Wichura on 18.02.2017.
  * Luftkrafsport
  */
 
