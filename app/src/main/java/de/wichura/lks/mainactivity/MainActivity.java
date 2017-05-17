@@ -329,13 +329,18 @@ public class MainActivity extends AppCompatActivity implements
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
+                hideEmptyView();
                 setMyAdsFlag(false);
                 setBookmarksFlag(false);
+                isMyAds = false;
+                isBookmarks = false;
+                isSearch = false;
                 getAds(Constants.TYPE_ALL);
             }
         });
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        swipeContainer.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
@@ -842,17 +847,6 @@ public class MainActivity extends AppCompatActivity implements
                 setBookmarksFlag(false);
                 final Intent i = new Intent(this, SettingsActivity.class);
                 startActivityForResult(i, Constants.REQUEST_ID_FOR_SETTINGS);
-                return true;
-            }
-            case R.id.refresh: {
-                hideEmptyView();
-                setMyAdsFlag(false);
-                setBookmarksFlag(false);
-                isMyAds = false;
-                isBookmarks = false;
-                isSearch = false;
-                getAds(Constants.TYPE_ALL);
-                if (drawer != null) drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
             case R.id.bookmarks: {
