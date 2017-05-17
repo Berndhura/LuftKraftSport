@@ -8,14 +8,14 @@
         android:layout_height="wrap_content" 
         android:layout_width="wrap_content"
         android:layout_marginTop="80dip"
-        android:src="@drawable/logo_martin_zweiter"/>
+        android:src="@drawable/lks_app_logo"/>
 
     <ImageView android:id="@+id/even_bubble"
         android:layout_height="wrap_content" 
         android:layout_width="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_margin="5dip"
-        android:src="@drawable/logo_martin_zweiter"/>
+        android:src="@drawable/lks_app_logo"/>
 
     <TextView android:id="@+id/text" 
         android:layout_height="wrap_content"

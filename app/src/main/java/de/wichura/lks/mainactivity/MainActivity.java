@@ -912,7 +912,7 @@ public class MainActivity extends AppCompatActivity implements
             Picasso.with(getApplicationContext()).load(uri.toString()).into(proPic);
         } else {
             if (proPic != null) {
-                proPic.setImageResource(R.drawable.logo_martin_zweiter);
+                proPic.setImageResource(R.drawable.lks_app_logo);
             }
         }
     }

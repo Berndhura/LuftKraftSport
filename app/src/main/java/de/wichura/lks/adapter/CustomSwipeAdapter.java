@@ -150,7 +150,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
     private void showDefaultPic(ImageView image_view) {
         int ratio = Math.round((float) displayWidth / (float) displayWidth);
         Picasso.with(context)
-                .load(R.drawable.logo_martin_zweiter)
+                .load(R.drawable.lks_app_logo)
                 .placeholder(R.drawable.empty_photo)
                 .fit()
                 //.resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)

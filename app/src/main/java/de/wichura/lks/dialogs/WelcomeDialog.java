@@ -31,7 +31,7 @@ public class WelcomeDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.welcome_title)
-                .setIcon(R.drawable.logo_martin_zweiter)
+                .setIcon(R.drawable.lks_app_logo)
                 .setMessage(R.string.welcome_text)
                 .setView(showAgain)
                 .setPositiveButton("Schließen", (dialog, which) -> {
