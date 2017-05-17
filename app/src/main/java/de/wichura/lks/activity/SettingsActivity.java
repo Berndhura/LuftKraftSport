@@ -16,8 +16,8 @@ import de.wichura.lks.mainactivity.Constants;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
- * Created by ich on 03.06.2016.
- * CamperApp
+ * Created by Bernd Wichura on 03.06.2016.
+ * Luftkraftsport
  */
 public class SettingsActivity extends AppCompatActivity {
 
@@ -38,7 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         loginInfo = (TextView) findViewById(R.id.login_info_text);
-        loginInfo.setText("Logged in as " + getUserName());
+        loginInfo.setText("Angemeldet als: " + getUserName());
 
 
         initLogoutButton();
@@ -47,9 +47,9 @@ public class SettingsActivity extends AppCompatActivity {
     private void initLogoutButton() {
         Button logoutBtn = (Button) findViewById(R.id.logout_button);
         if (isUserLoggedIn()) {
-            logoutBtn.setText("LOGOUT");
+            logoutBtn.setText("Abmelden");
         } else {
-            logoutBtn.setText("LOGIN");
+            logoutBtn.setText("Anmelden");
         }
         logoutBtn.setOnClickListener((view) -> {
             if (isUserLoggedIn()) {
@@ -70,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_ID_FOR_LOGIN) {
             initLogoutButton();
-            loginInfo.setText("Logged in as " + getUserName());
+            loginInfo.setText("Angemeldet als: " + getUserName());
             setResult(RESULT_OK, data);
             finish();
         }

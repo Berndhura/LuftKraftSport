@@ -234,10 +234,10 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     private void deleteAdRequest(final Integer adId, final View view) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(activity)
                 //set message, title, and icon
-                .setTitle("Delete")
-                .setMessage("Do you want to Delete")
+                .setTitle("Löschen")
+                .setMessage("Möchtest Du wirklich löschen?")
                 .setIcon(R.drawable.ic_delete_blue_grey_600_24dp)
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Lösche", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         service.deleteAdObserv(adId, getUserToken())
@@ -267,7 +267,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                     }
                 })
 
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Nein!", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }

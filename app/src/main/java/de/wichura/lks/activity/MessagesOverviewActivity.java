@@ -94,7 +94,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             rowItems.add(e);
         }
 
-        getSupportActionBar().setTitle("Messages: " + rowItems.size());
+        getSupportActionBar().setTitle("Nachrichten: " + rowItems.size());
         getSupportActionBar().setSubtitle(getUserName());
 
         MsgOverviewAdapter adapter = new MsgOverviewAdapter(
