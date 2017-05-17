@@ -8,7 +8,7 @@
 
     <string name="title_open_ad_page">Details</string>
     <string name="title_search_page">Suche</string>
-    <string name="title_login_page">Login</string>
+    <string name="title_login_page">Anmelden</string>
     <string name="title_message_page">Nachrichten</string>
     <string name="title_msg_overview_page">Postbox</string>
     <string name="title_settings_page">Einstellungen</string>
@@ -29,10 +29,6 @@
     <string name="google_maps_key">AIzaSyCmTWsTXw80szVj0MtogQ57epeBIOSYtr4</string>
 
     <string name="server_client_id">485775614575-bgge92h3jhg7hm24qlmrl7bekcd64mbp.apps.googleusercontent.com</string>
-
-    <string name="uploadPic_string" tools:ignore="MissingTranslation">Pictures</string>
-
-    <string name="hello_world" tools:ignore="MissingTranslation,MissingTranslation">Tag</string>
 
     <string name="title_new_add_page" tools:ignore="MissingTranslation">Anlegen</string>
     <string name="uploadAd">Erstelle Anzeige</string>
@@ -55,10 +51,13 @@
     <string name="confirm_read_write_permission_text">Ohne Lese- und Schreiberechtigung kannst Du keine Anzeige erstellen. Willst Du dir es nochmal überlegen?</string>
     <string name="confirm_user_not_activated_error">Problem!</string>
     <string name="confirm_user_not_activated_error_text">Dieser Benutzer ist noch nicht aktiviert! Benutze den Aktivierungslink in Deiner Email oder den Aktivierungscode.</string>
+    <string name="welcome_title">Willkommen bei Luftkraftsport</string>
+    <string name="welcome_text">Wir als Entwickler dieser App versuchen Dir beim Verkauf/Kauf deines Materials so gut wie möglich zu helfen!
+        Dabei gibt es noch eine Reihe von Dingen, die gerade am Anfang passieren können. Wenn es einen crash geben sollte, sei uns bitte behilflich und sende den Bericht,
+    dann können wir das Problem so schnell wie möglich beheben. Wenn es Deiner Meinung nach Verbesserungsvorschläge gibt, teile sie uns mit! Nutze die Feedback email Adresse. Viel Spass und Erfolg beim Handeln!</string>
 
 
     <!-- Empty Ads Database -->
-    <string name="empty_ads_list">No Ads Information Available</string>
     <string name="empty_Ads_list_no_network">No Ads information available. The network is not available to fetch data.</string>
     <string name="search_for_keyword">Suche:</string>
     <string name="search_price">Preis:</string>

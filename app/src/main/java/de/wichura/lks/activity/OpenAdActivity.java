@@ -376,6 +376,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.d("CONAN", "in onConnected in OpenActivity");
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
         googleMap.clear();
         LatLng latLng = new LatLng(lat, lng);

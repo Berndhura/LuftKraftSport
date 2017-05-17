@@ -38,15 +38,9 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationServices;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -63,6 +57,7 @@ import de.wichura.lks.activity.OpenAdActivity;
 import de.wichura.lks.activity.SearchActivity;
 import de.wichura.lks.activity.SettingsActivity;
 import de.wichura.lks.adapter.MainListViewAdapter;
+import de.wichura.lks.dialogs.WelcomeDialog;
 import de.wichura.lks.gcm.QuickstartPreferences;
 import de.wichura.lks.gcm.RegistrationIntentService;
 import de.wichura.lks.http.Service;
@@ -314,6 +309,14 @@ public class MainActivity extends AppCompatActivity implements
             setMyAdsFlag(false);
             setBookmarksFlag(false);
             getAds(Constants.TYPE_ALL);
+        }
+
+        showWelcomeDialog();
+    }
+
+    private void showWelcomeDialog() {
+        if (getSharedPreferences(Constants.SHARED_PREFS_WELCOME_DIALOG, 0).getBoolean(Constants.SHOW_WELCOME, true)) {
+            new WelcomeDialog().show(getSupportFragmentManager(), null);
         }
     }
 
