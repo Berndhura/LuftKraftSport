@@ -244,6 +244,7 @@ public class MessagesActivity extends AppCompatActivity {
         intent.putExtra(Constants.VIEWS, rowItem.getViews());
         intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
         intent.putExtra(Constants.USER_ID, getUserId());
+        intent.putExtra(Constants.LOCATION_NAME, rowItem.getLocationName());
         startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
     }
 }

@@ -18,8 +18,8 @@ import de.wichura.lks.models.MsgRowItem;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
- * Created by ich on 31.05.2016.
- * Camper App
+ * Created by Bernd Wichura on 31.05.2016.
+ * Luftkraftsport
  */
 public class MessageListViewAdapter extends ArrayAdapter<MsgRowItem> {
 
