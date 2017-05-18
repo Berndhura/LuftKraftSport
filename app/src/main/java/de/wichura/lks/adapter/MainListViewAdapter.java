@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     private Activity activity;
     private Service service;
     private MainPresenter presenter;
+    private Boolean isLocationSet;
 
     public MainListViewAdapter(final Activity activity, final Context context, final int resourceId,
                                final List<RowItem> items, final ArrayList<Long> bookmarks) {
@@ -62,6 +64,8 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         }
         service = new Service();
         presenter = new MainPresenter((MainActivity) activity, service, context);
+
+        isLocationSet = isLocationOn();
     }
 
     /* private view holder class */
@@ -112,7 +116,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         // getting ad data for the row
         final RowItem rowItem = getItem(position);
 
-        //TODO: (rowItem.getPictureIds().length > 0)? rowItem.getPictureIds()[0]: ""  -> im else zweig ?
         Picasso.with(context)
                 .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + ((rowItem.getPictureIds().length > 0) ? rowItem.getPictureIds()[0] : "") + "/thumbnail")
                 .placeholder(R.drawable.lks_app_logo)
@@ -123,18 +126,19 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         holder.txtTitle.setText(rowItem.getTitle());
 
         holder.txtPrice.setText(Utility.getPriceString(rowItem.getPrice()));
-        holder.txtDate.setText(DateFormat.getDateInstance().format(rowItem.getDate()));
+        holder.txtDate.setText(new SimpleDateFormat("dd MMM").format(rowItem.getDate()));
 
         if (isMyAdsRequest()) {
-            holder.distance.setText("Meine");
+            holder.distance.setText(rowItem.getLocationName());
         } else if (!isLocationServiceEnabled()) {
-            holder.distance.setText("");  // TODO keine location -> keine km entfernung
+            holder.distance.setText(rowItem.getLocationName());
+        } else if (!isLocationSet) {
+            holder.distance.setText(rowItem.getLocationName());
         } else {
             holder.distance.setText(getDistAndLocation(rowItem));
         }
 
         //bookmark star full for bookmarked ad
-
         if (bookmarks == null) {
             holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
         } else {
@@ -274,6 +278,14 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 })
                 .create();
         myQuittingDialogBox.show();
+    }
+
+
+    private Boolean isLocationOn() {
+        SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
+        Double lat = Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
+        Double lng = Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
+        return !(lat.equals(0.0) && lng.equals(0.0));
     }
 
     private boolean isMyAdsRequest() {
