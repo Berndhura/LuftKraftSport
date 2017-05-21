@@ -3,6 +3,8 @@ package de.wichura.lks.mainactivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.LinearLayout;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,16 +14,17 @@ import de.wichura.lks.http.StartActivity;
 
 /**
  * Created by Bernd Wichura on 10.05.2016.
- * Camper App
+ * Luftkraftsport
  */
 public class Splash extends Activity {
 
-    private final static int STR_SPLASH_TIME = 3000;
+    private final static int STR_SPLASH_TIME = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
         startSplashTimer();
     }
 
@@ -32,7 +35,7 @@ public class Splash extends Activity {
 
                 @Override
                 public void run() {
-                    Intent intent = new Intent(Splash.this, StartActivity.class);
+                    Intent intent = new Intent(Splash.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }

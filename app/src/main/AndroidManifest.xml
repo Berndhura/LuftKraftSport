@@ -20,6 +20,9 @@
     <uses-permission android:name="de.wichura.lks.permission.C2D_MESSAGE" />
 
     <application
+
+
+
         android:name="de.wichura.lks.mainactivity.MainApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -67,15 +70,22 @@
 
         </service>
 
+        <!-- Splash screen -->
+        <activity
+            android:name="de.wichura.lks.mainactivity.Splash"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="de.wichura.lks.mainactivity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
 

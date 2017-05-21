@@ -12,8 +12,8 @@ import de.wichura.lks.http.Service;
 import de.wichura.lks.models.GroupedMsgItem;
 
 /**
- * Created by ich on 05.12.2016.
- * Camper App
+ * Created by Bernd Wichura on 05.12.2016.
+ * BoardRip
  */
 
 public class MsgOverviewPresenter {
