@@ -2,10 +2,13 @@ package de.wichura.lks.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
@@ -22,6 +25,7 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 public class SettingsActivity extends AppCompatActivity {
 
     private TextView loginInfo;
+    private ImageView shareApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,14 @@ public class SettingsActivity extends AppCompatActivity {
         loginInfo = (TextView) findViewById(R.id.login_info_text);
         loginInfo.setText("Angemeldet als: " + getUserName());
 
+        shareApp = (ImageView) findViewById(R.id.share_luftkraftsport_app);
+        shareApp.setOnClickListener(view -> {
+            final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Surfmaterial Kaufen/Verkaufen mit Luftkraftsport:");
+            shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml("https://play.google.com/store/apps/details?id=de.wichura.lks"));
+            shareIntent.setType("text/plain");
+            startActivity(Intent.createChooser(shareIntent, "Teile Luftkraftsport"));
+        });
 
         initLogoutButton();
     }
