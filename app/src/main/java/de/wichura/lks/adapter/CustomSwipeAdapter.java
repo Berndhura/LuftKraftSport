@@ -86,13 +86,15 @@ public class CustomSwipeAdapter extends PagerAdapter {
                     @Override
                     public void onSuccess() {
                         activity.mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
-                        activity.shareArticle.setVisibility(View.VISIBLE);
+                        //TODO sichbar wenn webapp soweit
+                        //activity.shareArticle.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onError() {
                         activity.mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
-                        activity.shareArticle.setVisibility(View.VISIBLE);
+                        //TODO sichtbar, wenn webapp soweit
+                        //activity.shareArticle.setVisibility(View.VISIBLE);
                         Toast.makeText(context, "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
                         showDefaultPic(image_view);
                     }

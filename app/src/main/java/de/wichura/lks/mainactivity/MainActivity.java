@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public ListView listView;
     private int page;
-    private int size;
+    private int size = 10;
     private int pages;
     private int total;
 
@@ -148,8 +148,7 @@ public class MainActivity extends AppCompatActivity implements
 
         //Google Api client
         //initGoogleApiClient();
-        if(MainApp.getGoogleApiHelper().isConnected())
-        {
+        if (MainApp.getGoogleApiHelper().isConnected()) {
             //Get google api client
             mGoogleApiClient = MainApp.getGoogleApiHelper().getGoogleApiClient();
             Log.d("CONAN", "google client connected in MainActivity!");
@@ -545,6 +544,8 @@ public class MainActivity extends AppCompatActivity implements
     public void showProblem(String type) {
         listView.setEmptyView(noResultsView);
         noResultsView.setVisibility(View.VISIBLE);
+
+        Log.d("CONAN", "serach again");
 
         ImageView reload = (ImageView) findViewById(R.id.reload_list);
         reload.setOnClickListener(v -> {

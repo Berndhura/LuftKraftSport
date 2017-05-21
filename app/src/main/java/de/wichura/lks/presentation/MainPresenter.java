@@ -342,6 +342,8 @@ public class MainPresenter {
 
                         @Override
                         public void onError(Throwable e) {
+                            activity.swipeContainer.setRefreshing(false);
+
                             if ("HTTP 401 Unauthorized".equals(e.getMessage())) {
                                 //refresh userToken
                                 refreshUserIdToken();

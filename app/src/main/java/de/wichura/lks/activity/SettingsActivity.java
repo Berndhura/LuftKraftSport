@@ -47,8 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
         shareApp = (ImageView) findViewById(R.id.share_luftkraftsport_app);
         shareApp.setOnClickListener(view -> {
             final Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Surfmaterial Kaufen/Verkaufen mit Luftkraftsport:");
-            shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml("https://play.google.com/store/apps/details?id=de.wichura.lks"));
+            shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Klicke den Link an: https://play.google.com/store/apps/details?id=de.wichura.lks");
             shareIntent.setType("text/plain");
             startActivity(Intent.createChooser(shareIntent, "Teile Luftkraftsport"));
         });
