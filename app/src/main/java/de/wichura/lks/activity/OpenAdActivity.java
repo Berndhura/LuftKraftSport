@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -87,6 +88,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private TextView mDateText;
     private Integer mAdId;
     private TextView locationName;
+    public ImageView shareArticle;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -122,6 +124,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         userNumberOfArticles = (TextView) findViewById(R.id.user_number_of_articles);
         userPic = (ImageView) findViewById(R.id.user_image);
         locationName = (TextView) findViewById(R.id.open_ad_location_name);
+        shareArticle = (ImageView) findViewById(R.id.share_article);
 
         getDisplayDimensions();
 
@@ -141,6 +144,16 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             lat = getIntent().getDoubleExtra(Constants.LAT, 0);
             lng = getIntent().getDoubleExtra(Constants.LNG, 0);
             String ownerId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
+
+            shareArticle.setOnClickListener(v -> {
+                final Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Eine Anzeige in Luftkraftsport");
+                emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml("Hier das könnte etwas für Dich sein: " +
+                        "http://www.luftkraftsport.de:9876/#/arcticle/" + mAdId + "/show"));  //http://luftkraftsport.de:9876/#/article/3221/show
+                emailIntent.setType("text/plain");
+                startActivity(Intent.createChooser(emailIntent, "Sende es einem Freund"));
+            });
+
             setupPanel(pictureUri, ownerId);
         } else {
             //intent comes from notification -> get article first
@@ -194,6 +207,16 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         lat = articleDetails.getLocation().getCoordinates()[0];
         lng = articleDetails.getLocation().getCoordinates()[1];
         presenter.getSellerInformation(articleDetails.getUserId());
+
+        shareArticle.setOnClickListener(v -> {
+            final Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Eine Anzeige in Luftkraftsport");
+            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml("Hier das könnte etwas für Dich sein: " +
+                    "http://www.luftkraftsport.de:9876/#/arcticle/" + mAdId + "/show"));  //http://luftkraftsport.de:9876/#/article/3221/show
+            emailIntent.setType("text/plain");
+            startActivity(Intent.createChooser(emailIntent, "Sende es einem Freund"));
+        });
+
         setupPanel(pictureUri, ownerId);
         //TODO ok mit onConnect nochmal aufrufen?
         //daten fuer artikel kommen später als onConnect

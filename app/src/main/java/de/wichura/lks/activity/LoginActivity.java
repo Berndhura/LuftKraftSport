@@ -236,7 +236,7 @@ public class LoginActivity extends AppCompatActivity implements
             @Override
             public void onSuccess(LoginResult loginResult) {
                 token = loginResult.getAccessToken();
-                Log.d("CONAN", token.getUserId());
+                Log.d("CONAN", "Facebook user token: " + token.getUserId());
                 profile = Profile.getCurrentProfile();
                 if (profile != null) {
                     Uri uri = profile.getProfilePictureUri(250, 250);

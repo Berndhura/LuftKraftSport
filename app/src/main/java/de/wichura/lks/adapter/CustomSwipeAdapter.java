@@ -82,17 +82,17 @@ public class CustomSwipeAdapter extends PagerAdapter {
                 .placeholder(R.drawable.empty_photo)
                 .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
                 .centerInside()
-                //.transform(new CropSquareTransformation())
-                //.fit()
                 .into(image_view, new Callback() {
                     @Override
                     public void onSuccess() {
                         activity.mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
+                        activity.shareArticle.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onError() {
                         activity.mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
+                        activity.shareArticle.setVisibility(View.VISIBLE);
                         Toast.makeText(context, "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
                         showDefaultPic(image_view);
                     }
