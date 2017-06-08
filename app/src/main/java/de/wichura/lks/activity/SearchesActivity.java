@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -47,6 +48,7 @@ public class SearchesActivity extends Fragment implements
     private View mainView;
     private SearchesPresenter presenter;
     private GoogleApiClient mGoogleApiClient;
+    private LinearLayout emptyView;
 
 
     @Override
@@ -68,6 +70,8 @@ public class SearchesActivity extends Fragment implements
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        emptyView = (LinearLayout) view.findViewById(R.id.searches_overview_empty_page);
 
         progressBar = (AVLoadingIndicatorView) view.findViewById(R.id.searches_overview_ProgressBar);
         mainView = view;
@@ -106,7 +110,14 @@ public class SearchesActivity extends Fragment implements
         presenter.loadSearchesForUser();
     }
 
+    public void emptyPage() {
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
     public void updateSearches(List<SearchItem> searchItem) {
+
+        emptyView.setVisibility(View.GONE);
+
         List<SearchItem> rowItems = new ArrayList<>();
         rowItems.addAll(searchItem);
 

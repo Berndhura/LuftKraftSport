@@ -4,16 +4,16 @@ import android.util.Log;
 
 import java.util.List;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import de.wichura.lks.activity.MessagesOverviewActivity;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.models.GroupedMsgItem;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Bernd Wichura on 05.12.2016.
- * BoardRip
+ * Luftkraftsport
  */
 
 public class MsgOverviewPresenter {
@@ -46,7 +46,11 @@ public class MsgOverviewPresenter {
                     @Override
                     public void onNext(List<GroupedMsgItem> msgRowItems) {
                         view.hideProgressBar();
-                        view.updateMsgList(msgRowItems);
+                        if (msgRowItems.size() == 0) {
+                            view.emptyPage();
+                        } else {
+                            view.updateMsgList(msgRowItems);
+                        }
                     }
                 });
     }

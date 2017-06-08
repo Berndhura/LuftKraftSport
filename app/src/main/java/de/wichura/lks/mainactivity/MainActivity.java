@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.wichura.lks.R;
+import de.wichura.lks.activity.EbayActivity;
 import de.wichura.lks.activity.LoginActivity;
 import de.wichura.lks.activity.MessagesOverviewActivity;
 import de.wichura.lks.activity.NewAdActivity;
@@ -879,6 +880,12 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
                 }
             }
+            //TODO anzeige EBAY
+           /* case R.id.ebay: {
+                final Intent i = new Intent(this, EbayActivity.class);
+                startActivityForResult(i, Constants.REQUEST_ID_FOR_SETTINGS);
+                return true;
+            }*/
         }
 
         if (drawer != null) drawer.closeDrawer(GravityCompat.START);

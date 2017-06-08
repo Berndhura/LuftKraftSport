@@ -148,7 +148,8 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             shareArticle.setOnClickListener(v -> {
                 final Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Hier das könnte etwas für Dich sein: " +
-                        "http://www.luftkraftsport.de:9876/#/arcticle/" + mAdId + "/show");  //http://luftkraftsport.de:9876/#/article/3221/show
+                        //"http://www.luftkraftsport.de:9876/#/arcticle/" + mAdId + "/show");  //http://luftkraftsport.de:9876/#/article/3221/show
+                        "localhost:8080/#/arcticle/" + mAdId + "/show");  //http://luftkraftsport.de:9876/#/article/3221/show
                 emailIntent.setType("text/plain");
                 startActivity(Intent.createChooser(emailIntent, "Sende es einem Freund"));
             });

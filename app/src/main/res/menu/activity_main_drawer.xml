@@ -32,6 +32,11 @@
             android:icon="@drawable/ic_settings_white_24dp"
             android:title="Einstellungen" />
 
+        <!--item
+            android:id="@+id/ebay"
+            android:icon="@drawable/ic_delete_forever_red_800_24dp"
+            android:title="ebay" /-->
+
     </group>
 
 </menu>

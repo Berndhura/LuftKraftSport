@@ -121,6 +121,9 @@
             android:name="de.wichura.lks.activity.RegisterUserActivity"
             android:label="@string/title_register_user" />
 
+        <activity
+            android:name="de.wichura.lks.activity.EbayActivity"
+            android:label="EBAY" />
 
         <activity
             android:name="com.facebook.FacebookActivity"

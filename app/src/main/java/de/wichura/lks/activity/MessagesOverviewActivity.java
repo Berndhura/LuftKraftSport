@@ -7,6 +7,8 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -90,6 +92,9 @@ public class MessagesOverviewActivity extends AppCompatActivity {
     public void updateMsgList(List<GroupedMsgItem> messageList) {
         List<GroupedMsgItem> rowItems = new ArrayList<>();
 
+        LinearLayout emptyView = (LinearLayout) findViewById(R.id.message_overview_empty_page);
+        emptyView.setVisibility(View.GONE);
+
         for (GroupedMsgItem e : messageList) {
             rowItems.add(e);
         }
@@ -119,6 +124,11 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
             startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);
         });
+    }
+
+    public void emptyPage() {
+        LinearLayout emptyView = (LinearLayout) findViewById(R.id.message_overview_empty_page);
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     private void removeFromUnreadMessages(Integer articleId, String sender) {

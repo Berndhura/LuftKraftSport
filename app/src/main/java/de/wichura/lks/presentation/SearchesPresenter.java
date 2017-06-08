@@ -67,7 +67,11 @@ public class SearchesPresenter {
 
                     @Override
                     public void onNext(List<SearchItem> searchItem) {
-                        activity.updateSearches(searchItem);
+                        if (searchItem.size() == 0) {
+                            activity.emptyPage();
+                        } else {
+                            activity.updateSearches(searchItem);
+                        }
                     }
                 });
     }
