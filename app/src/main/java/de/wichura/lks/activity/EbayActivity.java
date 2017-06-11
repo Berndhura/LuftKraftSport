@@ -7,10 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,8 @@ public class EbayActivity extends AppCompatActivity {
 
     private EbayRestService ebayRestService;
 
+    private AVLoadingIndicatorView mMessagesProgressBar;
+
     private ListView listView;
 
     @Override
@@ -50,6 +54,8 @@ public class EbayActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
+
+        mMessagesProgressBar = (AVLoadingIndicatorView) findViewById(R.id.ebay_overview_ProgressBar);
 
         listView = (ListView) findViewById(R.id.ebay_overview_list);
 
@@ -99,6 +105,9 @@ public class EbayActivity extends AppCompatActivity {
     }
 
     private void updateResults(List<EbayAd> ebayList) {
+
+        hideProgressBar();
+
         List<EbayAd> rowItems = new ArrayList<>();
 
         for (EbayAd e : ebayList) {
@@ -118,5 +127,9 @@ public class EbayActivity extends AppCompatActivity {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(rowItem.getUrl()));
             startActivity(browserIntent);
         });
+    }
+
+    public void hideProgressBar() {
+        mMessagesProgressBar.setVisibility(ProgressBar.GONE);
     }
 }
