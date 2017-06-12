@@ -2,6 +2,7 @@ package de.wichura.lks.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.test.suitebuilder.TestMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,12 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import de.wichura.lks.R;
 import de.wichura.lks.models.EbayAd;
+import de.wichura.lks.util.Utility;
 
 /**
  * Created by Bernd Wichura on 11.06.2017.
@@ -33,6 +36,8 @@ public class EbayAdsAdapter extends ArrayAdapter<EbayAd> {
     private static class ViewHolder {
         TextView title;
         TextView location;
+        TextView price;
+        TextView startDate;
         ImageView thumbNail;
     }
 
@@ -49,6 +54,8 @@ public class EbayAdsAdapter extends ArrayAdapter<EbayAd> {
             holder = new EbayAdsAdapter.ViewHolder();
             holder.title = (TextView) convertView.findViewById(R.id.ebay_title);
             holder.location = (TextView) convertView.findViewById(R.id.ebay_location);
+            holder.price = (TextView) convertView.findViewById(R.id.ebay_price);
+            holder.startDate = (TextView) convertView.findViewById(R.id.ebay_start_date);
             convertView.setTag(holder);
         } else
             holder = (EbayAdsAdapter.ViewHolder) convertView.getTag();
@@ -61,6 +68,8 @@ public class EbayAdsAdapter extends ArrayAdapter<EbayAd> {
 
         holder.title.setText(rowItem.getTitle());
         holder.location.setText(rowItem.getLocation());
+        holder.startDate.setText(rowItem.getStartDate());
+        holder.price.setText(Utility.getPriceString(rowItem.getPrice()));
 
         return convertView;
     }

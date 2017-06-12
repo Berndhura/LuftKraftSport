@@ -20,11 +20,15 @@ import java.util.List;
 import de.wichura.lks.R;
 import de.wichura.lks.adapter.EbayAdsAdapter;
 import de.wichura.lks.http.EbayRestService;
+import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.EbayAd;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static de.wichura.lks.mainactivity.Constants.LAST_SEARCH;
+import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by Bernd Wichura on 06.06.2017.
@@ -59,7 +63,7 @@ public class EbayActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.ebay_overview_list);
 
-        Observable<JsonObject> ebayService = ebayRestService.findItemsByKeywordObersv("tabou");
+        Observable<JsonObject> ebayService = ebayRestService.findItemsByKeywordObersv(getLastSearch());
 
         ebayService.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -87,12 +91,16 @@ public class EbayActivity extends AppCompatActivity {
                             Log.d("CONAN", j.getAsJsonObject().get("galleryURL").toString());
                             Log.d("CONAN", j.getAsJsonObject().get("viewItemURL").toString());
                             Log.d("CONAN", j.getAsJsonObject().get("location").toString());
-                            //Log.d("CONAN", j.getAsJsonObject().get("currentPrice").getAsJsonArray().get(0).getAsJsonObject().get("__value__").toString());   //currentPrice":[{"@currencyId":"EUR","__value__":"1070.0"}]
+                            Log.d("CONAN",  j.getAsJsonObject().get("sellingStatus").getAsJsonArray().get(0).getAsJsonObject().get("currentPrice")
+                                    .getAsJsonArray().get(0).getAsJsonObject().get("__value__").getAsString());
                             EbayAd el = new EbayAd();
                             el.setTitle(j.getAsJsonObject().get("title").getAsString());
                             el.setThumbNailUrl(j.getAsJsonObject().get("galleryURL").getAsString());
                             el.setLocation(j.getAsJsonObject().get("location").getAsString());
                             el.setUrl(j.getAsJsonObject().get("viewItemURL").getAsString());
+                            el.setPrice(j.getAsJsonObject().get("sellingStatus").getAsJsonArray().get(0).getAsJsonObject().get("currentPrice")
+                                    .getAsJsonArray().get(0).getAsJsonObject().get("__value__").getAsFloat());
+                            el.setStartDate(j.getAsJsonObject().get("listingInfo").getAsJsonArray().get(0).getAsJsonObject().get("startTime").getAsString());
 
                             ebayAds.add(el);
                         }
@@ -115,6 +123,7 @@ public class EbayActivity extends AppCompatActivity {
         }
 
         getSupportActionBar().setTitle("Treffer: " + rowItems.size());
+        getSupportActionBar().setSubtitle("Auf Ebay für: "+getLastSearch());
 
         EbayAdsAdapter adapter = new EbayAdsAdapter(getApplicationContext(), R.layout.ebay_row_item, rowItems);
         listView.setAdapter(adapter);
@@ -131,5 +140,9 @@ public class EbayActivity extends AppCompatActivity {
 
     public void hideProgressBar() {
         mMessagesProgressBar.setVisibility(ProgressBar.GONE);
+    }
+
+    public String getLastSearch() {
+        return getSharedPreferences(LAST_SEARCH, 0).getString(Constants.KEYWORDS, "");
     }
 }

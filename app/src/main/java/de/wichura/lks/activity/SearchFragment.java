@@ -40,7 +40,9 @@ import rx.schedulers.Schedulers;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static de.wichura.lks.mainactivity.Constants.DISTANCE_INFINITY;
+import static de.wichura.lks.mainactivity.Constants.LAST_SEARCH;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
 import static de.wichura.lks.mainactivity.Constants.USER_PRICE_RANGE;
 
 /**
@@ -221,6 +223,9 @@ public class SearchFragment extends Fragment {
     }
 
     private void performSearch() {
+        //store last search in sharedPrefs for Ebay search
+        storeLastSearch(keywords.getText().toString());
+
         priceFrom = getPrice(Constants.PRICE_FROM);
         priceTo = getPrice(Constants.PRICE_TO);
 
@@ -392,5 +397,13 @@ public class SearchFragment extends Fragment {
     public Double getLat() {
         SharedPreferences settings = getActivity().getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
         return Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
+    }
+
+
+    private void storeLastSearch(String keyword) {
+        SharedPreferences settings = getActivity().getSharedPreferences(LAST_SEARCH, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(Constants.KEYWORDS, keyword);
+        editor.apply();
     }
 }

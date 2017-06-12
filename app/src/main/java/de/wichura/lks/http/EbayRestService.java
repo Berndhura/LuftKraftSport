@@ -3,7 +3,6 @@ package de.wichura.lks.http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -72,7 +71,6 @@ public class EbayRestService {
                                                   @Query("OPERATION-NAME") String findItemsByKeywords,
                                                   @Query("SERVICE-VERSION") String serviceVersion,
                                                   @Query("RESPONSE-DATA-FORMAT") String dataFormat,
-                                                 // @Query("callback") String callback,
                                                   @Query("REST-PAYLOAD") String payload,
                                                   @Query("keywords") String keywords,
                                                   @Query("paginationInput.entriesPerPage") String pages,
@@ -85,8 +83,7 @@ public class EbayRestService {
                 "findItemsByKeywords",
                 "1.0.0",
                 "JSON",
-                //"_cb_findItemsByKeywords",
-                 "",
+                "",
                 keywords,
                 "100",
                 "EBAY-DE",
