@@ -37,7 +37,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:numColumns="3" >
+                android:numColumns="2" >
 
             </GridView>
 

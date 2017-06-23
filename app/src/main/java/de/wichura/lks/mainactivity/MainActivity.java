@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements
 
         //load main layout
         setContentView(R.layout.activity_main);
-        listView = (ListView) findViewById(R.id.main_list);
+        listView = (AbsListView) findViewById(R.id.main_list);
         noResultsView = findViewById(R.id.empty_list_view);
 
         //ProgressBar
@@ -882,11 +882,11 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
             //TODO anzeige EBAY
-            case R.id.ebay: {
+           /* case R.id.ebay: {
                 final Intent i = new Intent(this, EbayActivity.class);
                 startActivityForResult(i, Constants.REQUEST_ID_FOR_SETTINGS);
                 return true;
-            }
+            }*/
         }
 
         if (drawer != null) drawer.closeDrawer(GravityCompat.START);
