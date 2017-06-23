@@ -128,7 +128,8 @@
             android:id="@+id/share_luftkraftsport_app"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/lks_app_logo" />
+            android:src="@drawable/lks_app_logo"
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 

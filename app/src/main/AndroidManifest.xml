@@ -84,8 +84,8 @@
 
         <activity
             android:name="de.wichura.lks.mainactivity.MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:label="@string/app_name">
+            !--android:screenOrientation="portrait"-->
         </activity>
 
 
