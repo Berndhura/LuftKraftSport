@@ -165,7 +165,10 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             //Share on Facebook
             if (getUserType().equals(Constants.FACEBOOK_USER)) {
                 facebookit.setVisibility(View.VISIBLE);
-                facebookit.setOnClickListener(v -> fbImageSubmit(pictureUri, getIntent().getStringExtra(Constants.TITLE)));
+                facebookit.setOnClickListener(v -> fbImageSubmit(pictureUri,
+                        getIntent().getStringExtra(Constants.TITLE),
+                        getIntent().getStringExtra(Constants.DESCRIPTION),
+                        Utility.getPriceString(getIntent().getFloatExtra(Constants.PRICE, 0))));
             }
 
             setupPanel(pictureUri, ownerId);
@@ -300,7 +303,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         Log.d("CONAN", "request Picture: " + pictureUri);
     }
 
-    private void fbImageSubmit(String imgUrlList, String title) {
+    private void fbImageSubmit(String imgUrlList, String title, String desc, String price) {
 
         facebookit.setClickable(false);
         facebookit.setText("wird geteilt auf Facebook...");
@@ -309,9 +312,11 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
         JSONObject msg = new JSONObject();
         try {
-            msg.put("message", "Auf Luftkraftsport gibt es folgendes: \n" + title);
+            msg.put("message", "Auf Luftkraftsport gibt es folgendes: \n\n" + title + "\n\n" + desc + "\n\n" + "Preis: "
+                    + price +"\n\n"
+                    + "Luftkraftsport App im Play Store:\nhttps://play.google.com/store/apps/details?id=de.wichura.lks");
+
             msg.put("url", url);
-            msg.put("v", "535532649933816");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -327,6 +332,20 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         });
 
         GraphRequest.executeBatchAsync(request);
+
+       /* GraphRequest request2 = GraphRequest.newPostRequest(AccessToken.getCurrentAccessToken(),
+                "?url=https://play.google.com/store/apps/details?id=de.wichura.lks", null, new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse response) {
+                Log.d("CONAN", "facebook upload done: " + response.getJSONObject());
+                if (response.getError() != null)
+                    Log.d("CONAN", "facebook upload done: " + response.getError().getErrorMessage());
+                facebookit.setText("Geteilt auf Facebook!");
+            }
+        });
+
+        GraphRequest.executeBatchAsync(request2);
+*/
     }
 
     private String getMainPictureFromList(String imgList) {
