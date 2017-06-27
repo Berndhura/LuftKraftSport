@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -22,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -38,6 +40,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +50,7 @@ import java.util.Arrays;
 import de.wichura.lks.R;
 import de.wichura.lks.adapter.CustomSwipeAdapter;
 import de.wichura.lks.http.Service;
+import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.mainactivity.MainActivity;
 import de.wichura.lks.models.ArticleDetails;
@@ -89,6 +95,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private Integer mAdId;
     private TextView locationName;
     public ImageView shareArticle;
+    public Button facebookit;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -125,6 +132,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         userPic = (ImageView) findViewById(R.id.user_image);
         locationName = (TextView) findViewById(R.id.open_ad_location_name);
         shareArticle = (ImageView) findViewById(R.id.share_article);
+        facebookit = (Button) findViewById(R.id.facebookit);
 
         getDisplayDimensions();
 
@@ -154,7 +162,14 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 startActivity(Intent.createChooser(emailIntent, "Sende es einem Freund"));
             });
 
+            //Share on Facebook
+            if (getUserType().equals(Constants.FACEBOOK_USER)) {
+                facebookit.setVisibility(View.VISIBLE);
+                facebookit.setOnClickListener(v -> fbImageSubmit(pictureUri, getIntent().getStringExtra(Constants.TITLE)));
+            }
+
             setupPanel(pictureUri, ownerId);
+
         } else {
             //intent comes from notification -> get article first
             presenter.getAd(getIntent().getIntExtra(Constants.ID, 0));
@@ -285,6 +300,49 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         Log.d("CONAN", "request Picture: " + pictureUri);
     }
 
+    private void fbImageSubmit(String imgUrlList, String title) {
+
+        facebookit.setClickable(false);
+        facebookit.setText("wird geteilt auf Facebook...");
+
+        String url = Urls.MAIN_SERVER_URL_V3 + "pictures/" + getMainPictureFromList(imgUrlList);
+
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("message", "Auf Luftkraftsport gibt es folgendes: \n" + title);
+            msg.put("url", url);
+            msg.put("v", "535532649933816");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        GraphRequest request = GraphRequest.newPostRequest(AccessToken.getCurrentAccessToken(), "/me/photos", msg, new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse response) {
+                Log.d("CONAN", "facebook upload done: " + response.getJSONObject());
+                if (response.getError() != null)
+                    Log.d("CONAN", "facebook upload done: " + response.getError().getErrorMessage());
+                facebookit.setText("Geteilt auf Facebook!");
+            }
+        });
+
+        GraphRequest.executeBatchAsync(request);
+    }
+
+    private String getMainPictureFromList(String imgList) {
+
+        if (imgList != null) {
+            String[] uris = imgList.split(",");
+            if (uris.length > 0) {
+                return uris[0];
+            }
+        } else {
+            return "nix";
+        }
+        return "problem";
+    }
+
+
     public void updateSellerInformation(User user) {
 
         if (user != null) {
@@ -375,6 +433,19 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     private String getUserId() {
         return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
     }
+
+    private String getFacebookToken() {
+        if (getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TYPE, "").equals(Constants.FACEBOOK_USER)) {
+            return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
+        } else {
+            return "";
+        }
+    }
+
+    private String getUserType() {
+        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TYPE, "");
+    }
+
 
     private boolean isOwnAd() {
         return getIntent().getStringExtra(Constants.USER_ID_FROM_AD).equals(getIntent().getStringExtra(Constants.USER_ID));

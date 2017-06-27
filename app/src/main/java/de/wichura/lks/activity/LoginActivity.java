@@ -173,7 +173,8 @@ public class LoginActivity extends AppCompatActivity implements
 
         LoginButton fbLoginButton = (LoginButton) findViewById(R.id.fb_login_button);
         if (fbLoginButton != null) {
-            fbLoginButton.setReadPermissions("user_friends");
+            fbLoginButton.setPublishPermissions("publish_actions");
+            //fbLoginButton.setReadPermissions("user_friends");
             fbLoginButton.registerCallback(mCallbackMgt, mCallback);
         }
         adaptFacebookButton(fbLoginButton);

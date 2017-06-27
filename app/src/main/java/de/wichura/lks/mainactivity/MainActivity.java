@@ -32,7 +32,6 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -214,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
                 if (newAccessToken != null) {
                     String userToken = newAccessToken.getToken();
+                    setUserType(Constants.FACEBOOK_USER);
                     setUserPreferences(null, null, userToken);
                 }
                 if (newAccessToken == null) {
@@ -232,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements
                 if (newProfile != null) {
                     String userId = newProfile.getId();
                     String name = newProfile.getName();
+                    setUserType(Constants.FACEBOOK_USER);
 
                     setUserPreferences(name, userId, null);
 
@@ -321,6 +322,14 @@ public class MainActivity extends AppCompatActivity implements
 
         showWelcomeDialog();
     }
+
+    private void setUserType(String userType) {
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(Constants.USER_TYPE, userType);
+        editor.apply();
+    }
+
 
     private void initRefreshSwipeDown() {
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -882,7 +891,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
             //TODO anzeige EBAY
-           /* case R.id.ebay: {
+            /*case R.id.ebay: {
                 final Intent i = new Intent(this, EbayActivity.class);
                 startActivityForResult(i, Constants.REQUEST_ID_FOR_SETTINGS);
                 return true;
