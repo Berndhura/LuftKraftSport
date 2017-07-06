@@ -2,7 +2,6 @@ package de.wichura.lks.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.test.suitebuilder.TestMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
 import java.util.List;
 
 import de.wichura.lks.R;

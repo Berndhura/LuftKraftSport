@@ -473,7 +473,7 @@ public class MainPresenter {
                 opr.setResultCallback(googleSignInResult -> handleSignInResult(googleSignInResult));
             }
         } else {
-            Log.d("CONAN", "Google client NULL GET ALL ADS!");
+            Log.d("CONAN", "Google activity.getGoogleApiClient() is NULL during refreshUserIdToken");
         }
     }
 

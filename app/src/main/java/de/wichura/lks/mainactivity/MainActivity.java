@@ -428,6 +428,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
         registerGcmReceiver();
         registerLoginReceiver();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -891,11 +894,11 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
             //TODO anzeige EBAY
-            /*case R.id.ebay: {
+            case R.id.ebay: {
                 final Intent i = new Intent(this, EbayActivity.class);
                 startActivityForResult(i, Constants.REQUEST_ID_FOR_SETTINGS);
                 return true;
-            }*/
+            }
         }
 
         if (drawer != null) drawer.closeDrawer(GravityCompat.START);

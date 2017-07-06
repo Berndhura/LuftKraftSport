@@ -22,7 +22,6 @@
     <application
 
 
-
         android:name="de.wichura.lks.mainactivity.MainApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -75,7 +74,7 @@
             android:name="de.wichura.lks.mainactivity.Splash"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            android:theme="@android:style/Theme.Black.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -123,7 +122,11 @@
 
         <activity
             android:name="de.wichura.lks.activity.EbayActivity"
-            android:label="EBAY" />
+            android:label="EBAY">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
 
         <activity
             android:name="com.facebook.FacebookActivity"

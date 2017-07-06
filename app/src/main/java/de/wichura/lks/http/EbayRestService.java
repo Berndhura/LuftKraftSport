@@ -79,13 +79,16 @@ public class EbayRestService {
     }
 
     public Observable<JsonObject> findItemsByKeywordObersv(String keywords) {
+
+        String size = "10";
+
         return mEbayRestService.findItemsByKeyword("berndwic-luftkraf-PRD-c7a9b454f-48afe28f",
                 "findItemsByKeywords",
                 "1.0.0",
                 "JSON",
                 "",
                 keywords,
-                "100",
+                size,
                 "EBAY-DE",
                 "77");
     }
