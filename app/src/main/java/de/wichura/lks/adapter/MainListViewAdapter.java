@@ -122,6 +122,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 .resize(100, 100)
                 .centerCrop()
                 .into(holder.thumbNail);
+        Log.d("LA", Urls.MAIN_SERVER_URL_V3 + "pictures/" + ((rowItem.getPictureIds().length > 0) ? rowItem.getPictureIds()[0] : "") + "/thumbnail");
 
         holder.txtTitle.setText(rowItem.getTitle());
 

@@ -99,12 +99,6 @@ public class EbayActivity extends AppCompatActivity {
                         ArrayList<EbayAd> ebayAds = new ArrayList<EbayAd>();
 
                         for (JsonElement j : resArray) {
-                           /* Log.d("CONAN", j.getAsJsonObject().get("title").toString());
-                            Log.d("CONAN", j.getAsJsonObject().get("galleryURL").toString());
-                            Log.d("CONAN", j.getAsJsonObject().get("viewItemURL").toString());
-                            Log.d("CONAN", j.getAsJsonObject().get("location").toString());
-                            Log.d("CONAN",  j.getAsJsonObject().get("sellingStatus").getAsJsonArray().get(0).getAsJsonObject().get("currentPrice")
-                                    .getAsJsonArray().get(0).getAsJsonObject().get("__value__").getAsString());*/
                             EbayAd el = new EbayAd();
                             el.setTitle(j.getAsJsonObject().get("title").getAsString());
                             el.setThumbNailUrl(j.getAsJsonObject().get("galleryURL").getAsString());
@@ -114,7 +108,9 @@ public class EbayActivity extends AppCompatActivity {
                                     .getAsJsonArray().get(0).getAsJsonObject().get("__value__").getAsFloat());
                             el.setStartDate(j.getAsJsonObject().get("listingInfo").getAsJsonArray().get(0).getAsJsonObject().get("startTime").getAsString());
                             el.setEndDate(j.getAsJsonObject().get("listingInfo").getAsJsonArray().get(0).getAsJsonObject().get("endTime").getAsString());
-
+                            el.setTimeLeft(j.getAsJsonObject().get("sellingStatus").getAsJsonArray().get(0).getAsJsonObject().get("timeLeft").getAsString());
+                            //TODO
+                            // ISO 8601 duration format (PnYnMnDTnHnMnS). For listings that have ended, the time left is PT0S (zero seconds). See the "duration" type for information about this time format.
                             ebayAds.add(el);
                         }
 

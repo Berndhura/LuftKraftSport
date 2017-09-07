@@ -14,6 +14,7 @@ public class EbayAd {
     private String startDate;
     private String endDate;
     private Float price;
+    private String timeLeft;
 
     public String getThumbNailUrl() {
         return thumbNailUrl;
@@ -71,5 +72,14 @@ public class EbayAd {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+
+    public String getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(String timeLeft) {
+        this.timeLeft = timeLeft;
     }
 }

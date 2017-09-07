@@ -35,7 +35,7 @@ public class EbayAdsAdapter extends ArrayAdapter<EbayAd> {
         TextView title;
         TextView location;
         TextView price;
-        TextView startDate;
+        TextView timeLeft;
         ImageView thumbNail;
     }
 
@@ -53,7 +53,7 @@ public class EbayAdsAdapter extends ArrayAdapter<EbayAd> {
             holder.title = (TextView) convertView.findViewById(R.id.ebay_title);
             holder.location = (TextView) convertView.findViewById(R.id.ebay_location);
             holder.price = (TextView) convertView.findViewById(R.id.ebay_price);
-            holder.startDate = (TextView) convertView.findViewById(R.id.ebay_start_date);
+            holder.timeLeft = (TextView) convertView.findViewById(R.id.ebay_time_left);
             convertView.setTag(holder);
         } else
             holder = (EbayAdsAdapter.ViewHolder) convertView.getTag();
@@ -66,7 +66,7 @@ public class EbayAdsAdapter extends ArrayAdapter<EbayAd> {
 
         holder.title.setText(rowItem.getTitle());
         holder.location.setText(rowItem.getLocation());
-        holder.startDate.setText(rowItem.getStartDate());
+        holder.timeLeft.setText("noch: " + rowItem.getTimeLeft());
         holder.price.setText(Utility.getPriceString(rowItem.getPrice()));
 
         return convertView;
