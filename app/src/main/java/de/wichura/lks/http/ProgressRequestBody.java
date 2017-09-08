@@ -19,19 +19,21 @@ import okio.BufferedSink;
 public class ProgressRequestBody extends RequestBody {
     private File mFile;
     private String mPath;
+    private int mPicture;
     private UploadCallbacks mListener;
 
     private static final int DEFAULT_BUFFER_SIZE = 2048;
 
     public interface UploadCallbacks {
-        void onProgressUpdate(int percentage);
-        void onError();
-        void onFinish();
+        void onProgressUpdate(int percentage, int pic);
+        void onError(int pic);
+        void onFinish(int pic);
     }
 
-    public ProgressRequestBody(final File file, final  UploadCallbacks listener) {
+    public ProgressRequestBody(final File file, final  UploadCallbacks listener, final int picture) {
         mFile = file;
         mListener = listener;
+        mPicture = picture;
     }
 
     @Override
@@ -76,7 +78,7 @@ public class ProgressRequestBody extends RequestBody {
 
         @Override
         public void run() {
-            mListener.onProgressUpdate((int)(100 * mUploaded / mTotal));
+            mListener.onProgressUpdate((int)(100 * mUploaded / mTotal), mPicture);
         }
     }
 }

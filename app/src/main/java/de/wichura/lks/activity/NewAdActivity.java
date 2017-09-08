@@ -69,7 +69,7 @@ public class NewAdActivity extends AppCompatActivity implements
 
     private ArrayList<ImageView> removeImgButton;
 
-    public ProgressBar progress;
+    public ArrayList<ProgressBar> progress;
 
     private NewArticlePresenter presenter;
     private FileUploadService fileUploadService;
@@ -113,6 +113,7 @@ public class NewAdActivity extends AppCompatActivity implements
         IMAGES = new ArrayList<>();
         deleteFilesList = new HashMap<>();
         imageView = new ArrayList<>();
+        progress = new ArrayList<>();
         removeImgButton = new ArrayList<>();
         mImageBuffer = new FileNameParcelable[5];
         changedImages = new Boolean[5];
@@ -146,9 +147,8 @@ public class NewAdActivity extends AppCompatActivity implements
         }
 
         isEditMode = false;
-        progress = (ProgressBar) findViewById(R.id.upload_ProgressBar);
-        progress.setMax(100);
-        hideProgress();
+
+        initProgressBars();
 
         emptyBackgroundLl = (LinearLayout) findViewById(R.id.upload_background);
         mainLl = (LinearLayout) findViewById(R.id.main_upload_linear_layout);
@@ -183,10 +183,11 @@ public class NewAdActivity extends AppCompatActivity implements
                 Log.d("CONAN", "size: " + size);
 
                 for (int i = 0; i < size; i++) {
+                    final int picture = i;
                     IMAGES.add(i, uris[i]);
                     imageView.get(i).setVisibility(View.VISIBLE);
                     removeImgButton.get(i).setVisibility(View.VISIBLE);
-                    showProgress();
+                    showProgressForPicture(i);
                     Picasso.with(getApplicationContext())
                             .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(i))
                             .placeholder(R.drawable.empty_photo)
@@ -196,12 +197,12 @@ public class NewAdActivity extends AppCompatActivity implements
                             .into(imageView.get(i), new Callback() {
                                 @Override
                                 public void onSuccess() {
-                                    hideProgress();
+                                    hideProgressForPicture(picture);
                                 }
 
                                 @Override
                                 public void onError() {
-                                    hideProgress();
+                                    hideProgressForPicture(picture);
                                     Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -293,6 +294,19 @@ public class NewAdActivity extends AppCompatActivity implements
                     //Toast.makeText(this, "Ohne Zustimmung können leider keine eigenen Anzeigen erstellt werden!", Toast.LENGTH_LONG).show();
                 }
             }
+        }
+    }
+
+    private void initProgressBars() {
+        progress.add((ProgressBar) findViewById(R.id.upload_ProgressBar1));
+        progress.add((ProgressBar) findViewById(R.id.upload_ProgressBar2));
+        progress.add((ProgressBar) findViewById(R.id.upload_ProgressBar3));
+        progress.add((ProgressBar) findViewById(R.id.upload_ProgressBar4));
+        progress.add((ProgressBar) findViewById(R.id.upload_ProgressBar5));
+
+        for (ProgressBar pb : progress) {
+            pb.setVisibility(View.GONE);
+            pb.setMax(100);
         }
     }
 
@@ -467,12 +481,12 @@ public class NewAdActivity extends AppCompatActivity implements
         submitButton.setEnabled(true);
     }
 
-    public void showProgress() {
-        progress.setVisibility(ProgressBar.VISIBLE);
+    public void showProgressForPicture(int i) {
+        progress.get(i).setVisibility(ProgressBar.VISIBLE);
     }
 
-    public void hideProgress() {
-        progress.setVisibility(ProgressBar.GONE);
+    public void hideProgressForPicture(int i) {
+        progress.get(i).setVisibility(ProgressBar.GONE);
     }
 
     public void showMainProgress() {

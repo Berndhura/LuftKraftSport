@@ -27,7 +27,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
+    <!--FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="10dp"
@@ -43,7 +43,7 @@
             android:background="@android:color/transparent"
             android:progressDrawable="@drawable/custom_progress" />
 
-    </FrameLayout>
+    </FrameLayout-->
 
     <include layout="@layout/create_article_fragment" />
 

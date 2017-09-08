@@ -1,19 +1,15 @@
 package de.wichura.lks.http;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -169,7 +165,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                 .subscribe(new Subscriber<RowItem>() {
                     @Override
                     public void onCompleted() {
-                        view.hideProgress();
+                        //todo: hide?!
+                        //view.hideProgress();
                         if (newFilesForUpload.size() > 0) {
                             view.hideMainProgress();
                             uploadPic(Long.parseLong(articleId.toString()), newFilesForUpload);
@@ -181,7 +178,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
                     @Override
                     public void onError(Throwable e) {
-                        view.hideProgress();
+                        //TODO: hide?!
+                        //view.hideProgress();
                         Log.d("CONAN", "error in updating Article" + e.toString());
                         //show problem
                         new ShowNetworkProblemDialog().show(view.getSupportFragmentManager(), null);
@@ -234,7 +232,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
                     @Override
                     public void onError(Throwable e) {
-                        view.hideProgress();
+                        //TODO hide?!
+                        //view.hideProgress();
                         Log.d("CONAN", "error in upload new Article" + e.toString());
                         //show problem
                         new ShowNetworkProblemDialog().show(view.getSupportFragmentManager(), null);
@@ -256,7 +255,8 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
         for (int i = 0; i < imageFiles.size(); i++) {
 
-            view.showProgress();
+            final int picture = i;
+            view.showProgressForPicture(i);
             final int counter = i;
             String fileString = getRealPathFromUri(context, Uri.parse(imageFiles.get(i).getFileName()));
             File file = new File(fileString);
@@ -276,7 +276,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             final File reducedPicture = bitmapHelper.saveBitmapToFile(file);
 
             //RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(Uri.parse(picture))), reducedPicture);
-            ProgressRequestBody requestFile = new ProgressRequestBody(reducedPicture, this);
+            ProgressRequestBody requestFile = new ProgressRequestBody(reducedPicture, this, picture);
 
             MultipartBody.Part multiPartBody = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
@@ -295,7 +295,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
                         @Override
                         public void onError(Throwable e) {
-                            view.hideProgress();
+                            view.hideProgressForPicture(picture);
                             Log.d("CONAN", "error in upload: " + e.toString());
                             //show problem
                             new ShowNetworkProblemDialog().show(view.getSupportFragmentManager(), null);
@@ -307,7 +307,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
 
                         @Override
                         public void onNext(String status) {
-                            view.hideProgress();
+                            view.hideProgressForPicture(picture);
                             Log.d("CONAN", "Picture uploaded");
                             //TODO unterscheiden ob new oder update -> Toast anpassen
                             Boolean deleted = reducedPicture.delete();
@@ -339,16 +339,16 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
     }
 
     @Override
-    public void onProgressUpdate(int percentage) {
-        view.progress.setProgress(percentage);
+    public void onProgressUpdate(int percentage, int pic) {
+        view.progress.get(pic).setProgress(percentage);
     }
 
     @Override
-    public void onError() {
+    public void onError(int pic) {
     }
 
     @Override
-    public void onFinish() {
-        view.progress.setProgress(100);
+    public void onFinish(int pic) {
+        view.progress.get(pic).setProgress(100);
     }
 }
