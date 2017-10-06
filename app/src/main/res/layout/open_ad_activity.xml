@@ -30,8 +30,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="10dp"
-                android:src="@drawable/ic_add_alert_blue_grey_700_24dp"
-                android:visibility="gone" />
+                android:src="@drawable/ic_share_white_24dp"
+                android:visibility="visible" />
 
             <com.wang.avi.AVLoadingIndicatorView
                 android:id="@+id/open_Ad_ProgressBar"
