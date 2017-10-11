@@ -47,7 +47,12 @@ public class Utility {
     }
 
     public static String getPriceString(Float price) {
-        return price.toString().split("\\.")[0] + " €";
+        if (price==null) {
+            return "0";
+        }
+        else {
+            return price.toString().split("\\.")[0] + " €";
+        }
     }
 
     public static String getPriceWithoutEuro(Float price) {
