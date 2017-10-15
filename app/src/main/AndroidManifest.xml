@@ -37,29 +37,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="de.wichura.lks" />
-            </intent-filter>
-        </receiver>
-
         <service
-            android:name="de.wichura.lks.gcm.MyGcmListenerService"
-            android:exported="false">
+            android:name="de.wichura.lks.gcm.MyGcmListenerService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <service
-            android:name="de.wichura.lks.gcm.MyInstanceIDListenerService"
-            android:exported="false">
+            android:name="de.wichura.lks.gcm.MyInstanceIDListenerService">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 

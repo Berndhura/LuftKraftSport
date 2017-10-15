@@ -63,10 +63,10 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     //play service
-    compile 'com.google.android.gms:play-services-gcm:10.2.4'
-    compile 'com.google.android.gms:play-services-maps:10.2.4'
-    compile 'com.google.android.gms:play-services-auth:10.2.4'
-    compile 'com.google.android.gms:play-services-location:10.2.4'
+    compile "com.google.firebase:firebase-messaging:11.0.4"
+    compile 'com.google.android.gms:play-services-maps:11.0.4'
+    compile 'com.google.android.gms:play-services-auth:11.0.4'
+    compile 'com.google.android.gms:play-services-location:11.0.4'
     //Gson
     compile 'com.google.code.gson:gson:2.7'
     //RxAndroid

@@ -7,90 +7,84 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import de.wichura.lks.R;
 import de.wichura.lks.activity.MessagesActivity;
 import de.wichura.lks.activity.OpenAdActivity;
 import de.wichura.lks.mainactivity.Constants;
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
 
 /**
  * Created by Bernd Wichura on 14.05.2016.
- * Camper App
+ *
+ * Luftkraftsport
+ *
  */
-public class MyGcmListenerService extends GcmListenerService {
+public class MyGcmListenerService extends FirebaseMessagingService {
 
     private static final String TAG = "CONAN";
 
     /**
      * Called when message is received.
      *
-     * @param from SenderID of the sender.
-     * @param data Data bundle containing message data as key/value pairs.
-     *             For Set of keys use data.keySet().
+     * @param message Data bundle containing message data as key/value pairs.
+     *                For Set of keys use data.keySet().
      */
     // [START receive_message]
     @Override
-    public void onMessageReceived(String from, Bundle data) {
-        if ("message".contains(data.getString("type"))) {
-            String message = data.getString("message");
-            String sender = data.getString("sender");
-            String articleId = data.getString("articleId");
-            String name = data.getString("name");
-            Log.v(TAG, "Received: sender: " + sender);
+    public void onMessageReceived(RemoteMessage message) {
+
+        String from = message.getFrom();
+        Map data = message.getData();
+
+        /*
+
+
+       /* if ("message".contains(data.get("type"))) {
+
+            String messageText = message.getNotification().getBody();//data.getString("message");
+           // String sender = data.getString("sender");
+           // String articleId = data.getString("articleId");
+            //String name = data.getString("name");
+            //Log.v(TAG, "Received: sender: " + sender);
             Log.v(TAG, "Received: Message: " + message);
-            Log.v(TAG, "Received: articleId: " + articleId);
-            Log.v(TAG, "Received: name: " + name);
+            //Log.v(TAG, "Received: articleId: " + articleId);
+            //Log.v(TAG, "Received: name: " + name);
             Log.v(TAG, "data: " + data);
 
-            pushToUnreadMessages(articleId, sender);
-
-            if (from.startsWith("/topics/")) {
-                // message received from some topic.
-            } else {
-                // normal downstream message.
-            }
+            //pushToUnreadMessages(articleId, sender);
 
             updateMessageSymbol();
 
-            // [START_EXCLUDE]
-            /**
-             * Production applications would usually process the message here.
-             * Eg: - Syncing with server.
-             *     - Store message in local database.
-             *     - Update UI.
-             */
 
-            /**
-             * show a notification indicating to the user
-             * that a message was received when MessageActivity is NOT open
-             *
-             * if MessageActivity IS open, only update chat
-             */
-            if (isMessageActivityActive() && getAdIdFromSharedPref().equals(Integer.parseInt(articleId))) {
-                updateChat(message, sender);
-            } else {
-                sendNotification(message, sender, Integer.parseInt(articleId), name);
-            }
-        } else if ("article".contains(data.getString("type"))) {
-            String message = data.getString("message");
-            String sender = data.getString("sender");
-            String articleId = data.getString("articleId");
-            String name = data.getString("name");
-            openArticle(message, Integer.parseInt(articleId), name);
+
+        if (isMessageActivityActive() && getAdIdFromSharedPref().equals(Integer.parseInt(articleId))) {
+            updateChat(messageText, sender);
+        } else {
+            sendNotification(messageText, sender, Integer.parseInt(articleId), name);
         }
-        // [END_EXCLUDE]
+    } else if ("article".contains(data.getString("type"))) {
+        String messageText = data.getString("message");
+        String sender = data.getString("sender");
+        String articleId = data.getString("articleId");
+        String name = data.getString("name");
+        openArticle(messageText, Integer.parseInt(articleId), name);
+    }
+
+
+         */
+
+
     }
 
     private void pushToUnreadMessages(String articleId, String sender) {

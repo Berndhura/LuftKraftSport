@@ -2,28 +2,78 @@ package de.wichura.lks.gcm;
 
 /**
  * Created by Bernd Wichura on 14.05.2016.
- * Camper App
+ * Luftkraftsport
  */
 
-import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
 
-import com.google.android.gms.iid.InstanceIDListenerService;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 
-public class MyInstanceIDListenerService extends InstanceIDListenerService {
+import de.wichura.lks.http.Service;
+import de.wichura.lks.mainactivity.Constants;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
+import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
+public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
 
     private static final String TAG = "MyInstanceIDLS";
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
-     * the previous token had been compromised. This call is initiated by the
-     * InstanceID provider.
+     * the previous token had been compromised. Note that this is also called
+     * when the InstanceID token is initially generated, so this is where
+     * you retrieve the token.
      */
     // [START refresh_token]
     @Override
     public void onTokenRefresh() {
-        // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
-        Intent intent = new Intent(this, RegistrationIntentService.class);
-        startService(intent);
+        // Get updated InstanceID token.
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "Refreshed token: " + refreshedToken);
+        // TODO: Implement this method to send any registration to your app's servers.
+        sendRegistrationToServer(refreshedToken);
     }
-    // [END refresh_token]
+
+    /**
+     * Persist registration to third-party servers.
+     * <p/>
+     * Modify this method to associate the user's GCM registration token with any server-side account
+     * maintained by your application.
+     *
+     * @param deviceToken The new token.
+     */
+    public void sendRegistrationToServer(String deviceToken) {
+        Service service = new Service();
+
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
+        String userId = settings.getString(Constants.USER_ID, "");
+        String userToken = settings.getString(Constants.USER_TOKEN, "");
+
+        if (!userId.equals("")) {
+            service.sendDeviceTokenObserv(userToken, deviceToken)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+                            Log.d("CONAN", "send device token to server");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("CONAN", "error in sending device token: " + e.getMessage());
+                        }
+
+                        @Override
+                        public void onNext(String result) {
+                            Log.d("CONAN", "send device token to server: "+result);
+                        }
+                    });
+        }
+    }
 }
