@@ -14,6 +14,8 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONObject;
+
 import java.util.Map;
 
 import de.wichura.lks.R;
@@ -46,6 +48,23 @@ public class MyGcmListenerService extends FirebaseMessagingService {
 
         String from = message.getFrom();
         Map data = message.getData();
+
+        Log.d("CONAN", message.getNotification().getBody());
+        Log.d("CONAN", message.getFrom());
+        //Log.d("CONAN", message.getData().get("name"));
+
+        if (message.getData().get("label") != null)  Log.d("CONAN",message.getData().get("label"));
+
+
+        try
+        {
+            Map<String, String> params = message.getData();
+            JSONObject object = new JSONObject(params);
+            Log.e("CONAN", object.toString());
+        } catch (Exception e) {
+
+        }
+
 
         /*
 
