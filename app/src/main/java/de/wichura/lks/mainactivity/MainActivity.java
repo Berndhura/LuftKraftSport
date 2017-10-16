@@ -137,9 +137,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       // FirebaseApp.initializeApp(getApplication());
-        Log.d("CONAN", FirebaseInstanceId.getInstance().getToken());
-
         page = 0;
         size = 10;
         pages = 0;
@@ -323,9 +320,17 @@ public class MainActivity extends AppCompatActivity implements
             getAds(Constants.TYPE_ALL);
         }
 
+        updateDeviceToken();
+
         initRefreshSwipeDown();
 
         showWelcomeDialog();
+    }
+
+
+    private void updateDeviceToken() {
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+        presenterLayer.sendDeviceTokenToBackEndServer(deviceToken);
     }
 
     private void setUserType(String userType) {

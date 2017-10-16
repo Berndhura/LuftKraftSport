@@ -62,6 +62,35 @@ public class MainPresenter {
         this.context = context;
     }
 
+    public void sendDeviceTokenToBackEndServer(String deviceToken) {
+
+        SharedPreferences settings = context.getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
+        String userId = settings.getString(Constants.USER_ID, "");
+        String userToken = settings.getString(Constants.USER_TOKEN, "");
+
+        if (!userId.equals("")) {
+            service.sendDeviceTokenObserv(userToken, deviceToken)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+                            Log.d("CONAN", "send device token to server");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("CONAN", "error in sending device token: " + e.getMessage());
+                        }
+
+                        @Override
+                        public void onNext(String result) {
+                            Log.d("CONAN", "send device token to server: "+result);
+                        }
+                    });
+        }
+    }
+
     public void deleteBookmark(Integer adId) {
         service.delBookmarkAdObserv(adId, getUserToken())
                 .subscribeOn(Schedulers.newThread())

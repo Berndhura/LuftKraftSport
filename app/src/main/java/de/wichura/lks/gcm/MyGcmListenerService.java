@@ -14,10 +14,6 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import org.json.JSONObject;
-
-import java.util.Map;
-
 import de.wichura.lks.R;
 import de.wichura.lks.activity.MessagesActivity;
 import de.wichura.lks.activity.OpenAdActivity;
@@ -28,9 +24,8 @@ import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
 
 /**
  * Created by Bernd Wichura on 14.05.2016.
- *
+ * <p>
  * Luftkraftsport
- *
  */
 public class MyGcmListenerService extends FirebaseMessagingService {
 
@@ -46,64 +41,36 @@ public class MyGcmListenerService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage message) {
 
-        String from = message.getFrom();
-        Map data = message.getData();
+        //{"message":"joMOFO","sender":"109156770575781620767","type":"message","articleId":"4165","adUrl":"4166","name":"john doe"}
 
-        Log.d("CONAN", message.getNotification().getBody());
-        Log.d("CONAN", message.getFrom());
-        //Log.d("CONAN", message.getData().get("name"));
+        if ("message".equals(message.getData().get("type"))) {
 
-        if (message.getData().get("label") != null)  Log.d("CONAN",message.getData().get("label"));
-
-
-        try
-        {
-            Map<String, String> params = message.getData();
-            JSONObject object = new JSONObject(params);
-            Log.e("CONAN", object.toString());
-        } catch (Exception e) {
-
-        }
-
-
-        /*
-
-
-       /* if ("message".contains(data.get("type"))) {
-
-            String messageText = message.getNotification().getBody();//data.getString("message");
-           // String sender = data.getString("sender");
-           // String articleId = data.getString("articleId");
-            //String name = data.getString("name");
-            //Log.v(TAG, "Received: sender: " + sender);
+            String messageText = message.getData().get("message");
+            String sender = message.getData().get("sender");
+            String articleId = message.getData().get("articleId");
+            String name = message.getData().get("name");
+            Log.v(TAG, "Received: sender: " + sender);
             Log.v(TAG, "Received: Message: " + message);
-            //Log.v(TAG, "Received: articleId: " + articleId);
-            //Log.v(TAG, "Received: name: " + name);
-            Log.v(TAG, "data: " + data);
+            Log.v(TAG, "Received: articleId: " + articleId);
+            Log.v(TAG, "Received: name: " + name);
 
-            //pushToUnreadMessages(articleId, sender);
+            pushToUnreadMessages(articleId, sender);
 
             updateMessageSymbol();
 
+            if (isMessageActivityActive() && getAdIdFromSharedPref().equals(Integer.parseInt(articleId))) {
+                updateChat(messageText, sender);
+            } else {
+                sendNotification(messageText, sender, Integer.parseInt(articleId), name);
+            }
 
-
-        if (isMessageActivityActive() && getAdIdFromSharedPref().equals(Integer.parseInt(articleId))) {
-            updateChat(messageText, sender);
-        } else {
-            sendNotification(messageText, sender, Integer.parseInt(articleId), name);
+        } else if ("article".equals(message.getData().get("type"))) {
+            String messageText = message.getData().get("message");
+            String sender = message.getData().get("sender");
+            String articleId = message.getData().get("articleId");
+            String name = message.getData().get("name");
+            openArticle(messageText, Integer.parseInt(articleId), name);
         }
-    } else if ("article".contains(data.getString("type"))) {
-        String messageText = data.getString("message");
-        String sender = data.getString("sender");
-        String articleId = data.getString("articleId");
-        String name = data.getString("name");
-        openArticle(messageText, Integer.parseInt(articleId), name);
-    }
-
-
-         */
-
-
     }
 
     private void pushToUnreadMessages(String articleId, String sender) {
@@ -139,7 +106,7 @@ public class MyGcmListenerService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.surfing_filled_50_app_blue)
+                .setSmallIcon(R.drawable.surfing_filled_50)
                 .setContentTitle(name + ": ")
                 .setContentText(message)
                 .setAutoCancel(true)
@@ -172,7 +139,7 @@ public class MyGcmListenerService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.surfing_filled_50_app_blue)
+                .setSmallIcon(R.drawable.surfing_filled_50)
                 .setContentTitle(name + ": ")
                 .setContentText(message)
                 .setAutoCancel(true)
