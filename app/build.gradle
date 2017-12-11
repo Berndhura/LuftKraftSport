@@ -7,7 +7,7 @@ android {
         }
     }
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
     lintOptions {
         abortOnError true
     }
@@ -15,9 +15,9 @@ android {
         applicationId "de.wichura.lks"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 58
+        versionCode 59
         //versionName "0.6.7"
-        versionName "1.0.7"
+        versionName "1.0.8"
         //multiDexEnabled true
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
