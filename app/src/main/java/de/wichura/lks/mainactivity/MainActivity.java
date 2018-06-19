@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements
                 boolean sentToken = sharedPreferences
                         .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
                 if (sentToken) {
-                    Log.d("CONAN", "Token from GCM received");
+                    Log.d("CONAN", "Token from Firebase received");
                 } else {
                     Log.d("CONAN", "Did not get a Token from GCM!");
                 }
@@ -939,7 +939,7 @@ public class MainActivity extends AppCompatActivity implements
             Log.d("CONAN", "Set profile picture: " + uri.toString());
         }
         ImageView proPic = (ImageView) findViewById(R.id.profile_image);
-        if (uri != null && !"".equals(uri.toString())) {
+        if (proPic != null && uri != null && !"".equals(uri.toString())) {
             Picasso.with(getApplicationContext()).load(uri.toString()).into(proPic);
         } else {
             if (proPic != null) {

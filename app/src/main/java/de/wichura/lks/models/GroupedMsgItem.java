@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 
 /**
  * Created by ich on 20.06.2016.
- * CamperApp
+ * Luftkraftsport
  */
 public class GroupedMsgItem {
 

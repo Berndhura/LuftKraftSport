@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 
 /**
  * Created by ich on 25.06.2016.
- * CamperApp
+ * Luftkraftsport
  */
 public class ProportionalImageView extends AppCompatImageView {
 

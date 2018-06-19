@@ -2,7 +2,7 @@ package de.wichura.lks.models;
 
 /**
  * Created by ich on 03.11.2016.
- * CamperApp
+ * Luftkraftsport
  */
 
 public class Bookmarks {

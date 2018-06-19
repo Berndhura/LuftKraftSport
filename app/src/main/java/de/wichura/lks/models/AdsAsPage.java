@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * Created by ich on 22.11.2016.
- * Camper App
+ * Luftkraftsport
  */
 
 public class AdsAsPage {

@@ -23,7 +23,7 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
 
-    private static final String TAG = "MyInstanceIDLS";
+    private static final String TAG = "CONAN";
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -79,6 +79,7 @@ public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
 
                         @Override
                         public void onComplete() {
+
                             Log.d("CONAN", "send device token to server");
                         }
                     });

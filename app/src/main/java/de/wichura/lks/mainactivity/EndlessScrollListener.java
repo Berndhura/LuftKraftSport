@@ -4,7 +4,7 @@ import android.widget.AbsListView;
 
 /**
  * Created by bwichura on 23.11.2016.
- * Camper App
+ * Luftkraftsport
  */
 
 public abstract class EndlessScrollListener implements AbsListView.OnScrollListener {

@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 
 /**
  * Created by ich on 29.05.2016.
- * Camper App
+ * Luftkraftsport
  */
 public class MsgRowItem {
 

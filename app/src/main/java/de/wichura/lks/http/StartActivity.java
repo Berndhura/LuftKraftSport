@@ -28,7 +28,7 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
  * Created by Bernd Wichura on 31.03.2016.
- * Camper App
+ * Luftkraftsport
  */
 public class StartActivity extends Activity {
 

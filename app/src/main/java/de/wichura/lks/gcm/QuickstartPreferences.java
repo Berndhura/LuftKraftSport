@@ -2,7 +2,7 @@ package de.wichura.lks.gcm;
 
 /**
  * Created by Bernd Wichura on 14.05.2016.
- * Camper App
+ * Luftkraftsport
  */
 public class QuickstartPreferences {
 
