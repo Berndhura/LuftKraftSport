@@ -13,9 +13,11 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -58,10 +60,16 @@ public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
             service.sendDeviceTokenObserv(userToken, deviceToken)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<String>() {
+                    .subscribe(new Observer<String>() {
+
                         @Override
-                        public void onCompleted() {
-                            Log.d("CONAN", "send device token to server");
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(String result) {
+                            Log.d("CONAN", "send device token to server: " + result);
                         }
 
                         @Override
@@ -70,8 +78,8 @@ public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
                         }
 
                         @Override
-                        public void onNext(String result) {
-                            Log.d("CONAN", "send device token to server: "+result);
+                        public void onComplete() {
+                            Log.d("CONAN", "send device token to server");
                         }
                     });
         }
