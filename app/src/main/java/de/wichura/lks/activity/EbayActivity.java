@@ -29,10 +29,11 @@ import de.wichura.lks.adapter.EbayAdsAdapter;
 import de.wichura.lks.http.EbayRestService;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.EbayAd;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.LAST_SEARCH;
 
@@ -75,13 +76,13 @@ public class EbayActivity extends AppCompatActivity {
         showProgressBar();
 
         //Observable<JsonObject> ebayService = ebayRestService.findItemsByKeywordObersv(getLastSearch());
-        Observable<JsonObject> ebayService = ebayRestService.findItemsByKeywordObersv(item);
+        //Observable<JsonObject> ebayService = ebayRestService.findItemsByKeywordObersv(item);
 
-        ebayService.subscribeOn(Schedulers.io())
+        ebayRestService.findItemsByKeywordObersv(item).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<JsonObject>() {
+                .subscribe(new Observer<JsonObject>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -117,6 +118,11 @@ public class EbayActivity extends AppCompatActivity {
                         updateResults(ebayAds);
 
                         Log.d("CONAN", result.toString());
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }

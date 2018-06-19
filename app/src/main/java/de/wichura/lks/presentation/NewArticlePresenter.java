@@ -8,10 +8,11 @@ import com.google.gson.JsonObject;
 
 import de.wichura.lks.activity.NewAdActivity;
 import de.wichura.lks.http.GoogleService;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by ich on 31.03.2017.
@@ -37,9 +38,9 @@ public class NewArticlePresenter {
         getCityNameFromLatLng
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<JsonObject>() {
+                .subscribe(new Observer<JsonObject>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -55,6 +56,11 @@ public class NewArticlePresenter {
 
                         Log.d("CONAN", "city name from google maps api: " + city);
                         view.setCityName(city.getAsString());
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }

@@ -16,9 +16,10 @@ import de.wichura.lks.R;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.SearchItem;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -57,11 +58,11 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
             convertView = mInflater.inflate(R.layout.searches_overview_item, parent, false);
 
             holder = new SearchesListAdapter.ViewHolder();
-            holder.title = (TextView) convertView.findViewById(R.id.search_title);
-            holder.priceRange = (TextView) convertView.findViewById(R.id.search_price_range);
-            holder.distance = (TextView) convertView.findViewById(R.id.search_distance);
-            holder.deleteSearch = (ImageView) convertView.findViewById(R.id.delete_search);
-            holder.location = (TextView) convertView.findViewById(R.id.location_name);
+            holder.title = convertView.findViewById(R.id.search_title);
+            holder.priceRange = convertView.findViewById(R.id.search_price_range);
+            holder.distance = convertView.findViewById(R.id.search_distance);
+            holder.deleteSearch = convertView.findViewById(R.id.delete_search);
+            holder.location = convertView.findViewById(R.id.location_name);
             convertView.setTag(holder);
         } else
             holder = (SearchesListAdapter.ViewHolder) convertView.getTag();
@@ -113,9 +114,9 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
         service.deleteSearchesObserv(id, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         //view.disableProgress();
                         String pos = view.getTag().toString();
                         int position = Integer.parseInt(pos);
@@ -133,6 +134,11 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
                         //disableProgress();
                         //view.dataChanged();
                         Log.d("CONAN", "deleting searches: " + "id: " + id);
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
                     }
                 });

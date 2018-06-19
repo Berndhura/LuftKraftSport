@@ -24,12 +24,12 @@ import de.wichura.lks.models.FileNameParcelable;
 import de.wichura.lks.models.Location;
 import de.wichura.lks.models.RowItem;
 import de.wichura.lks.util.BitmapHelper;
+import io.reactivex.Observable;
 import okhttp3.MultipartBody;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Bernd Wichura on 25.10.2016.
  * Luftkrafsport
@@ -100,13 +100,13 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             }
 
             //delete removed images
-            Observable.from(ids)
+            Observable.fromIterable(ids)
                     .flatMap(imageId -> service.deletePictureObserv(Long.parseLong(articleId.toString()), imageId, getUserToken()))
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<String>() {
+                    .subscribe(new Observer<String>() {
                         @Override
-                        public void onCompleted() {
+                        public void onComplete() {
                             Log.d("CONAN", "delete images COMPLETE");
                             updateTextAndNewImages(data);
                         }
@@ -125,6 +125,11 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         @Override
                         public void onNext(String rowItem) {
                             Log.d("CONAN", "delete images ONNEXT " + rowItem);
+                        }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
                         }
                     });
         } else {
@@ -162,9 +167,9 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         service.saveNewAdObserv(getUserToken(), item)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<RowItem>() {
+                .subscribe(new Observer<RowItem>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         //todo: hide?!
                         //view.hideProgress();
                         if (newFilesForUpload.size() > 0) {
@@ -194,6 +199,11 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                         adId = Long.parseLong(rowItem.getId().toString());
                         Log.d("CONAN", "onNext in updating Article");
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -218,9 +228,9 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
         service.saveNewAdObserv(getUserToken(), item)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<RowItem>() {
+                .subscribe(new Observer<RowItem>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         view.hideMainProgress();
                         if (mImage.size() > 0) {
                             uploadPic(adId, mImage);
@@ -247,6 +257,11 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                     public void onNext(RowItem rowItem) {
                         adId = Long.parseLong(rowItem.getId().toString());
                         Log.d("CONAN", "new article added with id: " + adId);
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }
@@ -283,9 +298,9 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
             service.uploadPictureObserv(adId, getUserToken(), multiPartBody)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<String>() {
+                    .subscribe(new Observer<String>() {
                         @Override
-                        public void onCompleted() {
+                        public void onComplete() {
                             //finish activity when last file uploaded
                             if (counter == imageFiles.size() - 1) {
                                 Toast.makeText(context, "Neue Anzeige erstellt/geändert!", Toast.LENGTH_SHORT).show();
@@ -313,6 +328,11 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
                             Boolean deleted = reducedPicture.delete();
                             if (!deleted)
                                 Toast.makeText(context, "Delete tempFile not possible", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
                         }
                     });
         }

@@ -18,7 +18,7 @@ import de.wichura.lks.models.User;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
+//import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
@@ -51,13 +51,13 @@ public class Service {
 
     public Service() {
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+      //  HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+      //  logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         //api/V3
         OkHttpClient.Builder httpClientV3 = new OkHttpClient.Builder();
 
-        httpClientV3.addInterceptor(logging);
+      //  httpClientV3.addInterceptor(logging);
 
         Gson gson = new GsonBuilder()
                 .setLenient()

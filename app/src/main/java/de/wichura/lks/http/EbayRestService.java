@@ -4,14 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
+//import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by Bernd Wichura on 06.06.2017.
@@ -29,19 +29,19 @@ public class EbayRestService {
 
     public EbayRestService() {
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        //HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        //logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder httpEbayClient = new OkHttpClient.Builder();
 
-        httpEbayClient.addInterceptor(logging);
+        //httpEbayClient.addInterceptor(logging);
 
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
 
         Retrofit restAdapterV2 = new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(EBAY_REST_URL)
                 .client(httpEbayClient.build())

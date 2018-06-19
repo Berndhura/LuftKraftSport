@@ -33,9 +33,10 @@ import de.wichura.lks.dialogs.SetPriceDialog;
 import de.wichura.lks.dialogs.ShowNetworkProblemDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -293,9 +294,9 @@ public class SearchFragment extends Fragment {
         service.saveSearchObserv(description, getMinPrice(), getMaxPrice(), getLat(), getLng(), getDistance(), getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         followSearch.setClickable(true);
                         disableProgress();
                         new ConfirmFollowSearchDialog().show(getActivity().getSupportFragmentManager(), null);
@@ -311,6 +312,11 @@ public class SearchFragment extends Fragment {
 
                     @Override
                     public void onNext(String result) {
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }

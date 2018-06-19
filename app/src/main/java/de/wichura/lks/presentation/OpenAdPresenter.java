@@ -4,10 +4,13 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import de.wichura.lks.activity.OpenAdActivity;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
@@ -26,7 +29,6 @@ public class OpenAdPresenter {
     private Service service;
     private Context context;
     private OpenAdActivity view;
-    private Subscription subscription;
 
     public OpenAdPresenter(OpenAdActivity myAdsActivity, Service service, Context applicationContext) {
         this.service = service;
@@ -38,9 +40,9 @@ public class OpenAdPresenter {
         service.getBookmarksForUserObserv(getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Long[]>() {
+                .subscribe(new Observer<Long[]>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -52,6 +54,11 @@ public class OpenAdPresenter {
                     public void onNext(Long[] bookmarks) {
                         view.updateBookmarkButton(bookmarks);
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -60,9 +67,9 @@ public class OpenAdPresenter {
                 .subscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -74,6 +81,11 @@ public class OpenAdPresenter {
                     public void onNext(String result) {
                         Log.d("CONAN", "increase view count: " + result);
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -81,9 +93,9 @@ public class OpenAdPresenter {
         service.bookmarkAdObserv(adId, userToken)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         Toast.makeText(view.getApplicationContext(), "Artikel ist gemerkt", Toast.LENGTH_SHORT).show();
                         view.mBookmarkButton.setText("Vergessen");
                         view.isBookmarked = true;
@@ -98,6 +110,11 @@ public class OpenAdPresenter {
                     public void onNext(String result) {
                         Log.d("CONAN", "bookmark ad: " + result);
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -105,9 +122,9 @@ public class OpenAdPresenter {
         service.delBookmarkAdObserv(adId, userToken)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         Toast.makeText(view.getApplicationContext(), "von der Merkliste gelöscht!", Toast.LENGTH_SHORT).show();
                         view.mBookmarkButton.setText("Merken");
                         view.isBookmarked = false;
@@ -122,6 +139,11 @@ public class OpenAdPresenter {
                     public void onNext(String result) {
                         Log.d("CONAN", "bookmark deleted: " + result);
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -129,9 +151,9 @@ public class OpenAdPresenter {
         service.sendNewMessageObserv(message, adId, idTo, userToken)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         Toast.makeText(view.getContext(), "Nachricht gesendet...", Toast.LENGTH_SHORT).show();
                     }
 
@@ -144,6 +166,11 @@ public class OpenAdPresenter {
                     public void onNext(String result) {
                         Log.d("CONAN", "send message to user: " + result);
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -151,9 +178,9 @@ public class OpenAdPresenter {
         service.deleteAdObserv(adId, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         Toast.makeText(view.getApplicationContext(), "Artikel gelöscht!", Toast.LENGTH_SHORT).show();
                     }
 
@@ -166,6 +193,11 @@ public class OpenAdPresenter {
                     public void onNext(String result) {
                         Log.d("CONAN", "delete ad: " + result);
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -173,9 +205,9 @@ public class OpenAdPresenter {
         service.getAdDetailsObserv(articleId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArticleDetails>() {
+                .subscribe(new Observer<ArticleDetails>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onComplete() {}
 
                     @Override
                     public void onError(Throwable e) {
@@ -186,6 +218,11 @@ public class OpenAdPresenter {
                     public void onNext(ArticleDetails articleDetails) {
                         view.prepareDataFromArticle(articleDetails);
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -193,9 +230,9 @@ public class OpenAdPresenter {
         service.getSellerInformationObserv(userId, getUserToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<User>() {
+                .subscribe(new Observer<User>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onComplete() {}
 
                     @Override
                     public void onError(Throwable e) {
@@ -206,6 +243,11 @@ public class OpenAdPresenter {
                     @Override
                     public void onNext(User user) {
                         view.updateSellerInformation(user);
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }

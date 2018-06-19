@@ -13,11 +13,14 @@ import de.wichura.lks.activity.LocationFragment;
 import de.wichura.lks.activity.SearchActivity;
 import de.wichura.lks.http.GoogleService;
 import de.wichura.lks.mainactivity.Constants;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -30,7 +33,6 @@ public class LocationPresenter {
 
     private Context context;
     private GoogleService googleService;
-    private Subscription subscription;
     private SearchActivity view;
 
     public LocationPresenter(Context applicationContext, SearchActivity view) {
@@ -43,12 +45,12 @@ public class LocationPresenter {
 
         Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFromLatLngObserable(lat, lng, false);
 
-        subscription = getCityNameFromLatLng
+        getCityNameFromLatLng
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<JsonObject>() {
+                .subscribe(new Observer<JsonObject>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -64,6 +66,11 @@ public class LocationPresenter {
 
                         Log.d("CONAN", "city name from google maps api: " + city);
                         storeCityName(lat, lng, city.getAsString());
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }

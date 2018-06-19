@@ -7,9 +7,10 @@ import java.util.List;
 import de.wichura.lks.activity.MessagesOverviewActivity;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.models.GroupedMsgItem;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Bernd Wichura on 05.12.2016.
@@ -32,9 +33,9 @@ public class MsgOverviewPresenter {
         service.getAllMessagesFromUserObserv(userToken)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<GroupedMsgItem>>() {
+                .subscribe(new Observer<List<GroupedMsgItem>>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
 
                     }
 
@@ -51,6 +52,11 @@ public class MsgOverviewPresenter {
                         } else {
                             view.updateMsgList(msgRowItems);
                         }
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }

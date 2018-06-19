@@ -16,9 +16,10 @@ import de.wichura.lks.dialogs.ShowUserNotActivatedDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.util.Utility;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.ACTIVATE_USER_STATUS;
 
@@ -65,9 +66,9 @@ public class RegisterUserActivity extends AppCompatActivity implements
             service.registerUserObserv(name.getText().toString(), email.getText().toString(), hashedPw)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<String>() {
+                    .subscribe(new Observer<String>() {
                         @Override
-                        public void onCompleted() {
+                        public void onComplete() {
 
                         }
 
@@ -85,6 +86,11 @@ public class RegisterUserActivity extends AppCompatActivity implements
                             //finish();
                             setRegisterUpdatePreferences(true, false);
                             adaptViewForActivation();
+                        }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
                         }
                     });
         } else {
@@ -146,9 +152,9 @@ public class RegisterUserActivity extends AppCompatActivity implements
             service.activateUserObserv(code, email)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<String>() {
+                    .subscribe(new Observer<String>() {
                         @Override
-                        public void onCompleted() {
+                        public void onComplete() {
 
                         }
 
@@ -168,6 +174,11 @@ public class RegisterUserActivity extends AppCompatActivity implements
                             } else {
                                 adaptViewForExitActivation();
                             }
+                        }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
                         }
                     });
         }

@@ -19,10 +19,11 @@ import de.wichura.lks.util.Utility;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Response;
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import retrofit2.adapter.rxjava2.HttpException;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Bernd Wichura on 05.12.2016.
@@ -51,9 +52,9 @@ public class LoginPresenter {
         service.loginUserObserv(email, hashedPassword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<User>() {
+                .subscribe(new Observer<User>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -98,6 +99,11 @@ public class LoginPresenter {
                         loginActivity.setUserPreferences(user.getName(), user.getId(), null, Constants.EMAIL_USER, user.getToken());
                         loginActivity.finish();
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -121,9 +127,9 @@ public class LoginPresenter {
         service.activateUserObserv(code, email)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
 
                     }
 
@@ -143,6 +149,11 @@ public class LoginPresenter {
                             //activated, now login with credentials
                             sendLoginReq(email, password);
                         }
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }

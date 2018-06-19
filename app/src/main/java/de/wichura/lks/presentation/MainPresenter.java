@@ -33,12 +33,12 @@ import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.mainactivity.MainActivity;
 import de.wichura.lks.models.AdsAndBookmarks;
 import de.wichura.lks.models.AdsAsPage;
-import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -54,7 +54,7 @@ public class MainPresenter {
     private MainActivity activity;
     private Service service;
     private Context context;
-    public Subscription subscription;
+    public Disposable disposable;
 
     public MainPresenter(MainActivity activity, Service service, Context context) {
         this.activity = activity;
@@ -72,9 +72,9 @@ public class MainPresenter {
             service.sendDeviceTokenObserv(userToken, deviceToken)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<String>() {
+                    .subscribe(new Observer<String>() {
                         @Override
-                        public void onCompleted() {
+                        public void onComplete() {
                             Log.d("CONAN", "send device token to server");
                         }
 
@@ -87,6 +87,11 @@ public class MainPresenter {
                         public void onNext(String result) {
                             Log.d("CONAN", "send device token to server: "+result);
                         }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
                     });
         }
     }
@@ -95,9 +100,9 @@ public class MainPresenter {
         service.delBookmarkAdObserv(adId, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         Toast.makeText(context, "Von den Favoriten gelöscht!", Toast.LENGTH_SHORT).show();
                     }
 
@@ -110,6 +115,11 @@ public class MainPresenter {
                     public void onNext(String result) {
                         Log.d("CONAN", "bookmark deleted: " + result);
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -117,9 +127,9 @@ public class MainPresenter {
         service.bookmarkAdObserv(adId, getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         Toast.makeText(context, "Zu den Favoriten hinzugefügt!", Toast.LENGTH_SHORT).show();
                     }
 
@@ -131,6 +141,11 @@ public class MainPresenter {
                     @Override
                     public void onNext(String result) {
                         Log.d("CONAN", "bookmark ad: " + result);
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }
@@ -208,12 +223,12 @@ public class MainPresenter {
                         return elements;
                     });
 
-            subscription = zippedReqForBookmarksAndAds
+            zippedReqForBookmarksAndAds
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<AdsAndBookmarks>() {
                         @Override
-                        public void onCompleted() {
+                        public void onComplete() {
                         }
 
                         @Override
@@ -235,16 +250,21 @@ public class MainPresenter {
                                 activity.addMoreAdsToList(element);
                             }
                         }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
                     });
         } else {
             Observable<AdsAsPage> searchForAdsObserv = service.findAdsObserv(description, getLat(), getLng(), distance, priceFrom, priceTo, page, size, userId);
 
-            subscription = searchForAdsObserv
+            searchForAdsObserv
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<AdsAsPage>() {
+                    .subscribe(new Observer<AdsAsPage>() {
                         @Override
-                        public void onCompleted() {
+                        public void onComplete() {
 
                         }
 
@@ -270,6 +290,11 @@ public class MainPresenter {
                             } else {
                                 activity.addMoreAdsToList(adsAndBookmarks);
                             }
+                        }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
                         }
                     });
         }
@@ -308,7 +333,7 @@ public class MainPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<AdsAndBookmarks>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -329,6 +354,11 @@ public class MainPresenter {
                         } else {
                             activity.addMoreAdsToList(element);
                         }
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }
@@ -361,12 +391,12 @@ public class MainPresenter {
                         return elements;
                     });
 
-            subscription = zippedReqForBookmarksAndAds
+            zippedReqForBookmarksAndAds
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<AdsAndBookmarks>() {
                         @Override
-                        public void onCompleted() {
+                        public void onComplete() {
                         }
 
                         @Override
@@ -394,16 +424,21 @@ public class MainPresenter {
                                 activity.addMoreAdsToList(element);
                             }
                         }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
                     });
         } else {
             Observable<AdsAsPage> getAllAdsForUserObserv = service.getAllAdsObserv(lat, lng, page, size);
 
-            subscription = getAllAdsForUserObserv
+            getAllAdsForUserObserv
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<AdsAsPage>() {
+                    .subscribe(new Observer<AdsAsPage>() {
                         @Override
-                        public void onCompleted() {
+                        public void onComplete() {
 
                         }
 
@@ -429,6 +464,11 @@ public class MainPresenter {
                             } else {
                                 activity.addMoreAdsToList(adsAndBookmarks);
                             }
+                        }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
                         }
                     });
         }
@@ -458,12 +498,12 @@ public class MainPresenter {
                     return elements;
                 });
 
-        subscription = zippedReqForBookmarksAndAds
+        zippedReqForBookmarksAndAds
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<AdsAndBookmarks>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -484,6 +524,11 @@ public class MainPresenter {
                         } else {
                             activity.addMoreAdsToList(element);
                         }
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }
@@ -550,9 +595,9 @@ public class MainPresenter {
         service.saveUserPictureObserv(getUserToken(), userProfilePic)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -563,6 +608,11 @@ public class MainPresenter {
                     @Override
                     public void onNext(String s) {
                         Log.d("CONAN", "pictureUri send: " + s);
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }

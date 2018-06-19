@@ -31,9 +31,10 @@ import de.wichura.lks.mainactivity.MainActivity;
 import de.wichura.lks.models.RowItem;
 import de.wichura.lks.presentation.MainPresenter;
 import de.wichura.lks.util.Utility;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.IS_BOOKMARKS;
 import static de.wichura.lks.mainactivity.Constants.IS_MY_ADS;
@@ -248,9 +249,9 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                         service.deleteAdObserv(adId, getUserToken())
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Subscriber<String>() {
+                                .subscribe(new Observer<String>() {
                                     @Override
-                                    public void onCompleted() {
+                                    public void onComplete() {
                                         Log.d("CONAN", "Ad deleted");
                                         String pos = view.getTag().toString();
                                         int position = Integer.parseInt(pos);
@@ -267,6 +268,11 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                                     @Override
                                     public void onNext(String result) {
                                         Log.d("CONAN", "delete ad: " + result);
+                                    }
+
+                                    @Override
+                                    public void onSubscribe(Disposable d) {
+
                                     }
                                 });
                     }

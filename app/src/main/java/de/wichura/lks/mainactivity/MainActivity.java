@@ -430,8 +430,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (presenterLayer.subscription != null && !presenterLayer.subscription.isUnsubscribed()) {
-            presenterLayer.subscription.unsubscribe();
+        if (presenterLayer.disposable != null && !presenterLayer.disposable.isDisposed()) {
+            presenterLayer.disposable.dispose();
         }
     }
 

@@ -8,6 +8,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.OptionalPendingResult;
 
+import org.reactivestreams.Subscriber;
+
 import java.util.List;
 
 import de.wichura.lks.activity.SearchesActivity;
@@ -15,10 +17,10 @@ import de.wichura.lks.http.GoogleService;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.models.SearchItem;
 import de.wichura.lks.util.Utility;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;;
 
 
 /**
@@ -32,7 +34,6 @@ public class SearchesPresenter {
     private GoogleService googleService;
     private Context context;
     private SearchesActivity activity;
-    private Subscription subscription;
     private Utility utils;
 
     public SearchesPresenter(SearchesActivity searchesActivity, Service service, Context applicationContext) {
@@ -48,9 +49,9 @@ public class SearchesPresenter {
         service.findSearchesObserv(utils.getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<SearchItem>>() {
+                .subscribe(new Observer<List<SearchItem>>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         activity.disableProgressbar();
                     }
 
@@ -72,6 +73,11 @@ public class SearchesPresenter {
                         } else {
                             activity.updateSearches(searchItem);
                         }
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }

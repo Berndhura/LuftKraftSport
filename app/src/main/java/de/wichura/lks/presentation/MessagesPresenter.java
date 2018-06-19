@@ -9,11 +9,13 @@ import de.wichura.lks.activity.MessagesActivity;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.models.ArticleDetails;
 import de.wichura.lks.models.MsgRowItem;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Bernd Wichura on 01.11.2016.
@@ -24,7 +26,7 @@ public class MessagesPresenter {
 
     private MessagesActivity view;
     private Service service;
-    private Subscription subscription;
+    private Disposable disposable;
 
     public MessagesPresenter(MessagesActivity view) {
         this.view = view;
@@ -37,11 +39,12 @@ public class MessagesPresenter {
 
         Log.d("CONAN", "message: sender, adId: " + chatPartner + ", " + adId);
 
-        subscription = getMessagesForAdObserv
+        getMessagesForAdObserv
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<MsgRowItem>>() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<MsgRowItem>>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -55,6 +58,11 @@ public class MessagesPresenter {
                         view.showLinkToAdButton();
                         view.showMessages(msgRowItems);
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
@@ -63,9 +71,9 @@ public class MessagesPresenter {
         service.sendNewMessageObserv(message, adId, idTo, userToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -77,12 +85,17 @@ public class MessagesPresenter {
                     public void onNext(String s) {
                         Log.d("CONAN", "message send: " + s);
                     }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
                 });
     }
 
     public void disableSubscription() {
-        if (subscription != null && !subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
         }
     }
 
@@ -90,9 +103,9 @@ public class MessagesPresenter {
         service.getAdDetailsObserv(articleId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArticleDetails>() {
+                .subscribe(new Observer<ArticleDetails>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -103,6 +116,11 @@ public class MessagesPresenter {
                     @Override
                     public void onNext(ArticleDetails articleDetails) {
                         view.openAdActivityFor(articleDetails);
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
                 });
     }

@@ -33,10 +33,11 @@ import de.wichura.lks.dialogs.SetPriceDialog;
 import de.wichura.lks.dialogs.ZipDialogFragment;
 import de.wichura.lks.http.GoogleService;
 import de.wichura.lks.mainactivity.Constants;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.DISTANCE_INFINITY;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
@@ -181,9 +182,9 @@ public class SearchActivity extends AppCompatActivity implements
         getCityNameFromLatLng
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<JsonObject>() {
+                .subscribe(new Observer<JsonObject>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                     }
 
                     @Override
@@ -202,6 +203,11 @@ public class SearchActivity extends AppCompatActivity implements
                         //set location name in searchFragment and store lat lng in shared prefs
                         storeLocation(lat, lng, city.getAsString());
                         new DistanceDialogFragment().show(getSupportFragmentManager(), null);
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        
                     }
                 });
     }
