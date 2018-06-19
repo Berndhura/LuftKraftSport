@@ -21,7 +21,7 @@ import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -31,7 +31,10 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import rx.Observable;
+
+import io.reactivex.Observable;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 
 /**
  * Created by Bernd Wichura on 16.10.2016.
@@ -61,7 +64,7 @@ public class Service {
                 .create();
 
         builder = new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(WEB_SERVICE_BASE_URL_V3)
                 .client(httpClientV3.build());
