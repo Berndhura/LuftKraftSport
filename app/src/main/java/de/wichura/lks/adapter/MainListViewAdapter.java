@@ -46,7 +46,6 @@ import static de.wichura.lks.mainactivity.Constants.USERS_LOCATION;
 public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
     private Context context;
-    private ViewHolder holder;
     private ArrayList<Long> bookmarks;
     private Activity activity;
     private Service service;
@@ -84,7 +83,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         ImageView thumbNail;
         TextView txtNumberOfBookmarks;
         ImageView new_ad_marker;
-
     }
 
     @Override
@@ -93,22 +91,24 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         //final LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(context.LAYOUT_INFLATER_SERVICE);
         final LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
+        ViewHolder holder;
+
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.list_item, parent, false);
             holder = new ViewHolder();
-            holder.txtTitle = (TextView) convertView.findViewById(R.id.title);
-            holder.txtPrice = (TextView) convertView.findViewById(R.id.price);
-            holder.distance = (TextView) convertView.findViewById(R.id.distance);
-            holder.txtDate = (TextView) convertView.findViewById(R.id.creation_date);
-            holder.bookmarkStar = (ImageView) convertView.findViewById(R.id.bookmark_star);
-            holder.myAdsView = (LinearLayout) convertView.findViewById(R.id.my_ads_view);
-            holder.mainLl = (LinearLayout) convertView.findViewById(R.id.main_linear_layout);
-            holder.deleteButton = (ImageView) convertView.findViewById(R.id.NEW_my_ad_delete);
-            holder.editButton = (ImageView) convertView.findViewById(R.id.edit_my_article);
-            holder.txtViews = (TextView) convertView.findViewById(R.id.NEW_my_views);
-            holder.txtNumberOfBookmarks = (TextView) convertView.findViewById(R.id.number_of_bookmarks);
-            holder.thumbNail = (ImageView) convertView.findViewById(R.id.icon);
-            holder.new_ad_marker = (ImageView) convertView.findViewById(R.id.new_ad_marker);
+            holder.txtTitle = convertView.findViewById(R.id.title);
+            holder.txtPrice = convertView.findViewById(R.id.price);
+            holder.distance = convertView.findViewById(R.id.distance);
+            holder.txtDate = convertView.findViewById(R.id.creation_date);
+            holder.bookmarkStar = convertView.findViewById(R.id.bookmark_star);
+            holder.myAdsView = convertView.findViewById(R.id.my_ads_view);
+            holder.mainLl = convertView.findViewById(R.id.main_linear_layout);
+            holder.deleteButton = convertView.findViewById(R.id.NEW_my_ad_delete);
+            holder.editButton = convertView.findViewById(R.id.edit_my_article);
+            holder.txtViews = convertView.findViewById(R.id.NEW_my_views);
+            holder.txtNumberOfBookmarks = convertView.findViewById(R.id.number_of_bookmarks);
+            holder.thumbNail = convertView.findViewById(R.id.icon);
+            holder.new_ad_marker = convertView.findViewById(R.id.new_ad_marker);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -240,8 +240,8 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     private void deleteAdRequest(final Integer adId, final View view) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(activity)
                 //set message, title, and icon
-                .setTitle("Löschen")
-                .setMessage("Möchtest Du wirklich löschen?")
+                .setTitle(R.string.delete)
+                .setMessage(R.string.confirm_delete)
                 .setIcon(R.drawable.ic_delete_blue_grey_600_24dp)
                 .setPositiveButton("Lösche", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {

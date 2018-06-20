@@ -5,7 +5,7 @@
         <item
             android:id="@+id/myads"
             android:icon="@drawable/ic_person_white_24dp"
-            android:title="Meine Anzeigen" />
+            android:title="@string/title_open_my_ads_page" />
 
         <item
             android:id="@+id/bookmarks"
@@ -20,22 +20,22 @@
         <item
             android:id="@+id/search"
             android:icon="@drawable/ic_search_white_24dp"
-            android:title="Suchen" />
+            android:title="@string/search_in_drawer" />
 
         <item
             android:id="@+id/messages_from_user"
             android:icon="@drawable/ic_email_white_24dp"
-            android:title="Nachrichten" />
+            android:title="@string/messages" />
 
         <item
             android:id="@+id/settings"
             android:icon="@drawable/ic_settings_white_24dp"
-            android:title="Einstellungen" />
+            android:title="@string/settings" />
 
         <item
             android:id="@+id/ebay"
             android:icon="@drawable/ic_web_black_24dp"
-            android:title="Check auf ebay" />
+            android:title="@string/check_on_ebay" />
 
     </group>
 

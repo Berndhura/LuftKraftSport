@@ -81,9 +81,9 @@ public class SetPriceDialog extends DialogFragment {
         @Override
         public void onClick(View v) {
 
-            priceFromTv = (TextView) getDialog().findViewById(R.id.priceFrom);
-            priceToTv = (TextView) getDialog().findViewById(R.id.priceTo);
-            priceDnM = (CheckBox) getDialog().findViewById(R.id.price_does_not_matter);
+            priceFromTv = getDialog().findViewById(R.id.priceFrom);
+            priceToTv = getDialog().findViewById(R.id.priceTo);
+            priceDnM = getDialog().findViewById(R.id.price_does_not_matter);
 
             if (validatePriceRange()) {
                 getPrices();
