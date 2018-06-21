@@ -1,5 +1,6 @@
 package de.wichura.lks.gcm;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -111,6 +112,7 @@ public class MyGcmListenerService extends FirebaseMessagingService {
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setVibrate(new long[0])
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
@@ -138,13 +140,17 @@ public class MyGcmListenerService extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "channelId")
                 .setSmallIcon(R.drawable.surfing_filled_50)
                 .setContentTitle(name + ": ")
+                .setStyle(new NotificationCompat.MessagingStyle("User"))
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setPriority(Notification.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent);
+
+        notificationBuilder.setFullScreenIntent(pendingIntent, true);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

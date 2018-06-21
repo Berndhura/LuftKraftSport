@@ -43,7 +43,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -175,12 +174,12 @@ public class MainActivity extends AppCompatActivity implements
 
         //load main layout
         setContentView(R.layout.activity_main);
-        listView = (AbsListView) findViewById(R.id.main_list);
+        listView = findViewById(R.id.main_list);
         noResultsView = findViewById(R.id.empty_list_view);
 
         //ProgressBar
-        progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
-        messagesBtn = (ImageView) findViewById(R.id.main_mail_button);
+        progressBar = findViewById(R.id.progressBar);
+        messagesBtn = findViewById(R.id.main_mail_button);
 
         messagesBtn.setOnClickListener(v -> {
             messagesBtn.setVisibility(View.GONE);
@@ -193,11 +192,11 @@ public class MainActivity extends AppCompatActivity implements
         //configureFlurry();
 
         //load toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //init drawer
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -207,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
 
-        loginBtn = (ImageView) findViewById(R.id.main_login_button);
+        loginBtn = findViewById(R.id.main_login_button);
         updateLoginButton();
 
         AccessTokenTracker tracker = new AccessTokenTracker() {
@@ -342,22 +341,20 @@ public class MainActivity extends AppCompatActivity implements
 
 
     private void initRefreshSwipeDown() {
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-                hideEmptyView();
-                setMyAdsFlag(false);
-                setBookmarksFlag(false);
-                isMyAds = false;
-                isBookmarks = false;
-                isSearch = false;
-                getAds(Constants.TYPE_ALL);
-            }
+        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(() -> {
+            // Your code to refresh the list here.
+            // Make sure you call swipeContainer.setRefreshing(false)
+            // once the network request has completed successfully.
+            hideEmptyView();
+            setMyAdsFlag(false);
+            setBookmarksFlag(false);
+            isMyAds = false;
+            isBookmarks = false;
+            isSearch = false;
+            getAds(Constants.TYPE_ALL);
         });
+
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
@@ -374,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initSearchAgainButton() {
-        searchAgainButton = (Button) findViewById(R.id.search_again);
+        searchAgainButton =  findViewById(R.id.search_again);
         searchAgainButton.setOnClickListener(v -> {
             searchAgainButton.setVisibility(View.GONE);
             final Intent searchIntent = new Intent(this, SearchActivity.class);
@@ -958,7 +955,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void setProfileName(String name) {
-        TextView nav_user = (TextView) findViewById(R.id.username);
+        TextView nav_user = findViewById(R.id.username);
         if (nav_user != null) nav_user.setText(name);
     }
 
@@ -1044,6 +1041,5 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d("CONAN", "onConnectionFailed: " + connectionResult.toString());
-
     }
 }

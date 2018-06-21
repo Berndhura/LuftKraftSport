@@ -1,10 +1,5 @@
 package de.wichura.lks.gcm;
 
-/**
- * Created by Bernd Wichura on 14.05.2016.
- * Luftkraftsport
- */
-
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -20,6 +15,11 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
+
+/**
+ * Created by Bernd Wichura on 14.05.2016.
+ * Luftkraftsport
+ */
 
 public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
 
