@@ -2,6 +2,7 @@ package de.wichura.lks.presentation;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -50,12 +51,21 @@ public class NewArticlePresenter {
 
                     @Override
                     public void onNext(JsonObject location) {
-                        JsonElement city = location.get("results").getAsJsonArray()
-                                .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
-                                .get(2).getAsJsonObject().get("long_name");
 
-                        Log.d("CONAN", "city name from google maps api: " + city);
-                        view.setCityName(city.getAsString());
+                        if (location.get("error_message") != null) {
+                            Log.d("CONAN", "problem with google maps api: " + location.get("status"));
+                            Toast.makeText(context, "Problem with google maps", Toast.LENGTH_SHORT).show();
+                            //todo what if google map api does not work? default location
+                            view.setCityName("Texas");
+                        } else {
+
+                            JsonElement city = location.get("results").getAsJsonArray()
+                                    .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
+                                    .get(2).getAsJsonObject().get("long_name");
+
+                            Log.d("CONAN", "city name from google maps api: " + city);
+                            view.setCityName(city.getAsString());
+                        }
                     }
 
                     @Override
