@@ -311,7 +311,7 @@ public class NewAdActivity extends AppCompatActivity implements
     }
 
     private void initImageViews() {
-        imageView.add((ImageView) findViewById(R.id.imageButton));
+        imageView.add(findViewById(R.id.imageButton));
         imageView.add((ImageView) findViewById(R.id.imageButton2));
         imageView.add((ImageView) findViewById(R.id.imageButton3));
         imageView.add((ImageView) findViewById(R.id.imageButton4));
@@ -435,12 +435,13 @@ public class NewAdActivity extends AppCompatActivity implements
 
     private void setupLocation() {
 
-        locationName = (TextView) findViewById(R.id.create_location_name);
+        locationName = findViewById(R.id.create_location_name);
 
         //do not set location new if edit mode
         if (isEditMode) {
             lat = getIntent().getDoubleExtra(Constants.LAT, 0);
             lng = getIntent().getDoubleExtra(Constants.LNG, 0);
+            String location = getIntent().getStringExtra(Constants.LOCATION_NAME);
             presenter.getCityNameFromLatLng(lat, lng);
             isLocationSet = true;
         } else {
