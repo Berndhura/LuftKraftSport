@@ -7,7 +7,6 @@ android {
         }
     }
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
     lintOptions {
         abortOnError true
     }
@@ -52,10 +51,10 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.android.support:design:27.1.1'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:design:27.0.2'
     compile 'de.hdodenhof:circleimageview:2.0.0'
-    compile 'com.facebook.android:facebook-android-sdk:4.8.2'
+    compile 'com.facebook.android:facebook-android-sdk:4.40.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     //compile 'com.android.support:multidex:1.0.1'
     //compile 'com.loopj.android:android-async-http:1.4.9'
