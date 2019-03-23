@@ -1,39 +1,27 @@
 {
   "project_info": {
-    "project_number": "485775614575",
-    "firebase_url": "https://luftkraftsport-161620.firebaseio.com",
-    "project_id": "luftkraftsport-161620",
-    "storage_bucket": "luftkraftsport-161620.appspot.com"
+    "project_number": "34066618832",
+    "firebase_url": "https://luftkraftsport-d15b7.firebaseio.com",
+    "project_id": "luftkraftsport-d15b7",
+    "storage_bucket": "luftkraftsport-d15b7.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:485775614575:android:2d6a6a75fe51ec97",
+        "mobilesdk_app_id": "1:34066618832:android:2d6a6a75fe51ec97",
         "android_client_info": {
           "package_name": "de.wichura.lks"
         }
       },
       "oauth_client": [
         {
-          "client_id": "485775614575-r4uiijtbts8s1qcn79as7j3nqapfr7h7.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "de.wichura.lks",
-            "certificate_hash": "dc1ff62812f1f8f69fb312b1dcdb6c209cc50e20"
-          }
-        },
-        {
-          "client_id": "485775614575-hm690j34vufjf0pcckaj0daug601lkjj.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "485775614575-bgge92h3jhg7hm24qlmrl7bekcd64mbp.apps.googleusercontent.com",
+          "client_id": "34066618832-d8fgka4uf68d7f7jgn6jf4665oheqtfs.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDYcC66curYS3L7ZbS4B1LbEvQIm4xtSu8"
+          "current_key": "AIzaSyBVtmQC_pQLqJIx2HLpKNGS6Oz7pPPzMs4"
         }
       ],
       "services": {
@@ -41,20 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "485775614575-fgcdf5gp12fa475bladu1ab9jcjsl1rv.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "de.wichura.lks"
-              }
-            },
-            {
-              "client_id": "485775614575-hm690j34vufjf0pcckaj0daug601lkjj.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
