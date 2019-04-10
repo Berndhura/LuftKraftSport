@@ -329,6 +329,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void updateDeviceToken() {
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d("CONAN", "Token from Firebase: " + deviceToken);
         presenterLayer.sendDeviceTokenToBackEndServer(deviceToken);
     }
 

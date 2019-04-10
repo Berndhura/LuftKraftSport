@@ -1,39 +1,44 @@
 {
   "project_info": {
-    "project_number": "34066618832",
-    "firebase_url": "https://luftkraftsport-d15b7.firebaseio.com",
-    "project_id": "luftkraftsport-d15b7",
-    "storage_bucket": "luftkraftsport-d15b7.appspot.com"
+    "project_number": "225684928245",
+    "firebase_url": "https://luftkraftsport-d2eef.firebaseio.com",
+    "project_id": "luftkraftsport-d2eef",
+    "storage_bucket": "luftkraftsport-d2eef.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:34066618832:android:2d6a6a75fe51ec97",
+        "mobilesdk_app_id": "1:225684928245:android:2d6a6a75fe51ec97",
         "android_client_info": {
           "package_name": "de.wichura.lks"
         }
       },
       "oauth_client": [
         {
-          "client_id": "34066618832-d8fgka4uf68d7f7jgn6jf4665oheqtfs.apps.googleusercontent.com",
+          "client_id": "225684928245-p2059i7v6002c29njmm5l0clus9g16k8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBVtmQC_pQLqJIx2HLpKNGS6Oz7pPPzMs4"
+          "current_key": "AIzaSyCf24X06XRzETm2clxlEh61rn1zrDuCxM0"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225684928245-p2059i7v6002c29njmm5l0clus9g16k8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "225684928245-cvnc51d5m9jhali8c2ju1lrs97v60qo2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "de.wichura.lks"
+              }
+            }
+          ]
         }
       }
     }
