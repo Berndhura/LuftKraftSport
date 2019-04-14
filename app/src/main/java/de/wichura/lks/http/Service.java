@@ -1,10 +1,24 @@
 package de.wichura.lks.http;
 
+import android.app.Application;
+import android.content.res.Resources;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.AdsAsPage;
@@ -45,9 +59,9 @@ public class Service {
 
     private static final String WEB_SERVICE_BASE_URL_V3 = Urls.MAIN_SERVER_URL_V3;
 
-    private final WebService mWebServiceV3;
-    private final Retrofit.Builder builder;
-    private final Retrofit restAdapterV2;
+    private WebService mWebServiceV3 = null;
+    private Retrofit.Builder builder = null;
+    private Retrofit restAdapterV2 = null;
 
     public Service() {
 
@@ -57,17 +71,67 @@ public class Service {
         //api/V3
         OkHttpClient.Builder httpClientV3 = new OkHttpClient.Builder();
 
-      //  httpClientV3.addInterceptor(logging);
+      //httpClientV3.addInterceptor(logging);
 
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
 
-        builder = new Retrofit.Builder()
+        //https
+        SSLContext sslContext;
+        TrustManager[] trustManagers;
+        try {
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(null, null);
+
+            InputStream fis = null;
+            try {
+                //fis = new java.io.FileInputStream("/Users/digiconan/StudioProjects/LuftKraftSport/app/src/main/assets/lks.pem");
+                fis = Resources.getSystem().getAssets().open( "lks.pem");
+                String pw = "Bw12345!";
+                char[] password = new char[] { 'B', 'w', '1', '2', '3', '4', '5', '!' };
+                    keyStore.load(fis, password);
+                } finally{
+                    if (fis != null) {
+                        fis.close();
+                    }
+                }
+
+
+
+                //getAssets()  only with context possible
+                //InputStream certInputStream = getAssets().open("lks.pem");
+
+
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+                while (bis.available() > 0) {
+                    Certificate cert = certificateFactory.generateCertificate(bis);
+                    keyStore.setCertificateEntry("www.luftkraftsport.de", cert);
+                }
+                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                trustManagerFactory.init(keyStore);
+                trustManagers = trustManagerFactory.getTrustManagers();
+                sslContext = SSLContext.getInstance("TLS");
+                sslContext.init(null, trustManagers, null);
+            } catch (Exception e) {
+                e.printStackTrace(); //TODO replace with real exception handling tailored to your needs
+                return;
+            }
+
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0])
+                    .build();
+            //https end
+
+
+
+
+            builder = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(WEB_SERVICE_BASE_URL_V3)
-                .client(httpClientV3.build());
+                .client(client);
 
         restAdapterV2 = builder.build();
 

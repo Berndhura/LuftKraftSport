@@ -41,6 +41,7 @@ android {
         androidTest {
             java.srcDirs = ['androidTest/java']
         }
+        main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] }
     }
     compileOptions {
         targetCompatibility 1.8
