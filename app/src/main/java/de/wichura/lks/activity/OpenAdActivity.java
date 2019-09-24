@@ -483,18 +483,20 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
     public void onConnected(@Nullable Bundle bundle) {
         Log.d("CONAN", "in onConnected in OpenActivity");
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
-        googleMap.clear();
-        LatLng latLng = new LatLng(lat, lng);
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 7));
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.getUiSettings().setScrollGesturesEnabled(true);
-        googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        if (googleMap != null) {
+            googleMap.clear();
+            LatLng latLng = new LatLng(lat, lng);
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title(getIntent().getStringExtra(Constants.TITLE));
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+            googleMap.addMarker(markerOptions);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 7));
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        }
     }
 
     @Override

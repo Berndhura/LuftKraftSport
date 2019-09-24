@@ -77,6 +77,7 @@ public class Service {
                 .setLenient()
                 .create();
 
+        /*
         //https
         SSLContext sslContext;
         TrustManager[] trustManagers;
@@ -122,7 +123,9 @@ public class Service {
             OkHttpClient client = new OkHttpClient.Builder()
                     .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0])
                     .build();
+            */
             //https end
+
 
 
 
@@ -131,7 +134,7 @@ public class Service {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(WEB_SERVICE_BASE_URL_V3)
-                .client(client);
+                .client(httpClientV3.build());
 
         restAdapterV2 = builder.build();
 
