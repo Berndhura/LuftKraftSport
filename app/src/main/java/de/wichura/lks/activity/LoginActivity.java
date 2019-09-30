@@ -77,9 +77,6 @@ public class LoginActivity extends AppCompatActivity implements
         Service service = new Service();
         presenter = new LoginPresenter(this, service, getApplicationContext());
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        FacebookCallback<LoginResult> mCallback = initFacebookCallback();
-
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "de.wichura.lks",
@@ -121,25 +118,16 @@ public class LoginActivity extends AppCompatActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        SignInButton signInButton = (SignInButton) findViewById(R.id.google_login_button);
+        SignInButton signInButton = findViewById(R.id.google_login_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setColorScheme(SignInButton.COLOR_DARK);
         signInButton.setHovered(true);
         // signInButton.setScopes(gso.getScopeArray());
         setGooglePlusButton(signInButton, "Anmelden mit Google");
+        signInButton.setOnClickListener(v -> signIn());
 
 
-        findViewById(R.id.google_login_button).setOnClickListener(v -> {
-            switch (v.getId()) {
-                case R.id.google_login_button:
-                    signIn();
-                    break;
-                // ...
-            }
-        });
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.login_toolbar);
+        Toolbar toolbar = findViewById(R.id.login_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -147,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-        Button email_login_button = (Button) findViewById(R.id.email_login_button);
+        Button email_login_button = findViewById(R.id.email_login_button);
         if (email_login_button != null) {
             email_login_button.setOnClickListener((view) -> {
                 if (!validate()) {
@@ -162,25 +150,49 @@ public class LoginActivity extends AppCompatActivity implements
             });
         }
 
-        _emailText = (EditText) findViewById(R.id.login_name);
-        _passwordText = (EditText) findViewById(R.id.password);
+        _emailText = findViewById(R.id.login_name);
+        _passwordText = findViewById(R.id.password);
 
-        Button register = (Button) findViewById(R.id.register);
+        Button register = findViewById(R.id.register);
         register.setOnClickListener(view -> {
             Intent i = new Intent(getApplicationContext(), RegisterUserActivity.class);
             startActivityForResult(i, Constants.REQUEST_ID_FOR_REGISTER_USER);
         });
 
-        LoginButton fbLoginButton = (LoginButton) findViewById(R.id.fb_login_button);
+        LoginButton fbLoginButton = findViewById(R.id.fb_login_button);
         if (fbLoginButton != null) {
-            fbLoginButton.setPublishPermissions("publish_actions");
-            //fbLoginButton.setReadPermissions("user_friends");
-            fbLoginButton.registerCallback(mCallbackMgt, mCallback);
+            //fbLoginButton.setPublishPermissions("publish_actions");
+            fbLoginButton.setReadPermissions("email");
+            fbLoginButton.registerCallback(mCallbackMgt, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    token = loginResult.getAccessToken();
+                    Log.d("CONAN", "Facebook user token: " + token.getUserId());
+                    profile = Profile.getCurrentProfile();
+                    if (profile != null) {
+                        Uri uri = profile.getProfilePictureUri(250, 250);
+                        setUserPreferences(profile.getName(), profile.getId(), uri, Constants.FACEBOOK_USER, token.getToken());
+                        Intent loginComplete = new Intent(Constants.LOGIN_COMPLETE);
+                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
+                    }
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+
+                @Override
+                public void onError(FacebookException error) {
+                    Log.d("CONAN", "Facebook error: " + error.getLocalizedMessage());
+                }
+            });
         }
+
         adaptFacebookButton(fbLoginButton);
         setFbButton(fbLoginButton, "Anmelden mit Facebook");
 
-        progressBar = (AVLoadingIndicatorView) findViewById(R.id.login_ProgressBar);
+        progressBar = findViewById(R.id.login_ProgressBar);
     }
 
     private void adaptFacebookButton(LoginButton loginButton) {
@@ -230,31 +242,6 @@ public class LoginActivity extends AppCompatActivity implements
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private FacebookCallback<LoginResult> initFacebookCallback() {
-        return new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                token = loginResult.getAccessToken();
-                Log.d("CONAN", "Facebook user token: " + token.getUserId());
-                profile = Profile.getCurrentProfile();
-                if (profile != null) {
-                    Uri uri = profile.getProfilePictureUri(250, 250);
-                    setUserPreferences(profile.getName(), profile.getId(), uri, Constants.FACEBOOK_USER, token.getToken());
-                    Intent loginComplete = new Intent(Constants.LOGIN_COMPLETE);
-                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
-                }
-            }
-
-            @Override
-            public void onCancel() {
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-            }
-        };
     }
 
     @Override

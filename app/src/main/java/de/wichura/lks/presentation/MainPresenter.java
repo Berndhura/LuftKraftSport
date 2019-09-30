@@ -591,7 +591,7 @@ public class MainPresenter {
 
     public void sendUserPicToServer(String userProfilePic) {
 
-        Log.d("CONAN", "FART: " + userProfilePic);
+        Log.d("CONAN", "send profile image to server: " + userProfilePic);
         service.saveUserPictureObserv(getUserToken(), userProfilePic)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
