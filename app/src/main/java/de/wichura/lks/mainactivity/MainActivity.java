@@ -523,7 +523,7 @@ public class MainActivity extends AppCompatActivity implements
         adapter = new MainListViewAdapter(
                 this,
                 getApplicationContext(),
-                R.layout.list_item, rowItems,
+                R.layout.list_item_new, rowItems,
                 elements.getBookmarks());
 
         listView.setAdapter(adapter);

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -94,7 +96,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.list_item, parent, false);
+            convertView = mInflater.inflate(R.layout.list_item_new, parent, false);
             holder = new ViewHolder();
             holder.txtTitle = convertView.findViewById(R.id.title);
             holder.txtPrice = convertView.findViewById(R.id.price);
@@ -105,7 +107,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
             holder.mainLl = convertView.findViewById(R.id.main_linear_layout);
             holder.deleteButton = convertView.findViewById(R.id.NEW_my_ad_delete);
             holder.editButton = convertView.findViewById(R.id.edit_my_article);
-            holder.txtViews = convertView.findViewById(R.id.NEW_my_views);
+            holder.txtViews = convertView.findViewById(R.id.article_views);
             holder.txtNumberOfBookmarks = convertView.findViewById(R.id.number_of_bookmarks);
             holder.thumbNail = convertView.findViewById(R.id.icon);
             holder.new_ad_marker = convertView.findViewById(R.id.new_ad_marker);
@@ -117,18 +119,42 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         // getting ad data for the row
         final RowItem rowItem = getItem(position);
 
+        Transformation transformation = new Transformation() {
+
+            @Override
+            public Bitmap transform(Bitmap source) {
+                int targetWidth = holder.thumbNail.getWidth();
+
+                double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
+                int targetHeight = (int) (targetWidth * aspectRatio);
+                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+                if (result != source) {
+                    // Same bitmap is returned if sizes are the same
+                    source.recycle();
+                }
+                return result;
+            }
+
+            @Override
+            public String key() {
+                return "transformation" + " desiredWidth";
+            }
+        };
+
         Picasso.with(context)
-                .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + ((rowItem.getPictureIds().length > 0) ? rowItem.getPictureIds()[0] : "") + "/thumbnail")
+                .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + ((rowItem.getPictureIds().length > 0) ? rowItem.getPictureIds()[0] : ""))
                 .placeholder(R.drawable.lks_app_logo)
-                .resize(100, 100)
-                .centerCrop()
+                //.transform(transformation)
+                .fit()
+                //.networkPolicy(NetworkPolicy.OFFLINE)
                 .into(holder.thumbNail);
-        Log.d("LA", Urls.MAIN_SERVER_URL_V3 + "pictures/" + ((rowItem.getPictureIds().length > 0) ? rowItem.getPictureIds()[0] : "") + "/thumbnail");
+
+        Log.d("LA", Urls.MAIN_SERVER_URL_V3 + "pictures/" + ((rowItem.getPictureIds().length > 0) ? rowItem.getPictureIds()[0] : ""));
 
         holder.txtTitle.setText(rowItem.getTitle());
 
         holder.txtPrice.setText(Utility.getPriceString(rowItem.getPrice()));
-        holder.txtDate.setText(new SimpleDateFormat("dd MMM").format(rowItem.getDate()));
+        holder.txtDate.setText("Erstellt am "+ new SimpleDateFormat("dd. MMM").format(rowItem.getDate()));
 
         if (isMyAdsRequest()) {
             holder.distance.setText(rowItem.getLocationName());
@@ -150,6 +176,10 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 holder.bookmarkStar.setImageResource(R.drawable.bockmark_star_empty);
             }
         }
+
+        //Views
+        holder.txtViews.setText(rowItem.getViews()+ " Aufrufe");
+        holder.txtNumberOfBookmarks.setText(rowItem.getBookmarks());
 
         //no login -> disable bookmark button
         if ("".equals(getUserToken())) {
@@ -216,10 +246,6 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 i.putExtra(Constants.DATE, rowItem.getDate());
                 activity.startActivityForResult(i, Constants.REQUEST_ID_FOR_NEW_AD);
             });
-
-            //Views
-            holder.txtViews.setText(rowItem.getViews());
-            holder.txtNumberOfBookmarks.setText(rowItem.getBookmarks());
         }
 
         return convertView;

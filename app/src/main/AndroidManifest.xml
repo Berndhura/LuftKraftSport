@@ -22,6 +22,7 @@
     <application
         android:name="de.wichura.lks.mainactivity.MainApp"
         android:allowBackup="true"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
