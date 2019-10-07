@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,6 +36,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -62,9 +64,7 @@ import de.wichura.lks.util.Utility;
 import static de.wichura.lks.R.id.map;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
-public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, OnMapReadyCallback {
+public class OpenAdActivity extends FragmentActivity implements OnMapReadyCallback {
 
     public Button mBookmarkButton;
     public boolean isBookmarked;
@@ -106,19 +106,19 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
         utils = new Utility(this);
 
-        MapsInitializer.initialize(this);
+       // MapsInitializer.initialize(this);
 
         presenter = new OpenAdPresenter(this, new Service(), getApplicationContext());
 
-        checkGoogleConnection(savedInstanceState);
+        //checkGoogleConnection(savedInstanceState);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.open_ad_toolbar);
-        if (toolbar != null) {
+       /* if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             toolbar.setNavigationOnClickListener((view) -> finish());
-        }
+        } */
 
         mOpenAdProgressBar = (AVLoadingIndicatorView) findViewById(R.id.open_Ad_ProgressBar);
         mTitleText = (TextView) findViewById(R.id.title);
@@ -174,6 +174,11 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
             setupPanel(pictureUri, ownerId);
 
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+
+
         } else {
             //intent comes from notification -> get article first
             presenter.getAd(getIntent().getIntExtra(Constants.ID, 0));
@@ -184,12 +189,12 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
             presenter.getSellerInformation(getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
         }
 
-        buildGoogleApiClient();
+        //buildGoogleApiClient();
 
-        mGoogleApiClient.connect();
+        //mGoogleApiClient.connect();
     }
 
-    private void checkGoogleConnection(Bundle savedInstanceState) {
+   /* private void checkGoogleConnection(Bundle savedInstanceState) {
         switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
             case ConnectionResult.SUCCESS: {
                 MapView mapView = (MapView) findViewById(map);
@@ -204,7 +209,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
                 Log.d("CONAN", "Google play service: ConnectionResult.NETWORK_ERROR");
             }
         }
-    }
+    }*/
 
     public void prepareDataFromArticle(ArticleDetails articleDetails) {
 
@@ -230,7 +235,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         setupPanel(pictureUri, ownerId);
         //TODO ok mit onConnect nochmal aufrufen?
         //daten fuer artikel kommen später als onConnect
-        onConnected(null);
+        //onConnected(null);
     }
 
     private void setupPanel(String pictureUri, String ownerId) {
@@ -378,17 +383,15 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
+
+        // Add a marker in Sydney, Australia, and move the camera.
+        LatLng sydney = new LatLng(-34, 151);
+        googleMap.clear();
+        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     public void updateBookmarkButton(Long[] bookmark) {
@@ -479,7 +482,7 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
         return getApplicationContext();
     }
 
-    @Override
+  /*  @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d("CONAN", "in onConnected in OpenActivity");
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
@@ -509,5 +512,5 @@ public class OpenAdActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onLocationChanged(Location location) {
-    }
+    } */
 }

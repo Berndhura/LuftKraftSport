@@ -15,28 +15,25 @@
       },
       "oauth_client": [
         {
-          "client_id": "225684928245-p2059i7v6002c29njmm5l0clus9g16k8.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "225684928245-snid9lcthfjn7r2ll5mb7f1v5ddd7rb0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.wichura.lks",
+            "certificate_hash": "cec30516c060d1266e25ff122b5c56faea6a47d7"
+          }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCf24X06XRzETm2clxlEh61rn1zrDuCxM0"
+          "current_key": "AIzaSyA8x3Il4-xgNij1FSOxQkMYX4_1bzVo12k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "225684928245-p2059i7v6002c29njmm5l0clus9g16k8.apps.googleusercontent.com",
+              "client_id": "225684928245-21lot3bitst9q7te84fq0kcc1bel3pl7.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "225684928245-cvnc51d5m9jhali8c2ju1lrs97v60qo2.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "de.wichura.lks"
-              }
             }
           ]
         }
