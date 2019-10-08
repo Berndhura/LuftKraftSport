@@ -2,16 +2,18 @@ package de.wichura.lks.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import de.wichura.lks.R;
 import de.wichura.lks.mainactivity.Constants;
@@ -25,7 +27,7 @@ import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 public class SettingsActivity extends AppCompatActivity {
 
     private TextView loginInfo;
-    private ImageView shareApp;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         setContentView(R.layout.settings_layout);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+        Toolbar toolbar = findViewById(R.id.settings_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -41,10 +43,10 @@ public class SettingsActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-        loginInfo = (TextView) findViewById(R.id.login_info_text);
+        loginInfo = findViewById(R.id.login_info_text);
         loginInfo.setText("Angemeldet als: " + getUserName());
 
-        shareApp = (ImageView) findViewById(R.id.share_luftkraftsport_app);
+        ImageView shareApp = findViewById(R.id.share_luftkraftsport_app);
         shareApp.setOnClickListener(view -> {
             final Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Klicke den Link an: https://play.google.com/store/apps/details?id=de.wichura.lks");
@@ -52,11 +54,20 @@ public class SettingsActivity extends AppCompatActivity {
             startActivity(Intent.createChooser(shareIntent, "Teile Luftkraftsport"));
         });
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestId()
+                .requestProfile()
+                .requestIdToken(Constants.WEB_CLIENT_ID)
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
         initLogoutButton();
     }
 
     private void initLogoutButton() {
-        Button logoutBtn = (Button) findViewById(R.id.logout_button);
+        Button logoutBtn = findViewById(R.id.logout_button);
         if (isUserLoggedIn()) {
             logoutBtn.setText("Abmelden");
         } else {
@@ -67,6 +78,8 @@ public class SettingsActivity extends AppCompatActivity {
                 //logout from Facebook
                 LoginManager.getInstance().logOut();
                 //in case email login just delete sharedPrefs
+                //sign out from Google
+                signOutFromGoogle();
                 updateUserInfo();
                 finish();
             } else {
@@ -85,6 +98,12 @@ public class SettingsActivity extends AppCompatActivity {
             setResult(RESULT_OK, data);
             finish();
         }
+    }
+
+    private void signOutFromGoogle() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, task ->
+                        Log.d("CONAN", "Sign Out from Google done!"));
     }
 
     private void updateUserInfo() {
