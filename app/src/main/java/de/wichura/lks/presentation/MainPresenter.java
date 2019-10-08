@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +21,9 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +43,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.Context.MODE_PRIVATE;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.TYPE_ALL;
@@ -577,6 +582,8 @@ public class MainPresenter {
 
     public Double getLng() {
         SharedPreferences settings = context.getSharedPreferences(Constants.USERS_LOCATION, 0);
+        Double bla = Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
+        Log.d("CONAN LONGE", bla.toString());
         return Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
     }
 
@@ -618,17 +625,23 @@ public class MainPresenter {
     }
 
     public void getLastKnownLocation() {
+
+        ActivityCompat.requestPermissions(activity, new String[]{ACCESS_COARSE_LOCATION}, 1);
         //get last location
-        if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(activity, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(activity.getGoogleApiClient());
+            FusedLocationProviderClient locationClient = LocationServices.getFusedLocationProviderClient(activity);
 
-            if (lastLocation != null) {
-                Double lat = lastLocation.getLatitude();
-                Double lng = lastLocation.getLongitude();
-                //store in Shared prefs
-                storeLocation(lat, lng);
-            }
+            locationClient.getLastLocation().addOnSuccessListener(activity, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    double lat = location.getLatitude();
+                    double lng = location.getLongitude();
+                    Double mu = lat;
+                    Log.d("CONAN", mu.toString());
+                    storeLocation(lat, lng);
+                }
+            });
         }
     }
 
