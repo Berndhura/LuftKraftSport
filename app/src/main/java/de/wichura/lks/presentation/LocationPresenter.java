@@ -60,12 +60,18 @@ public class LocationPresenter {
 
                     @Override
                     public void onNext(JsonObject location) {
-                        JsonElement city = location.get("results").getAsJsonArray()
-                                .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
-                                .get(2).getAsJsonObject().get("long_name");
+                        if (location.get("error_message").getAsString() != null) {
+                            Log.d("CONAN", location.get("error_message").getAsString());
+                            return;
+                        }
+                        if (location.get("results").getAsString() != null) {
+                            JsonElement city = location.get("results").getAsJsonArray()
+                                    .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
+                                    .get(2).getAsJsonObject().get("long_name");
 
-                        Log.d("CONAN", "city name from google maps api: " + city);
-                        storeCityName(lat, lng, city.getAsString());
+                            Log.d("CONAN", "city name from google maps api: " + city);
+                            storeCityName(lat, lng, city.getAsString());
+                        }
                     }
 
                     @Override
