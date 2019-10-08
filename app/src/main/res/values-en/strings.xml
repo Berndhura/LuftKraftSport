@@ -18,7 +18,7 @@
     <string name="enter_title_string">Titel</string>
     <string name="submit_string">Submit</string>
     <string name="facebook_app_id">535532649933816</string>
-    <string name="google_maps_key">AIzaSyCf24X06XRzETm2clxlEh61rn1zrDuCxM0</string>
+    <string name="google_maps_key">AIzaSyA8x3Il4-xgNij1FSOxQkMYX4_1bzVo12k</string>
     <string name="server_client_id">485775614575-bgge92h3jhg7hm24qlmrl7bekcd64mbp.apps.googleusercontent.com</string>
     <string name="title_new_add_page" tools:ignore="MissingTranslation">Create</string>
     <string name="uploadAd">Create Ad</string>
