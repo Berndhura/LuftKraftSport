@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements
         checkLocationServiceEnabled();
 
         //TODO last location hier holen oder in onConnect nutzen?
-        //presenterLayer.getLastKnownLocation();
+        presenterLayer.getLastKnownLocation();
 
         //TODO: set active false in messageActivity in onDestroy, onStop, on???  BUT NOT HERE
         SharedPreferences sp = getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE);
