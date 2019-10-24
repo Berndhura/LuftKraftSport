@@ -33,6 +33,7 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 //import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
@@ -65,70 +66,17 @@ public class Service {
 
     public Service() {
 
-      //  HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-      //  logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         //api/V3
         OkHttpClient.Builder httpClientV3 = new OkHttpClient.Builder();
 
-      //httpClientV3.addInterceptor(logging);
+        httpClientV3.addInterceptor(logging);
 
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
-
-        /*
-        //https
-        SSLContext sslContext;
-        TrustManager[] trustManagers;
-        try {
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keyStore.load(null, null);
-
-            InputStream fis = null;
-            try {
-                //fis = new java.io.FileInputStream("/Users/digiconan/StudioProjects/LuftKraftSport/app/src/main/assets/lks.pem");
-                fis = Resources.getSystem().getAssets().open( "lks.pem");
-                String pw = "Bw12345!";
-                char[] password = new char[] { 'B', 'w', '1', '2', '3', '4', '5', '!' };
-                    keyStore.load(fis, password);
-                } finally{
-                    if (fis != null) {
-                        fis.close();
-                    }
-                }
-
-
-
-                //getAssets()  only with context possible
-                //InputStream certInputStream = getAssets().open("lks.pem");
-
-
-                BufferedInputStream bis = new BufferedInputStream(fis);
-                CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-                while (bis.available() > 0) {
-                    Certificate cert = certificateFactory.generateCertificate(bis);
-                    keyStore.setCertificateEntry("www.luftkraftsport.de", cert);
-                }
-                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-                trustManagerFactory.init(keyStore);
-                trustManagers = trustManagerFactory.getTrustManagers();
-                sslContext = SSLContext.getInstance("TLS");
-                sslContext.init(null, trustManagers, null);
-            } catch (Exception e) {
-                e.printStackTrace(); //TODO replace with real exception handling tailored to your needs
-                return;
-            }
-
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0])
-                    .build();
-            */
-            //https end
-
-
-
-
 
             builder = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

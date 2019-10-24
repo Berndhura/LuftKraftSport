@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 
 import de.wichura.lks.activity.NewAdActivity;
 import de.wichura.lks.http.GoogleService;
+import de.wichura.lks.util.SharedPrefsHelper;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,53 +26,56 @@ public class NewArticlePresenter {
     private Context context;
     private GoogleService googleService;
     private NewAdActivity view;
+    private SharedPrefsHelper sharedPrefsHelper;
 
     public NewArticlePresenter(Context applicationContext, NewAdActivity view) {
         this.context = applicationContext;
         this.googleService = new GoogleService();
         this.view = view;
+        this.sharedPrefsHelper = new SharedPrefsHelper(view);
     }
 
-    public void getCityNameFromLatLng(Double lat, Double lng) {
-
-        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFromLatLngObserable(lat, lng, false);
-
-        getCityNameFromLatLng
+    public void getLatLngFromAddress(String address) {
+        googleService.getLatLngFromAddressObservable(address)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonObject>() {
                     @Override
-                    public void onComplete() {
-                    }
+                    public void onComplete() { }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("CONAN", "new Article Presenter: error in getting city name from google maps api: " + e.toString());
+                        Log.d("CONAN", "on Error in getLatLngFromAddress " + e.getLocalizedMessage() );
                     }
 
                     @Override
                     public void onNext(JsonObject location) {
 
                         if (location.get("error_message") != null) {
-                            Log.d("CONAN", "problem with google maps api: " + location.get("status"));
+                            Log.d("CONAN", "problem with google maps api Geocoding: " + location.get("status"));
                             Toast.makeText(context, "Problem with google maps", Toast.LENGTH_SHORT).show();
                             //todo what if google map api does not work? default location
-                            view.setCityName("Texas");
+
                         } else {
 
                             JsonElement city = location.get("results").getAsJsonArray()
                                     .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
-                                    .get(2).getAsJsonObject().get("long_name");
+                                    .get(0).getAsJsonObject().get("long_name");
 
-                            Log.d("CONAN", "city name from google maps api: " + city);
+                            Float lat = location.get("results").getAsJsonArray().get(0).getAsJsonObject().get("geometry").getAsJsonObject().get("location").getAsJsonObject().get("lat").getAsFloat();
+                            Float lng = location.get("results").getAsJsonArray().get(0).getAsJsonObject().get("geometry").getAsJsonObject().get("location").getAsJsonObject().get("lng").getAsFloat();
+
+                            sharedPrefsHelper.setLastLocationName(city.getAsString());
+                            sharedPrefsHelper.setLastLocationCoordinates(lat, lng);
+
+                            Log.d("CONAN", "city name from google maps api: " + city + lat + lng);
                             view.setCityName(city.getAsString());
+                            view.isLocationSet = true;
                         }
                     }
 
                     @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
+                    public void onSubscribe(Disposable d) { }
                 });
     }
 }

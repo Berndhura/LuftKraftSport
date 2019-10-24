@@ -35,6 +35,9 @@ public class Constants {
     public static final String USER_PICTURE = "user_picture";
     public static final String USER_TYPE = "user_type";
     public static final String USER_TOKEN = "user_token";
+    public static final String LAST_LOCATION_NAME = "last_location_name";
+    public static final String LAST_LAT = "last_lat";
+    public static final String LAST_LNG = "last_lng";
 
     public static final String GOOGLE_USER = "google_user";
     public static final String EMAIL_USER = "email_user";
@@ -83,6 +86,7 @@ public class Constants {
     public static final String SHOW_MY_ADS = "showMyAds";
     public static final String SHOW_BOOKMARKS = "showBookmarks";
     public static final String SHARED_PREFS_USER_INFO = "UserInfo";
+    public static final String SHARED_PREFS_LOCATION = "lastLoacation";
     public static final String USERS_LOCATION = "usersLocation";
     public static final String LOCATION_SERVICE_IS_ENABLED = "locationServiceIsEnabled";
     public static final String USER_PRICE_RANGE = "usersPriceRange";

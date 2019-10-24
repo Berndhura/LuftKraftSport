@@ -4,8 +4,6 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -33,7 +31,6 @@ import com.google.android.gms.location.LocationServices;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,16 +42,14 @@ import de.wichura.lks.http.Urls;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.FileNameParcelable;
 import de.wichura.lks.presentation.NewArticlePresenter;
+import de.wichura.lks.util.SharedPrefsHelper;
 import de.wichura.lks.util.Utility;
 import jp.wasabeef.picasso.transformations.CropSquareTransformation;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 
-public class NewAdActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        ZipDialogFragment.OnCompleteListener {
+public class NewAdActivity extends AppCompatActivity implements ZipDialogFragment.OnCompleteListener {
 
     private EditText mDescription;
     private EditText mTitle;
@@ -81,21 +76,23 @@ public class NewAdActivity extends AppCompatActivity implements
     private LinearLayout emptyBackgroundLl;
     private LinearLayout mainLl;
 
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
     private TextView locationName;
-    private Boolean isLocationSet;
+    public Boolean isLocationSet;
     private double lat;
     private double lng;
 
     private LinearLayout main;
 
+    private SharedPrefsHelper sharedPrefsHelper;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        sharedPrefsHelper = new SharedPrefsHelper(this);
+
         setContentView(R.layout.new_ad_acivity);
-        main = (LinearLayout) findViewById(R.id.main_create_layout);
+        main = findViewById(R.id.main_create_layout);
         main.setVisibility(View.GONE);
 
         //Android 6 and higher: request permission
@@ -119,16 +116,7 @@ public class NewAdActivity extends AppCompatActivity implements
         changedImages = new Boolean[5];
         for (int i = 0; i < 5; i++) changedImages[i] = false;
 
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.new_ad_toolbar);
+        Toolbar toolbar = findViewById(R.id.new_ad_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             if (getSupportActionBar() != null) {
@@ -148,17 +136,19 @@ public class NewAdActivity extends AppCompatActivity implements
 
         isEditMode = false;
 
+        setupLocation();
+
         initProgressBars();
 
-        emptyBackgroundLl = (LinearLayout) findViewById(R.id.upload_background);
-        mainLl = (LinearLayout) findViewById(R.id.main_upload_linear_layout);
+        emptyBackgroundLl = findViewById(R.id.upload_background);
+        mainLl = findViewById(R.id.main_upload_linear_layout);
 
         fileUploadService = new FileUploadService(getApplicationContext(), this);
         presenter = new NewArticlePresenter(getApplicationContext(), this);
 
-        mDescription = (EditText) findViewById(R.id.new_ad_description);
-        mTitle = (EditText) findViewById(R.id.new_ad_title);
-        mPrice = (EditText) findViewById(R.id.new_ad_price);
+        mDescription = findViewById(R.id.new_ad_description);
+        mTitle = findViewById(R.id.new_ad_title);
+        mPrice = findViewById(R.id.new_ad_price);
 
         initImageViews();
 
@@ -216,7 +206,7 @@ public class NewAdActivity extends AppCompatActivity implements
             Log.d("CONAN", "edit: " + articleIdForEdit);
         }
 
-        submitButton = (Button) findViewById(R.id.uploadButton);
+        submitButton = findViewById(R.id.uploadButton);
         if (isEditMode) submitButton.setText("Speichern");
         submitButton.setOnClickListener((v) -> {
 
@@ -298,11 +288,11 @@ public class NewAdActivity extends AppCompatActivity implements
     }
 
     private void initProgressBars() {
-        progress.add((ProgressBar) findViewById(R.id.upload_ProgressBar1));
-        progress.add((ProgressBar) findViewById(R.id.upload_ProgressBar2));
-        progress.add((ProgressBar) findViewById(R.id.upload_ProgressBar3));
-        progress.add((ProgressBar) findViewById(R.id.upload_ProgressBar4));
-        progress.add((ProgressBar) findViewById(R.id.upload_ProgressBar5));
+        progress.add(findViewById(R.id.upload_ProgressBar1));
+        progress.add(findViewById(R.id.upload_ProgressBar2));
+        progress.add(findViewById(R.id.upload_ProgressBar3));
+        progress.add(findViewById(R.id.upload_ProgressBar4));
+        progress.add(findViewById(R.id.upload_ProgressBar5));
 
         for (ProgressBar pb : progress) {
             pb.setVisibility(View.GONE);
@@ -312,10 +302,10 @@ public class NewAdActivity extends AppCompatActivity implements
 
     private void initImageViews() {
         imageView.add(findViewById(R.id.imageButton));
-        imageView.add((ImageView) findViewById(R.id.imageButton2));
-        imageView.add((ImageView) findViewById(R.id.imageButton3));
-        imageView.add((ImageView) findViewById(R.id.imageButton4));
-        imageView.add((ImageView) findViewById(R.id.imageButton5));
+        imageView.add(findViewById(R.id.imageButton2));
+        imageView.add(findViewById(R.id.imageButton3));
+        imageView.add(findViewById(R.id.imageButton4));
+        imageView.add(findViewById(R.id.imageButton5));
 
         for (int i = 0; i < 5; i++) {
             final Integer COUNTER = i;
@@ -329,11 +319,11 @@ public class NewAdActivity extends AppCompatActivity implements
     }
 
     private void initRemoveImgButtons() {
-        removeImgButton.add((ImageView) findViewById(R.id.removeImage1));
-        removeImgButton.add((ImageView) findViewById(R.id.removeImage2));
-        removeImgButton.add((ImageView) findViewById(R.id.removeImage3));
-        removeImgButton.add((ImageView) findViewById(R.id.removeImage4));
-        removeImgButton.add((ImageView) findViewById(R.id.removeImage5));
+        removeImgButton.add(findViewById(R.id.removeImage1));
+        removeImgButton.add(findViewById(R.id.removeImage2));
+        removeImgButton.add(findViewById(R.id.removeImage3));
+        removeImgButton.add(findViewById(R.id.removeImage4));
+        removeImgButton.add(findViewById(R.id.removeImage5));
 
         for (int i = 0; i < 5; i++) {
             final Integer COUNTER = i;
@@ -417,22 +407,6 @@ public class NewAdActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    protected void onStart() {
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
-    }
-
     private void setupLocation() {
 
         locationName = findViewById(R.id.create_location_name);
@@ -442,32 +416,29 @@ public class NewAdActivity extends AppCompatActivity implements
             lat = getIntent().getDoubleExtra(Constants.LAT, 0);
             lng = getIntent().getDoubleExtra(Constants.LNG, 0);
             String location = getIntent().getStringExtra(Constants.LOCATION_NAME);
-            presenter.getCityNameFromLatLng(lat, lng);
+            setCityName(location);
             isLocationSet = true;
         } else {
-            if (!isLocationSet) {
-                if (mLastLocation != null) {
-                    lat = mLastLocation.getLatitude();
-                    lng = mLastLocation.getLongitude();
-                    presenter.getCityNameFromLatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                    isLocationSet = true;
-                } else {
-                    locationName.setText("Bitte auswählen");
-                    isLocationSet = false;
-                }
+            if (sharedPrefsHelper.getLastLocationName() != "") {
+                lat = sharedPrefsHelper.getLastLat();
+                lng = sharedPrefsHelper.getLastLng();
+                setCityName(sharedPrefsHelper.getLastLocationName());
+                isLocationSet = true;
+            } else {
+                locationName.setText("Bitte auswählen");
+                isLocationSet = false;
             }
         }
-
         locationName.setOnClickListener(v -> new ZipDialogFragment().show(getSupportFragmentManager(), null));
 
-        ImageView location = (ImageView) findViewById(R.id.create_change_location);
+        ImageView location = findViewById(R.id.create_change_location);
         location.setOnClickListener(v -> new ZipDialogFragment().show(getSupportFragmentManager(), null));
     }
 
     @Override
     public void onZipCodeComplete(String zipCode) {
         Log.d("CONAN", "Zipcode from dialog: " + zipCode);
-        getLatLngFromPlz(zipCode);
+        getLatLngFromLocation(zipCode);
     }
 
     public void setCityName(String city) {
@@ -500,29 +471,14 @@ public class NewAdActivity extends AppCompatActivity implements
         mainLl.setVisibility(View.VISIBLE);
     }
 
-    public void getLatLngFromPlz(String zip) {
-        final Geocoder geocoder = new Geocoder(this);
-        try {
-            List<Address> addresses = geocoder.getFromLocationName(zip, 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                Address address = addresses.get(0);
-
-                //store lat lng for article
-                lat = address.getLatitude();
-                lng = address.getLongitude();
-
-                //location is set -> for validation before upload new article
-                isLocationSet = true;
-
-                //show city name
-                presenter.getCityNameFromLatLng(address.getLatitude(), address.getLongitude());
-            } else {
-                // Display appropriate message when Geocoder services are not available
-                Toast.makeText(getApplicationContext(), "Hat leider nicht geklappt mit deiner PLZ, versuche nochmal!", Toast.LENGTH_LONG).show();
-            }
-        } catch (IOException e) {
-            // handle exception
-        }
+    public void getLatLngFromLocation(String location) {
+        //TODO unterscheiden ob plz oder ortsname?
+        /*if (location.matches("[0-9]+") && location.length() > 2) {
+            presenter.getLatLngFromZip(location);
+        } else {
+            presenter.getLatLngFromAddress(location);
+        }*/
+        presenter.getLatLngFromAddress(location);
     }
 
     public boolean validateInputs() {
@@ -565,25 +521,5 @@ public class NewAdActivity extends AppCompatActivity implements
 
     public String getUserToken() {
         return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        int accessCoarseLoc = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (accessCoarseLoc == PackageManager.PERMISSION_GRANTED)
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        //got the location -> get city name and show it on UI
-        setupLocation();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }

@@ -13,6 +13,7 @@ public class Urls {
     //old https
     public static final String MAIN_SERVER_URL_V3 = "http://52.29.200.187:80/api/V3/";
     //public static final String MAIN_SERVER_URL_V3 = "https://52.59.68.97:443/api/V3/";
-    public static final String GOOGLE_MAPS_URL = "http://maps.googleapis.com/maps/api/";
+    //public static final String GOOGLE_MAPS_URL = "http://maps.googleapis.com/maps/api/";
+    public static final String GOOGLE_MAPS_URL = "https://maps.googleapis.com/maps/api/geocode/";
 }
 

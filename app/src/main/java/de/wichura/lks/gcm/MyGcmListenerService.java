@@ -18,7 +18,12 @@ import com.google.firebase.messaging.RemoteMessage;
 import de.wichura.lks.R;
 import de.wichura.lks.activity.MessagesActivity;
 import de.wichura.lks.activity.OpenAdActivity;
+import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
@@ -169,4 +174,57 @@ public class MyGcmListenerService extends FirebaseMessagingService {
     private Boolean isMessageActivityActive() {
         return getSharedPreferences(Constants.MESSAGE_ACTIVITY, MODE_PRIVATE).getBoolean("active", false);
     }
+
+    /**
+     * Called if InstanceID token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is called when the InstanceID token
+     * is initially generated so this is where you would retrieve the token.
+     */
+    @Override
+    public void onNewToken(String token) {
+        Log.d(TAG, "Refreshed token: " + token);
+
+        // If you want to send messages to this application instance or
+        // manage this apps subscriptions on the server side, send the
+        // Instance ID token to your app server.
+        sendRegistrationToServer(token);
+    }
+
+    public void sendRegistrationToServer(String deviceToken) {
+        Service service = new Service();
+
+        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
+        String userId = settings.getString(Constants.USER_ID, "");
+        String userToken = settings.getString(Constants.USER_TOKEN, "");
+
+        if (!userId.equals("")) {
+            service.sendDeviceTokenObserv(userToken, deviceToken)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<String>() {
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(String result) {
+                            Log.d("CONAN", "send device token to server: " + result);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("CONAN", "error in sending device token: " + e.getMessage());
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                            Log.d("CONAN", "send device token to server");
+                        }
+                    });
+        }
+    }
+
 }

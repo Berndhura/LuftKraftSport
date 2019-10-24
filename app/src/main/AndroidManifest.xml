@@ -57,13 +57,6 @@
         </service>
 
         <service
-            android:name="de.wichura.lks.gcm.MyInstanceIDListenerService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-
-        <service
             android:name="de.wichura.lks.gcm.RegistrationIntentService"
             android:exported="false">
         </service>
@@ -123,6 +116,10 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
     </application>
 </manifest>
