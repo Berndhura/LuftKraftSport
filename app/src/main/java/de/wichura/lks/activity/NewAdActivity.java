@@ -419,7 +419,7 @@ public class NewAdActivity extends AppCompatActivity implements ZipDialogFragmen
             setCityName(location);
             isLocationSet = true;
         } else {
-            if (sharedPrefsHelper.getLastLocationName() != "") {
+            if (!sharedPrefsHelper.getLastLocationName().equals("")) {
                 lat = sharedPrefsHelper.getLastLat();
                 lng = sharedPrefsHelper.getLastLng();
                 setCityName(sharedPrefsHelper.getLastLocationName());
