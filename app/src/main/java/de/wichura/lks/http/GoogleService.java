@@ -21,6 +21,8 @@ public class GoogleService {
 
     private static final String GOOGLE_WEB = Urls.GOOGLE_MAPS_URL;
 
+    private String API_KEY = "AIzaSyA8x3Il4-xgNij1FSOxQkMYX4_1bzVo12k";
+
     private final GoogleService.WebService mGoogleWebService;
 
     public GoogleService() {
@@ -30,7 +32,6 @@ public class GoogleService {
 
         //Google api
         OkHttpClient.Builder httpGoogleClient = new OkHttpClient.Builder();
-
 
         httpGoogleClient.addInterceptor(logging);
 
@@ -50,22 +51,22 @@ public class GoogleService {
 
     private interface WebService {
 
-        @GET("geocode/json")
+        @GET("json")
         Observable<JsonObject> getCityNameFromLatLng(@Query("latlng") String latlng,
-                                                     @Query("sensor") Boolean sensor);
+                                                     @Query("key") String api_key);
 
         @GET("json")
         Observable<JsonObject> getLatLngFromAddress(@Query("address") String address,
+                                                    @Query("region") String region,
                                                     @Query("key") String api_key);
     }
 
-    public Observable<JsonObject> getCityNameFromLatLngObserable(Double lat, Double lng, Boolean sensor) {
+    public Observable<JsonObject> getCityNameFromLatLngObserable(Double lat, Double lng) {
         String latlng = lat + "," + lng;
-        return mGoogleWebService.getCityNameFromLatLng(latlng, sensor);
+        return mGoogleWebService.getCityNameFromLatLng(latlng, API_KEY);
     }
 
     public Observable<JsonObject> getLatLngFromAddressObservable(String address) {
-        return mGoogleWebService.getLatLngFromAddress(address,
-                "AIzaSyA8x3Il4-xgNij1FSOxQkMYX4_1bzVo12k");
+        return mGoogleWebService.getLatLngFromAddress(address, "de", API_KEY);
     }
 }

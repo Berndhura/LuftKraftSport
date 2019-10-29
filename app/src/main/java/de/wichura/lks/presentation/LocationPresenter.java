@@ -6,8 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import de.wichura.lks.activity.LocationFragment;
 import de.wichura.lks.activity.SearchActivity;
@@ -43,7 +49,7 @@ public class LocationPresenter {
 
     public void saveUsersLocation(Double lat, Double lng) {
 
-        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFromLatLngObserable(lat, lng, false);
+        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFromLatLngObserable(lat, lng);
 
         getCityNameFromLatLng
                 .subscribeOn(Schedulers.io())
@@ -60,17 +66,11 @@ public class LocationPresenter {
 
                     @Override
                     public void onNext(JsonObject location) {
-                        if (location.get("error_message").getAsString() != null) {
-                            Log.d("CONAN", location.get("error_message").getAsString());
-                            return;
-                        }
-                        if (location.get("results").getAsString() != null) {
-                            JsonElement city = location.get("results").getAsJsonArray()
-                                    .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
-                                    .get(2).getAsJsonObject().get("long_name");
-
-                            Log.d("CONAN", "city name from google maps api: " + city);
-                            storeCityName(lat, lng, city.getAsString());
+                        try {
+                            JSONObject json = new JSONObject(location.toString());
+                            parseForLocality(json);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
 
@@ -79,6 +79,30 @@ public class LocationPresenter {
 
                     }
                 });
+    }
+
+    private void parseForLocality(JSONObject json) {
+        try {
+            JSONArray array = json.getJSONArray("results");
+            if (array.length() > 0) {
+
+                JSONObject obj = array.getJSONObject(0);
+                JSONArray addrComp = obj.getJSONArray("address_components");
+                int i=0;
+                while (i < addrComp.length()) {
+                    JSONArray types=  addrComp.getJSONObject(i).getJSONArray("types");
+                    if (types.getString(0).equals("locality")) {
+                        String city = addrComp.getJSONObject(i).getString("short_name");
+                        Log.d("CONAN", city);
+                        return;
+                    } else {
+                        i++;
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e("CONAN", e.toString());
+        }
     }
 
     private void storeCityName(Double lat, Double lng, String location) {

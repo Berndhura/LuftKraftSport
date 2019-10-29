@@ -15,8 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -71,9 +69,9 @@ public class SearchesActivity extends Fragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        emptyView = (LinearLayout) view.findViewById(R.id.searches_overview_empty_page);
+        emptyView = view.findViewById(R.id.searches_overview_empty_page);
 
-        progressBar = (AVLoadingIndicatorView) view.findViewById(R.id.searches_overview_ProgressBar);
+        progressBar = view.findViewById(R.id.searches_overview_ProgressBar);
         mainView = view;
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.searches_overview_toolbar);

@@ -10,7 +10,6 @@ import com.google.gson.JsonObject;
 import de.wichura.lks.activity.NewAdActivity;
 import de.wichura.lks.http.GoogleService;
 import de.wichura.lks.util.SharedPrefsHelper;
-import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -62,13 +61,13 @@ public class NewArticlePresenter {
                                     .get(0).getAsJsonObject().get("address_components").getAsJsonArray()
                                     .get(0).getAsJsonObject().get("long_name");
 
-                            Float lat = location.get("results").getAsJsonArray().get(0).getAsJsonObject().get("geometry").getAsJsonObject().get("location").getAsJsonObject().get("lat").getAsFloat();
-                            Float lng = location.get("results").getAsJsonArray().get(0).getAsJsonObject().get("geometry").getAsJsonObject().get("location").getAsJsonObject().get("lng").getAsFloat();
+                            Double lat = location.get("results").getAsJsonArray().get(0).getAsJsonObject().get("geometry").getAsJsonObject().get("location").getAsJsonObject().get("lat").getAsDouble();
+                            Double lng = location.get("results").getAsJsonArray().get(0).getAsJsonObject().get("geometry").getAsJsonObject().get("location").getAsJsonObject().get("lng").getAsDouble();
 
                             sharedPrefsHelper.setLastLocationName(city.getAsString());
                             sharedPrefsHelper.setLastLocationCoordinates(lat, lng);
 
-                            Log.d("CONAN", "city name from google maps api: " + city + lat + lng);
+                            Log.d("CONAN", "city name from google maps api: " + city + lat + " " + lng);
                             view.setCityName(city.getAsString());
                             view.isLocationSet = true;
                         }

@@ -33,6 +33,7 @@ import de.wichura.lks.dialogs.SetPriceDialog;
 import de.wichura.lks.dialogs.ShowNetworkProblemDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
+import de.wichura.lks.util.SharedPrefsHelper;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -42,8 +43,6 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static de.wichura.lks.mainactivity.Constants.DISTANCE_INFINITY;
 import static de.wichura.lks.mainactivity.Constants.LAST_SEARCH;
-import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
-import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
 import static de.wichura.lks.mainactivity.Constants.USER_PRICE_RANGE;
 
 /**
@@ -75,9 +74,13 @@ public class SearchFragment extends Fragment {
 
     String priceFrom;
 
+    SharedPrefsHelper sharedPrefsHelper;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        sharedPrefsHelper = new SharedPrefsHelper(getActivity());
 
         View view = inflater.inflate(R.layout.search_activity, container, false);
 
@@ -99,7 +102,7 @@ public class SearchFragment extends Fragment {
 
     private void createGui(View view, Bundle savedInstanceState) {
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.search_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.search_toolbar);
         if (toolbar != null) {
             ((SearchActivity) getActivity()).setSupportActionBar(toolbar);
             if (((SearchActivity) getActivity()).getSupportActionBar() != null) {
@@ -110,7 +113,7 @@ public class SearchFragment extends Fragment {
         }
 
         followSearch.setOnClickListener(v -> {
-            if (!"".equals(getUserToken())) {
+            if (!"".equals(sharedPrefsHelper.getUserToken())) {
                 if (!isSaveSearchValid()) {
                     return;
                 }
@@ -291,7 +294,13 @@ public class SearchFragment extends Fragment {
         String description = keywords.getText().toString();
         Service service = new Service();
 
-        service.saveSearchObserv(description, getMinPrice(), getMaxPrice(), getLat(), getLng(), getDistance(), getUserToken())
+        service.saveSearchObserv(description,
+                getMinPrice(),
+                getMaxPrice(),
+                sharedPrefsHelper.getLastLat(),
+                sharedPrefsHelper.getLastLng(),
+                getDistance(),
+                sharedPrefsHelper.getUserToken())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
@@ -372,39 +381,26 @@ public class SearchFragment extends Fragment {
     }
 
     private void showLocation() {
-        SharedPreferences location = getActivity().getSharedPreferences(Constants.USERS_LOCATION, 0);
+        SharedPreferences location = getActivity().getSharedPreferences(Constants.LAST_LOCATION_NAME, 0);
         int distance = location.getInt(Constants.DISTANCE, DISTANCE_INFINITY);
         if (((SearchActivity) getActivity()).getSupportActionBar() != null) {
             ((SearchActivity) getActivity()).getSupportActionBar()
-                    .setSubtitle("in " + location.getString(Constants.LOCATION, "") + ((DISTANCE_INFINITY.equals(distance)) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)")));
+                    .setSubtitle("in " + location.getString(Constants.LOCATION, "") +
+                            ((DISTANCE_INFINITY.equals(distance)) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)")));
         }
     }
 
     private String getLocationString() {
-        SharedPreferences location = getActivity().getSharedPreferences(Constants.USERS_LOCATION, 0);
+        SharedPreferences location = getActivity().getSharedPreferences(Constants.LAST_LOCATION_NAME, 0);
         int distance = location.getInt(Constants.DISTANCE, DISTANCE_INFINITY);
-        return location.getString(Constants.LOCATION, "") + ((DISTANCE_INFINITY.equals(distance)) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)"));
-    }
-
-    public String getUserToken() {
-        return getActivity().getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TOKEN, "");
-    }
-
-    public Double getLng() {
-        SharedPreferences settings = getActivity().getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
-        return Double.longBitsToDouble(settings.getLong(Constants.LNG, 0));
+        return location.getString(sharedPrefsHelper.getLastLocationName(), "") +
+                ((DISTANCE_INFINITY.equals(distance)) ? (" Unbegrenzt") : (" (+" + location.getInt(Constants.DISTANCE, 0) / 1000 + " km)"));
     }
 
     public int getDistance() {
         SharedPreferences settings = getActivity().getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
         return settings.getInt(Constants.DISTANCE, Constants.DISTANCE_INFINITY);
     }
-
-    public Double getLat() {
-        SharedPreferences settings = getActivity().getApplicationContext().getSharedPreferences(Constants.USERS_LOCATION, 0);
-        return Double.longBitsToDouble(settings.getLong(Constants.LAT, 0));
-    }
-
 
     private void storeLastSearch(String keyword) {
         SharedPreferences settings = getActivity().getSharedPreferences(LAST_SEARCH, 0);

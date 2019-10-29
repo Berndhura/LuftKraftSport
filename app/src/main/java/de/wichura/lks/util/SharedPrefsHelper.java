@@ -24,12 +24,12 @@ public class SharedPrefsHelper {
         return activity.getSharedPreferences(SHARED_PREFS_LOCATION, 0).getString(Constants.LAST_LOCATION_NAME, "");
     }
 
-    public Float getLastLat() {
-        return activity.getSharedPreferences(SHARED_PREFS_LOCATION, 0).getFloat(Constants.LAST_LAT, 0.0f);
+    public Double getLastLat() {
+        return Double.longBitsToDouble(activity.getSharedPreferences(SHARED_PREFS_LOCATION, 0).getLong(Constants.LAT, 0));
     }
 
-    public Float getLastLng() {
-        return activity.getSharedPreferences(SHARED_PREFS_LOCATION, 0).getFloat(Constants.LAST_LNG, 0.0f);
+    public Double getLastLng() {
+        return Double.longBitsToDouble(activity.getSharedPreferences(SHARED_PREFS_LOCATION, 0).getLong(Constants.LNG, 0));
     }
 
     public void setLastLocationName(String locationName) {
@@ -39,11 +39,11 @@ public class SharedPrefsHelper {
         editor.apply();
     }
 
-    public void setLastLocationCoordinates(Float lat, Float lng) {
+    public void setLastLocationCoordinates(Double lat, Double lng) {
         SharedPreferences settings = activity.getSharedPreferences(SHARED_PREFS_LOCATION, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putFloat(Constants.LAST_LAT, lat);
-        editor.putFloat(Constants.LAST_LNG, lng);
+        editor.putLong(Constants.LAT, Double.doubleToRawLongBits(lat));
+        editor.putLong(Constants.LNG, Double.doubleToRawLongBits(lng));
         editor.apply();
     }
 

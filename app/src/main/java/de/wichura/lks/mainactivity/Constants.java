@@ -36,8 +36,6 @@ public class Constants {
     public static final String USER_TYPE = "user_type";
     public static final String USER_TOKEN = "user_token";
     public static final String LAST_LOCATION_NAME = "last_location_name";
-    public static final String LAST_LAT = "last_lat";
-    public static final String LAST_LNG = "last_lng";
 
     public static final String GOOGLE_USER = "google_user";
     public static final String EMAIL_USER = "email_user";

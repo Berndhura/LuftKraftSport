@@ -1,6 +1,5 @@
 package de.wichura.lks.activity;
 
-
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -177,7 +176,7 @@ public class SearchActivity extends AppCompatActivity implements
 
         GoogleService googleService = new GoogleService();
 
-        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFromLatLngObserable(lat, lng, false);
+        Observable<JsonObject> getCityNameFromLatLng = googleService.getCityNameFromLatLngObserable(lat, lng);
 
         getCityNameFromLatLng
                 .subscribeOn(Schedulers.io())
