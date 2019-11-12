@@ -68,7 +68,7 @@ public class LocationPresenter {
                     public void onNext(JsonObject location) {
                         try {
                             JSONObject json = new JSONObject(location.toString());
-                            parseForLocality(json);
+                            parseForLocality(json, lat, lng);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -81,7 +81,7 @@ public class LocationPresenter {
                 });
     }
 
-    private void parseForLocality(JSONObject json) {
+    private void parseForLocality(JSONObject json, Double lat, Double lng) {
         try {
             JSONArray array = json.getJSONArray("results");
             if (array.length() > 0) {
@@ -94,6 +94,7 @@ public class LocationPresenter {
                     if (types.getString(0).equals("locality")) {
                         String city = addrComp.getJSONObject(i).getString("short_name");
                         Log.d("CONAN", city);
+                        storeCityName(lat, lng, city);
                         return;
                     } else {
                         i++;
