@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.wang.avi.AVLoadingIndicatorView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -41,7 +41,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
     private static final String LIST_STATE = "listState";
     private Parcelable mListState = null;
 
-    private AVLoadingIndicatorView mMessagesProgressBar;
+    private CircularProgressIndicator mMessagesProgressBar;
 
     private MsgOverviewPresenter presenter;
 
@@ -49,7 +49,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Service service = new Service();
+        Service service = Service.get();
         presenter = new MsgOverviewPresenter(this, service);
 
         setContentView(R.layout.message_overview_layout);
@@ -62,7 +62,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-        mMessagesProgressBar = (AVLoadingIndicatorView) findViewById(R.id.msg_overview_ProgressBar);
+        mMessagesProgressBar = (CircularProgressIndicator) findViewById(R.id.msg_overview_ProgressBar);
 
         listView = (ListView) findViewById(R.id.message_overview_list);
 

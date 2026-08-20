@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -20,10 +20,10 @@ import de.wichura.lks.activity.MessagesActivity;
 import de.wichura.lks.activity.OpenAdActivity;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
@@ -49,6 +49,7 @@ public class MyGcmListenerService extends FirebaseMessagingService {
 
         //{"message":"joMOFO","sender":"109156770575781620767","type":"message","articleId":"4165","adUrl":"4166","name":"john doe"}
 
+        sendNotification(message.getNotification().getBody(), "331", 123, "maulaffe");
         if ("message".equals(message.getData().get("type"))) {
 
             String messageText = message.getData().get("message");
@@ -107,11 +108,11 @@ public class MyGcmListenerService extends FirebaseMessagingService {
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "channelId")
                 .setSmallIcon(R.drawable.surfing_filled_50)
                 .setContentTitle(name + ": ")
                 .setContentText(message)
@@ -141,7 +142,7 @@ public class MyGcmListenerService extends FirebaseMessagingService {
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -191,7 +192,7 @@ public class MyGcmListenerService extends FirebaseMessagingService {
     }
 
     public void sendRegistrationToServer(String deviceToken) {
-        Service service = new Service();
+        Service service = Service.get();
 
         SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
         String userId = settings.getString(Constants.USER_ID, "");

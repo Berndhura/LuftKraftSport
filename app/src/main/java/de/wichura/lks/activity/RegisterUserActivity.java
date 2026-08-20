@@ -3,8 +3,8 @@ package de.wichura.lks.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,10 +16,10 @@ import de.wichura.lks.dialogs.ShowUserNotActivatedDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.util.Utility;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.ACTIVATE_USER_STATUS;
 
@@ -53,7 +53,7 @@ public class RegisterUserActivity extends AppCompatActivity implements
 
     private void registerUser() {
 
-        Service service = new Service();
+        Service service = Service.get();
 
         name = (EditText) findViewById(R.id.register_user_name);
         email = (EditText) findViewById(R.id.register_user_email);
@@ -143,7 +143,7 @@ public class RegisterUserActivity extends AppCompatActivity implements
 
         ((TextView) findViewById(R.id.register_user_info_box)).setText("Aktiviere Konto...");
 
-        Service service = new Service();
+        Service service = Service.get();
 
         String email = ((TextView) findViewById(R.id.register_user_email)).getText().toString();
         String code = ((TextView) findViewById(R.id.register_user_name)).getText().toString();

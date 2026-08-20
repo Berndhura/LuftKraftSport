@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
+import com.bumptech.glide.Glide;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.wichura.lks.BuildConfig;
 import de.wichura.lks.R;
 import de.wichura.lks.activity.NewAdActivity;
 import de.wichura.lks.http.Service;
@@ -32,11 +32,12 @@ import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.mainactivity.MainActivity;
 import de.wichura.lks.models.RowItem;
 import de.wichura.lks.presentation.MainPresenter;
+import de.wichura.lks.util.MockImages;
 import de.wichura.lks.util.Utility;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.IS_BOOKMARKS;
 import static de.wichura.lks.mainactivity.Constants.IS_MY_ADS;
@@ -64,7 +65,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         } else {
             this.bookmarks = null;
         }
-        service = new Service();
+        service = Service.get();
         presenter = new MainPresenter((MainActivity) activity, service, context);
 
         isLocationSet = isLocationOn();
@@ -118,38 +119,11 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
 
         // getting ad data for the row
         final RowItem rowItem = getItem(position);
-
-        Transformation transformation = new Transformation() {
-
-            @Override
-            public Bitmap transform(Bitmap source) {
-                int targetWidth = holder.thumbNail.getWidth();
-
-                double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
-                int targetHeight = (int) (targetWidth * aspectRatio);
-                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
-                if (result != source) {
-                    // Same bitmap is returned if sizes are the same
-                    source.recycle();
-                }
-                return result;
-            }
-
-            @Override
-            public String key() {
-                return "transformation" + " desiredWidth";
-            }
-        };
-
-        Picasso.with(context)
+        Glide.with(context)
                 .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + ((rowItem.getPictureIds().length > 0) ? rowItem.getPictureIds()[0] : ""))
                 .placeholder(R.drawable.lks_app_logo)
-                //.transform(transformation)
-                .fit()
-                //.networkPolicy(NetworkPolicy.OFFLINE)
+                .error(MockImages.drawableFor(rowItem.getId()))
                 .into(holder.thumbNail);
-
-        Log.d("LA", Urls.MAIN_SERVER_URL_V3 + "pictures/" + ((rowItem.getPictureIds().length > 0) ? rowItem.getPictureIds()[0] : ""));
 
         holder.txtTitle.setText(rowItem.getTitle());
 

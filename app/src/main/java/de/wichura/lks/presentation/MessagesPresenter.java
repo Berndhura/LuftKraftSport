@@ -11,11 +11,11 @@ import de.wichura.lks.models.ArticleDetails;
 import de.wichura.lks.models.MsgRowItem;
 
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by Bernd Wichura on 01.11.2016.
@@ -30,7 +30,7 @@ public class MessagesPresenter {
 
     public MessagesPresenter(MessagesActivity view) {
         this.view = view;
-        this.service = new Service();
+        this.service = Service.get();
     }
 
     public void loadMessages(String userToken, String chatPartner, Integer adId) {

@@ -2,7 +2,8 @@ package de.wichura.lks.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v4.view.PagerAdapter;
+import android.graphics.drawable.Drawable;
+import androidx.viewpager.widget.PagerAdapter;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -13,16 +14,24 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-import com.wang.avi.AVLoadingIndicatorView;
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.wichura.lks.BuildConfig;
 import de.wichura.lks.R;
 import de.wichura.lks.activity.OpenAdActivity;
 import de.wichura.lks.http.Urls;
+import de.wichura.lks.mainactivity.Constants;
+import de.wichura.lks.util.MockImages;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -76,29 +85,27 @@ public class CustomSwipeAdapter extends PagerAdapter {
         View item_view = layoutInflater.inflate(R.layout.swipe_layout, container, false);
         ImageView image_view = (ImageView) item_view.findViewById(R.id.imageView);
 
-        int ratio = Math.round((float) displayWidth / (float) displayWidth);
-        Picasso.with(context)
+        final int adId = activity.getIntent().getIntExtra(Constants.ID, 0);
+        Glide.with(context)
                 .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(position))
                 .placeholder(R.drawable.empty_photo)
-                .resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
+                .error(MockImages.drawableFor(adId))
+                .override((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6))
                 .centerInside()
-                .into(image_view, new Callback() {
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    public void onSuccess() {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         activity.mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
-                        //TODO sichbar wenn webapp soweit
-                        //activity.shareArticle.setVisibility(View.VISIBLE);
+                        return false;
                     }
 
                     @Override
-                    public void onError() {
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         activity.mOpenAdProgressBar.setVisibility(ProgressBar.GONE);
-                        //TODO sichtbar, wenn webapp soweit
-                        //activity.shareArticle.setVisibility(View.VISIBLE);
-                        Toast.makeText(context, "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
-                        showDefaultPic(image_view);
+                        return false;
                     }
-                });
+                })
+                .into(image_view);
 
         container.addView(item_view);
 
@@ -109,32 +116,38 @@ public class CustomSwipeAdapter extends PagerAdapter {
             nagDialog.setCancelable(false);
             nagDialog.setContentView(R.layout.full_screen_image);
 
-            activity.mOpenFullScreenImgProgressBar = (AVLoadingIndicatorView) nagDialog.findViewById(R.id.progress_loading_full_screen_pic);
+            activity.mOpenFullScreenImgProgressBar = (CircularProgressIndicator) nagDialog.findViewById(R.id.progress_loading_full_screen_pic);
             activity.mOpenFullScreenImgProgressBar.setVisibility(View.VISIBLE);
 
             ImageView ivPreview = (ImageView) nagDialog.findViewById(R.id.iv_preview_image);
             PhotoViewAttacher photoView = new PhotoViewAttacher(ivPreview);
             photoView.update();
-            Picasso.with(context)
+            final int fullAdId = activity.getIntent().getIntExtra(Constants.ID, 0);
+            Glide.with(context)
                     .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(position))
+                    .error(MockImages.drawableFor(fullAdId))
+                    .override(displayWidth, displayHeight)
                     .centerInside()
-                    .resize(displayWidth, displayHeight)
-                    .into(ivPreview, new Callback() {
+                    .listener(new RequestListener<Drawable>() {
                         @Override
-                        public void onSuccess() {
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                             activity.mOpenFullScreenImgProgressBar.setVisibility(ProgressBar.GONE);
                             ImageView closeImage = (ImageView) nagDialog.findViewById(R.id.close_full_screen_image);
                             closeImage.setVisibility(View.VISIBLE);
                             closeImage.setOnClickListener(dialog -> nagDialog.dismiss());
+                            return false;
                         }
 
                         @Override
-                        public void onError() {
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                             activity.mOpenFullScreenImgProgressBar.setVisibility(ProgressBar.GONE);
-                            Toast.makeText(context, "Problem beim Laden!", Toast.LENGTH_SHORT).show();
-                            showDefaultPic(image_view);
+                            ImageView closeImage = (ImageView) nagDialog.findViewById(R.id.close_full_screen_image);
+                            closeImage.setVisibility(View.VISIBLE);
+                            closeImage.setOnClickListener(dialog -> nagDialog.dismiss());
+                            return false;
                         }
-                    });
+                    })
+                    .into(ivPreview);
 
             nagDialog.setOnKeyListener((arg0, keyCode, event) -> {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -150,12 +163,9 @@ public class CustomSwipeAdapter extends PagerAdapter {
     }
 
     private void showDefaultPic(ImageView image_view) {
-        int ratio = Math.round((float) displayWidth / (float) displayWidth);
-        Picasso.with(context)
+        Glide.with(context)
                 .load(R.drawable.lks_app_logo)
                 .placeholder(R.drawable.empty_photo)
-                .fit()
-                //.resize((int) Math.round((float) displayWidth * 0.6), (int) Math.round((float) displayHeight * 0.6) * ratio)
                 .centerCrop()
                 .into(image_view);
     }

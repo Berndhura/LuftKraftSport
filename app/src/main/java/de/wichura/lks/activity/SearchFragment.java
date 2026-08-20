@@ -9,9 +9,9 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,21 +23,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wang.avi.AVLoadingIndicatorView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import de.wichura.lks.R;
+import de.wichura.lks.databinding.SearchFieldsBinding;
 import de.wichura.lks.dialogs.ConfirmFollowSearchDialog;
 import de.wichura.lks.dialogs.SetPriceDialog;
 import de.wichura.lks.dialogs.ShowNetworkProblemDialog;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.util.SharedPrefsHelper;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -52,26 +51,16 @@ import static de.wichura.lks.mainactivity.Constants.USER_PRICE_RANGE;
 
 public class SearchFragment extends Fragment {
 
-    @BindView(R.id.keywords)
-    TextView keywords;
+    private SearchFieldsBinding binding;
 
-    @BindView(R.id.price_from)
-    TextView price;
-
-    @BindView(R.id.search_location_zip_and_location)
-    TextView location;
-
-    @BindView(R.id.start_search)
-    Button startSearch;
-
-    @BindView(R.id.follow_search)
-    Button followSearch;
-
-    @BindView(R.id.follow_search_ProgressBar)
-    AVLoadingIndicatorView progressBar;
+    private TextView keywords;
+    private TextView price;
+    private TextView location;
+    private Button startSearch;
+    private Button followSearch;
+    private CircularProgressIndicator progressBar;
 
     String priceTo;
-
     String priceFrom;
 
     SharedPrefsHelper sharedPrefsHelper;
@@ -82,11 +71,22 @@ public class SearchFragment extends Fragment {
 
         sharedPrefsHelper = new SharedPrefsHelper(getActivity());
 
-        View view = inflater.inflate(R.layout.search_activity, container, false);
+        binding = SearchFieldsBinding.inflate(inflater, container, false);
 
-        ButterKnife.bind(this, view);
+        keywords = binding.keywords;
+        price = binding.priceFrom;
+        location = binding.searchLocationZipAndLocation;
+        startSearch = binding.startSearch;
+        followSearch = binding.followSearch;
+        progressBar = binding.followSearchProgressBar;
 
-        return view;
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override
@@ -187,7 +187,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void openLocationFragment() {
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        androidx.fragment.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.layout, new LocationFragment());
         fragmentTransaction.commit();
     }
@@ -292,7 +292,7 @@ public class SearchFragment extends Fragment {
         showProgress();
 
         String description = keywords.getText().toString();
-        Service service = new Service();
+        Service service = Service.get();
 
         service.saveSearchObserv(description,
                 getMinPrice(),

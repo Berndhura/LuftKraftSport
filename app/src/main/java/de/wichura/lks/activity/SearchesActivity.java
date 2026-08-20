@@ -2,10 +2,10 @@ package de.wichura.lks.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class SearchesActivity extends Fragment implements
         GoogleApiClient.ConnectionCallbacks {
 
     private ListView listView;
-    private AVLoadingIndicatorView progressBar;
+    private CircularProgressIndicator progressBar;
     private View mainView;
     private SearchesPresenter presenter;
     private GoogleApiClient mGoogleApiClient;
@@ -84,7 +84,7 @@ public class SearchesActivity extends Fragment implements
             toolbar.setNavigationOnClickListener((v) -> getActivity().finish());
         }
 
-        presenter = new SearchesPresenter(this, new Service(), getActivity().getApplicationContext());
+        presenter = new SearchesPresenter(this, Service.get(), getActivity().getApplicationContext());
 
         listView = (ListView) view.findViewById(R.id.searches_overview_list);
 

@@ -24,12 +24,12 @@ import de.wichura.lks.models.FileNameParcelable;
 import de.wichura.lks.models.Location;
 import de.wichura.lks.models.RowItem;
 import de.wichura.lks.util.BitmapHelper;
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MultipartBody;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 /**
  * Created by Bernd Wichura on 25.10.2016.
  * Luftkrafsport
@@ -45,7 +45,7 @@ public class FileUploadService implements ProgressRequestBody.UploadCallbacks {
     public FileUploadService(Context context, NewAdActivity view) {
         this.context = context;
         this.view = view;
-        this.service = new Service();
+        this.service = Service.get();
     }
 
     private void removeIdFromImageList(Intent data, Long imageId) {

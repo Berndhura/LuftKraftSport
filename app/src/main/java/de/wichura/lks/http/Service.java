@@ -20,6 +20,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import de.wichura.lks.BuildConfig;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.AdsAsPage;
 import de.wichura.lks.models.ApiError;
@@ -47,8 +48,8 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-import io.reactivex.Observable;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import io.reactivex.rxjava3.core.Observable;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 
 
 /**
@@ -60,11 +61,32 @@ public class Service {
 
     private static final String WEB_SERVICE_BASE_URL_V3 = Urls.MAIN_SERVER_URL_V3;
 
+    private static volatile Service INSTANCE;
+
+    /**
+     * Returns the shared Retrofit-backed HTTP client. Constructing this is
+     * expensive (Retrofit + OkHttp + Gson) and OkHttp's connection pool is
+     * only useful when the client is reused, so all callers share one instance.
+     */
+    public static Service get() {
+        Service local = INSTANCE;
+        if (local == null) {
+            synchronized (Service.class) {
+                local = INSTANCE;
+                if (local == null) {
+                    local = new Service();
+                    INSTANCE = local;
+                }
+            }
+        }
+        return local;
+    }
+
     private WebService mWebServiceV3 = null;
     private Retrofit.Builder builder = null;
     private Retrofit restAdapterV2 = null;
 
-    public Service() {
+    private Service() {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -72,6 +94,11 @@ public class Service {
         //api/V3
         OkHttpClient.Builder httpClientV3 = new OkHttpClient.Builder();
 
+        // MockInterceptor is dormant now that the local backend serves real data.
+        // To go offline-only again, un-comment the next two lines.
+        // if (BuildConfig.DEBUG) {
+        //     httpClientV3.addInterceptor(new MockInterceptor());
+        // }
         httpClientV3.addInterceptor(logging);
 
         Gson gson = new GsonBuilder()
@@ -79,7 +106,7 @@ public class Service {
                 .create();
 
             builder = new Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(WEB_SERVICE_BASE_URL_V3)
                 .client(httpClientV3.build());

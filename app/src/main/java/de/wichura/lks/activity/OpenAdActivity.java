@@ -7,12 +7,12 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -40,8 +40,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.squareup.picasso.Picasso;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.bumptech.glide.Glide;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,8 +74,8 @@ public class OpenAdActivity extends FragmentActivity implements OnMapReadyCallba
     private int displayHeight;
     private int displayWidth;
 
-    public AVLoadingIndicatorView mOpenAdProgressBar;
-    public AVLoadingIndicatorView mOpenFullScreenImgProgressBar;
+    public CircularProgressIndicator mOpenAdProgressBar;
+    public CircularProgressIndicator mOpenFullScreenImgProgressBar;
 
     private OpenAdPresenter presenter;
     private GoogleMap googleMap;
@@ -108,7 +108,7 @@ public class OpenAdActivity extends FragmentActivity implements OnMapReadyCallba
 
        // MapsInitializer.initialize(this);
 
-        presenter = new OpenAdPresenter(this, new Service(), getApplicationContext());
+        presenter = new OpenAdPresenter(this, Service.get(), getApplicationContext());
 
         //checkGoogleConnection(savedInstanceState);
 
@@ -120,7 +120,7 @@ public class OpenAdActivity extends FragmentActivity implements OnMapReadyCallba
             toolbar.setNavigationOnClickListener((view) -> finish());
         } */
 
-        mOpenAdProgressBar = (AVLoadingIndicatorView) findViewById(R.id.open_Ad_ProgressBar);
+        mOpenAdProgressBar = (CircularProgressIndicator) findViewById(R.id.open_Ad_ProgressBar);
         mTitleText = (TextView) findViewById(R.id.title);
         mPrice = (TextView) findViewById(R.id.price);
         mDescText = (TextView) findViewById(R.id.description);
@@ -365,7 +365,7 @@ public class OpenAdActivity extends FragmentActivity implements OnMapReadyCallba
         if (user != null) {
             userName.setText(user.getName());
             userNumberOfArticles.setText("Anzeigen: " + user.getNumberOfArticles().toString());
-            Picasso.with(getContext())
+            Glide.with(getContext())
                     .load(user.getProfilePictureUrl())
                     .placeholder(R.drawable.ic_person_outline_blue_grey_600_24dp)
                     .into(userPic);
@@ -377,7 +377,7 @@ public class OpenAdActivity extends FragmentActivity implements OnMapReadyCallba
             });
         } else {
             userName.setText("Keine Benutzer Infos vorhanden!");
-            Picasso.with(getContext())
+            Glide.with(getContext())
                     .load(R.drawable.ic_person_outline_blue_grey_600_24dp)
                     .into(userPic);
         }

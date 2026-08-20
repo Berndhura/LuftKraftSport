@@ -16,10 +16,10 @@ import de.wichura.lks.R;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.SearchItem;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -36,7 +36,7 @@ public class SearchesListAdapter extends ArrayAdapter<SearchItem> {
     public SearchesListAdapter(final Context context, final int resourceId, final List<SearchItem> items) {
         super(context, resourceId, items);
         this.context = context;
-        service = new Service();
+        service = Service.get();
     }
 
     private class ViewHolder {

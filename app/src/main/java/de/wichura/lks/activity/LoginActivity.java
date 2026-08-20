@@ -6,9 +6,9 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import de.wichura.lks.R;
 import de.wichura.lks.dialogs.ShowUserNotActivatedDialog;
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements
     private CallbackManager mCallbackMgt;
 
     private LoginPresenter presenter;
-    private AVLoadingIndicatorView progressBar;
+    private CircularProgressIndicator progressBar;
 
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Service service = new Service();
+        Service service = Service.get();
         presenter = new LoginPresenter(this, service, getApplicationContext());
 
         setContentView(R.layout.login_activity);
@@ -322,11 +322,8 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.google_login_button:
-                signIn();
-                break;
-            // ...
+        if (v.getId() == R.id.google_login_button) {
+            signIn();
         }
     }
 }
