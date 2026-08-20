@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+
+import androidx.activity.result.ActivityResultLauncher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,9 +56,11 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
     private Service service;
     private MainPresenter presenter;
     private Boolean isLocationSet;
+    private final ActivityResultLauncher<Intent> newAdLauncher;
 
     public MainListViewAdapter(final Activity activity, final Context context, final int resourceId,
-                               final List<RowItem> items, final ArrayList<Long> bookmarks) {
+                               final List<RowItem> items, final ArrayList<Long> bookmarks,
+                               final ActivityResultLauncher<Intent> newAdLauncher) {
         super(context, resourceId, items);
         this.context = context;
         this.activity = activity;
@@ -67,6 +71,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
         }
         service = Service.get();
         presenter = new MainPresenter((MainActivity) activity, service, context);
+        this.newAdLauncher = newAdLauncher;
 
         isLocationSet = isLocationOn();
     }
@@ -218,7 +223,7 @@ public class MainListViewAdapter extends ArrayAdapter<RowItem> {
                 i.putExtra(Constants.LAT, rowItem.getLocation().getCoordinates()[0]);
                 i.putExtra(Constants.LNG, rowItem.getLocation().getCoordinates()[1]);
                 i.putExtra(Constants.DATE, rowItem.getDate());
-                activity.startActivityForResult(i, Constants.REQUEST_ID_FOR_NEW_AD);
+                newAdLauncher.launch(i);
             });
         }
 

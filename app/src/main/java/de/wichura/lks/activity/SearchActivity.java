@@ -59,7 +59,7 @@ public class SearchActivity extends AppCompatActivity implements
             if (tabId == R.id.tab_list_saved_searches) {
                 if ("".equals(getUserToken())) {
                     final Intent facebookIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
+                    startActivity(facebookIntent);
                 } else {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.layout, new SearchesActivity())

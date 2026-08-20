@@ -3,6 +3,8 @@ package de.wichura.lks.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
@@ -28,10 +30,20 @@ public class SettingsActivity extends AppCompatActivity {
 
     private TextView loginInfo;
     private GoogleSignInClient mGoogleSignInClient;
+    private ActivityResultLauncher<Intent> loginLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        loginLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    initLogoutButton();
+                    loginInfo.setText("Angemeldet als: " + getUserName());
+                    setResult(RESULT_OK, result.getData());
+                    finish();
+                });
 
         setContentView(R.layout.settings_layout);
 
@@ -84,20 +96,9 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             } else {
                 final Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivityForResult(intent, Constants.REQUEST_ID_FOR_LOGIN);
+                loginLauncher.launch(intent);
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_ID_FOR_LOGIN) {
-            initLogoutButton();
-            loginInfo.setText("Angemeldet als: " + getUserName());
-            setResult(RESULT_OK, data);
-            finish();
-        }
     }
 
     private void signOutFromGoogle() {

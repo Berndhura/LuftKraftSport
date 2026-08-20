@@ -261,7 +261,7 @@ public class OpenAdActivity extends FragmentActivity implements OnMapReadyCallba
                     sendMessage(mAdId, ownerId);
                 } else {
                     final Intent facebookIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
+                    startActivity(facebookIntent);
                 }
             });
         }
@@ -281,7 +281,7 @@ public class OpenAdActivity extends FragmentActivity implements OnMapReadyCallba
                 i.putExtra(Constants.LAT, getIntent().getDoubleExtra(Constants.LAT, 0));
                 i.putExtra(Constants.LNG, getIntent().getDoubleExtra(Constants.LNG, 0));
                 i.putExtra(Constants.DATE, getIntent().getLongExtra(Constants.DATE, 0));
-                startActivityForResult(i, Constants.REQUEST_ID_FOR_NEW_AD);
+                startActivity(i);
             } else {
 
                 if (!"".equals(getUserId())) {
@@ -373,7 +373,7 @@ public class OpenAdActivity extends FragmentActivity implements OnMapReadyCallba
             userPic.setOnClickListener(v -> {
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 i.putExtra(Constants.USER_ID_FROM_AD, getIntent().getStringExtra(Constants.USER_ID_FROM_AD));
-                startActivityForResult(i, Constants.REQUEST_ID_FOR_MAINACTIVITY);
+                startActivity(i);
             });
         } else {
             userName.setText("Keine Benutzer Infos vorhanden!");

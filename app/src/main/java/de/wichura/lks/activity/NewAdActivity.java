@@ -8,6 +8,9 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -91,9 +94,16 @@ public class NewAdActivity extends AppCompatActivity implements ZipDialogFragmen
 
     private SharedPrefsHelper sharedPrefsHelper;
 
+    private ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher;
+    private int pendingImageSlot;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.PickVisualMedia(),
+                uri -> onImagePicked(uri, pendingImageSlot));
 
         sharedPrefsHelper = new SharedPrefsHelper(this);
 
@@ -311,12 +321,12 @@ public class NewAdActivity extends AppCompatActivity implements ZipDialogFragmen
         imageView.add(findViewById(R.id.imageButton5));
 
         for (int i = 0; i < 5; i++) {
-            final Integer COUNTER = i;
+            final int slot = i;
             imageView.get(i).setOnClickListener((v) -> {
-                final Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                photoPickerIntent.putExtra("image", true);
-                startActivityForResult(photoPickerIntent, COUNTER);
+                pendingImageSlot = slot;
+                pickImageLauncher.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build());
             });
         }
     }
@@ -365,44 +375,36 @@ public class NewAdActivity extends AppCompatActivity implements ZipDialogFragmen
         }
     }
 
-    @Override
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+    private void onImagePicked(@Nullable Uri selectedImage, int pictureCount) {
+        if (selectedImage == null) return;
 
-        Log.d("CONAN", "requestCode: " + requestCode);
-        int pictureCount = requestCode;
+        Log.d("CONAN", "picked image for slot: " + pictureCount);
+        mImageBuffer[pictureCount] = new FileNameParcelable(selectedImage.toString());
+        Glide.with(getApplicationContext())
+                .load(selectedImage)
+                .centerCrop()
+                .skipMemoryCache(true)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
 
-        if (resultCode == RESULT_OK) {
-            final Uri selectedImage = imageReturnedIntent.getData();
-            FileNameParcelable file = new FileNameParcelable(selectedImage.toString());
-            mImageBuffer[pictureCount] = file;
-            Glide.with(getApplicationContext())
-                    .load(selectedImage)
-                    .centerCrop()
-                    .skipMemoryCache(true)
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            return false;
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        if (pictureCount < 4) {
+                            imageView.get(pictureCount + 1).setVisibility(View.VISIBLE);
                         }
+                        removeImgButton.get(pictureCount).setVisibility(View.VISIBLE);
 
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            if (pictureCount < 4) {
-                                imageView.get(pictureCount + 1).setVisibility(View.VISIBLE);
-                            }
-                            removeImgButton.get(pictureCount).setVisibility(View.VISIBLE);
-
-                            HorizontalScrollView s = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
-                            s.postDelayed(() -> s.fullScroll(HorizontalScrollView.FOCUS_RIGHT), 500L);
-                            return false;
-                        }
-                    })
-                    .into(imageView.get(pictureCount));
-            //which image is changed
-            if (isEditMode) {
-                changedImages[pictureCount] = true;
-            }
+                        HorizontalScrollView s = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
+                        s.postDelayed(() -> s.fullScroll(HorizontalScrollView.FOCUS_RIGHT), 500L);
+                        return false;
+                    }
+                })
+                .into(imageView.get(pictureCount));
+        if (isEditMode) {
+            changedImages[pictureCount] = true;
         }
     }
 

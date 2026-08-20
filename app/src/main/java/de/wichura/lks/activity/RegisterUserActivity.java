@@ -134,8 +134,8 @@ public class RegisterUserActivity extends AppCompatActivity implements
         ((Button) findViewById(R.id.register_user_button)).setText("Zurück zum Login");
         findViewById(R.id.register_user_button).setOnClickListener(v -> {
             final Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
             finish();
-            startActivityForResult(intent, Constants.REQUEST_ID_FOR_LOGIN);
         });
     }
 

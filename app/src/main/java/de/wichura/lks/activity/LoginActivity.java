@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,13 +25,13 @@ import com.facebook.FacebookException;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import de.wichura.lks.R;
@@ -38,7 +40,6 @@ import de.wichura.lks.http.Service;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.presentation.LoginPresenter;
 
-import static de.wichura.lks.mainactivity.Constants.RC_SIGN_IN;
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
 /**
@@ -60,10 +61,19 @@ public class LoginActivity extends AppCompatActivity implements
     private CircularProgressIndicator progressBar;
 
     private GoogleSignInClient mGoogleSignInClient;
+    private ActivityResultLauncher<Intent> googleSignInLauncher;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        googleSignInLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    Task<GoogleSignInAccount> task =
+                            GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                    handleSignInResult(task, result.getData());
+                });
 
         Service service = Service.get();
         presenter = new LoginPresenter(this, service, getApplicationContext());
@@ -124,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements
         Button register = findViewById(R.id.register);
         register.setOnClickListener(view -> {
             Intent i = new Intent(getApplicationContext(), RegisterUserActivity.class);
-            startActivityForResult(i, Constants.REQUEST_ID_FOR_REGISTER_USER);
+            startActivity(i);
         });
 
         LoginButton fbLoginButton = findViewById(R.id.fb_login_button);
@@ -208,39 +218,12 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        googleSignInLauncher.launch(mGoogleSignInClient.getSignInIntent());
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Log.d("CONAN", "handleSignInResult:" + data);
-
-        if (requestCode == Constants.RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result, data);
-        }
-
-        if (requestCode == Constants.REQUEST_ID_FOR_REGISTER_USER) {
-            //use request code from email to verify email
-            // Intent i = new Intent(getApplicationContext(), ActivateUserActivity.class);
-            // startActivityForResult(i, Constants.REQUEST_ID_FOR_ACTIVATE_USER);
-            // TODO: back from activate... einloggen...
-        }
-
-        mCallbackMgt.onActivityResult(requestCode, resultCode, data);
-        finish();
-    }
-
-    private void handleSignInResult(GoogleSignInResult result, Intent data) {
-        Log.d("CONAN", "handleSignInResult from Google:" + result.isSuccess());
-        Log.d("CONAN", "handleSignInResult status from google:" + result.getStatus());
-
-        if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
+    private void handleSignInResult(Task<GoogleSignInAccount> task, Intent data) {
+        try {
+            GoogleSignInAccount acct = task.getResult(ApiException.class);
             if (acct != null) {
                 String name = acct.getDisplayName();
                 String userId = acct.getId();
@@ -248,13 +231,13 @@ public class LoginActivity extends AppCompatActivity implements
                 Log.d("CONAN", "Google Token: " + token);
 
                 Uri userPicture = acct.getPhotoUrl();
-                Log.d("CONAN", userPicture.toString());
+                if (userPicture != null) Log.d("CONAN", userPicture.toString());
                 setUserPreferences(name, userId, userPicture, Constants.GOOGLE_USER, token);
             }
             setResult(RESULT_OK, data);
             finish();
-        } else {
-            Log.d("CONAN", result.toString());
+        } catch (ApiException e) {
+            Log.d("CONAN", "Google sign-in failed: " + e.getStatusCode());
         }
     }
 

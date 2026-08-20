@@ -49,6 +49,7 @@ public class AdListController {
     private final CircularProgressIndicator progressBar;
     private final Runnable onPullToRefresh;
     private final ActivityResultLauncher<Intent> openAdLauncher;
+    private final ActivityResultLauncher<Intent> newAdLauncher;
 
     private int page;
     private int size = DEFAULT_PAGE_SIZE;
@@ -67,7 +68,8 @@ public class AdListController {
                             View noResultsView,
                             CircularProgressIndicator progressBar,
                             Runnable onPullToRefresh,
-                            ActivityResultLauncher<Intent> openAdLauncher) {
+                            ActivityResultLauncher<Intent> openAdLauncher,
+                            ActivityResultLauncher<Intent> newAdLauncher) {
         this.activity = activity;
         this.presenter = presenter;
         this.session = session;
@@ -77,6 +79,7 @@ public class AdListController {
         this.progressBar = progressBar;
         this.onPullToRefresh = onPullToRefresh;
         this.openAdLauncher = openAdLauncher;
+        this.newAdLauncher = newAdLauncher;
 
         initPullToRefresh();
     }
@@ -116,7 +119,8 @@ public class AdListController {
                 activity,
                 activity.getApplicationContext(),
                 R.layout.list_item_new, rowItems,
-                elements.getBookmarks());
+                elements.getBookmarks(),
+                newAdLauncher);
 
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();

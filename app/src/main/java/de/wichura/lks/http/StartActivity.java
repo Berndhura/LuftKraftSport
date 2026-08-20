@@ -65,11 +65,11 @@ public class StartActivity extends Activity {
             public void onClick(final View v) {
                 if (getUserId().equals("")) {
                     final Intent facebookIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
+                    startActivity(facebookIntent);
                 } else {
                     final Intent intent = new Intent(getApplicationContext(), NewAdActivity.class);
                     intent.putExtra(Constants.USER_ID, getUserId());
-                    startActivityForResult(intent, Constants.REQUEST_ID_FOR_NEW_AD);
+                    startActivity(intent);
                 }
             }
         });

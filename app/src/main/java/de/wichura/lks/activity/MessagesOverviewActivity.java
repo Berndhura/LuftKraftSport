@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
@@ -44,10 +46,15 @@ public class MessagesOverviewActivity extends AppCompatActivity {
     private CircularProgressIndicator mMessagesProgressBar;
 
     private MsgOverviewPresenter presenter;
+    private ActivityResultLauncher<Intent> messagesLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        messagesLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> presenter.loadAllMessages(getUserToken()));
 
         Service service = Service.get();
         presenter = new MsgOverviewPresenter(this, service);
@@ -122,7 +129,7 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             intent.putExtra(Constants.CHAT_PARTNER, rowItem.getChatPartner());
             intent.putExtra(Constants.ID_TO, rowItem.getIdTo());
             intent.putExtra(Constants.SENDER_NAME, rowItem.getName());
-            startActivityForResult(intent, Constants.REQUEST_ID_FOR_MESSAGES);
+            messagesLauncher.launch(intent);
         });
     }
 
@@ -165,14 +172,6 @@ public class MessagesOverviewActivity extends AppCompatActivity {
             ShortcutBadger.removeCount(getApplicationContext());
         } else {
             ShortcutBadger.applyCount(getApplicationContext(), unreadMsgMap.size());
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_ID_FOR_MESSAGES) {
-            presenter.loadAllMessages(getUserToken());
         }
     }
 

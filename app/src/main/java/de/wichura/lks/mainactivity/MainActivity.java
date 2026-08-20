@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements
         adListController = new AdListController(this, presenterLayer, session,
                 listView, swipeContainer, noResultsView, progressBar,
                 () -> sectionNavigation.resetFlags(),
-                openAdLauncher);
+                openAdLauncher, newAdLauncher);
 
         sectionNavigation = new SectionNavigationController(this, drawer,
                 findViewById(R.id.search_again), session, adListController,
