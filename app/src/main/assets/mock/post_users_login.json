@@ -1,0 +1,8 @@
+{
+  "id": "mock-user-1",
+  "email": "test@example.com",
+  "token": "mock-token-xyz",
+  "name": "Test User",
+  "profilePictureUrl": "",
+  "numberOfArticles": 1
+}

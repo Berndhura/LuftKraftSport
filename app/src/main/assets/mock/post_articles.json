@@ -1,0 +1,15 @@
+{
+  "id": 99,
+  "title": "Neue Anzeige (Mock)",
+  "urls": "https://picsum.photos/id/1018/600/400",
+  "description": "Vom Mock erstellt",
+  "phone": "0170 0000000",
+  "date": 1730000000000,
+  "price": 100.0,
+  "location": { "type": "Point", "coordinates": [11.5820, 48.1351] },
+  "userId": "mock-user-1",
+  "views": "0",
+  "bookmarks": "0",
+  "pictureIds": [],
+  "locationName": "München"
+}

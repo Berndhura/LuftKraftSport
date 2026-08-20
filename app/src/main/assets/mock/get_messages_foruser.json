@@ -1,0 +1,12 @@
+[
+  {
+    "message": "Hallo, ist das Angebot noch aktuell?",
+    "name": "Anna Beispiel",
+    "url": "https://picsum.photos/id/1018/600/400",
+    "date": 1729800000000,
+    "idFrom": "mock-user-2",
+    "idTo": "mock-user-1",
+    "articleId": 1,
+    "chatPartner": "mock-user-2"
+  }
+]

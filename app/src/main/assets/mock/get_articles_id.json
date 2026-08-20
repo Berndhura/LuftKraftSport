@@ -1,0 +1,13 @@
+{
+  "id": 1,
+  "title": "Gleitschirm Advance Alpha 6, Größe M",
+  "description": "Sehr guter Zustand, wenig geflogen. Startgewicht 85-105kg. Wurde in 3 Jahren nur 30 Stunden geflogen. Check aktuell, alle Papiere vorhanden. Farbe rot/weiß. Preis VB.",
+  "urls": "https://picsum.photos/id/1018/600/400",
+  "userId": "mock-user-1",
+  "price": 2500.0,
+  "date": 1730000000000,
+  "views": 42,
+  "bookmarks": 5,
+  "location": { "type": "Point", "coordinates": [11.5820, 48.1351] },
+  "locationName": "München"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "mock-user-1",
+  "email": "seller@example.com",
+  "name": "Max Mustermann",
+  "profilePictureUrl": "",
+  "numberOfArticles": 3
+}

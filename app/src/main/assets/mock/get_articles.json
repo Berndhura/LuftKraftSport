@@ -1,0 +1,68 @@
+{
+  "page": 0,
+  "size": 10,
+  "pages": 1,
+  "total": 4,
+  "ads": [
+    {
+      "id": 1,
+      "title": "Gleitschirm Advance Alpha 6, Größe M",
+      "urls": "https://picsum.photos/id/1018/600/400",
+      "description": "Sehr guter Zustand, wenig geflogen. Startgewicht 85-105kg. Check aktuell, alle Papiere vorhanden.",
+      "phone": "0170 1234567",
+      "date": 1730000000000,
+      "price": 2500.0,
+      "location": { "type": "Point", "coordinates": [11.5820, 48.1351] },
+      "userId": "mock-user-1",
+      "views": "42",
+      "bookmarks": "5",
+      "pictureIds": ["1"],
+      "locationName": "München"
+    },
+    {
+      "id": 2,
+      "title": "Kitesurf Board Naish 138cm",
+      "urls": "https://picsum.photos/id/1015/600/400",
+      "description": "Twin Tip, 138cm, inklusive Bindungen. Guter Allrounder für Einsteiger bis Fortgeschrittene.",
+      "phone": "0175 9876543",
+      "date": 1729500000000,
+      "price": 450.0,
+      "location": { "type": "Point", "coordinates": [10.1228, 54.3233] },
+      "userId": "mock-user-2",
+      "views": "127",
+      "bookmarks": "12",
+      "pictureIds": ["2"],
+      "locationName": "Kiel"
+    },
+    {
+      "id": 3,
+      "title": "Segelflugzeug LS4 Anteil (1/6)",
+      "urls": "https://picsum.photos/id/1019/600/400",
+      "description": "Anteil an LS4-b, stationiert in Bayreuth. Sehr gepflegt, Halle vorhanden.",
+      "phone": "0160 2223344",
+      "date": 1729000000000,
+      "price": 8500.0,
+      "location": { "type": "Point", "coordinates": [11.5713, 49.9456] },
+      "userId": "mock-user-3",
+      "views": "89",
+      "bookmarks": "3",
+      "pictureIds": ["3"],
+      "locationName": "Bayreuth"
+    },
+    {
+      "id": 4,
+      "title": "Motorschirm Kit komplett",
+      "urls": "https://picsum.photos/id/1043/600/400",
+      "description": "Miniplane Top 80, Schirm Dudek Nucleon XX, wenig geflogen. Für Piloten mit BuBiCo.",
+      "phone": "0179 5551122",
+      "date": 1728500000000,
+      "price": 4200.0,
+      "location": { "type": "Point", "coordinates": [8.6821, 50.1109] },
+      "userId": "mock-user-1",
+      "views": "56",
+      "bookmarks": "8",
+      "pictureIds": ["4"],
+      "locationName": "Frankfurt am Main"
+    }
+  ]
+}

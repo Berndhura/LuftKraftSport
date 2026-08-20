@@ -1,0 +1,23 @@
+{
+  "page": 0,
+  "size": 10,
+  "pages": 1,
+  "total": 1,
+  "ads": [
+    {
+      "id": 1,
+      "title": "Gleitschirm Advance Alpha 6, Größe M",
+      "urls": "https://picsum.photos/id/1018/600/400",
+      "description": "Sehr guter Zustand, wenig geflogen. Startgewicht 85-105kg.",
+      "phone": "0170 1234567",
+      "date": 1730000000000,
+      "price": 2500.0,
+      "location": { "type": "Point", "coordinates": [11.5820, 48.1351] },
+      "userId": "mock-user-1",
+      "views": "42",
+      "bookmarks": "5",
+      "pictureIds": ["1"],
+      "locationName": "München"
+    }
+  ]
+}

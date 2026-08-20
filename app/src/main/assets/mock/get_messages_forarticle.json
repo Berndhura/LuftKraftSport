@@ -1,0 +1,14 @@
+[
+  {
+    "message": "Hallo, ist das Angebot noch aktuell?",
+    "date": 1729800000000,
+    "idFrom": "mock-user-2",
+    "chatPartner": "mock-user-2"
+  },
+  {
+    "message": "Ja, ist noch verfügbar. Wann möchtest du es anschauen?",
+    "date": 1729810000000,
+    "idFrom": "mock-user-1",
+    "chatPartner": "mock-user-2"
+  }
+]
