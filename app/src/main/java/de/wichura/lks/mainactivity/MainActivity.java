@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.navigation.NavigationView;
@@ -74,6 +76,13 @@ public class MainActivity extends AppCompatActivity implements
     private SectionNavigationController sectionNavigation;
     private SessionStore session;
 
+    private ActivityResultLauncher<Intent> newAdLauncher;
+    private ActivityResultLauncher<Intent> loginLauncher;
+    private ActivityResultLauncher<Intent> openAdLauncher;
+    private ActivityResultLauncher<Intent> searchLauncher;
+    private ActivityResultLauncher<Intent> settingsLauncher;
+    private ActivityResultLauncher<Intent> messagesLauncher;
+
     //login
     private BroadcastReceiver mLoginBroadcastReceiver;
     private boolean isLoginReceiverRegistered;
@@ -89,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Result launchers must be registered before the Activity reaches STARTED.
+        registerActivityLaunchers();
 
         Service service = Service.get();
         presenterLayer = new MainPresenter(this, service, getApplicationContext());
@@ -130,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements
             messageBadgeController.hideButton();
             final Intent msgIntent = new Intent(getApplicationContext(), MessagesOverviewActivity.class);
             msgIntent.putExtra(Constants.USER_ID, session.getUserId());
-            startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES);
+            messagesLauncher.launch(msgIntent);
         });
 
         //configure Flurry for analysis
@@ -157,11 +169,13 @@ public class MainActivity extends AppCompatActivity implements
         swipeContainer = findViewById(R.id.swipeContainer);
         adListController = new AdListController(this, presenterLayer, session,
                 listView, swipeContainer, noResultsView, progressBar,
-                () -> sectionNavigation.resetFlags());
+                () -> sectionNavigation.resetFlags(),
+                openAdLauncher);
 
         sectionNavigation = new SectionNavigationController(this, drawer,
                 findViewById(R.id.search_again), session, adListController,
-                messageBadgeController, this::startLoginActivity);
+                messageBadgeController, this::startLoginActivity,
+                newAdLauncher, searchLauncher, settingsLauncher, messagesLauncher);
         NavigationView navigationView = findViewById(R.id.nav_view);
         if (navigationView != null) navigationView.setNavigationItemSelectedListener(sectionNavigation);
 
@@ -330,79 +344,79 @@ public class MainActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void registerActivityLaunchers() {
+        ActivityResultContracts.StartActivityForResult contract =
+                new ActivityResultContracts.StartActivityForResult();
 
-        switch (requestCode) {
-            case Constants.REQUEST_ID_FOR_NEW_AD: {
-                //my articles -> edit one -> just go back -> still show my articles
-                if (data != null && data.getStringExtra(Constants.IS_EDIT_MODE) != null) {
-                    sectionNavigation.setMyAdsFlag(true);
-                    adListController.loadType(Constants.TYPE_USER);
-                    break;
-                }
-                //Android M permission for Read/Write -> ask user again
-                if (data != null && data.getStringExtra(Constants.PERMISSION_DENIED) != null) {
-                    sectionNavigation.closeDrawer();
-                    showRequestForPermission();
-                }
-                //just show all
-                sectionNavigation.resetFlags();
-                adListController.loadType(Constants.TYPE_ALL);
-                break;
+        newAdLauncher = registerForActivityResult(contract, result -> {
+            Intent data = result.getData();
+            // my articles -> edit one -> just go back -> still show my articles
+            if (data != null && data.getStringExtra(Constants.IS_EDIT_MODE) != null) {
+                sectionNavigation.setMyAdsFlag(true);
+                adListController.loadType(Constants.TYPE_USER);
+                return;
             }
-            case Constants.REQUEST_ID_FOR_LOGIN: {
+            // Android M permission for Read/Write -> ask user again
+            if (data != null && data.getStringExtra(Constants.PERMISSION_DENIED) != null) {
+                sectionNavigation.closeDrawer();
+                showRequestForPermission();
+            }
+            sectionNavigation.resetFlags();
+            adListController.loadType(Constants.TYPE_ALL);
+        });
 
-                if (session.isLoggedIn()) {
-                    if (Constants.GOOGLE_USER.equals(session.getUserType())) {
-                        presenterLayer.sendUserPicToServer(session.getUserProfilePicture());
-                    }
-                    pushTokenController.refreshToken();
+        loginLauncher = registerForActivityResult(contract, result -> {
+            if (session.isLoggedIn()) {
+                if (Constants.GOOGLE_USER.equals(session.getUserType())) {
+                    presenterLayer.sendUserPicToServer(session.getUserProfilePicture());
                 }
+                pushTokenController.refreshToken();
+            }
+            loginUiController.refreshLoginButton();
+            loginUiController.refreshProfileHeader();
+            Log.d("CONAN", "Return from login, userid: " + session.getUserId());
 
-                loginUiController.refreshLoginButton();
-                loginUiController.refreshProfileHeader();
-                Log.d("CONAN", "Return from login, userid: " + session.getUserId());
+            sectionNavigation.resetFlags();
+            hideEmptyView();
+            adListController.loadType(Constants.TYPE_ALL);
+        });
 
-                sectionNavigation.resetFlags();
-                hideEmptyView();
-                adListController.loadType(Constants.TYPE_ALL);
-                break;
+        openAdLauncher = registerForActivityResult(contract, result -> {
+            Intent data = result.getData();
+            // article was deleted -> remove from list
+            if (data != null) {
+                adListController.removeItemAt(data.getIntExtra(Constants.POSITION_IN_LIST, 0));
             }
-            case Constants.REQUEST_ID_FOR_OPEN_AD: {
-                //in case article is deleted -> remove from list
-                if (data != null) {
-                    adListController.removeItemAt(data.getIntExtra(Constants.POSITION_IN_LIST, 0));
-                }
-                break;
-            }
-            case Constants.REQUEST_ID_FOR_SEARCH: {
-                if (data != null) {
-                    String keyword = data.getStringExtra(Constants.KEYWORDS);
-                    String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
-                    String priceTo = data.getStringExtra(Constants.PRICE_TO);
-                    int distance = data.getIntExtra(Constants.DISTANCE, Constants.DISTANCE_INFINITY);
-                    sectionNavigation.rememberSearch(keyword, priceFrom, priceTo);
-                    sectionNavigation.resetFlags();
+        });
 
-                    presenterLayer.searchForArticles(0, adListController.pageSize(),
-                            priceFrom.equals("") ? null : Integer.parseInt(priceFrom),
-                            priceTo.equals("") ? null : Integer.parseInt(priceTo),
-                            distance,
-                            keyword,
-                            null); //userId
-                    sectionNavigation.closeDrawer();
-                    sectionNavigation.showSearchAgainButton();
-                }
-                break;
-            }
-            case Constants.REQUEST_ID_FOR_SETTINGS: {
-                loginUiController.refreshLoginButton();
-                loginUiController.refreshProfileHeader();
-                break;
-            }
-        }
+        searchLauncher = registerForActivityResult(contract, result -> {
+            Intent data = result.getData();
+            if (data == null) return;
+            String keyword = data.getStringExtra(Constants.KEYWORDS);
+            String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
+            String priceTo = data.getStringExtra(Constants.PRICE_TO);
+            int distance = data.getIntExtra(Constants.DISTANCE, Constants.DISTANCE_INFINITY);
+            sectionNavigation.rememberSearch(keyword, priceFrom, priceTo);
+            sectionNavigation.resetFlags();
+
+            presenterLayer.searchForArticles(0, adListController.pageSize(),
+                    priceFrom.equals("") ? null : Integer.parseInt(priceFrom),
+                    priceTo.equals("") ? null : Integer.parseInt(priceTo),
+                    distance,
+                    keyword,
+                    null);
+            sectionNavigation.closeDrawer();
+            sectionNavigation.showSearchAgainButton();
+        });
+
+        settingsLauncher = registerForActivityResult(contract, result -> {
+            loginUiController.refreshLoginButton();
+            loginUiController.refreshProfileHeader();
+        });
+
+        messagesLauncher = registerForActivityResult(contract, result -> {
+            // No-op: the badge/broadcast handles state changes on return.
+        });
     }
 
     private void showRequestForPermission() {
@@ -438,8 +452,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void startLoginActivity() {
-        final Intent facebookIntent = new Intent(this, LoginActivity.class);
-        startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
+        loginLauncher.launch(new Intent(this, LoginActivity.class));
     }
 
     /** Kept for callsites in adapters/dialogs that still need a public API. */

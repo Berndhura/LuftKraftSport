@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -39,6 +40,10 @@ public class SectionNavigationController implements NavigationView.OnNavigationI
     private final AdListController adList;
     private final MessageBadgeController messageBadge;
     private final Runnable startLoginAction;
+    private final ActivityResultLauncher<Intent> newAdLauncher;
+    private final ActivityResultLauncher<Intent> searchLauncher;
+    private final ActivityResultLauncher<Intent> settingsLauncher;
+    private final ActivityResultLauncher<Intent> messagesLauncher;
 
     private boolean isMyAds;
     private boolean isBookmarks;
@@ -54,7 +59,11 @@ public class SectionNavigationController implements NavigationView.OnNavigationI
                                        SessionStore session,
                                        AdListController adList,
                                        MessageBadgeController messageBadge,
-                                       Runnable startLoginAction) {
+                                       Runnable startLoginAction,
+                                       ActivityResultLauncher<Intent> newAdLauncher,
+                                       ActivityResultLauncher<Intent> searchLauncher,
+                                       ActivityResultLauncher<Intent> settingsLauncher,
+                                       ActivityResultLauncher<Intent> messagesLauncher) {
         this.activity = activity;
         this.drawer = drawer;
         this.searchAgainButton = searchAgainButton;
@@ -62,6 +71,10 @@ public class SectionNavigationController implements NavigationView.OnNavigationI
         this.adList = adList;
         this.messageBadge = messageBadge;
         this.startLoginAction = startLoginAction;
+        this.newAdLauncher = newAdLauncher;
+        this.searchLauncher = searchLauncher;
+        this.settingsLauncher = settingsLauncher;
+        this.messagesLauncher = messagesLauncher;
 
         searchAgainButton.setOnClickListener(v -> relaunchLastSearch());
     }
@@ -87,20 +100,18 @@ public class SectionNavigationController implements NavigationView.OnNavigationI
             setBookmarksFlag(false);
             Intent i = new Intent(activity, NewAdActivity.class);
             i.putExtra(Constants.USER_ID, userId);
-            activity.startActivityForResult(i, Constants.REQUEST_ID_FOR_NEW_AD);
+            newAdLauncher.launch(i);
             return true;
         }
         if (id == R.id.search) {
             setBookmarksFlag(false);
             isMyAds = false; isBookmarks = false; isSearch = true;
-            activity.startActivityForResult(new Intent(activity, SearchActivity.class),
-                    Constants.REQUEST_ID_FOR_SEARCH);
+            searchLauncher.launch(new Intent(activity, SearchActivity.class));
             return true;
         }
         if (id == R.id.settings) {
             setBookmarksFlag(false);
-            activity.startActivityForResult(new Intent(activity, SettingsActivity.class),
-                    Constants.REQUEST_ID_FOR_SETTINGS);
+            settingsLauncher.launch(new Intent(activity, SettingsActivity.class));
             return true;
         }
         if (id == R.id.bookmarks) {
@@ -119,12 +130,12 @@ public class SectionNavigationController implements NavigationView.OnNavigationI
             messageBadge.hideButton();
             Intent msg = new Intent(activity.getApplicationContext(), MessagesOverviewActivity.class);
             msg.putExtra(Constants.USER_ID, userId);
-            activity.startActivityForResult(msg, Constants.REQUEST_ID_FOR_MESSAGES);
+            messagesLauncher.launch(msg);
             return true;
         }
         if (id == R.id.ebay) {
-            activity.startActivityForResult(new Intent(activity, EbayActivity.class),
-                    Constants.REQUEST_ID_FOR_SETTINGS);
+            // Ebay screen historically reused the settings result contract.
+            settingsLauncher.launch(new Intent(activity, EbayActivity.class));
             return true;
         }
         closeDrawer();
@@ -190,6 +201,6 @@ public class SectionNavigationController implements NavigationView.OnNavigationI
         i.putExtra(Constants.TITLE, searchKeyword);
         i.putExtra(Constants.PRICE_FROM, searchPriceFrom);
         i.putExtra(Constants.PRICE_TO, searchPriceTo);
-        activity.startActivityForResult(i, Constants.REQUEST_ID_FOR_SEARCH);
+        searchLauncher.launch(i);
     }
 }

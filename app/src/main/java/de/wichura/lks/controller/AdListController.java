@@ -1,6 +1,5 @@
 package de.wichura.lks.controller;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -10,6 +9,7 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -48,6 +48,7 @@ public class AdListController {
     private final View noResultsView;
     private final CircularProgressIndicator progressBar;
     private final Runnable onPullToRefresh;
+    private final ActivityResultLauncher<Intent> openAdLauncher;
 
     private int page;
     private int size = DEFAULT_PAGE_SIZE;
@@ -65,7 +66,8 @@ public class AdListController {
                             SwipeRefreshLayout swipeContainer,
                             View noResultsView,
                             CircularProgressIndicator progressBar,
-                            Runnable onPullToRefresh) {
+                            Runnable onPullToRefresh,
+                            ActivityResultLauncher<Intent> openAdLauncher) {
         this.activity = activity;
         this.presenter = presenter;
         this.session = session;
@@ -74,6 +76,7 @@ public class AdListController {
         this.noResultsView = noResultsView;
         this.progressBar = progressBar;
         this.onPullToRefresh = onPullToRefresh;
+        this.openAdLauncher = openAdLauncher;
 
         initPullToRefresh();
     }
@@ -135,7 +138,7 @@ public class AdListController {
             intent.putExtra(Constants.USER_ID, session.getUserId());
             intent.putExtra(Constants.POSITION_IN_LIST, position);
             intent.putExtra(Constants.AD_URL, rowItem.getUrl());
-            activity.startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
+            openAdLauncher.launch(intent);
         });
 
         swipeContainer.setRefreshing(false);
