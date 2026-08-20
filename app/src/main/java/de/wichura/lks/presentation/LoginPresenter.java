@@ -19,11 +19,11 @@ import de.wichura.lks.util.Utility;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Response;
-import retrofit2.adapter.rxjava2.HttpException;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.adapter.rxjava3.HttpException;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by Bernd Wichura on 05.12.2016.

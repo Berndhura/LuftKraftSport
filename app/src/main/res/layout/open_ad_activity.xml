@@ -6,7 +6,7 @@
     android:layout_weight="1"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/open_ad_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -33,19 +33,16 @@
                 android:src="@drawable/ic_share_white_24dp"
                 android:visibility="visible" />
 
-            <com.wang.avi.AVLoadingIndicatorView
+            <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/open_Ad_ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="10dp"
-                android:visibility="visible"
-                app:indicator="LineScaleParty"
-                app:indicator_color="#FFFFFF" />
-
+                android:visibility="visible" />
         </RelativeLayout>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -162,7 +159,7 @@
                     app:civ_border_width="0dp"
                     app:paddingStart="5sp" />
 
-                <android.support.v7.widget.LinearLayoutCompat
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -189,12 +186,9 @@
                         android:gravity="start"
                         android:textSize="18sp" />
 
-
-                </android.support.v7.widget.LinearLayoutCompat>
-
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
             </LinearLayout>
-
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="400dp"

@@ -2,8 +2,8 @@ package de.wichura.lks.presentation;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -21,11 +21,11 @@ import de.wichura.lks.http.GoogleService;
 import de.wichura.lks.mainactivity.Constants;
 
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 import static android.content.Context.MODE_PRIVATE;

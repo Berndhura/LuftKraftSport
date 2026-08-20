@@ -8,12 +8,12 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,8 +28,15 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import android.graphics.drawable.Drawable;
+
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +51,6 @@ import de.wichura.lks.models.FileNameParcelable;
 import de.wichura.lks.presentation.NewArticlePresenter;
 import de.wichura.lks.util.SharedPrefsHelper;
 import de.wichura.lks.util.Utility;
-import jp.wasabeef.picasso.transformations.CropSquareTransformation;
 
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
 
@@ -178,24 +184,26 @@ public class NewAdActivity extends AppCompatActivity implements ZipDialogFragmen
                     imageView.get(i).setVisibility(View.VISIBLE);
                     removeImgButton.get(i).setVisibility(View.VISIBLE);
                     showProgressForPicture(i);
-                    Picasso.with(getApplicationContext())
+                    Glide.with(getApplicationContext())
                             .load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + IMAGES.get(i))
                             .placeholder(R.drawable.empty_photo)
-                            .skipMemoryCache()
-                            .fit()
-                            .transform(new CropSquareTransformation())
-                            .into(imageView.get(i), new Callback() {
+                            .skipMemoryCache(true)
+                            .centerCrop()
+                            .listener(new RequestListener<Drawable>() {
                                 @Override
-                                public void onSuccess() {
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                                     hideProgressForPicture(picture);
+                                    Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
+                                    return false;
                                 }
 
                                 @Override
-                                public void onError() {
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                     hideProgressForPicture(picture);
-                                    Toast.makeText(getApplicationContext(), "No network connection while loading picture!", Toast.LENGTH_SHORT).show();
+                                    return false;
                                 }
-                            });
+                            })
+                            .into(imageView.get(i));
                 }
                 //show one more empty image view for user -> more images to add but no remove button
                 if (size < 5) imageView.get(size).setVisibility(View.VISIBLE);
@@ -244,45 +252,40 @@ public class NewAdActivity extends AppCompatActivity implements ZipDialogFragmen
 
     @TargetApi(Build.VERSION_CODES.M)
     private void checkReadWritePermission() {
+        String readPermission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                ? Manifest.permission.READ_MEDIA_IMAGES
+                : Manifest.permission.READ_EXTERNAL_STORAGE;
 
-        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(readPermission) == PackageManager.PERMISSION_GRANTED) {
             //permission granted, just go on
             main.setVisibility(View.VISIBLE);
             initGui();
         } else {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                Toast.makeText(this, "Die App benötigt Lese- und Schreiberechtigungen, um Anzeigen erstellen zu können!", Toast.LENGTH_LONG).show();
+            if (shouldShowRequestPermissionRationale(readPermission)) {
+                Toast.makeText(this, "Die App benötigt Lesezugriff auf Fotos, um Anzeigen erstellen zu können!", Toast.LENGTH_LONG).show();
                 Intent i = new Intent();
                 i.putExtra(Constants.PERMISSION_DENIED, "permission");
                 setResult(RESULT_OK, i);
                 finish();
-            } else {
-                //nothing to do here -> user wants to use upload first time
             }
             //ask for permission
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.REQUEST_ID_FOR_FILE_PERMISSION);
+            ActivityCompat.requestPermissions(this, new String[]{readPermission},
+                    Constants.REQUEST_ID_FOR_FILE_PERMISSION);
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-
-            //TODO der ablauf ist mir noch nicht ganz klar...
-            case Constants.REQUEST_ID_FOR_FILE_PERMISSION: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //permission granted, just go on
-                    main.setVisibility(View.VISIBLE);
-                    initGui();
-                } else {
-                    //permission not granted -> go back
-                    finish();
-                    //Toast.makeText(this, "Ohne Zustimmung können leider keine eigenen Anzeigen erstellt werden!", Toast.LENGTH_LONG).show();
-                }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constants.REQUEST_ID_FOR_FILE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //permission granted, just go on
+                main.setVisibility(View.VISIBLE);
+                initGui();
+            } else {
+                //permission not granted -> go back
+                Toast.makeText(this, "Ohne Zustimmung können leider keine eigenen Anzeigen erstellt werden!", Toast.LENGTH_LONG).show();
+                finish();
             }
         }
     }
@@ -373,33 +376,29 @@ public class NewAdActivity extends AppCompatActivity implements ZipDialogFragmen
             final Uri selectedImage = imageReturnedIntent.getData();
             FileNameParcelable file = new FileNameParcelable(selectedImage.toString());
             mImageBuffer[pictureCount] = file;
-            Picasso.with(getApplicationContext())
+            Glide.with(getApplicationContext())
                     .load(selectedImage)
-                    .transform(new CropSquareTransformation())
-                    .skipMemoryCache()
-                    .fit()
-                    .into(imageView.get(pictureCount), new Callback() {
+                    .centerCrop()
+                    .skipMemoryCache(true)
+                    .listener(new RequestListener<Drawable>() {
                         @Override
-                        public void onSuccess() {
-                            //only show view for 5 images, after this no more new views!
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                             if (pictureCount < 4) {
                                 imageView.get(pictureCount + 1).setVisibility(View.VISIBLE);
                             }
-                            //show remove image view when new image is shown
                             removeImgButton.get(pictureCount).setVisibility(View.VISIBLE);
 
                             HorizontalScrollView s = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
-                            s.postDelayed(new Runnable() {
-                                public void run() {
-                                    s.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-                                }
-                            }, 500L);
+                            s.postDelayed(() -> s.fullScroll(HorizontalScrollView.FOCUS_RIGHT), 500L);
+                            return false;
                         }
-
-                        @Override
-                        public void onError() {
-                        }
-                    });
+                    })
+                    .into(imageView.get(pictureCount));
             //which image is changed
             if (isEditMode) {
                 changedImages[pictureCount] = true;

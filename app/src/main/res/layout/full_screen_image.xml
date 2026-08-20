@@ -12,14 +12,12 @@
         android:layout_centerVertical="true"
         android:layout_centerInParent="true"/>
 
-    <com.wang.avi.AVLoadingIndicatorView
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress_loading_full_screen_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        app:indicator="LineScaleParty"
-        app:indicator_color="#FFFFFF"
         android:visibility="gone" />
 
     <ImageView

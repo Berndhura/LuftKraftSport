@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/ebay_overview_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -23,19 +23,16 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextColor="@android:color/white" />
 
-            <com.wang.avi.AVLoadingIndicatorView
+            <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/ebay_overview_ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="10dp"
-                android:visibility="gone"
-                app:indicator="LineScaleParty"
-                app:indicator_color="#FFFFFF" />
-
+                android:visibility="gone" />
         </RelativeLayout>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ListView
         android:id="@+id/ebay_overview_list"

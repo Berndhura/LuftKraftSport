@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.wichura.lks">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <supports-screens
         android:largeScreens="true"
         android:xlargeScreens="true" />
 
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Android 7-12: classic storage permissions -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <!-- Android 13+: granular media permissions -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="MY_PERMISSION_REQUEST_ACCESS_FINE_LOCATION" />
-
-    <permission
-        android:name="de.wichura.lks.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="de.wichura.lks.permission.C2D_MESSAGE" />
 
     <application
         android:name="de.wichura.lks.mainactivity.MainApp"
@@ -31,40 +27,42 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token"/>
         <activity
             android:name="com.facebook.FacebookActivity"
-            android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:exported="false" />
         <activity
-            android:name="com.facebook.CustomTabActivity"
+            android:name="com.facebook.CustomTabMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="fb535532649933816" />
-            </intent-filter> </activity>
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <service
-            android:name="de.wichura.lks.gcm.MyGcmListenerService">
+            android:name="de.wichura.lks.gcm.MyGcmListenerService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-
-        <service
-            android:name="de.wichura.lks.gcm.RegistrationIntentService"
-            android:exported="false">
         </service>
 
         <!-- Splash screen -->
         <activity
             android:name="de.wichura.lks.mainactivity.Splash"
             android:label="@string/app_name"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar">
             <intent-filter>

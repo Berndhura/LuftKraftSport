@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +19,7 @@ import android.widget.ProgressBar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +30,10 @@ import de.wichura.lks.http.EbayRestService;
 import de.wichura.lks.mainactivity.Constants;
 import de.wichura.lks.models.EbayAd;
 
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static de.wichura.lks.mainactivity.Constants.LAST_SEARCH;
 
@@ -46,7 +46,7 @@ public class EbayActivity extends AppCompatActivity {
 
     private EbayRestService ebayRestService;
 
-    private AVLoadingIndicatorView mMessagesProgressBar;
+    private CircularProgressIndicator mMessagesProgressBar;
 
     private ListView listView;
 
@@ -66,7 +66,7 @@ public class EbayActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener((view) -> finish());
         }
 
-        mMessagesProgressBar = (AVLoadingIndicatorView) findViewById(R.id.ebay_overview_ProgressBar);
+        mMessagesProgressBar = (CircularProgressIndicator) findViewById(R.id.ebay_overview_ProgressBar);
 
         listView = (ListView) findViewById(R.id.ebay_overview_list);
     }
@@ -139,10 +139,10 @@ public class EbayActivity extends AppCompatActivity {
                 searchManager.getSearchableInfo(getComponentName()));
 
         searchView.setBackgroundColor(Color.WHITE);
-        ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(Color.DKGRAY);
-        ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(Color.LTGRAY);
-        ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHint("Suche auf Ebay...");
-        ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setPadding(5, 5, 5, 5);
+        ((EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text)).setTextColor(Color.DKGRAY);
+        ((EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text)).setHintTextColor(Color.LTGRAY);
+        ((EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text)).setHint("Suche auf Ebay...");
+        ((EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text)).setPadding(5, 5, 5, 5);
         searchView.setPadding(10, 10, 10, 10);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

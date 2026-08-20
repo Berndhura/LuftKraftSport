@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.wang.avi.AVLoadingIndicatorView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class MessagesActivity extends AppCompatActivity {
     private EditText text;
     private MessagesPresenter presenter;
 
-    public AVLoadingIndicatorView progress;
+    public CircularProgressIndicator progress;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class MessagesActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.message_list);
         text = (EditText) findViewById(R.id.edit_message);
-        progress = (AVLoadingIndicatorView) findViewById(R.id.msg_progressBar);
+        progress = (CircularProgressIndicator) findViewById(R.id.msg_progressBar);
 
         final Integer articleId = getIntent().getIntExtra(Constants.ARTICLE_ID, 0);
         final String senderName = getIntent().getStringExtra(Constants.SENDER_NAME);

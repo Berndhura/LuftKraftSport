@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.text.DateFormat;
 import java.util.Iterator;
@@ -68,7 +68,7 @@ public class MsgOverviewAdapter extends ArrayAdapter<GroupedMsgItem> {
         final GroupedMsgItem rowItem = getItem(position);
 
         ImageView thumbNail = (ImageView) convertView.findViewById(R.id.ad_image);
-        Picasso.with(context).load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + getMainImageId(rowItem) + "/thumbnail").into(thumbNail);
+        Glide.with(context).load(Urls.MAIN_SERVER_URL_V3 + "pictures/" + getMainImageId(rowItem) + "/thumbnail").into(thumbNail);
 
         holder.title.setText(rowItem.getMessage());
         holder.name.setText(rowItem.getName());

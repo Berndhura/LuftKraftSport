@@ -7,7 +7,7 @@
     android:background="#BECCD1"
     android:weightSum="2">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/start_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -30,7 +30,7 @@
 
         </RelativeLayout>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ImageView
         android:id="@+id/startImage"

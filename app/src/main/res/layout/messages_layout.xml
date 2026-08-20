@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -17,22 +17,20 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/message_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <com.wang.avi.AVLoadingIndicatorView
+            <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/msg_progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="10dp"
-                android:visibility="gone"
-                app:indicator="LineScaleParty"
-                app:indicator_color="#FFFFFF" />
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/link_to_ad_button"
@@ -49,7 +47,7 @@
 
         </RelativeLayout>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ListView
         android:id="@+id/message_list"

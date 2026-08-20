@@ -4,11 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 import okhttp3.OkHttpClient;
 //import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -41,7 +41,7 @@ public class EbayRestService {
                 .create();
 
         Retrofit restAdapterV2 = new Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(EBAY_REST_URL)
                 .client(httpEbayClient.build())

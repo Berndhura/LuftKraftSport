@@ -1,10 +1,7 @@
 package de.wichura.lks.activity;
 
-import android.support.test.rule.ActivityTestRule;
-import android.view.View;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -20,28 +17,12 @@ import static org.junit.Assert.assertNotNull;
 public class SearchActivityTest {
 
     @Rule
-    public ActivityTestRule<SearchActivity> activityTestRule = new ActivityTestRule<>(SearchActivity.class);
-
-    private SearchActivity activity;
-
-    @Before
-    public void setup() throws Exception {
-        activity = activityTestRule.getActivity();
-    }
+    public ActivityScenarioRule<SearchActivity> activityTestRule = new ActivityScenarioRule<>(SearchActivity.class);
 
     @Test
-    public void getUserToken() throws Exception {
-
-        View view = activity.findViewById(R.id.bottomBar);
-        assertNotNull(view);
-
-        /*SearchActivity ac = new SearchActivity();
-        String token = ac.getUserToken();
-        assertTrue(!token.isEmpty());*/
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        activity = null;
+    public void getUserToken() {
+        activityTestRule.getScenario().onActivity(activity -> {
+            assertNotNull(activity.findViewById(R.id.bottomBar));
+        });
     }
 }

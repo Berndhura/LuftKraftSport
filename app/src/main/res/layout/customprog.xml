@@ -14,13 +14,9 @@
         android:textColor="#3456ff"
         android:layout_marginBottom="10dp"/>
 
-
-    <com.wang.avi.AVLoadingIndicatorView
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/avloadingIndicatorView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:indicator="LineScaleParty"
-        app:indicator_color="#12aaff"/>
-
+        android:visibility="visible" />
 </LinearLayout>
