@@ -10,143 +10,90 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.facebook.FacebookSdk;
-import com.facebook.Profile;
-import com.facebook.ProfileTracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.squareup.picasso.Picasso;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import de.wichura.lks.controller.AdListController;
+import de.wichura.lks.controller.LoginUiController;
+import de.wichura.lks.controller.MessageBadgeController;
+import de.wichura.lks.controller.PushTokenController;
+import de.wichura.lks.controller.SectionNavigationController;
+import de.wichura.lks.util.SessionStore;
 
 import de.wichura.lks.R;
-import de.wichura.lks.activity.EbayActivity;
 import de.wichura.lks.activity.LoginActivity;
 import de.wichura.lks.activity.MessagesOverviewActivity;
-import de.wichura.lks.activity.NewAdActivity;
-import de.wichura.lks.activity.OpenAdActivity;
-import de.wichura.lks.activity.SearchActivity;
-import de.wichura.lks.activity.SettingsActivity;
-import de.wichura.lks.adapter.MainListViewAdapter;
 import de.wichura.lks.dialogs.WelcomeDialog;
-import de.wichura.lks.gcm.QuickstartPreferences;
-import de.wichura.lks.gcm.RegistrationIntentService;
 import de.wichura.lks.http.Service;
 import de.wichura.lks.models.AdsAndBookmarks;
-import de.wichura.lks.models.RowItem;
 import de.wichura.lks.presentation.MainPresenter;
-import me.leolin.shortcutbadger.ShortcutBadger;
-
 import static de.wichura.lks.mainactivity.Constants.SHARED_PREFS_USER_INFO;
-import static de.wichura.lks.mainactivity.Constants.SHOW_BOOKMARKS;
-import static de.wichura.lks.mainactivity.Constants.SHOW_MY_ADS;
-import static de.wichura.lks.mainactivity.Constants.UNREAD_MESSAGES;
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener,
         SharedPreferences.OnSharedPreferenceChangeListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     public AbsListView listView;
-    private int page;
-    private int size = 10;
-    private int pages;
-    private int total;
+    public CircularProgressIndicator progressBar;
+    public SwipeRefreshLayout swipeContainer;
 
     private static final String TAG = "CONAN";
     private ImageView loginBtn;
     private ImageView messagesBtn;
     private DrawerLayout drawer;
 
-    public AVLoadingIndicatorView progressBar;
-
-    //Google Cloud Messages
-    private BroadcastReceiver mGcmRegistrationBroadcastReceiver;
-    private boolean isGcmReceiverRegistered;
+    private PushTokenController pushTokenController;
+    private MessageBadgeController messageBadgeController;
+    private LoginUiController loginUiController;
+    private AdListController adListController;
+    private SectionNavigationController sectionNavigation;
+    private SessionStore session;
 
     //login
     private BroadcastReceiver mLoginBroadcastReceiver;
     private boolean isLoginReceiverRegistered;
 
-    //Messages
-    private BroadcastReceiver mMessageBroadcastReceiver;
-    private boolean isMessageBroadcastReceiver;
-
     private MainPresenter presenterLayer;
-    private MainListViewAdapter adapter;
-    private List<RowItem> rowItems;
-
-    private static final String LIST_STATE = "listState";
-    private Parcelable mListState = null;
 
     private GoogleApiClient mGoogleApiClient;
 
-    //app navigation
-    private Boolean isBookmarks;
-    private Boolean isMyAds;
-    private Boolean isSearch;
-
-    //search again
-    private Button searchAgainButton;
-    private String searchKeyword;
-    private String searchPriceFrom;
-    private String searchPriceTo;
-
     //empty view for network problems
     private View noResultsView;
-
-    //pull down to refresh
-    public SwipeRefreshLayout swipeContainer;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        page = 0;
-        size = 10;
-        pages = 0;
-        total = 0;
-
-        isBookmarks = false;
-        isMyAds = false;
-        isSearch = false;
-
-        Service service = new Service();
+        Service service = Service.get();
         presenterLayer = new MainPresenter(this, service, getApplicationContext());
+        pushTokenController = new PushTokenController(this, presenterLayer);
+        session = new SessionStore(this);
 
         //Google Api client
         //initGoogleApiClient();
@@ -169,9 +116,6 @@ public class MainActivity extends AppCompatActivity implements
         ed.putString("adId", "");
         ed.apply();
 
-        //get Facebook access token
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
         //load main layout
         setContentView(R.layout.activity_main);
         listView = findViewById(R.id.main_list);
@@ -180,11 +124,12 @@ public class MainActivity extends AppCompatActivity implements
         //ProgressBar
         progressBar = findViewById(R.id.progressBar);
         messagesBtn = findViewById(R.id.main_mail_button);
+        messageBadgeController = new MessageBadgeController(this, messagesBtn);
 
         messagesBtn.setOnClickListener(v -> {
-            messagesBtn.setVisibility(View.GONE);
+            messageBadgeController.hideButton();
             final Intent msgIntent = new Intent(getApplicationContext(), MessagesOverviewActivity.class);
-            msgIntent.putExtra(Constants.USER_ID, getUserId());
+            msgIntent.putExtra(Constants.USER_ID, session.getUserId());
             startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES);
         });
 
@@ -203,192 +148,58 @@ public class MainActivity extends AppCompatActivity implements
         toggle.syncState();
 
         //init navigationbar
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
-
         loginBtn = findViewById(R.id.main_login_button);
-        updateLoginButton();
+        loginUiController = new LoginUiController(this, loginBtn, session, presenterLayer,
+                this::startLoginActivity,
+                () -> pushTokenController.refreshToken());
+        loginUiController.refreshLoginButton();
 
-        AccessTokenTracker tracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
-                if (newAccessToken != null) {
-                    String userToken = newAccessToken.getToken();
-                    setUserType(Constants.FACEBOOK_USER);
-                    setUserPreferences(null, null, userToken);
-                }
-                if (newAccessToken == null) {
-                    //Facebook user logged out: name="" and userId=""
-                    setUserPreferences("", "", "");
-                    setProfileName("");
-                    setProfilePicture(null);
-                    updateLoginButton();
-                }
-            }
-        };
+        swipeContainer = findViewById(R.id.swipeContainer);
+        adListController = new AdListController(this, presenterLayer, session,
+                listView, swipeContainer, noResultsView, progressBar,
+                () -> sectionNavigation.resetFlags());
 
-        ProfileTracker profileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-                if (newProfile != null) {
-                    String userId = newProfile.getId();
-                    String name = newProfile.getName();
-                    setUserType(Constants.FACEBOOK_USER);
+        sectionNavigation = new SectionNavigationController(this, drawer,
+                findViewById(R.id.search_again), session, adListController,
+                messageBadgeController, this::startLoginActivity);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        if (navigationView != null) navigationView.setNavigationItemSelectedListener(sectionNavigation);
 
-                    setUserPreferences(name, userId, null);
+        pushTokenController.register();
 
-                    //not logged in as FB user: create db entry, GCM token, update login button
-                    if (oldProfile == null && checkPlayServices() && isUserLoggedIn()) {
-                        if (checkPlayServices() && isUserLoggedIn()) {
-                            // Start IntentService to register this application with GCM.
-                            Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
-                            startService(intent);
-                        }
-                        updateLoginButton();
-                    }
-                    Intent loginComplete = new Intent(Constants.LOGIN_COMPLETE);
-                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(loginComplete);
-                }
-            }
-        };
-        tracker.startTracking();
-        profileTracker.startTracking();
-
-        mGcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
-                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
-                if (sentToken) {
-                    Log.d("CONAN", "Token from Firebase received");
-                } else {
-                    Log.d("CONAN", "Did not get a Token from GCM!");
-                }
-            }
-        };
-
-        registerGcmReceiver();
-
-        if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
-        }
-
-        mMessageBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                messagesBtn.setVisibility(View.VISIBLE);
-                //show unread messages over app icon
-                SharedPreferences stackUnread = getSharedPreferences(UNREAD_MESSAGES, 0);
-                Map unreadMsgMap = stackUnread.getAll();
-                ShortcutBadger.applyCount(getApplicationContext(), unreadMsgMap.size());
-            }
-        };
-
-        setupMessageBroadcastReceiver();
+        messageBadgeController.register();
 
         mLoginBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                //Toast.makeText(MainActivity.this, "BROADCAST LOGIN RECEIVED", Toast.LENGTH_SHORT).show();
                 //TODO was hier??
             }
         };
 
         registerLoginReceiver();
 
-        initSearchAgainButton();
-
         if (getIntent().getStringExtra(Constants.USER_ID_FROM_AD) != null) {
             String userId = getIntent().getStringExtra(Constants.USER_ID_FROM_AD);
-            setMyAdsFlag(false);
-            setBookmarksFlag(false);
-            presenterLayer.searchForArticles(0, size,
+            sectionNavigation.resetFlags();
+            presenterLayer.searchForArticles(0, adListController.pageSize(),
                     null,
                     null,
                     Constants.DISTANCE_INFINITY,
                     null,
                     userId); //userId
         } else {
-
-            setMyAdsFlag(false);
-            setBookmarksFlag(false);
-            getAds(Constants.TYPE_ALL);
+            sectionNavigation.resetFlags();
+            adListController.loadType(Constants.TYPE_ALL);
         }
 
-        updateDeviceToken();
-
-        initRefreshSwipeDown();
+        pushTokenController.refreshToken();
 
         showWelcomeDialog();
-    }
-
-
-    private void updateDeviceToken() {
-        String deviceToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d("CONAN", "Token from Firebase: " + deviceToken);
-        presenterLayer.sendDeviceTokenToBackEndServer(deviceToken);
-    }
-
-    private void setUserType(String userType) {
-        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(Constants.USER_TYPE, userType);
-        editor.apply();
-    }
-
-
-    private void initRefreshSwipeDown() {
-        swipeContainer = findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(() -> {
-            // Your code to refresh the list here.
-            // Make sure you call swipeContainer.setRefreshing(false)
-            // once the network request has completed successfully.
-            hideEmptyView();
-            setMyAdsFlag(false);
-            setBookmarksFlag(false);
-            isMyAds = false;
-            isBookmarks = false;
-            isSearch = false;
-            getAds(Constants.TYPE_ALL);
-        });
-
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
     }
 
     private void showWelcomeDialog() {
         if (getSharedPreferences(Constants.SHARED_PREFS_WELCOME_DIALOG, 0).getBoolean(Constants.SHOW_WELCOME, true)) {
             new WelcomeDialog().show(getSupportFragmentManager(), null);
-        }
-    }
-
-    private void initSearchAgainButton() {
-        searchAgainButton =  findViewById(R.id.search_again);
-        searchAgainButton.setOnClickListener(v -> {
-            searchAgainButton.setVisibility(View.GONE);
-            final Intent searchIntent = new Intent(this, SearchActivity.class);
-            searchIntent.putExtra(Constants.TITLE, searchKeyword);
-            searchIntent.putExtra(Constants.PRICE_FROM, searchPriceFrom);
-            searchIntent.putExtra(Constants.PRICE_TO, searchPriceTo);
-            startActivityForResult(searchIntent, Constants.REQUEST_ID_FOR_SEARCH);
-        });
-    }
-
-    private void setupMessageBroadcastReceiver() {
-
-        if (!isMessageBroadcastReceiver) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(mMessageBroadcastReceiver,
-                    new IntentFilter("messageReceived"));
-            isMessageBroadcastReceiver = true;
         }
     }
 
@@ -428,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (loginUiController != null) loginUiController.destroy();
         if (presenterLayer.disposable != null && !presenterLayer.disposable.isDisposed()) {
             presenterLayer.disposable.dispose();
         }
@@ -439,31 +251,29 @@ public class MainActivity extends AppCompatActivity implements
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
-        registerGcmReceiver();
+        pushTokenController.register();
         registerLoginReceiver();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sp.registerOnSharedPreferenceChangeListener(this);
-        if (mListState != null) listView.onRestoreInstanceState(mListState);
+        adListController.onResume();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
-        mListState = listView.onSaveInstanceState();
-        state.putParcelable(LIST_STATE, mListState);
+        adListController.onSaveInstanceState(state);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-        mListState = state.getParcelable(LIST_STATE);
+        adListController.onRestoreInstanceState(state);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGcmRegistrationBroadcastReceiver);
-        isGcmReceiverRegistered = false;
+        pushTokenController.unregister();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoginBroadcastReceiver);
         isLoginReceiverRegistered = false;
@@ -480,14 +290,6 @@ public class MainActivity extends AppCompatActivity implements
             LocalBroadcastManager.getInstance(this).registerReceiver(mLoginBroadcastReceiver,
                     new IntentFilter(Constants.LOGIN_COMPLETE));
             isLoginReceiverRegistered = true;
-        }
-    }
-
-    private void registerGcmReceiver() {
-        if (!isGcmReceiverRegistered) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(mGcmRegistrationBroadcastReceiver,
-                    new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
-            isGcmReceiverRegistered = true;
         }
     }
 
@@ -508,117 +310,19 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void updateAds(AdsAndBookmarks elements, String type, Integer priceFrom, Integer priceTo, Integer distance, String description, String userId) {
-
-        rowItems = new ArrayList<>();
-        for (RowItem e : elements.getAdsPage().getAds()) {
-            rowItems.add(e);
-        }
-
-        page = elements.getAdsPage().getPage();
-        size = elements.getAdsPage().getSize();
-        pages = elements.getAdsPage().getPages();
-        total = elements.getAdsPage().getTotal();
-
-        showNumberOfAds(total);
-        adapter = new MainListViewAdapter(
-                this,
-                getApplicationContext(),
-                R.layout.list_item_new, rowItems,
-                elements.getBookmarks());
-
-        listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        listView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
-            final RowItem rowItem = (RowItem) listView.getItemAtPosition(position);
-            final Intent intent = new Intent(getApplicationContext(), OpenAdActivity.class);
-            intent.putExtra(Constants.URI_AS_LIST, rowItem.getUrl());
-            intent.putExtra(Constants.LOCATION_NAME, rowItem.getLocationName());
-            intent.putExtra(Constants.ID, rowItem.getId());
-            intent.putExtra(Constants.TITLE, rowItem.getTitle());
-            intent.putExtra(Constants.DESCRIPTION, rowItem.getDescription());
-            intent.putExtra(Constants.LAT, rowItem.getLocation().getCoordinates()[0]);
-            intent.putExtra(Constants.LNG, rowItem.getLocation().getCoordinates()[1]);
-            intent.putExtra(Constants.PHONE, rowItem.getPhone());
-            intent.putExtra(Constants.PRICE, rowItem.getPrice());
-            intent.putExtra(Constants.DATE, rowItem.getDate());
-            intent.putExtra(Constants.VIEWS, rowItem.getViews());
-            intent.putExtra(Constants.USER_ID_FROM_AD, rowItem.getUserId());
-            intent.putExtra(Constants.USER_ID, getUserId());
-            intent.putExtra(Constants.POSITION_IN_LIST, position);
-            intent.putExtra(Constants.AD_URL, rowItem.getUrl());  //TODO einmal hier getURL dann oben nochmal.... aufräumen
-            startActivityForResult(intent, Constants.REQUEST_ID_FOR_OPEN_AD);
-        });
-
-        swipeContainer.setRefreshing(false);
-
-        listView.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public boolean onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to your AdapterView
-                loadNextDataFromApi(page, type, priceFrom, priceTo, distance, description, userId);
-                // or loadNextDataFromApi(totalItemsCount);
-                return true; // ONLY if more data is actually being loaded; false otherwise.
-            }
-        });
+        adListController.updateAds(elements, type, priceFrom, priceTo, distance, description, userId);
     }
 
     public void showProblem(String type) {
-        listView.setEmptyView(noResultsView);
-        noResultsView.setVisibility(View.VISIBLE);
-
-        Log.d("CONAN", "serach again");
-
-        ImageView reload = (ImageView) findViewById(R.id.reload_list);
-        reload.setOnClickListener(v -> {
-            noResultsView.setVisibility(View.GONE);
-            if (type.equals(Constants.TYPE_SEARCH)) {
-                //TODO search again aber nach was?? werte woher?
-                //presenterLayer.searchForArticles(page, size, priceFrom, priceTo, distance, description, userId);
-            } else {
-                presenterLayer.loadAdDataPage(page, size, type);
-            }
-        });
+        adListController.showProblem(type);
     }
 
     public void hideEmptyView() {
-        listView.setEmptyView(null);
-        noResultsView.setVisibility(View.GONE);
-    }
-
-    // Append the next page of data into the adapter
-    // This method probably sends out a network request and appends new data items to your adapter.
-    public void loadNextDataFromApi(int offset, String type, Integer priceFrom, Integer priceTo, Integer distance, String description, String userId) {
-        // Send an API request to retrieve appropriate paginated data
-        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
-        //  --> Deserialize and construct new model objects from the API response
-        //  --> Append the new data objects to the existing set of items inside the array of items
-        //  --> Notify the adapter of the new items made with `notifyDataSetChanged()`
-        Log.d("CONAN", "OFFSET: " + offset);
-        if (offset <= pages) {
-            page = page + 1;
-            if (type == null) {
-                presenterLayer.searchForArticles(page, size, priceFrom, priceTo, distance, description, userId);
-            } else {
-                presenterLayer.loadAdDataPage(page, size, type);
-            }
-        }
+        adListController.hideEmptyView();
     }
 
     public void addMoreAdsToList(AdsAndBookmarks elements) {
-
-        for (RowItem e : elements.getAdsPage().getAds()) {
-            rowItems.add(e);
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    private void getAds(String type) {
-        page = 0;
-        if (adapter != null) {
-            adapter.clear();
-        }
-        presenterLayer.loadAdDataPage(page, size, type);
+        adListController.addMoreAdsToList(elements);
     }
 
     @Override
@@ -634,110 +338,68 @@ public class MainActivity extends AppCompatActivity implements
             case Constants.REQUEST_ID_FOR_NEW_AD: {
                 //my articles -> edit one -> just go back -> still show my articles
                 if (data != null && data.getStringExtra(Constants.IS_EDIT_MODE) != null) {
-                    setMyAdsFlag(true);
-                    getAds(Constants.TYPE_USER);
+                    sectionNavigation.setMyAdsFlag(true);
+                    adListController.loadType(Constants.TYPE_USER);
                     break;
                 }
                 //Android M permission for Read/Write -> ask user again
                 if (data != null && data.getStringExtra(Constants.PERMISSION_DENIED) != null) {
-                    if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
-                        drawer.closeDrawer(GravityCompat.START);
-                    }
+                    sectionNavigation.closeDrawer();
                     showRequestForPermission();
                 }
                 //just show all
-                setMyAdsFlag(false);
-                setBookmarksFlag(false);
-                getAds(Constants.TYPE_ALL);
+                sectionNavigation.resetFlags();
+                adListController.loadType(Constants.TYPE_ALL);
                 break;
             }
             case Constants.REQUEST_ID_FOR_LOGIN: {
 
-                if (getUserType().equals(Constants.FACEBOOK_USER)) {
-                    if (checkPlayServices() && isUserLoggedIn()) {
-                        // Start IntentService to register this application with GCM.
-                        Intent intent = new Intent(this, RegistrationIntentService.class);
-                        startService(intent);
+                if (session.isLoggedIn()) {
+                    if (Constants.GOOGLE_USER.equals(session.getUserType())) {
+                        presenterLayer.sendUserPicToServer(session.getUserProfilePicture());
                     }
+                    pushTokenController.refreshToken();
                 }
 
-                if (getUserType().equals(Constants.EMAIL_USER) && isUserLoggedIn()) {
-                    //request Token from GCM and update in DB
-                    if (checkPlayServices() && isUserLoggedIn()) {
-                        // Start IntentService to register this application with GCM.
-                        Intent intent = new Intent(this, RegistrationIntentService.class);
-                        startService(intent);
-                    }
-                }
+                loginUiController.refreshLoginButton();
+                loginUiController.refreshProfileHeader();
+                Log.d("CONAN", "Return from login, userid: " + session.getUserId());
 
-                if (getUserType().equals(Constants.GOOGLE_USER) && isUserLoggedIn()) {
-                    presenterLayer.sendUserPicToServer(getUserProfilePic());
-
-                    //request Token from GCM and update in DB
-                    if (checkPlayServices() && isUserLoggedIn()) {
-                        // Start IntentService to register this application with GCM.
-                        Intent intent = new Intent(this, RegistrationIntentService.class);
-                        startService(intent);
-                    }
-                }
-
-                updateLoginButton();
-                setProfileName(getUserName());
-                if (!isUserLoggedIn()) {
-                    setProfileName("Bitte anmelden...");
-                }
-                if (!"".equals(getUserProfilePic())) {
-                    setProfilePicture(Uri.parse(getUserProfilePic()));
-                } else {
-                    setProfilePicture(null);
-                }
-                Log.d("CONAN", "Return from login, userid: " + getUserId());
-
-                setMyAdsFlag(false);
-                setBookmarksFlag(false);
+                sectionNavigation.resetFlags();
                 hideEmptyView();
-                getAds(Constants.TYPE_ALL);
-
+                adListController.loadType(Constants.TYPE_ALL);
                 break;
-                //end case UserLogin
             }
             case Constants.REQUEST_ID_FOR_OPEN_AD: {
                 //in case article is deleted -> remove from list
                 if (data != null) {
-                    adapter.remove(adapter.getItem(data.getIntExtra(Constants.POSITION_IN_LIST, 0)));
-                    adapter.notifyDataSetChanged();
+                    adListController.removeItemAt(data.getIntExtra(Constants.POSITION_IN_LIST, 0));
                 }
-                //in case article is bookmarked -> show blue star
-                // if (data.getIntExtra(Constants.POSITION_IN_LIST, 0) != 0 && data.getStringExtra(Constants.BOOKMARKED_FLAG == true)) {
                 break;
             }
             case Constants.REQUEST_ID_FOR_SEARCH: {
                 if (data != null) {
-                    searchKeyword = data.getStringExtra(Constants.KEYWORDS);
-                    searchPriceFrom = data.getStringExtra(Constants.PRICE_FROM);
-                    searchPriceTo = data.getStringExtra(Constants.PRICE_TO);
+                    String keyword = data.getStringExtra(Constants.KEYWORDS);
+                    String priceFrom = data.getStringExtra(Constants.PRICE_FROM);
+                    String priceTo = data.getStringExtra(Constants.PRICE_TO);
                     int distance = data.getIntExtra(Constants.DISTANCE, Constants.DISTANCE_INFINITY);
-                    setMyAdsFlag(false);
-                    setBookmarksFlag(false);
+                    sectionNavigation.rememberSearch(keyword, priceFrom, priceTo);
+                    sectionNavigation.resetFlags();
 
-                    presenterLayer.searchForArticles(0, size,
-                            searchPriceFrom.equals("") ? null : Integer.parseInt(searchPriceFrom),
-                            searchPriceTo.equals("") ? null : Integer.parseInt(searchPriceTo),
+                    presenterLayer.searchForArticles(0, adListController.pageSize(),
+                            priceFrom.equals("") ? null : Integer.parseInt(priceFrom),
+                            priceTo.equals("") ? null : Integer.parseInt(priceTo),
                             distance,
-                            searchKeyword,
+                            keyword,
                             null); //userId
-                    drawer.closeDrawer(GravityCompat.START);
-                    searchAgainButton.setVisibility(View.VISIBLE);
+                    sectionNavigation.closeDrawer();
+                    sectionNavigation.showSearchAgainButton();
                 }
                 break;
             }
             case Constants.REQUEST_ID_FOR_SETTINGS: {
-                updateLoginButton();
-                setProfileName(getUserName());
-                if (!isUserLoggedIn()) {
-                    setProfileName("Bitte anmelden...");
-                }
-                setProfilePicture(Uri.parse(getUserProfilePic()));
+                loginUiController.refreshLoginButton();
+                loginUiController.refreshProfileHeader();
                 break;
             }
         }
@@ -761,170 +423,18 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        //in case we are back from search and do not care to adapt search
-        searchAgainButton.setVisibility(View.GONE);
-
-        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else if (isBookmarks) {
-            setBookmarksFlag(false);
-            setMyAdsFlag(false);
-            isBookmarks = false;
-            getAds(Constants.TYPE_ALL);
-        } else if (isMyAds) {
-            setMyAdsFlag(false);
-            setBookmarksFlag(false);
-            isMyAds = false;
-            getAds(Constants.TYPE_ALL);
-        } else if (isSearch) {
-            setMyAdsFlag(false);
-            setBookmarksFlag(false);
-            isSearch = false;
-            getAds(Constants.TYPE_ALL);
-
+        if (sectionNavigation.handleBackPressed()) return;
+        if (isTaskRoot()) {
+            new ExitDialogFragment().show(getSupportFragmentManager(), null);
         } else {
-            if (isTaskRoot()) {
-                new ExitDialogFragment().show(getSupportFragmentManager(), null);
-            } else {
-                super.onBackPressed();
-            }
+            super.onBackPressed();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        setProfileName(getUserName());
-        if (!isUserLoggedIn()) {
-            setProfileName("Bitte anmelden...");
-        }
-        setProfilePicture(Uri.parse(getUserProfilePic()));
+        loginUiController.refreshProfileHeader();
         return true;
-    }
-
-    private void updateLoginButton() {
-        if (getUserId().equals("")) {
-            Log.d("CONAN", "enable login button");
-            loginBtn.setEnabled(true);
-            loginBtn.setVisibility(View.VISIBLE);
-            loginBtn.setOnClickListener((view) -> startLoginActivity());
-            presenterLayer.getFacebookUserInfo();  //TODO richtig hier?
-        } else {
-            Log.d("CONAN", "disable login button");
-            loginBtn.setEnabled(false);
-            loginBtn.setVisibility(View.GONE);
-            presenterLayer.getFacebookUserInfo();  //TODO richtig hier?
-        }
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        final String userId = getUserId();
-
-        //in case we are back from search and do not care to adapt search
-        searchAgainButton.setVisibility(View.GONE);
-
-        switch (item.getItemId()) {
-            case R.id.myads: {
-                if (userId.equals("")) {
-                    startLoginActivity();
-                    return true;
-                } else {
-                    hideEmptyView();
-                    page = 0;
-                    size = 10;
-                    setMyAdsFlag(true);
-                    setBookmarksFlag(false);
-                    isMyAds = true;
-                    isBookmarks = false;
-                    isSearch = false;
-                    getAds(Constants.TYPE_USER);
-                    if (drawer != null) drawer.closeDrawer(GravityCompat.START);
-                    return true;
-                }
-            }
-            case R.id.new_ad: {
-                if (userId.equals("")) {
-                    startLoginActivity();
-                    return true;
-                }
-                setBookmarksFlag(false);
-                final Intent intent = new Intent(this, NewAdActivity.class);
-                intent.putExtra(Constants.USER_ID, userId);
-                startActivityForResult(intent, Constants.REQUEST_ID_FOR_NEW_AD);
-                return true;
-            }
-            case R.id.search: {
-                setBookmarksFlag(false);
-                isMyAds = false;
-                isBookmarks = false;
-                isSearch = true;
-                searchAgainButton.setVisibility(View.GONE);
-                //TODO alten search parameter mitgeben!
-                final Intent searchIntent = new Intent(this, SearchActivity.class);
-                startActivityForResult(searchIntent, Constants.REQUEST_ID_FOR_SEARCH);
-                return true;
-            }
-            case R.id.settings: {
-                setBookmarksFlag(false);
-                final Intent i = new Intent(this, SettingsActivity.class);
-                startActivityForResult(i, Constants.REQUEST_ID_FOR_SETTINGS);
-                return true;
-            }
-            case R.id.bookmarks: {
-                if (userId.equals("")) {
-                    startLoginActivity();
-                    return true;
-                } else {
-                    hideEmptyView();
-                    setMyAdsFlag(false);
-                    setBookmarksFlag(true);
-                    isBookmarks = true;
-                    isMyAds = false;
-                    isSearch = false;
-                    getAds(Constants.TYPE_BOOKMARK);
-                    if (drawer != null) drawer.closeDrawer(GravityCompat.START);
-                    return true;
-                }
-            }
-            case R.id.messages_from_user: {
-                if (userId.equals("")) {
-                    startLoginActivity();
-                    return true;
-                } else {
-                    setBookmarksFlag(false);
-                    messagesBtn.setVisibility(View.GONE);
-                    final Intent msgIntent = new Intent(getApplicationContext(), MessagesOverviewActivity.class);
-                    msgIntent.putExtra(Constants.USER_ID, userId);
-                    startActivityForResult(msgIntent, Constants.REQUEST_ID_FOR_MESSAGES);
-                    return true;
-                }
-            }
-            //TODO anzeige EBAY
-            case R.id.ebay: {
-                final Intent i = new Intent(this, EbayActivity.class);
-                startActivityForResult(i, Constants.REQUEST_ID_FOR_SETTINGS);
-                return true;
-            }
-        }
-
-        if (drawer != null) drawer.closeDrawer(GravityCompat.START);
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void setMyAdsFlag(boolean isMyAds) {
-        SharedPreferences settings = getSharedPreferences(SHOW_MY_ADS, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(Constants.IS_MY_ADS, isMyAds);
-        editor.apply();
-    }
-
-    private void setBookmarksFlag(boolean isBookmarks) {
-        SharedPreferences settings = getSharedPreferences(SHOW_BOOKMARKS, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(Constants.IS_BOOKMARKS, isBookmarks);
-        editor.apply();
     }
 
     private void startLoginActivity() {
@@ -932,52 +442,13 @@ public class MainActivity extends AppCompatActivity implements
         startActivityForResult(facebookIntent, Constants.REQUEST_ID_FOR_LOGIN);
     }
 
+    /** Kept for callsites in adapters/dialogs that still need a public API. */
     public void setProfilePicture(Uri uri) {
-        if (uri != null) {
-            Log.d("CONAN", "Set profile picture: " + uri.toString());
-        }
-        ImageView proPic = (ImageView) findViewById(R.id.profile_image);
-        if (proPic != null && uri != null && !"".equals(uri.toString())) {
-            Picasso.with(getApplicationContext()).load(uri.toString()).into(proPic);
-        } else {
-            if (proPic != null) {
-                proPic.setImageResource(R.drawable.lks_app_logo);
-            }
-        }
-    }
-
-    private void setUserPreferences(String name, String userId, String userToken) {
-        SharedPreferences settings = getSharedPreferences(SHARED_PREFS_USER_INFO, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        if (name != null) editor.putString(Constants.USER_NAME, name);
-        if (userId != null) editor.putString(Constants.USER_ID, userId);
-        if (userToken != null) editor.putString(Constants.USER_TOKEN, userToken);
-        editor.apply();
+        loginUiController.setProfilePicture(uri);
     }
 
     public void setProfileName(String name) {
-        TextView nav_user = findViewById(R.id.username);
-        if (nav_user != null) nav_user.setText(name);
-    }
-
-    private String getUserName() {
-        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_NAME, "");
-    }
-
-    private String getUserId() {
-        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_ID, "");
-    }
-
-    private String getUserProfilePic() {
-        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_PICTURE, "");
-    }
-
-    private Boolean isUserLoggedIn() {
-        return !getUserId().equals("");
-    }
-
-    private String getUserType() {
-        return getSharedPreferences(SHARED_PREFS_USER_INFO, 0).getString(Constants.USER_TYPE, "");
+        loginUiController.setProfileName(name);
     }
 
     @Override
@@ -1004,15 +475,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void showNumberOfAds(int numberOfAds) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setSubtitle("Anzeigen: " + numberOfAds);
-        }
+        adListController.showNumberOfAds(numberOfAds);
     }
 
     public void setMainTitle(String title) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(title);
-        }
+        adListController.setMainTitle(title);
     }
 
     @Override
